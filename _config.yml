@@ -11,21 +11,21 @@ safe: true
 
 
 # edit here to achieve your personal greatness
-url: http://username.github.io/
+url: http://arialdomartini.github.io/
 baseurl: /
-title: Chris Turner
-author: Chris Turner
-description: Personal blog and resume
-avatar: profile.png
-email: yourname@email.com
-github: biomadeira/sustain # username
-twitter: username
-linkedin: username
-stackoverflow: username   #e.g: users/2735833/proton1h1
+title: Arialdo Martini
+author: Arialdo Martini
+description: Personal resume
+avatar: arialdomartini.jpg
+email: arialdomartini@gmail.com
+github: arialdomartini
+twitter: arialdomartini
+linkedin: https://it.linkedin.com/in/arialdomartini
+stackoverflow: /users/202443/arialdo-martini
 #Comment out if you don't want disqus 
-disqus: username
-google_analytics: UA-69391421-1
+#disqus: username
+#google_analytics: UA-69391421-1
 
 
 # needed for travis-ci build
-exclude: [vendor]
+#exclude: [vendor]

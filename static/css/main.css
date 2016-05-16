@@ -3,10 +3,10 @@
 html,
 body {
   height: 100%;
-  background-color: #fff;
+  background-color: #fff; #002b36
   font-family: 'Source Sans Pro', sans-serif;
   /* The html and body elements cannot have any padding or margin. */
-  border-top: 3px solid #27A822;
+
 }
 /* Wrapper for page content to push down footer */
 #wrap {
@@ -134,10 +134,11 @@ body {
 }
 .social {
   padding-top: 12px;
-  word-spacing: 25px;
 }
 .social h4 > a {
   color: #000000;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .avatar {
   padding-top: 5%;
