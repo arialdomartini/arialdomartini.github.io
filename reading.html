@@ -1,0 +1,23 @@
+---
+layout: page
+title: Books
+---
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      {% for book in site.data.books %}
+      <div class="row"  style="padding:10px;">
+        <div class="col-sm-4 col-md-4 col-lg-4">
+      	  <img width="200px" src="{{ site.baseurl }}static/img/books/{{ book.img }}" alt="{{ book.author }} - {{ book.title }}">
+        </div>
+        <div class="col-sm-8 col-md-8 col-lg-8">
+	      <h5 style="text-align: right; ">
+		    <strong>{{ book.author }}<br /><a href="{{ book.url }}">{{ book.title }}</a></strong>
+	      </h5>
+	    </div>
+      </div>
+      </br>
+      {% endfor %}
+    </div>
+  </div>
+</div>
