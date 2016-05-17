@@ -13,3 +13,17 @@
   img: cleancode.jpg
   url: http://www.amazon.it/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882
 
+- title: "Building Microservices"
+  author: Sam Newman
+  img: building+microservices.jpg
+  url: http://shop.oreilly.com/product/0636920033158.do
+
+- title: "SOA Design Patterns"
+  author: Thomas Rischbeck and Thomas Erl
+  img: soa+design+patterns.jpg
+  url: http://www.amazon.com/Design-Patterns-Prentice-Service-Oriented-Computing/dp/0136135161
+
+- title: "The Pragmatic Programmer: From Journeyman to Master"
+  author: Andrew Hunt and David Thomas
+  img: the+pragmatic+programmer.jpg
+  url: https://pragprog.com/book/tpp/the-pragmatic-programmer
