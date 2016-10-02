@@ -8,6 +8,11 @@
   img: the+mythical+man+month.jpg
   url: http://www.amazon.it/Mythical-Man-Month-Essays-Software-Engineering/dp/0201835959
 
+- title: The Little Schemer
+  author: Daniel P. Friedman
+  img: the+little+schemer.jpg
+  url: https://mitpress.mit.edu/books/little-schemer
+
 - title: "Clean Code: A Handbook of Agile Software Craftsmanship"
   author: Robert C. Martin 
   img: cleancode.jpg
