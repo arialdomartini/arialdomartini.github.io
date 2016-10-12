@@ -9,7 +9,9 @@ title: About
   </div>
 
 
-  <h3>Archive</h3>
+  {% assign post_count=site.posts | size %}
+  {% if post_count > 0 %}
+  Posts
   <div class="panel panel-default">
     <div class="panel-body">
 	  {% for post in site.posts %}
@@ -27,5 +29,6 @@ title: About
 	  </div>
 	  {% endfor %}
 	</div>
+    {% endif %}
   </div>
 </div>
