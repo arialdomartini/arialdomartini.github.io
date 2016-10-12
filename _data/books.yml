@@ -1,3 +1,9 @@
+- title: "Reactive Messaging Patterns With the Actor Model: Applications and Integration in Scala and Akka"
+  author: Vaughn Vernon
+  img: reactive-messaging-patterns.jpg
+  url: https://www.amazon.it/Reactive-Messaging-Patterns-Actor-Model/dp/0133846830
+
+
 - title: SOA Patterns
   author: Arnon Rotem-Gal-Oz
   img: soapatterns.jpg
