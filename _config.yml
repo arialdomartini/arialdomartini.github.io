@@ -1,8 +1,5 @@
 # top level stuff you probably don't need to touch
 highlighter: rouge
-markdown: rdiscount
-rdiscount:
-  extensions: [smart]
 permalink: /:title.html
 paginate: 5
 gems: [jekyll-paginate]
