@@ -23,6 +23,11 @@
   img: soa+design+patterns.jpg
   url: http://www.amazon.com/Design-Patterns-Prentice-Service-Oriented-Computing/dp/0136135161
 
+- title: "The Docker Book"
+  author: James Turnbull
+  img: the+docker+book.jpg
+  url: https://www.dockerbook.com
+
 - title: "Seven Languages in Seven Weeks"
   author: Bruce Tate
   img: seven-languages-in-seven-weeks.jpg
