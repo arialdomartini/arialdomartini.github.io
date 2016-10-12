@@ -13,6 +13,11 @@
   img: the+little+schemer.jpg
   url: https://mitpress.mit.edu/books/little-schemer
 
+- title: "RabbitMQ In Action"
+  author: Alvaro Videla, Jason J.W. Williams
+  img: rabbitmq+in+action.jpg
+  url: https://www.manning.com/books/rabbitmq-in-action
+
 - title: "Building Microservices"
   author: Sam Newman
   img: building+microservices.jpg
