@@ -3,12 +3,21 @@
   img: reactive-messaging-patterns.jpg
   url: https://www.amazon.it/Reactive-Messaging-Patterns-Actor-Model/dp/0133846830
 
-
 - title: SOA Patterns
   author: Arnon Rotem-Gal-Oz
   img: soapatterns.jpg
   url: http://www.amazon.com/SOA-Patterns-Arnon-Rotem-Gal-Oz/dp/1933988266
 
+- title: Seven Languages in Seven Weeks
+  author: Bruce Tate
+  img: seven-languages-in-seven-weeks.jpg
+  url: https://pragprog.com/book/btlang/seven-languages-in-seven-weeks
+
+- title: "Erlang Programming: A Concurrent Approach to Software Development"
+  author: Francesco Cesarini, Simon Thompson
+  img: erlang-programming.jpg
+  url: http://shop.oreilly.com/product/9780596518189.do
+  
 - title: "The Mythical Man-Month: Essays on Software Engineering"
   author: Frederick Phillips Brooks
   img: the+mythical+man+month.jpg
