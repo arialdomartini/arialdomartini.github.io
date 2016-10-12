@@ -28,6 +28,11 @@
   img: building+microservices.jpg
   url: http://shop.oreilly.com/product/0636920033158.do
 
+- title: "Peopleware: Peopleware: Productive Projects and Teams"
+  author: Tom DeMarco, Tim Lister
+  img: peopleware.jpg
+  url: https://www.amazon.com/gp/product/0321934113/ref=pd_sbs_14_t_0?ie=UTF8&psc=1&refRID=B7CATX689JR9NXWJ5T7S
+  
 - title: "SOA Design Patterns"
   author: Thomas Rischbeck and Thomas Erl
   img: soa+design+patterns.jpg
