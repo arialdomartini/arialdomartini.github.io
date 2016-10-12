@@ -42,3 +42,8 @@
   author: Bruce Eckel
   img: thinking+in+java.jpg
   url: http://www.mindview.net/Books/TIJ/
+
+- title: "Domain-Driven Design: Tackling Complexity in the Heart of Software"
+  author: Eric Evans
+  img: domain-driven-design.jpg
+  url: https://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215
