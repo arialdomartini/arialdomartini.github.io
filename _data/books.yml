@@ -3,35 +3,15 @@
   img: reactive-messaging-patterns.jpg
   url: https://www.amazon.it/Reactive-Messaging-Patterns-Actor-Model/dp/0133846830
 
-- title: SOA Patterns
+- title: "SOA Patterns"
   author: Arnon Rotem-Gal-Oz
   img: soapatterns.jpg
   url: http://www.amazon.com/SOA-Patterns-Arnon-Rotem-Gal-Oz/dp/1933988266
 
-- title: Seven Languages in Seven Weeks
-  author: Bruce Tate
-  img: seven-languages-in-seven-weeks.jpg
-  url: https://pragprog.com/book/btlang/seven-languages-in-seven-weeks
-
-- title: "Erlang Programming: A Concurrent Approach to Software Development"
-  author: Francesco Cesarini, Simon Thompson
-  img: erlang-programming.jpg
-  url: http://shop.oreilly.com/product/9780596518189.do
-  
-- title: "The Mythical Man-Month: Essays on Software Engineering"
-  author: Frederick Phillips Brooks
-  img: the+mythical+man+month.jpg
-  url: http://www.amazon.it/Mythical-Man-Month-Essays-Software-Engineering/dp/0201835959
-
-- title: The Little Schemer
+- title: "The Little Schemer"
   author: Daniel P. Friedman
   img: the+little+schemer.jpg
   url: https://mitpress.mit.edu/books/little-schemer
-
-- title: "Clean Code: A Handbook of Agile Software Craftsmanship"
-  author: Robert C. Martin 
-  img: cleancode.jpg
-  url: http://www.amazon.it/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882
 
 - title: "Building Microservices"
   author: Sam Newman
@@ -43,22 +23,47 @@
   img: soa+design+patterns.jpg
   url: http://www.amazon.com/Design-Patterns-Prentice-Service-Oriented-Computing/dp/0136135161
 
+- title: "Seven Languages in Seven Weeks"
+  author: Bruce Tate
+  img: seven-languages-in-seven-weeks.jpg
+  url: https://pragprog.com/book/btlang/seven-languages-in-seven-weeks
+
+- title: "Erlang Programming: A Concurrent Approach to Software Development"
+  author: Francesco Cesarini, Simon Thompson
+  img: erlang-programming.jpg
+  url: http://shop.oreilly.com/product/9780596518189.do
+  
+- title: "Extreme Programming Explained: Embrace Change"
+  author: Kent Beck
+  img: extreme+programming+explained.jpg
+  url: http://www.amazon.com/Extreme-Programming-Explained-Embrace-Change/dp/0321278658
+
+- title: "Domain-Driven Design: Tackling Complexity in the Heart of Software"
+  author: Eric Evans
+  img: domain-driven-design.jpg
+  url: https://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215
+
 - title: "The Pragmatic Programmer: From Journeyman to Master"
   author: Andrew Hunt and David Thomas
   img: the+pragmatic+programmer.jpg
   url: https://pragprog.com/book/tpp/the-pragmatic-programmer
 
-- title: "Extreme Programming Explained: Embrace Change"
-  author: Kent Beck
-  img: extreme+programming+explained.jpg
-  url: http://www.amazon.com/Extreme-Programming-Explained-Embrace-Change/dp/0321278658
+- title: "Clean Code: A Handbook of Agile Software Craftsmanship"
+  author: Robert C. Martin
+  img: cleancode.jpg
+  url: http://www.amazon.it/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882
+
+- title: "The Mythical Man-Month: Essays on Software Engineering"
+  author: Frederick Phillips Brooks
+  img: the+mythical+man+month.jpg
+  url: http://www.amazon.it/Mythical-Man-Month-Essays-Software-Engineering/dp/0201835959
 
 - title: "Thinking in Java"
   author: Bruce Eckel
   img: thinking+in+java.jpg
   url: http://www.mindview.net/Books/TIJ/
 
-- title: "Domain-Driven Design: Tackling Complexity in the Heart of Software"
-  author: Eric Evans
-  img: domain-driven-design.jpg
-  url: https://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215
+- title: "Thinking in Java"
+  author: François Zaninotto, Fabien Potencier
+  img: symfony.jpg
+  url: http://symfony.com/legacy/doc/book/1_0
