@@ -8,6 +8,11 @@
   img: soapatterns.jpg
   url: http://www.amazon.com/SOA-Patterns-Arnon-Rotem-Gal-Oz/dp/1933988266
 
+- title: "Programming WCF Services"
+  author: Juval Lowy, Michael Montgomery
+  img: programming+wcf+services.jpg
+  url: http://shop.oreilly.com/product/0636920032373.do
+
 - title: "The Little Schemer"
   author: Daniel P. Friedman
   img: the+little+schemer.jpg
