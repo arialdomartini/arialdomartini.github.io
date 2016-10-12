@@ -43,6 +43,11 @@
   img: domain-driven-design.jpg
   url: https://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215
 
+- title: "Working Effectively With Legacy Code"
+  author: Michael C. Feathers
+  img: working+effectively+with+legacy+code.jpg
+  url: https://www.amazon.it/Working-Effectively-Legacy-Michael-Feathers/dp/0131177052
+
 - title: "The Pragmatic Programmer: From Journeyman to Master"
   author: Andrew Hunt and David Thomas
   img: the+pragmatic+programmer.jpg
