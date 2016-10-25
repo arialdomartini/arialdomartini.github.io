@@ -1,3 +1,14 @@
+- title: "Software Architecture Patterns"
+  author: Mark Richards
+  img: software+architecture+patterns.png
+  url: http://www.oreilly.com/programming/free/software-architecture-patterns.csp?intcmp=il-prog-free-article-sa15_sa_patterns
+
+- title: "Effective Akka"
+  author: Jamie Allen
+  img: effective-akka.jpg
+  url: http://shop.oreilly.com/product/0636920028789.do
+
+
 - title: "Reactive Messaging Patterns With the Actor Model: Applications and Integration in Scala and Akka"
   author: Vaughn Vernon
   img: reactive-messaging-patterns.jpg
