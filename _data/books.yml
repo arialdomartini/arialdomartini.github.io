@@ -83,7 +83,12 @@
   author: Francesco Cesarini, Simon Thompson
   img: erlang-programming.jpg
   url: http://shop.oreilly.com/product/9780596518189.do
-  
+
+- title: "97 Things Every Software Developer Should Know"
+  author: Kevlin Henney et al.
+  img: 97+things+every+developer.jpg
+  url: http://shop.oreilly.com/product/9780596809492.do
+
 - title: "Extreme Programming Explained: Embrace Change"
   author: Kent Beck
   img: extreme+programming+explained.jpg
