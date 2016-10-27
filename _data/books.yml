@@ -69,6 +69,11 @@
   img: the+docker+book.jpg
   url: https://www.dockerbook.com
 
+- title: "97 Things Every Software Architect Should Know"
+  author: Richard Monson-Haefel et al.
+  img: 97+things+every+architect.jpg
+  url: http://shop.oreilly.com/product/9780596522704.do?sortby=publicationDate
+
 - title: "Seven Languages in Seven Weeks"
   author: Bruce Tate
   img: seven-languages-in-seven-weeks.jpg
