@@ -7,8 +7,6 @@ tags:
 - IoC
 - AutoFac
 ---
-<a href="https://github.com/lucax88x/PrimitiveObsession/blob/master/README.md">Original post</a> on Luca's Github.
-
 Registering components in Autofac is straightforward, as long as no primitive dependencies (such as connection strings, URLs and configuration parameters in general) are involved. This post describes the strategy for dealing with primitive dependencies.
 
 
@@ -418,3 +416,4 @@ You will get:
 * all the advantages of using Value Objects, including the possibility to validate the primitive value;
 * the above solution can used also for collection of primitives or classes, such as `List<string>`.
 
+(<a href="https://github.com/lucax88x/PrimitiveObsession/blob/master/README.md">Post repository</a> on Luca Trazzi's Github)
