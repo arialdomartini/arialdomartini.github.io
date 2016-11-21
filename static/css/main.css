@@ -89,17 +89,24 @@ body {
 
 .container {
   width: auto;
-  max-width: 800px;
+  max-width: 1000px;
+  text-align: left;
+}
+
+.centered {
   text-align: center;
 }
+
 .container .text-muted {
   margin: 20px 0;
 }
+
 .container a {
-  color: #27A822;
+  color: #4078c0;
 }
+
 .container a:hover {
-  color: #267723;
+  color: #4078c0;
 }
 .img-responsive {
  display: block;
@@ -119,9 +126,7 @@ body {
 .panel-default h6 {
   font-size: 15px;
 }
-.panel-default h4 a, h5 a {
-  color: #27A822;
-}
+
 .panel-default h4 a:hover, h5 a:hover {
   color: #267723;
 }
@@ -162,7 +167,12 @@ body {
 .blogpost{
   text-align: left;
   line-height: 30px;
-  font-size: 18px;
+  font-size: 16px;
+}
+
+.blogpost h1, .blogpost h2, .blogpost h3, .blogpost h4, .blogpost h5, .blogpost h6  {
+    border-bottom: 1px solid #eee;
+    padding-bottom:0.3em;
 }
 
 /* Footer 
@@ -183,4 +193,3 @@ div.footer{
   padding-bottom: 15px;
   
 }*/
-
