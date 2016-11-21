@@ -21,7 +21,7 @@ linkedin: https://it.linkedin.com/in/arialdomartini
 stackoverflow: /users/202443/arialdo-martini
 #Comment out if you don't want disqus 
 #disqus: username
-#google_analytics: UA-69391421-1
+google_analytics: UA-44802996-2
 
 
 # needed for travis-ci build
