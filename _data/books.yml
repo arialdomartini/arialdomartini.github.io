@@ -1,3 +1,8 @@
+- title: "Patterns, Principles, and Practices of Domain-Driven Design"
+  author: Scott Millett, Nick Tune
+  img: ddd-wrox.jpg
+  url: http://www.wrox.com/WileyCDA/WroxTitle/Patterns-Principles-and-Practices-of-Domain-Driven-Design.productCd-1118714709.html
+
 - title: "Kubernetes: Scheduling the Future at Cloud Scale"
   author: David K. Rensin
   img: kubernetes.gif
