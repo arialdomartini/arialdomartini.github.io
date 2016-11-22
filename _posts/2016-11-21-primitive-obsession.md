@@ -248,7 +248,7 @@ So, the basic trick for dealing with primitives in Autofac is: **don't use primi
 
 ## Value Objects In Action
 Ok. Sounds simple.<br />
-So, instead of declaring `maxUsers` and `numerOfItemsPerPage` as `int`, all you have to do is to define 2 separate non-primitive types inheriting from `int`:
+So, instead of declaring `maxUsers` and `numberOfItemsPerPage` as `int`, all you have to do is to define 2 separate non-primitive types inheriting from `int`:
 
 {% highlight csharp %}
 class MaxUsers : int {}
