@@ -77,7 +77,7 @@ builder.RegisterType<Foo>()
 
 ## Pain Points
 
-This is tollerable as long as there there are just a very little number of primitive dependencies.<br />
+This is tollerable as long as there are just a very little number of primitive dependencies.<br />
 It starts stinking when it ends up with code like the following:
 
 
