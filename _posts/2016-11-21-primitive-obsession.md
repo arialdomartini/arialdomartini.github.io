@@ -9,7 +9,6 @@ tags:
 ---
 Registering components in Autofac is straightforward, as long as no primitive dependencies (such as connection strings, URLs and configuration parameters in general) are involved. This post describes the strategy for dealing with primitive dependencies.
 
-
 * [The Ordinary Case](#the-ordinary-case)  
 * [Here Come The Primitives](#here-come-the-primitives)
 * [Pain Points](#pain-points)
@@ -112,7 +111,7 @@ Would you spot the problem in the following code?
 {% highlight csharp %}
 class Foo
 {
-    public Foo(Bar bar, Baz baz, string connectionString, string url) { }
+    public Foo(Bar bar, Baz baz, string connectionString, string url, int maxUsers) { }
 }
 
 builder.Register(c =>
@@ -132,7 +131,7 @@ The following code compiles, but it will throw an exception at runtime the momen
 {% highlight csharp %}
 class Foo
 {
-    public Foo(Bar bar, Baz baz, string connectionString, string url) { }
+    public Foo(Bar bar, Baz baz, string connectionString, string url, int maxUsers) { }
 }
 
 builder.RegisterType<Foo>()
@@ -252,7 +251,7 @@ Ok. Sounds simple.<br />
 So, instead of declaring `maxDownloadableFiles` and `numerOfItemsPerPage` as `int`, all you have to do is to define 2 separate non-primitive types inheriting from `int`:
 
 {% highlight csharp %}
-class MaxDownloadableFiles : int {}
+class MaxUsers : int {}
 class NumerOfItemsPerPage : int {}
 {% endhighlight %}
 
@@ -263,11 +262,11 @@ Unfortunately, this is not allowed in C#, since primitive types are sealed.<br /
 You definitely have to resort on a workaround: use a DTO as a wrapper of the primitive value.<br />
 
 {% highlight csharp %}
-class MaxDownloadableFiles
+class MaxUsers
 {
     public int Value { get; }
 
-    public MaxDownloadableFiles(int value)
+    public MaxUsers(int value)
     {
         Value = value;
     }
