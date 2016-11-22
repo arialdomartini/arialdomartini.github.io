@@ -221,12 +221,12 @@ Service Locator pattern is mostly related to services, while here you are dealin
 ## Overcoming The Primitive Obsession
 
 Let me try to convince you that there is something deeply wrong with injecting a primitive.<br />
-Say you have 2 configuration parameters: `maxDownloadableFiles` and `numerOfItemsPerPage`. They can be defined in 2 completely different contexts, represent 2 completely different ideas, and have nothing to share.<br />
+Say you have 2 configuration parameters: `maxUsers` and `numerOfItemsPerPage`. They can be defined in 2 completely different contexts, represent 2 completely different ideas, and have nothing to share.<br />
 Yet you can represent both of them with the same type, `int`.
 
 That's the root error: when you use the very same class for 2 completely different purposes, it's just like collapsing `CustomerController` and `NHibernateSession` to a single class: by doing so, you would give no chance neither to Autofac nor to the compiler itself to distinguish the former from the latter.
 
-It's easy to see why representing the customer controller and the NHibernate session with 2 dedicated classes is valuable: it isn't hard to see that the idea can be profitably applied to `maxDownloadableFiles` and `numerOfItemsPerPage` well, and in general to any primitive configuration parameter. It would give you the opportunity the rely on the compiler: instead of having a constructor which takes 3 indistinguishable integers:
+It's easy to see why representing the customer controller and the NHibernate session with 2 dedicated classes is valuable: it isn't hard to see that the idea can be profitably applied to `maxUsers` and `numerOfItemsPerPage` well, and in general to any primitive configuration parameter. It would give you the opportunity the rely on the compiler: instead of having a constructor which takes 3 indistinguishable integers:
 
 {% highlight csharp %}
 class Foo
@@ -248,7 +248,7 @@ So, the basic trick for dealing with primitives in Autofac is: **don't use primi
 
 ## Value Objects In Action
 Ok. Sounds simple.<br />
-So, instead of declaring `maxDownloadableFiles` and `numerOfItemsPerPage` as `int`, all you have to do is to define 2 separate non-primitive types inheriting from `int`:
+So, instead of declaring `maxUsers` and `numerOfItemsPerPage` as `int`, all you have to do is to define 2 separate non-primitive types inheriting from `int`:
 
 {% highlight csharp %}
 class MaxUsers : int {}
