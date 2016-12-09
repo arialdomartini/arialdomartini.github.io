@@ -6,6 +6,7 @@ gems: [jekyll-paginate]
 port: 4000
 safe: true
 
+excerpt_separator: <!--more-->
 
 # edit here to achieve your personal greatness
 url: http://arialdomartini.github.io/
