@@ -3,11 +3,12 @@ layout: post
 title: "Forget The Keyboard"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
-- Touch Typing
+  - Touch Typing
+excerpt: If you are learning to touch type, use this cheat sheet. Print it, and forget the keyboard.<br /><br /><img src="static/img/hands-keyboard.jpg" width="50%"/>
 ---
 ## TL;DR
 
-If you are learning to touch type, use this cheat sheet. Print it, and forget the keyboard.
+If you are learning to touch type, use this cheat sheet. Print it, and forget the keyboard
 
 <img src="static/img/hands-keyboard.jpg" width="100%"/>
 

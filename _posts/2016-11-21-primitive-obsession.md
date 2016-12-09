@@ -7,8 +7,9 @@ tags:
 - IoC
 - AutoFac
 ---
-Registering components in Autofac is straightforward, as long as no primitive dependencies (such as connection strings, URLs and configuration parameters in general) are involved. This post describes the strategy for dealing with primitive dependencies.
-
+Registering components in Autofac is straightforward, as long as no primitive dependencies (such as connection strings, URLs and configuration parameters in general) are involved.<br />
+This post describes the strategy for dealing with primitive dependencies.
+<!--more-->
 * [The Ordinary Case](#the-ordinary-case)  
 * [Here Come The Primitives](#here-come-the-primitives)
 * [Pain Points](#pain-points)
