@@ -14,7 +14,7 @@ If you are learning to touch type, use this cheat sheet. Print it, and forget th
 
 # It's about your fingers, not about the keyboard
 
-I'm a late touch typer. I learned to type without looking in my 40s, after years of bad habits. Consequently, learning to touch type hasn't be the simplest task to me.
+I'm a late touch typer. I learned to type without looking in my 40s, after years of bad habits. Consequently, learning to touch type hasn't been the simplest task to me.
 
 Besided the unavoidable and boring hours of exercise, the trick that helped me the most was:
 
