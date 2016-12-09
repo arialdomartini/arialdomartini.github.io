@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Forget the keyboard"
+title: "Forget The Keyboard"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - Touch Typing
