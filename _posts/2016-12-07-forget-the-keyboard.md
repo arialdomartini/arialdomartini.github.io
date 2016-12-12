@@ -56,7 +56,7 @@ Equally, for getting a **`U`** you have to move your right hand index up.
 
 ![Position of letter j](static/img/hands-keyboard-ju.jpg)
 
-Use the trick again: **there's no physical `U` key, it's your finger that has a `U` letter on its tip**. The cheat sheet can help you visualize it. You don't need to look or think to a keyboard to make it work.
+Use the trick again: **there's no physical `U` key, it's your finger that has a `U` letter on its tip**.
 
 ## Try it
 
