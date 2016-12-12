@@ -8,7 +8,7 @@ excerpt: If you are learning to touch type, use this cheat sheet. Print it, and 
 ---
 ## TL;DR
 
-If you are learning to touch type, use this cheat sheet. Print it, and forget the keyboard
+If you are learning to touch type, use this cheat sheet. Print it, and forget the keyboard.
 
 <img src="static/img/hands-keyboard.jpg" width="100%"/>
 
