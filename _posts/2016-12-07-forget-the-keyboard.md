@@ -18,7 +18,7 @@ I'm a late touch typer. I learned to type without looking in my 40s, after years
 
 Besides the unavoidable and boring hours of exercise, the trick that helped me the most was:
 
-> Stop thinking to *position of keys on the keyboard*,
+> Stop thinking to *position of keys on the keyboard*.
 >
 > Only focus on *which finger to use*.
 
