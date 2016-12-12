@@ -22,6 +22,10 @@ Besides the unavoidable and boring hours of exercise, the trick that helped me t
 >
 > Only focus on *which finger to use*.
 
+*What do you mean?*
+
+Let's find out!
+
 ## A printed keyboard is a keyboard anyway
 
 Learning how to touch type is all about learning **not to look to the keyboard**, right?<br />
