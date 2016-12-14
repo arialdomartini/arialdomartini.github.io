@@ -8,19 +8,23 @@ excerpt: If you are learning to touch type, use this cheat sheet. Print it, and 
 ---
 ## TL;DR
 
-If you are learning to touch type, use this cheat sheet. Print it, and forget the keyboard
+If you are learning to touch type, use this cheat sheet. Print it, and forget the keyboard.
 
 <img src="static/img/hands-keyboard.jpg" width="100%"/>
 
-# It's about your fingers, not about the keyboard
+## It's about your fingers, not about the keyboard
 
-I'm a late touch typer. I learned to type without looking in my 40s, after years of bad habits. Consequently, learning to touch type hasn't be the simplest task to me.
+I'm a late touch typer. I learned to type without looking in my 40s, after years of bad habits. Consequently, learning to touch type hasn't been the simplest task to me.
 
-Besided the unavoidable and boring hours of exercise, the trick that helped me the most was:
+Besides the unavoidable and boring hours of exercise, the trick that helped me the most was:
 
-> Stop thinking to *position of keys on the keyboard*,
+> Stop thinking to *position of keys on the keyboard*.
 >
 > Only focus on *which finger to use*.
+
+*What do you mean?*
+
+Let's find out!
 
 ## A printed keyboard is a keyboard anyway
 
@@ -45,13 +49,14 @@ When your fingers are on the home row, you know that if you type with *that* fin
 
 ![Position of letter j](static/img/hands-keyboard-j.jpg)
 
-Well, that's all you need to know  about **`J`**. Do you mind *where* the **`J`** key is, on the keyboard? No, you don't. Just don't think to the phisical key under your finger. **Start thinking that your right hand index is the `J` letter**. As long you don't move your hands from the home row, that finger will always be the **`J`**. It's a simple association that your muscle memory will easily remember.
+Well, that's all you need to know  about **`J`**. Do you mind *where* the **`J`** key is, on the keyboard? No, you don't. Just don't think to the physical key under your finger. <br/>
+**Start thinking that your right hand index is the `J` letter**. As long you don't move your hands from the home row, that finger will always be the **`J`**. It's a simple association that your muscle memory will easily remember.
 
-Equally, for getting a **`U`** you have to move your left hand index up.
+Equally, for getting a **`U`** you have to move your right hand index up.
 
 ![Position of letter j](static/img/hands-keyboard-ju.jpg)
 
-Use the trick again: **there's no physical `U` key, it's your finger that has a `U` letter on its tip**. The cheat sheet can help you visualize it. You don't need to look or think to a keyboard to make it work.
+Use the trick again: **there's no physical `U` key, it's your finger that has a `U` letter on its tip**.
 
 ## Try it
 
