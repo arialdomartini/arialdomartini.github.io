@@ -18,6 +18,11 @@
   img: implementing-openshift.jpg
   url: https://www.amazon.com/Implementing-OpenShift-Adam-Miller/dp/1782164723
 
+- title: "Mastering Bitcoin"
+  author: Andreas M. Antonopoulos
+  img: mastering-bitcoin.jpg
+  url: http://shop.oreilly.com/product/0636920032281.do
+
 - title: "Patterns, Principles, and Practices of Domain-Driven Design"
   author: Scott Millett, Nick Tune
   img: ddd-wrox.jpg
