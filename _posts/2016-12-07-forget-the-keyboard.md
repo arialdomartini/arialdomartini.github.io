@@ -30,13 +30,7 @@ Yet, most of the web sites for learning touch typing suggest to use cheat sheets
 [![A cheat sheet for learning touch typing](static/img/touch-typing1.png)](http://elearn4free.blogspot.it/2012/03/touch-typing-learn-how-to-improve-your.html)
 [![Keybr's cheat sheet for learning touch typing](static/img/touch-typing2.png)](http://www.keybr.com/practice)
 
-<<<<<<< ae4354e2d87d479a073c24827a2f209bd867d8a5
-Do you see the problem? **As long as a cheat sheet represents a keyboard, the keyboard will be your reference**: you will learn to rely on the keyboard, you will even struggle to mentally visualize it. In all cases, you will be inevitably tempted to look at it, wherever it is represented. This won't help you learning to touch type, because looking at a keyboard printed on a sheet of paper is no better than looking to the physical keyboard.
-=======
 Do you see the problem? **As long as a cheat sheet represents a keyboard, the keyboard will be your reference**: as a consequence, you will learn to rely on the keyboard; you will even struggle to mentally visualize it. In all cases, you will be inevitably tempted to look at it, wherever it is represented. Unfortunately, since the main goal is to type without looking, looking to a keyboard printed on a sheet of paper is no better than looking to a physical keyboard.
-
-Ideally, when you touch type, there's no keyboard at all in your thoughts: there's only a direct connection between the character you want to type and a finger movement.
->>>>>>> cb3b22decdfa14ac9ba873cc725f6d212d78cfe7
 
 Ideally, when you touch type, there's no keyboard at all in your thoughts: there's only a direct connection between the character you want to type and a finger movement. Therefore, not only aren't those cheat sheets very effective: they could even be detrimental. 
 
