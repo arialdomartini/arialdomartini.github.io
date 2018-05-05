@@ -1,4 +1,4 @@
-# Build
+# Build with Jekyll
 
 Build the blog with:
 
@@ -12,10 +12,19 @@ Just push the repo to see the results online.
 
 ## Serve
 
-Serve the blog locally with
+### Serve with Jekyll
+
+Serve the blog locally with:
 
 ```
 jekyll serve
+```
+
+### Serve with Docker
+Just run:
+
+```
+./serve.sh
 ```
 
 # Template
