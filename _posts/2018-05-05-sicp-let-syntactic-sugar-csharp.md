@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Variables are syntatic sugar for lambda expressions (C#)
+title: Variables are syntactic sugar for lambda expressions (C#)
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - SICP
