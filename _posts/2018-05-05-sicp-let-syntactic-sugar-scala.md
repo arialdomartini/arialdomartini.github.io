@@ -1,6 +1,6 @@
 ---
 Layout: post
-title: Variables are simply syntatic sugar for lambda expressions (Scala)
+title: Variables are syntatic sugar for lambda expressions (Scala)
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - SICP
