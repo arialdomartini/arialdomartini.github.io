@@ -15,9 +15,11 @@ The quiz is:
 
 > Would you be able to implement a 2-tuple (a pair) of integers, only leveraging functions and lambdas, without using neither variables nor class fields?
 
+<!--more-->
+
 I mean, you should store 2 integers in a tuple, without writing anything like the following:
 
-{% highlight csharp%}
+{% highlight csharp %}
 class MyTuple
 {
     public int First { get; set; }  // Don't use properties!
@@ -29,13 +31,11 @@ class MyTuple
     {
         var a = ...                 // do not use variables!
     }
-...
+
 {% endhighlight %}
 
 At first, it seems impossible, isn't it?
 
-
-<!--more-->
 # The tests to pass
 
 A 2-tuple, or pair, is a data structure that holds 2 values. For example, a pair of integers is easily obtained in C# with:
@@ -87,11 +87,11 @@ public class MyTupleIntTest
 }
 {% endhighlight %}
 
-I'm sure you could easily write a custom implementation of pair of integers, may be storing the 2 integer values in 2 class fields. The challenge is: implement one, but use no variable and no class field. Only rely on functions.
+I'm sure you could easily write a custom implementation of pair of integers using classes, may be storing the 2 integer values in 2 class fields. The challenge is: implement a purely-functional version, with no variable and no class field. Only rely on functions.
 
 # Hint #1
 
-Somehow or other, the pair must retain the 2 integer values. In order to store a value you need a variable, a class field or a property, don't you? Actually, there are other means for storing a value and retrieving it later. You could use functions. The following example might give you a suggestion. Let's start from this function:
+Somehow or other, the pair must retain the 2 integer values. In order to store a value you need a variable, a class field or a property, don't you? Actually, there are other means for storing a value and making it available for a later use. You can use functions. The following example might give you a suggestion. Let's start from this function:
 
 {% highlight csharp%}
 Func<string> revealSecret = delegate(string message) {
@@ -133,7 +133,7 @@ var secret = secretRevealer("secret message");
 {% endhighlight %}
 
 So far, nothing special.<br />
-Enter closures. What if introduce a variable in `GetSecretRevealer`'s body:
+Enter closures. What if we introduce a variable in `GetSecretRevealer`'s body?
 
 {% highlight csharp%}
 Func<string, string> GetSecretRevealer()
@@ -153,7 +153,7 @@ The moment `secretRevealer` is invoked, the variable `name` is undefined, becaus
 Does it give you any suggestion?
 
 # Hint #2
-Ok, let's try with this. What if we convert the variable `name` to a method's parameter? See the following:
+Ok, let's try with this. What if we convert the variable `name` to a method's parameter?
 
 {% highlight csharp%}
 Func<string, string> GetSecretRevealer(string name)
@@ -162,13 +162,13 @@ Func<string, string> GetSecretRevealer(string name)
 }
 {% endhighlight %}
 
-or, more concisely, as an expression-bodied member:
+or, more concisely, using an expression-bodied member:
 {% highlight csharp%}
 Func<string, string> GetSecretRevealer(string name) =>
   (message) =>  $"My name is {name} and I tell you: {message}.";
 {% endhighlight %}
 
-Now, there are no variables at all in `GetSecretRevealer`. Yet, the value passed in input is retained, just like the variable `name` in the previous example. So, when the returned function is invoked, the value can be retrieved again:
+It still works. Although there are no variables at all in `GetSecretRevealer`, the value passed in input is retained, just like the variable `name` in the previous example:
 
 {% highlight csharp%}
 var secretRevealer = GetSecretRevealer("James Bond");    // we provide a value
@@ -181,7 +181,7 @@ var result = secretRevealer("some message");             // when the function is
 {% endhighlight %}
 
 
-The value of `name` has been captured by the closure returned by `GetSecretRevealer`. You could leverage this fact to store values, and use closures to build data structures, without using variables nor fields.
+The value of `name` has been captured by the closure returned by `GetSecretRevealer`. You could leverage this fact to store values, and use closures to build data structures, with no need of variables and fields.
 
 
 # Solution
@@ -207,7 +207,7 @@ static class MyTuple
 
 It's simpler than you think once you wrap your head around the idea of functions that returns function that takes functions as parameters, and the like.
 
-Let's start from `Build`: `Build`'s goal is to create our purely-functional version of tuple of integers, so it must retain the value of `a` and `b`. If `Build` could speak, it would say:
+Let's start from `Build`: `Build`'s goal is to create our purely-functional version of tuple of integers, so it must get the value of `a` and `b` in input. If `Build` could speak, it would say:
 
 > Invoke me, and pass me the 2 integers you want to store. I will return you back a Magic Closure, that can capture those two integers.<br />
 > Store that Magic Closure and whenever you want those 2 integers back, invoke it.<br />
@@ -215,11 +215,11 @@ Let's start from `Build`: `Build`'s goal is to create our purely-functional vers
 
 Let's ask Magic Closure:
 
-> I'm created by `Build` when you give it 2 integer values. Since I'm a closure, I will capture their values.
-> Unfortunately, I cannot give you them back as a tuple, since we deliberatelly decided to only rely on functions. Here's a trick we might use: pass me a function, and I will invoke it providing it exactly the 2 integers you need as parameters.
+> I'm created by `Build` when you give it 2 integer values. Since I'm a closure, I can capture their values.
+> Unfortunately, I cannot give you them back to you as a tuple, since we deliberatelly decided to only rely on functions. Here's a trick we might use: pass me a function, and I will invoke it providing it exactly the 2 integers you need as parameters.
 
-Let's talk about the functions we should pass the Magic Closure: what might them look like?<br />
-One of them could be a function to get the first value. It should be like:
+Let's talk about the functions we should pass the Magic Closure: what should they look like?<br />
+One of them can be a function to get the first value. Something like:
 
 {% highlight csharp%}
 int FirstOfTwoParameters(int a, int b)
@@ -253,7 +253,7 @@ static class MyTuple
 
 where `_` is used to signify that that particular value won't be used;
 
-If the Magic Closure receives `first` or `second`, all it has to do is to invoke them and return back the result. The Magic Closure is then:
+If the Magic Closure receives `first` or `second`, all it has to do is to invoke them passing them the 2 integers, and return back the result. The Magic Closure implementation is then:
 
 {% highlight csharp %}
 int MagicClosure(Func<int, int, int> f) => f(a, b);
@@ -265,12 +265,12 @@ The type of `MagicClosure` is:
 Func<Func<int, int, int>, int>
 {% endhighlight %}
 
-that is:
+that we can explain as:
 
 
 {% highlight csharp %}
 Func<                    // I am a function
-   Func<int, int, int>,  // Provide me the lambdas first or second
+   Func<int, int, int>,  // Provide me a lambda like the function first
    int                   // and I will invoke it and return its result
 >
 {% endhighlight %}
@@ -293,7 +293,7 @@ static int Second(this Func<Func<int, int, int>, int> tuple) => tuple((_, b) => 
 
 They invoke the Magic Closure, providing them the lambda to get the first value, and the lambda to get the second one.
 
-Now, think about it: the Magic Closure **is** our tuple. We get it from `Build`. We can invoke `First` and `Second` on it. Regardless it is implemented with functions, it is in fact a data structure.
+Now, think about it: the Magic Closure **is** our tuple: we create it using a sort of factory method, `Build`, and we can invoke `First` and `Second` on it to get its internal state. In orher words, regardless if it is implemented with functions, it is in fact a data structure.
 
 To demonstrate it, let's implement a sum of tuples.
 
@@ -307,7 +307,7 @@ To demonstrate it, let's implement a sum of tuples.
                  a.Second() + b.Second());
 {% endhighlight %}
 
-To reason about the hard-to-read signature, you could mentally replace `Func<Func<int, int, int>, int>` with `Tuple`. Doing so, the above would read as:
+To reason about the hard-to-read signature, you can mentally replace `Func<Func<int, int, int>, int>` with `Tuple`. Doing so, the above would read as:
 
 {% highlight csharp %}
 static int First(this Tuple tuple) => tuple((a, _) => a);
@@ -321,7 +321,7 @@ Straighforward, isn't it?
 
 ## Use a delegate alias
 
-Actually, you could simplify the whole syntax using a `delegate` to alias `Func<Func<int, int, int>, int>`:
+Actually, you can simplify the whole syntax using a `delegate` to alias `Func<Func<int, int, int>, int>`:
 
 {% highlight csharp %}
 delegate int FirstOrSecond(int a, int b);
@@ -373,4 +373,4 @@ Notice how
 
 * `Build` acts just like a data structure constructor, or a class factory method;
 * the delegate `Tuple` is a functional replacement of a class;
-* the closures by `Build`, `First`, `Second` and `Add` are the functional equivalent of class instances.
+* the closures returned by `Build`, `First`, `Second` and `Add` are the functional equivalent of class instances.
