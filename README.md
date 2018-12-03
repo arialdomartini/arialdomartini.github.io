@@ -1,11 +1,24 @@
 # Build with Jekyll
 
-Build the blog with:
+## Requirements
+Installation of Jekyll is optional, as the building and serving can also performed with Docker. In this case, of course, Docker must be installed
 
+## Build
+
+### Build with Jekyll
+Run:
 ```
 jekyll build
 ```
 
+### Build Docker
+Run:
+
+```
+./build.sh
+```
+
+### Getting the resulting HTML pages
 The resulting HTML pages will be stored in `_site_`, which is an ignored directory.
 
 Just push the repo to see the results online.
@@ -25,6 +38,12 @@ Just run:
 
 ```
 ./serve.sh
+```
+
+Stop the container with:
+
+```
+./stop.sh
 ```
 
 # Template
