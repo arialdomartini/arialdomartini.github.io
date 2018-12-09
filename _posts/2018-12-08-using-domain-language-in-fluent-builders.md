@@ -355,3 +355,7 @@ For this reason, we try to keep the builders as simple as possible (but not simp
 A good rule of thumb is the one suggested by [Leonardo Staffolani](https://github.com/staffoleo):
 
 > When you feel that the builder code would benefit from being test covered, it's the sign it has gone too far.
+
+Find here [the complete example](https://github.com/arialdomartini/fluent-builder).
+
+ciao!
