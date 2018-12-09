@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Using domain language in C# Fluent Builders
-author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
+author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>, <a href="https://github.com/ale7canna">Alessandro Canicatti</a>, <a href="https://github.com/staffoleo">Leonardo Staffolani</a>
 tags:
 - C#
 ---
