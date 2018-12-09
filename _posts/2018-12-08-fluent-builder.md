@@ -27,7 +27,7 @@ public class Order
 }
 {% endhighlight %}
 
-A builder with a Fluent Interface let's create instances of `Order` with a syntax like:
+A builder with a Fluent Interface lets create instances of `Order` with a syntax like:
 
 {% highlight csharp %}
 var order = new OrderBuilder()
