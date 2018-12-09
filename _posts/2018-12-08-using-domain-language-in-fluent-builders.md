@@ -352,7 +352,7 @@ Adopting this approach we found that sometimes the complexity introduced by the 
 
 For this reason, we try to keep the builders as simple as possible (but not simpler). In other words, we know these techniques are tools at our disposal, but we apply them conscientiously. We mostly focus on tests, not on builders: builders are meant to ease the test writing, and they are supposed to be reused in a very high number of tests, without modifications. When we feel the need to enhance or modify a builder, it happen that the modification causes controversies and discussions. In all the cases, we tend to prefer simplicity to completeness.
 
-A good rule of thumb is the one suggested by [Leonardo Staffolani](https://github.com/staffoleo):
+A good rule of thumb is the one suggested by Leonardo:
 
 > When you feel that the builder code would benefit from being test covered, it's the sign it has gone too far.
 
