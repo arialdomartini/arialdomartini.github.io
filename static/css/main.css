@@ -193,3 +193,19 @@ div.footer{
   padding-bottom: 15px;
   
 }*/
+
+tbody td {
+    padding:7px;
+    border:#555 1px solid;
+}
+
+th {
+    padding:7px;
+    border:#555 1px solid;
+}
+
+tbody tr:nth-child(odd){
+    background-color: #eee;
+    color: #fff;
+    border: 1px solid #555;
+}
