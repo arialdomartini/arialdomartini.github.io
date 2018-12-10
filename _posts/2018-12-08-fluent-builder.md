@@ -104,7 +104,7 @@ There are a few options for a Fluent Interface with nested entities. We experime
 The simplest approach requires the `OrderBuilder` to have a method for each of the `Article`'s properties:
 
 {% highlight csharp %}
-var order = AnOrder()
+var order = new OrderBuilder()
     .WithNumber(10)
     .WithDate(new DateTime(2018, 12, 24))
     .WithArticlePrice(32.50m)
@@ -120,7 +120,7 @@ Sincerely, this is not ideal, as it pollutes the `OrderBuilder` with methods, ma
 A better option is to provide `Article` with its own builder, and to make it accessible from `OrderBuilder` with something like:
 
 {% highlight csharp %}
-var order = AnOrder()
+var order = new OrderBuilder()
     .WithNumber(10)
     .WithDate(new DateTime(2018, 12, 24))
     .WithArticle()
@@ -152,7 +152,7 @@ is artificial: it will probably be removed by the IDE with operations like "Refo
 We found a third approach very convenient:
 
 {% highlight csharp %}
-var order = AnOrder()
+var order = new OrderBuilder()
     .WithNumber(10)
     .WithDate(new DateTime(2018, 12, 24))
     .HavingArticle(a => a

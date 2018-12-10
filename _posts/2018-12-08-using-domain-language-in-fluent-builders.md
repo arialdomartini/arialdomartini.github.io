@@ -8,7 +8,7 @@ tags:
 So, by [using lambdas in the Fluent Builders](fluent-builder.html) our tests started containing expressions such as:
 
 {% highlight csharp %}
-    var order = AnOrder()
+    var order = new OrderBuilder()
         .WithNumber(10)
         .WithDate(new DateTime(2018, 12, 24))
         .HavingArticle(a => a
