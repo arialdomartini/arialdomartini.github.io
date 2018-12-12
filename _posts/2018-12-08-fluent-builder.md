@@ -5,7 +5,21 @@ author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>, <a href=
 tags:
 - C#
 ---
-We show how we write our domain-focused, fluent builders that support nested entities by using lambdas, in C#.
+{% highlight csharp %}
+    var order = AnEmptyOrder()
+        .WithNumber(10)
+        .CreatedOn(new DateTime(2018, 12, 24))
+        .ByACustomer(c => c
+            .Named("Amelia")
+            .Aged(42))
+        .ContainingAnArticle(a => a
+            .WithPrice(32.50m)
+            .InCategory("books"))
+        .Build();
+{% endhighlight %}
+
+We show how we designed our C#, domain-focused, fluent builders that support nested entities by using lambdas.
+
 <!--more-->
 
 * [Builders with Fluent Interface](#builders-with-fluent-interface)
