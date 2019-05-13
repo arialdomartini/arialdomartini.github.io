@@ -6,9 +6,10 @@ tags:
 - Blockchain
 - Ethereum
 - Docker
-excerpt: bla bla bla
+excerpt: How to setup a private Ethereum network in a Docker container.
 
 ---
+Find the code at [Ethereum Private Network](https://github.com/arialdomartini/private-ethereum) on GitHub.
 
 To define a network, we need:
 
