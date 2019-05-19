@@ -6,7 +6,7 @@ tags:
 - Blockchain
 - Ethereum
 - Docker
-excerpt: How to setup a private Ethereum network in a Docker container.
+excerpt: Setup a one-node, private Ethereum network in a Docker container.
 
 ---
 Find the code at [Ethereum Private Network](https://github.com/arialdomartini/private-ethereum) on GitHub.
@@ -124,11 +124,4 @@ geth \
 
 
 ## Operations
-
-Let's read the difficulty:
-
-```
-eth.getBlock(0).difficulty
-```
-
-
+Checkout the GitHub repo [https://github.com/arialdomartini/private-ethereum](https://github.com/arialdomartini/private-ethereum): it contains a docker-compose bundle to setup a one-node Ethereum private network, and as well a sample session to interactively create accounts, mine blocks and make transactions in an Ethereum console.
