@@ -64,6 +64,9 @@ The network id is a positive number. Avoid using 1, 2, 3 or 4, as they are reser
 * `2` Morden test network
 * `3` Ropsten test network
 * `4` Rinkeby test network
+* `5` Goerly test network
+* `42` Kovan test network
+* `1337` Geth private chains
 
 We set our private network id to `99` with
 
