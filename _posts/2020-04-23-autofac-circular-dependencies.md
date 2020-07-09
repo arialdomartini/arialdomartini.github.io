@@ -9,7 +9,7 @@ tags:
 ---
 This post describes a possible approach for registering components with circular dependencies (e.g. `Foo` needs `Bar`, and `Bar` needs `Foo`) with Autofac, with both components taking their dependencies through their constructor (the so called [Constructor/Constructor Dependencies](https://autofaccn.readthedocs.io/en/latest/advanced/circular-dependencies.htmlhighlight=constructor%20injection#constructor-constructor-dependencies)).
 
-## TL;DR
+### TL;DR
 Use an [Implicit Relationship Type](https://docs.autofac.org/en/latest/resolve/relationships.html) and inject `Lazy<Foo>` instead of `Foo`.
 <!--more-->
 ## The problem
