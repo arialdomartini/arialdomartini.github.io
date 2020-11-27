@@ -18,15 +18,14 @@ Say we have a class `Foo` depending on `Bar`, and in the meanwhile `Bar` dependi
 ``` csharp
 class Foo
 {
- internal Foo(Bar bar) {}
+    internal Foo(Bar bar) {}
 }
 
 class Bar
 {
- internal Bar(Foo foo) {}
+    internal Bar(Foo foo) {}
 }
 ```
-k
 This would create 2 mutual runtime dependencies, and Autofac would detect the problem at runtime throwing a `DependencyResolutionException`, with the message "`Circular component dependency detected`":
 
 ``` csharp
