@@ -90,6 +90,7 @@ And, indeed, it needn't know: that's a just the application of the Dependency In
 
 > * High-level modules should not depend on low-level modules. Both should depend on abstractions (e.g., interfaces).
 > * Abstractions should not depend on details. Details (concrete implementations) should depend on abstractions.
+
 [Dependency Inversion Principle][dependency-inversion]
 
 Interfaces encourage loose coupling. We implement interfaces exactly because we want to separate the contract from the implementation, and decouple the clients from implementation.<br/>
