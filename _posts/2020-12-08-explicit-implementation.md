@@ -284,3 +284,6 @@ I would just recommend trying that.
 * [Design Pattern, Elements of Reusable Object-Oriented Software- Addison-Wesley Professional][gof]
 * [Overview of types in F#][fsharp-types], in [F# For Fun And Profit][fsharp-profit]
 * [Dependency Inversion Principle][dependency-inversion]
+
+
+[Comments](https://github.com/arialdomartini/arialdomartini.github.io/discussions/5)
