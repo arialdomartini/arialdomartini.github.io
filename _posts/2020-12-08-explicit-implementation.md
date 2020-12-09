@@ -165,7 +165,7 @@ This does not happen with Explicit Implementation. The following would happily c
 ```csharp
 interface ISomeService
 {
-    public void Foo();
+    internalvoid Foo();
 }
 
 class SomeService : ISomeService
@@ -213,14 +213,14 @@ For example:
 ```csharp
 internal interface ISomeService
 {
-    void MethodOne();
-    void MethodTwo();
+    public void MethodOne();
+    public void MethodTwo();
 }
 
 internal class ImplicitImplementation : ISomeService
 {
-    internal void MethodOne() { }
-    internal void MethodTwo() { }
+    public void MethodOne() { }
+    public void MethodTwo() { }
 }
 
 internal class ExplicitImplementation : ISomeService
@@ -241,8 +241,8 @@ internal interface ISomeService
 
 internal class ImplicitImplementation : ISomeService
 {
-    internal void MethodOne() { }
-    internal void MethodTwo() { }  // <- Ghost Public Function
+    public void MethodOne() { }
+    public void MethodTwo() { }  // <- Ghost Public Function
 }
 
 internal class ExplicitImplementation : ISomeService
@@ -251,7 +251,6 @@ internal class ExplicitImplementation : ISomeService
     void ISomeService.MethodTwo() {  }  // <- This won't compile
 }
 ```
-
 
 
 ## The case of F#
