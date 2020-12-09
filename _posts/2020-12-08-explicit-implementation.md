@@ -69,23 +69,23 @@ The following code:
 ```csharp
 class Client
 {
-    readonly ISomeService _control;
+    readonly ISomeService _service;
     
-    internal Client(ISomeService control)
+    internal Client(ISomeService service)
     {
-        _control = control;
+        _service = service;
     }
 
     internal void SomeMethod()
     {
-        _control_.DoSomething();
+        _service_.DoSomething();
     }
 }
 ```
 
-works regardless if `control` is implemented explicitly or impicitly. 
+works regardless if `service` is implemented explicitly or impicitly. 
 
-That's a trivial implementation of Dependency Injection where, rightly, `control` is injected in terms of an interface. `Client` would never know which is the corresponding concrete class.<br/>
+That's a trivial implementation of Dependency Injection where, rightly, `service` is injected in terms of an interface. `Client` would never know which is the corresponding concrete class.<br/>
 And, indeed, it needn't know: that's a just the application of the Dependency Inversion Principle:
 
 > * High-level modules should not depend on low-level modules. Both should depend on abstractions (e.g., interfaces).
@@ -94,7 +94,7 @@ And, indeed, it needn't know: that's a just the application of the Dependency In
 
 Interfaces encourage loose coupling. We implement interfaces exactly because we want to separate the contract from the implementation, and decouple the clients from implementation.<br/>
 
-Injecting `control` in terms of a specific class would just create useless and noxious coupling. 
+Injecting `service` in terms of a specific class would just create useless and noxious coupling. 
 
 ## Program to an interface, not an implementation
 > **TL;DR**<br/>
