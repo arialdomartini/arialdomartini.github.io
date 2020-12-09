@@ -78,7 +78,7 @@ class Client
 
     internal void SomeMethod()
     {
-        _service_.DoSomething();
+        _service.DoSomething();
     }
 }
 ```
