@@ -57,7 +57,7 @@ internal class Client
 Finally, there's no doubt that Implicit Implementation is, by far, the most common style.
 
 ## So what's the big deal?
-Despite the drawbacks above, I've decided to start using using more and more extensively the Explicit Implementation, for the reasons depicted below. So far I found a lot of benefits.<br/>
+Despite the drawbacks above, I've decided to start using more and more extensively the Explicit Implementation, for the reasons depicted below. So far I found a lot of benefits.<br/>
 Bear with me. 
 
 ## Inject dependencies in terms of an interface
@@ -86,7 +86,7 @@ class Client
 works regardless if `control` is implemented explicitly or impicitly. 
 
 That's a trivial implementation of Dependency Injection where, rightly, `control` is injected in terms of an interface. `Client` would never know which is the corresponding concrete class.<br/>
-And, in fact, it needn't know: that's a just the application of the Dependency Inversion Principle:
+And, indeed, it needn't know: that's a just the application of the Dependency Inversion Principle:
 
 > * High-level modules should not depend on low-level modules. Both should depend on abstractions (e.g., interfaces).
 > * Abstractions should not depend on details. Details (concrete implementations) should depend on abstractions.
@@ -112,7 +112,8 @@ The idea behind Programming To An Interface is to base the programming logic on 
 > This so greatly reduces implementation dependencies between subsystems that it leads to the following principle of reusable object-oriented design:
 > * Program to an interface, not an implementation.
 > Don’t declare variables to be instances of particular concrete classes. Instead, commit only to an interface defined by an abstract class
-[Design Pattern, Elements of Reusable Object-Oriented Software- Addison-Wesley Professional][gof]
+
+[Design Pattern: Elements of Reusable Object-Oriented Software][gof]
 
 I can't think of a single case in which an instance, passed down to a method or to a class constructor, in terms of an interface should be cast down to the concrete type. In other words, I don't see the reason to have Implicit Implementation on dependencies and parameters. 
 
@@ -180,7 +181,7 @@ Tests too should only deal with explicitly implemented method: tests should exer
 
 You don't test private methods for the same reason: private methods are an implementation detail that could change during the refactor cycle, they are private for hiding the implementation, and you don’t want to test implementation details.
 
-Private methods and methods not part of any interface are alike, ant the same rational applies: tests should always exercise a System Under Test in terms of its interface, rather than of its implementation. Explicit Implementation would just enforce this.
+Private methods and methods not part of any interface are alike, and the same rational applies: tests should always exercise a System Under Test in terms of its interface, rather than of its implementation. Explicit Implementation would just enforce this.
 
 ```csharp
 public class ExplicitClassTest
@@ -253,7 +254,7 @@ internal class ExplicitImplementation : ISomeService
 
 
 ## The case of F#
-F# only supports implicit implementation.
+F# only supports Explicit Implementation.
 
 That's one of the justifications:
 
