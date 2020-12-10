@@ -1,14 +1,14 @@
 ---
 layout: post
-title: "Explicit Interface Method Implementation is a design best practice"
+title: "Explicit Interface Implementation is a design best practice"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - C#
 ---
-**TL;DR**<br/>
 * In C# interfaces can be implemented either implicitly or explicitly
 * I've started applying Explicit Implementation wherever possible
 * I figured out that there are not so many use cases for Implicit Implementation. After all, objects should be manipulated solely in terms of their interface, rather than in terms of their concrete types. 
+* With Explicit Implementation methods needn't be public, which is good for encapsulation
 * I ended up seeing Explicit Implementation as a design best practice, as it promotes Loose Coupling and enforces the Dependency Inversion Principle.
 
 <!--more-->

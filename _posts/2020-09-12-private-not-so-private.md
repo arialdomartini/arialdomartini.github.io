@@ -5,7 +5,7 @@ author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - C#
 ---
-**TL;DR**: the following code is just legit:
+The following code is just legit:
 
 ```csharp
 class Foo
