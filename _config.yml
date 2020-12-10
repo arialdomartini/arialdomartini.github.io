@@ -27,3 +27,4 @@ google_analytics: UA-44802996-2
 
 # needed for travis-ci build
 #exclude: [vendor]
+permalink: /:title
