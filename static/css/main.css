@@ -209,3 +209,24 @@ tbody tr:nth-child(odd){
     color: #fff;
     border: 1px solid #555;
 }
+
+.image {
+  /* border: 4px solid black; */
+  padding: 20px;
+  width: 75%;
+  background: #000;
+}
+
+.image img {
+  border: 2px solid #fff;
+  width: 100%;
+
+}
+
+.image figcaption {
+  text-align: center;
+  font-variant-caps: small-caps;
+  padding-top:1em;
+  font-size: 2em;
+  color: #fff;
+}
