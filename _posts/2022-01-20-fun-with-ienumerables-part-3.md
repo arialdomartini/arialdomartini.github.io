@@ -93,8 +93,6 @@ internal static class Retrieve
 An example of usage would be
 
 ```csharp
-
-
 class MyTargetClass
 {
     // It's a collection of decimals
@@ -107,7 +105,7 @@ class MyTargetClass
 
     internal int SomeMethod(string s)
     {
-        // No, it's a function.
+        // No, wait, it's a function
         return _decimals.Execute<string, int, decimal>(s);
     }
 }
