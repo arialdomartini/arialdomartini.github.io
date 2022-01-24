@@ -52,7 +52,7 @@ I swear that [this test is green](/static/img/fun-with-ienumerables/puzzling-tes
 It's actually a dumb and deceitful trick, which we will use and abuse in a short, 3 episode series.
 
 * [Part I - Funny collection behaviors](fun-with-ienumerables-part-1)
-* [Part II - Encapsulating an Action in IEnumerable](fun-with-ienumerables-part-2)
-* [Part II - Pointless, unconvenient and unconventional Dependency Injection via IEnumerable](fun-with-ienumerables-part)
+* [Part II - Disguising an Action as an IEnumerable](fun-with-ienumerables-part-2)
+* [Part II - Horribly unconvenient Dependency Injection via IEnumerable](fun-with-ienumerables-part-3)
 
   

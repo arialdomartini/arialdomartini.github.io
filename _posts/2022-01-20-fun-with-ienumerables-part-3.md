@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Fun with IEnumerable - Part III - Pointless, unconvenient and unconventional Dependency Injection via IEnumerable"
+title: "Fun with IEnumerable - Part III - Horribly unconvenient Dependency Injection via IEnumerable"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - C#

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Fun with IEnumerable - Part II - Encapsulating an Action in IEnumerable"
+title: "Fun with IEnumerable - Part II - Disguising an Action as an IEnumerable"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - C#
