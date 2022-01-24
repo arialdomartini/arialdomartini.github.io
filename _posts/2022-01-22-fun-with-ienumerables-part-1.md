@@ -297,7 +297,7 @@ public void legit_case()
 Notice that the collection is not materialized until `Count()` or `ToArray()` are evaluated.
 
 
-## Funny uses
+## Crooked uses
 But you can also do fancy stuff like:
 
 ```csharp
