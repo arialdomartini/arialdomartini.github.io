@@ -8,7 +8,7 @@ author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 
 {% include image.html url="static/img/design-patterns/duck-typing.jpg" description="Duck Typing" %}
 
-
+{% include image.html url="static/img/design-patterns/onion-architecture.jpg" description="Onion Architecture" %}
 <!--more-->
 
 
@@ -30,4 +30,10 @@ author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 
 {% include image.html url="static/img/design-patterns/code-comments.jpg" description="Code Comments" %}
 
+{% include image.html url="static/img/design-patterns/do-while.jpg" description="While Vs Do-While" credits_name="spiderpig2099" credits_url="https://www.reddit.com/r/ProgrammerHumor/comments/a5mghb/the_importance_of_knowing_how_to_correctly_use/"%}
 
+
+{% include image.html url="static/img/design-patterns/smoke-tests.jpg" description="Smoke Testing" credits_name="Kamran Ahmed" credits_url="https://www.reddit.com/r/ProgrammerHumor/comments/enq91y/smoke_tests_in_the_wild/"%}
+
+
+{% include image.html url="static/img/design-patterns/firewall-violation.jpg" description="Firewall Violation" %}
