@@ -1,5 +1,7 @@
-<figure class="demotivational">
-  <img src="{{ include.url }}" alt="{{ include.description }}">
-  <figcaption>{{ include.description }}</figcaption>
+<div class="demotivational">
+  <figure>
+    <img src="{{ include.url }}" alt="{{ include.description }}">
+    <figcaption>{{ include.description }}</figcaption>
+  </figure>
   {% if include.credits_name %}<div class="credits">Credits: <a href="{{ include.credits_url }}">{{ include.credits_name }}</a></div>{% endif %}
-</figure>
+</div>

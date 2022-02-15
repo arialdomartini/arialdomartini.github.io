@@ -210,13 +210,15 @@ tbody tr:nth-child(odd){
     border: 1px solid #555;
 }
 
-
 .demotivational {
+  width: 75%;
+  margin-bottom:3em;
+}
+
+.demotivational figure {
   /* border: 4px solid black; */
   padding: 20px;
-  width: 75%;
   background: #000;
-  margin-bottom:3em;
 }
 
 .demotivational img {
@@ -234,6 +236,7 @@ tbody tr:nth-child(odd){
 }
 
 .demotivational .credits {
-  color: #fff;
+  color: black;
   text-align: right;
+  right-top:1em;
 }
