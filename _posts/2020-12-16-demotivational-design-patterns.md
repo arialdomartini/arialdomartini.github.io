@@ -28,12 +28,11 @@ author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 
 {% include image.html url="static/img/demotivational-design-patterns/microservices.jpg" description="Microservices" %}
 
-
-
 {% include image.html url="static/img/demotivational-design-patterns/fix-it-later.jpg" description="Fix It Later" credits_name="Jared Palmer" credits_url="https://twitter.com/jaredpalmer/status/1481981571112611843?s=21"%}
 
 {% include image.html url="static/img/demotivational-design-patterns/simple-design.jpg" description="Simple Design" %}
 
+{% include image.html url="static/img/demotivational-design-patterns/design-vs-user-experience.png" description="Design vs User Experience" %}
 
 {% include image.html url="static/img/demotivational-design-patterns/map-vs-flatmap.png" description="map vs flatMap" credits_name="PrimozDeluz" credits_url="https://www.reddit.com/r/scala/comments/9itau5/when_you_use_map_instead_of_flatmap/"%}
 
