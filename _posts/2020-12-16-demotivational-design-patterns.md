@@ -5,9 +5,16 @@ author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 ---
 {% include image.html url="static/img/demotivational-design-patterns/recursion.jpg" description="Recursion" %}
 <!--more-->
-{% include image.html url="static/img/demotivational-design-patterns/dependency-injection.jpg" description="Dependency Injection" %}
 
 {% include image.html url="static/img/demotivational-design-patterns/adapter.jpg" description="Adapter" %}
+
+
+{% include image.html url="static/img/demotivational-design-patterns/mocks.jpg" description="Mock Object" credits_name="Tomasz Łakomy" credits_url="https://twitter.com/tlakomy/status/1482292952093593602?s=21)"%}
+
+{% include image.html url="static/img/demotivational-design-patterns/deadlock.jpg" description="Deadlock" credits_name="Faruk Kapetanovic" credits_url="https://twitter.com/endphrame/status/1236595471713533952?s=21"%}
+
+{% include image.html url="static/img/demotivational-design-patterns/dependency-injection.jpg" description="Dependency Injection" %}
+
 
 {% include image.html url="static/img/demotivational-design-patterns/interface-segregation.jpg" description="Interface Segregation" %}
 
@@ -21,11 +28,6 @@ author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 
 {% include image.html url="static/img/demotivational-design-patterns/microservices.jpg" description="Microservices" %}
 
-
-
-{% include image.html url="static/img/demotivational-design-patterns/mocks.jpg" description="Mock Object" credits_name="Tomasz Łakomy" credits_url="https://twitter.com/tlakomy/status/1482292952093593602?s=21)"%}
-
-{% include image.html url="static/img/demotivational-design-patterns/deadlock.jpg" description="Deadlock" credits_name="Faruk Kapetanovic" credits_url="https://twitter.com/endphrame/status/1236595471713533952?s=21"%}
 
 
 {% include image.html url="static/img/demotivational-design-patterns/fix-it-later.jpg" description="Fix It Later" credits_name="Jared Palmer" credits_url="https://twitter.com/jaredpalmer/status/1481981571112611843?s=21"%}
