@@ -28,6 +28,8 @@ author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 
 {% include image.html url="static/img/demotivational-design-patterns/microservices.jpg" description="Microservices" %}
 
+{% include image.html url="static/img/demotivational-design-patterns/shared-mutable-state.gif" description="Shared Mutable State" credits_name="Stefano Baghino" credits_url="https://twitter.com/stefanobaghino/status/914042329002070016"%}
+
 {% include image.html url="static/img/demotivational-design-patterns/fix-it-later.jpg" description="Fix It Later" credits_name="Jared Palmer" credits_url="https://twitter.com/jaredpalmer/status/1481981571112611843?s=21"%}
 
 {% include image.html url="static/img/demotivational-design-patterns/simple-design.jpg" description="Simple Design" %}
