@@ -2,6 +2,7 @@
 layout: post
 title: "Fun with IEnumerable - Part II - Disguising an Action as an IEnumerable"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
+include_in_index: false
 tags:
 - C#
 ---
