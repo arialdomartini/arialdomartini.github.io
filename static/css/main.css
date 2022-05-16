@@ -148,12 +148,15 @@ body {
 .avatar {
   padding-top: 5%;
 }
+
 .blog-post{
   padding-top: 15px;
 }
-.blog-title{
+
+.title{
   padding-top: 2px;
 }
+
 .related-posts h4 {
   text-align: center;
 }
@@ -179,6 +182,12 @@ body {
     font-weight: 600;
     font-size: 2.5em;
 }
+
+
+.blogpost h1 a {
+    text-decoration: none;
+}
+
 
 /* Footer 
 -------------------------------------------------- */
