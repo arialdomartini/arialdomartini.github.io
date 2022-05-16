@@ -166,13 +166,18 @@ body {
 
 .blogpost{
   text-align: left;
-  line-height: 28px;
+  line-height: 32px;
   font-size: 18px;
 }
 
 .blogpost h1, .blogpost h2, .blogpost h3, .blogpost h4, .blogpost h5, .blogpost h6  {
     border-bottom: 1px solid #eee;
     padding-bottom:0.3em;
+}
+
+.blogpost h1 {
+    font-weight: 600;
+    font-size: 2.5em;
 }
 
 /* Footer 
