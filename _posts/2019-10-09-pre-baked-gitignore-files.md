@@ -4,6 +4,7 @@ title: "A more reasonable approach to pre-baked .gitignore files"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - Git
+most_read: true
 ---
 Some tools and Git hosting services promote the addition of pre-baked `.gitignore` files to repositories at their creation. <br/>
 GitHub, for example, offers the option to add long, 300+ lines, pre-compiled `.gitignore` files with a single click.

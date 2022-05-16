@@ -4,6 +4,7 @@ title: "Don't get fooled: git cherry-pick doesn't move commits"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - git
+most_read: true
 ---
 `git cherry-picks` seems to be detaching a commit from its parent and to be attaching it to a new parent. But this is just an illusion: as a matter of fact, `cherry-pick` moves patches, not commits. That's why cherry-picking a commit you can have conflicts.
 

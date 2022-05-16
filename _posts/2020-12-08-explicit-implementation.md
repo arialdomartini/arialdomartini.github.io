@@ -4,6 +4,7 @@ title: "Explicit Interface Implementation is a design best practice"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - C#
+most_read: true
 ---
 * In C# interfaces can be implemented either implicitly or explicitly
 * I've started applying Explicit Implementation wherever possible

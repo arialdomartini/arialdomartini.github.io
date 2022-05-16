@@ -2,6 +2,7 @@
 layout: post
 title: "Demotivational Design Patterns"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
+most_read: true
 ---
 {% include image.html url="static/img/demotivational-design-patterns/recursion.jpg" description="Recursion" %}
 <!--more-->

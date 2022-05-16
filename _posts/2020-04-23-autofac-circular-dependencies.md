@@ -6,6 +6,7 @@ tags:
 - C#
 - IoC
 - AutoFac
+most_read: true
 ---
 This post describes a possible approach for registering components with circular dependencies (e.g. `Foo` needs `Bar`, and `Bar` needs `Foo`) with Autofac, with both components taking their dependencies through their constructor (the so called [Constructor/Constructor Dependencies](https://autofaccn.readthedocs.io/en/latest/advanced/circular-dependencies.htmlhighlight=constructor%20injection#constructor-constructor-dependencies)).
 

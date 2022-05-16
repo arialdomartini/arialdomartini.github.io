@@ -4,6 +4,7 @@ title: "Private fields are not that private, after all"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - C#
+most_read: true
 ---
 The following code is just legit:
 
