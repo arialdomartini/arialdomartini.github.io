@@ -206,7 +206,7 @@ static class MyTuple
 
 # Explaination
 
-It's simpler than you think once you wrap your head around the idea of functions that returns function that takes functions as parameters, and the like.
+It's simpler than you think once you wrap your head around the idea of functions that return functions that take functions as parameters.
 
 Let's start from `Build`: `Build`'s goal is to create our purely-functional version of tuple of integers, so it must get the value of `a` and `b` in input. If `Build` could speak, it would say:
 
