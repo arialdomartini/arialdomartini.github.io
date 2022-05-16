@@ -14,16 +14,13 @@ public void puzzling_test()
     IEnumerable<string> strings = SomeStrings;
     Assert.AreEqual(new[] { "Foo", "Bar", "Baz" }, strings.ToArray());
 
-
     var test1 = strings.Select(s => new string(s.ToCharArray()));
     Assert.AreEqual(new[] { "Foo", "Bar", "Baz" }, test1.ToArray());
-
 
     var test2 = strings.Select(s => "" + new string(s.ToCharArray()));
     Assert.AreEqual(new[] { "Foo", "Bar", }, test2.ToArray());
     // Hey, what happened to Baz??
 
-            
     try
     { 
         var test3 = strings.Select(s => new string(s.ToCharArray()) + "");
@@ -33,7 +30,6 @@ public void puzzling_test()
     {
         Assert.Pass();
     }
-
             
     var test4 = strings.Select(s => new string(s.ToCharArray()) + "");
     Assert.AreEqual(new[]
