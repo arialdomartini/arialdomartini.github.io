@@ -6,7 +6,8 @@ tags:
 - Git
 ---
 [git stash][git-stash] is very convenient to quickly *switch* to another branch without loosing your changes.<br/>
-What if you wish to browse *both* your changes *and* another branch?
+What if you wish to browse *both* your changes *and* another branch?<br/>
+`worktree` lets you checkout more than one branch at a same time.
 
 <!--more-->
 # Temporary Branch
@@ -90,7 +91,7 @@ gitdir: /home/arialdo/prg/markdown/arialdomartini.github.io/.git/worktrees/a-cop
 
 So, a working tree is a lighter alternative to cloning a repo twice.
 
-The `git worktree` command comes with a bunch of convenient directives, whose use is straightforward: 
+`git worktree` comes with a bunch of convenient commands, whose use is straightforward: 
 
 ![The available options in git-worktree](static/img/git-worktree/git-worktree.png)
 
