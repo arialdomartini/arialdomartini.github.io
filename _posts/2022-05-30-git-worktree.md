@@ -76,16 +76,16 @@ Starting from Git 2.5, one can actually have multiple branches checked out at th
 
 
 ```bash
-git worktree add ../another-branch
-cd ../another-branch
-git checkout B
+git worktree add ../a-copy
+cd ../a-copy
+git checkout another-branch
 ```
 
-If you enter your `another-branch`, you will see that it's an ordinary Git clone, with the notable exception that the `.git` directory is actually a text file, containing a reference to your original clone. 
+If you enter your `a-copy`, you will see that it's an ordinary Git clone, with the notable exception that the `.git` directory is actually a text file, containing a reference to your original clone. 
 
 ```bash
 $ cat .git
-gitdir: /home/arialdo/prg/markdown/arialdomartini.github.io/.git/worktrees/another-branch
+gitdir: /home/arialdo/prg/markdown/arialdomartini.github.io/.git/worktrees/a-copy
 ```
 
 So, a working tree is a lighter alternative to cloning a repo twice.
