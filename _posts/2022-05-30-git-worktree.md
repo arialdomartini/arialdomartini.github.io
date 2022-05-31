@@ -9,7 +9,7 @@ tags:
 What if you wish to browse *both* your changes *and* another branch?
 
 <!--more-->
-## Temporary Branch
+# Temporary Branch
 If you need to temporary switch to another branch, and you don't want to loose the outstanding work, you might think of creating a temporary branch:
 
 ```bash
@@ -32,7 +32,7 @@ That's a mouthful.<br/>
 And it also has some annoying limitations: when back in the original branch, all the unstaged changes end up being staged, which is probably not what you wanted.
 
 
-## git stash
+# git stash
 [git stash][git-stash] does the same, saving a lot of keystrokes:
 
 ```bash
@@ -48,7 +48,7 @@ So, `stash` is often the best option for switching back and forth between branch
 What if wanted to *browse* your current working directory *and* another branch, at the same time?
 
 
-## show and ls-tree
+# show and ls-tree
 As a matter of fact, you don't need to *checkout* a branch or a commit to visit it. `git show` is already enough to display a branch content. For example,
 
 ```bash
@@ -68,7 +68,8 @@ Most of the GUI tools let you browse the whole filesystem without checking it ou
  
 But more often than not, having a real checkout is what you need.
 
-## Workdir
+
+# Workdir
 Starting from Git 2.5, one can actually have multiple branches checked out at the same time. This is a not so well known feature, which might come in handy for this specific case.
 
 `worktree` allows you to create an arbitrary number of directories ("worktrees"), each checked out to an independent branch. Indeed, a *worktree* is like an additional Git clone, sharing the same `.git` directory of the main clone.
