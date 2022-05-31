@@ -52,15 +52,15 @@ What if wanted to *browse* your current working directory *and* another branch, 
 As a matter of fact, you don't need to *checkout* a branch or a commit to visit it. `git show` is already enough to display a branch content. For example,
 
 ```bash
-git show B:your-file.txt
+git show another-branch:your-file.txt
 ```
 
-will display the content of `your-file.txt` at branch `B`.
+will display the content of `your-file.txt` at `another-branch`.
 
 You can `ls` a directory with `git ls-tree`
 
 ```bash
-git ls-tree B:your-directory/
+git ls-tree another-branch:your-directory/
 ```
  
 This is often enough for quick inspections.<br/> 
