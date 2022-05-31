@@ -36,7 +36,7 @@ And it also has some annoying limitations: when back in the original branch, all
 [git stash][git-stash] does the same, saving a lot of keystrokes:
 
 ```bash
-git stach push -um "WIP restart from here"
+git stash push -um "WIP restart from here"
 ...
 git stash pop -u 0
 ```
