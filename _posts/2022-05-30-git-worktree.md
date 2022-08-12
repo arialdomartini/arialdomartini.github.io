@@ -70,7 +70,7 @@ Most of the GUI tools let you browse the whole filesystem without checking it ou
 But more often than not, having a real checkout is what you need.
 
 
-# Workdir
+# Worktree
 Starting from Git 2.5, one can actually have multiple branches checked out at the same time. This is a not so well known feature, which might come in handy for this specific case.
 
 `worktree` allows you to create an arbitrary number of directories ("worktrees"), each checked out to an independent branch. Indeed, a *worktree* is like an additional Git clone, sharing the same `.git` directory of the main clone.
