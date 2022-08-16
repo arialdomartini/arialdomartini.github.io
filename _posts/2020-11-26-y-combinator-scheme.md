@@ -105,6 +105,11 @@ To get to a non-recursive `Y`, let's start over from the beginning.
 ## **#1** - Recursive factorial
 
 ``` scheme
+(define (zero? n)
+  (= n 0))
+(define (decr n)
+  (- n 1))
+
 (define (fact n)
   (if (zero? n)
     1
@@ -114,45 +119,61 @@ To get to a non-recursive `Y`, let's start over from the beginning.
 ## **#2** - Inject self
 
 ``` scheme
-(define (part-factorial self n)
-  (if (zero? n)
-      1
-      (* n (self self (decr n)))))
+(define mk-fact
+  (lambda (self n)
+    (if (zero? n)
+        1
+        (* n (self self (decr n))))))
 
 (define (fact n)
-  (part-factorial part-factorial n))
+  (mk-fact mk-fact n))
+
+(display (fact 5))(newline)
 ```
 
 ## **#3** - Separate the function taking self (push `lambda n` down)
 
 ``` scheme
-(define (part-factorial self)
-  (lambda (n)
-    (if (zero? n)
-        1
-        (* n ((self self) (decr n))))))
+(define mk-fact
+  (lambda (self)
+    (lambda (n)
+      (if (zero? n)
+          1
+          (* n ((self self) (decr n)))))))
+
+(define (fact n)
+  ((mk-fact mk-fact) n))
+
+(display (fact 5))(newline)
 ```
 
 ## **#4** - Refactor self self using a let expression
 
 ```scheme
-(define (part-factorial self)
-  (let ((f (self self)))
-    (lambda (n)
-      (if (zero? n)
-          1
-          (* n (f (decr n)))))))
+(define mk-fact
+  (lambda (self)
+    (let ((f (self self)))
+      (lambda (n)
+        (if (zero? n)
+            1
+            (* n (f (decr n))))))))
 ```
 
 In a strict language, use instead:
 
 ``` scheme
-(define (part-factorial self)
-  (let ((f (lambda (x) ((self self)x))))
-    (lambda (n)
-      (if (zero? n)
-          1
-          (* n (f (decr n)))))))
+(define mk-fact
+  (lambda (self)
+    (let ((f (lambda (x) ((self self)x))))
+      (lambda (n)
+        (if (zero? n)
+            1
+            (* n (f (decr n))))))))
+
+(define (fact n)
+  ((mk-fact mk-fact) n))
+
+(display (fact 5))(newline)
 ```
 
 ## **#5** - Convert let to lambda expression
@@ -171,59 +192,131 @@ becomes:
 Then:
 
 ``` scheme
-(define (part-factorial self)
-  ((lambda (f)
-     (lambda (n)
-       (if (zero? n)
-           1
-           (* n (f (decr n))))))
-   (lambda (x) ((self self) x))))
+(define mk-fact
+  (lambda (self)
+    ;;(let ((f (lambda (x) ((self self)x))))
+    ((lambda (f)
+       (lambda (n)
+         (if (zero? n)
+             1
+             (* n (f (decr n))))))
+     (lambda (x) ((self self)x)))))
+
+(define (fact n)
+  ((mk-fact mk-fact) n))
+
+(display (fact 5))(newline)
 ```
 
 ## **#6** - Extract factorial away
 
 ```scheme
-(define (part-factorial self)
-  (mk-factorial
-    (lambda (x) ((self self) x))))
-
-(define mk-factorial
+(define mk-fact
   (lambda (f)
     (lambda (n)
       (if (zero? n)
           1
           (* n (f (decr n)))))))
+
+(define Y
+  (lambda (self)
+    ;((lambda (f)
+    ;   (lambda (n)
+    ;     (if (zero? n)
+    ;         1
+    ;         (* n (f (decr n))))))
+    (mk-fact
+     (lambda (x) ((self self)x)))))
+
+(define (fact n)
+  ((Y Y) n))
+
+(display (fact 5))(newline)
 ```
 
 ## **#7** - Move self down in a lambda
 ```scheme
-(define part-factorial
-  (lambda (self)
-    (mk-factorial
-     (lambda (x) ((self self) x)))))
+(define mk-fact
+  (lambda (f)
+    (lambda (n)
+      (if (zero? n)
+          1
+          (* n (f (decr n)))))))
 
-(define factorial
-  (part-factorial part-factorial))
+(define Y
+  (lambda (self)
+    (mk-fact
+     (lambda (x) ((self self)x)))))
+
+(define fact
+  ((lambda (x) (x x))
+   Y))
+
+(display (fact 5))(newline)
 ```
 
 ## **8** - Factorial as part part using a lambda
 ```scheme
-(define factorial
+(define mk-fact
+  (lambda (f)
+    (lambda (n)
+      (if (zero? n)
+          1
+          (* n (f (decr n)))))))
+
+(define fact
   ((lambda (x) (x x))
-   part-factorial))
+   (lambda (self)
+     (mk-fact
+      (lambda (x) ((self self) x))))))
+
+(display (fact 5))(newline)
 ```
+
+## **8b**
+```scheme
+(define mk-fact
+  (lambda (f)
+    (lambda (n)
+      (if (zero? n)
+          1
+          (* n (f (decr n)))))))
+
+
+(define fact
+  ((lambda (f)                              ; \
+     ((lambda (x) (x x))                    ; |
+      (lambda (self)                        ; | Y
+        (f                                  ; |
+         (lambda (x) ((self self) x))))))   ; /
+   mk-fact))
+
+(display (fact 5))(newline)
+```
+
 
 ## **9** - Inline part-factorial
 ```scheme
-(define factorial
-  ((lambda (x) (x x))
-   (lambda (self)
-     (mk-factorial
-      (lambda (x) ((self self) x))))))
+(define mk-fact
+  (lambda (f)
+    (lambda (n)
+      (if (zero? n)
+          1
+          (* n (f (decr n)))))))
 
+;; ***
+(define Y
+  (lambda (f)
+    ((lambda (x) (x x))
+     (lambda (self)
+       (f (lambda (x) ((self self) x)))))))
+
+(define fact (Y mk-fact))
+
+(display (fact 5))(newline)
 ```
 
-## **#10** - Extract mk-factorial
+## **#10** - Rename
 ```scheme
 (define Y
   (lambda (f)
