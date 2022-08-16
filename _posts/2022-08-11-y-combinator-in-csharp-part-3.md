@@ -136,7 +136,7 @@ This passes the test.<br/>
 
 OK. It's time to finally define `Y`.
 
-### Define Y with Extract Method
+## Step 3 - Define Y with Extract Method
 Let's create again a bottleneck, applying [Extract Method][extract-method] on `MkSum(sum)`:
 
 

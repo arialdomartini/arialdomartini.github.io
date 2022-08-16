@@ -16,6 +16,7 @@ tags:
 **So, what's the point, why?** Because it's fun.
 
 
+
 <!--more-->
 <hr/>
 ## Index
@@ -25,6 +26,9 @@ This a 4 parts article. You are reading the first installment.
 * [Part 2 - The code problem][part-2]
 * [Part 3 - A recursive Y Combinator][part-3]
 * Part 4 - Non-recursive Y Combinator
+
+TL;DR just [show me the code][just-show-me-the-code].
+
 
 ## Recursive named functions
 Consider a generic 1-parameter, recursive function. Let's use for example `sum(n)`, that returns the sum of all numbers between `0` and `n`. Its implementation is trivial.
@@ -92,5 +96,6 @@ References:
 [point-free]: https://en.wikipedia.org/wiki/Tacit_programming
 [propositions-as-types]: https://www.youtube.com/watch?v=IOiZatlZtGU
 
+[just-show-me-the-code]: y-combinator-in-csharp-code-only
 [part-2]: y-combinator-in-csharp-part-2
 [part-3]: y-combinator-in-csharp-part-3
