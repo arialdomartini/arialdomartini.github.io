@@ -138,6 +138,7 @@ But don't despair: deriving it is not that hard, after all. In the [next install
 
 [Let's go][part-3].
 
+<hr/>
 
 References:
 

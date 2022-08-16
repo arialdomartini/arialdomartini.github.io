@@ -27,7 +27,7 @@ This a 4 parts article. You are reading the first installment.
 * [Part 3 - A recursive Y Combinator][part-3]
 * Part 4 - Non-recursive Y Combinator
 
-TL;DR just [show me the code][just-show-me-the-code].
+**TL;DR: [just show me the code][just-show-me-the-code]**.
 
 
 ## Recursive named functions

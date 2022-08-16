@@ -286,6 +286,26 @@ It *is* a result. But it stinks, it's sweeping the dust under the carpet. We can
 This will be a bit more challenging. Take a deep breath, have a beer and when you are ready, jump to the third and last installment.
 
 
+<hr/>
+References:
+
+
+* [JetBrains Refactorings](https://www.jetbrains.com/help/resharper/Main_Set_of_Refactorings.html)
+  * [Extract Method][extract-method]
+  * [Introduce Parameter][introduce-parameter]
+  * [Inline Method][inline-method]
+* [FsCheck][fscheck]
+* [Matteo Baglini - Twitter][matteo-baglini]
+* [Continuation Passing Style - Wikipedia][continuation-passing-style]
+* [JetBrains Bug RSRP-439279:  Inlining fields in usage causes all usages to be inlined][jetbrains-bug]
+* [Scott Wlaschin - The Lazy Programmer's Guide To Writing Thousands Of Tests][scott-wlaschin-property-testing]
+* [Carl Friedrich Gauss - Anecdotes - Wikipedia][gauss-formula]
+* [Tacit Programming - Wikipedia][point-free]
+
+[part-1]: y-combinator-in-csharp
+[part-2]: y-combinator-in-csharp-part-2
+[feeding-itself-with-itself]: y-combinator-in-csharp-part-2#feeding-itself-with-itself
+
 
 [extract-method]: https://www.jetbrains.com/help/resharper/Refactorings__Extract_Method.html
 [introduce-parameter]: https://www.jetbrains.com/help/resharper/Refactorings__Introduce_Parameter.html
