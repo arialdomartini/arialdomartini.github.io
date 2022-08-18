@@ -13,7 +13,7 @@ tags:
 **Uh?** A higher-order function with which anonymous lambdas can be made recursive.<br/>
 **Sounds useful, I guess?** No, it's not. It's a purely intellectual challenge.<br/>
 **Any practical application for my C# developer daily life?** Not at all.<br/>
-**So, what's the point, why?** Because it's fun.
+**So, what's the point? Why?** Because it's fun.
 
 
 
@@ -25,7 +25,7 @@ This a 4 parts article. You are reading the first installment.
 * **Part 1 - Recursive anonymous functions**
 * [Part 2 - The code problem][part-2]
 * [Part 3 - A recursive Y Combinator][part-3]
-* Part 4 - Non-recursive Y Combinator
+* [Part 4 - Non-recursive Y Combinator][part-4]
 
 **TL;DR: [just show me the code][just-show-me-the-code]**.
 
@@ -33,18 +33,18 @@ This a 4 parts article. You are reading the first installment.
 ## Recursive named functions
 Consider a generic 1-parameter, recursive function. Let's use for example `sum(n)`, that returns the sum of all numbers between `0` and `n`. Its implementation is trivial.
 
-{% highlight csharp %}
+```csharp
 static int Sum(int n) =>
     n == 0 ? 0 : n + Sum(n - 1);
-{% endhighlight %}
+```
 
 C# decently supports Functional Programming, so `Sum` can be passed as an argumento to high-order functions, even in [point-free style][point-free], like in:
 
-{% highlight csharp %}
+```csharp
 var result = new [] { 0, 1, 2, 3, 4 }.Select(Sum);
 
 result.Should().BeEquivalentTo(new [] { 0, 1, 3, 6, 10 });
-{% endhighlight %}
+```
 
 So far so good.
 
@@ -54,9 +54,9 @@ Here comes a puzzling quiz: can we inline `Sum`? That is, can we replace `Sum` i
 **Spoiler**: No, we can't. If we try, we will miserably fail ending up with a disappointing:
 
 
-{% highlight csharp %}
+```csharp
 var result = new []{0, 1, 2, 3, 4}.Select(n => n == 0 ? 0 : n + ???(n - 1));
-{% endhighlight %}
+```
 
 
 What should the value of `???` be?<br/>
@@ -99,3 +99,4 @@ References:
 [just-show-me-the-code]: y-combinator-in-csharp-code-only
 [part-2]: y-combinator-in-csharp-part-2
 [part-3]: y-combinator-in-csharp-part-3
+[part-4]: y-combinator-in-csharp-part-4

@@ -17,7 +17,7 @@ tags:
 # Recursive Y Combinator
 
 ## Step 1 - An ordinary recursive function
-{% highlight csharp %}
+```csharp
 public class YCombinator
 {
     private const int Max = 12_000;
@@ -32,20 +32,20 @@ public class YCombinator
         ForAll(PositiveNumbers, n =>
             sum(n) == n * (n + 1) / 2);
 }
-{% endhighlight %}
+```
 
 ### Type alias
-{% highlight csharp %}
+```csharp
 private delegate int Sum(int n);
 
 private static readonly Sum sum =
     n =>
         n == 0 ? 0 : n + sum(n - 1);
-{% endhighlight %}
+```
 
 ## Step 2 - Inject a continuation
 ### Define `MkSum` with Extract Method
-{% highlight csharp %}
+```csharp
 delegate int Sum(int n);
 
 static readonly Sum sum =
@@ -54,11 +54,11 @@ static readonly Sum sum =
 static Sum MkSum() =>
     n =>
         n == 0 ? 0 : n + sum(n-1);
-{% endhighlight%}
+```
 
 ### Let `sum` float up
 
-{% highlight csharp %}
+```csharp
 delegate int Sum(int n);
 
 static readonly Sum sum =
@@ -67,10 +67,10 @@ static readonly Sum sum =
 static Sum MkSum(Sum continuation) =>
     n =>
         n == 0 ? 0 : n + continuation(n-1);
-{% endhighlight%}
+```
 
 ### Make `sum` lazy
-{% highlight csharp %}
+```csharp
 delegate int Sum(int n);
 
 static readonly Sum sum = 
@@ -80,20 +80,20 @@ static readonly Sum sum =
 static Sum MkSum(Sum continuation) =>
     n =>
         n == 0 ? 0 : n + continuation(n-1);
-{% endhighlight%}
+```
 
 ### Reduce recursion
-{% highlight csharp %}
+```csharp
 public class YCombinator
 {
     private const int Max = 8_000;
     private readonly Arbitrary<int> PositiveNumbers = Arb.From(Gen.Choose(0, Max));
         
     [...]
-{% endhighlight %}
+```
 
 ## Step 3 - Define Y with Extract Method
-{% highlight csharp %}
+```csharp
 delegate int Sum(int n);
 delegate Sum MkSum(Sum continuation);
     
@@ -107,10 +107,10 @@ static Sum Y() =>
 static readonly Sum sum =
     n =>
         Y()(n);
-{% endhighlight%}
+```
 
 ### Inject `MkSum` as a parameter
-{% highlight csharp %}
+```csharp
 delegate int Sum(int n);
 delegate Sum MkSum(Sum continuation);
     
@@ -124,10 +124,10 @@ static Sum Y(Func<Sum, Sum> f) =>
 static readonly Sum sum =
     n =>
         Y(MkSum)(n);
-{% endhighlight%}
+```
 
 ### Move laziness from `sum` to `Y`
-{% highlight csharp %}
+```csharp
 delegate int Sum(int n);
 delegate Sum MkSum(Sum continuation);
     
@@ -141,12 +141,12 @@ static Sum Y(Fun<Sum, Sum> f) =>
 
 static readonly Sum sum =
     Y(MkSum);
-{% endhighlight%}
+```
 
 
 ### Replace `sum` with `Y(MkSum)`
 
-{% highlight csharp %}
+```csharp
 delegate int Sum(int n);
         
 static Sum MkSum(Sum continuation) =>
@@ -159,11 +159,11 @@ static Sum Y(MkSum f) =>
 
 static readonly Sum sum =
     Y(MkSum);
-{% endhighlight%}
+```
 
 ### Convert `Y` to field
 
-{% highlight csharp %}
+```csharp
 delegate int Sum(int n);
 
 static Sum MkSum(Sum continuation) =>
@@ -176,7 +176,7 @@ static Func<Func<Sum, Sum>, Sum> Y =
 
 static readonly Sum sum =
     Y(MkSum);
-{% endhighlight%}
+```
 
 
 [part-1]: y-combinator-in-csharp
