@@ -87,6 +87,7 @@ void variable_is_used()
 `var foo = "bar"` can be replaced with `string foo() { return "bar"; }`, getting to:
 
 ```csharp
+[Fact]
 void variable_is_replaced_with_method()
 {
     string foo() =>
