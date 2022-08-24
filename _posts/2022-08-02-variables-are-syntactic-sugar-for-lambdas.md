@@ -407,8 +407,12 @@ The equivalence between `let` expressions and lambdas is very well known in the 
 
 So what's next? Go and use it for deriving Y. Have fun!
 
-<hr/>
-References:
+
+# Comments
+
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/13)
+
+## References
 
 * [Structure and Interpretation of Computer Programs][sicp]
 * [Variables Are Syntactic Sugar For Lambda Expressions (C#)][Variables-Syntactic-Sugar-Csharp]
