@@ -16,6 +16,18 @@ tags:
 
 # Recursive Y Combinator
 
+
+* [Step 1 - An ordinary recursive function](#step-1---an-ordinary-recursive-function)
+  * [Type Alias](#type-alias)
+* [Step 2 - Inject a continuation](#step-2---inject-a-continuation)
+  * [Define `MkSum` with Extract Method](#define-mksu-with-extract-method)
+  * [Let `sum` float up](#let-sum-float-up)
+  * [Make `sum` lazy](#make-sum-lazy)
+* [Step 3 - Define Y with Extract Method](#step-3---define-y-with-sxtract-method)
+  * [Inject `MkSum` as a parameter](#inject-mksum-as-a-parameter)
+  * [Move laziness from `sum` to `Y`](#move-laziness-from-sum-to-y)
+  * [Replace `sum` with `Y(MkSum)`](#replace-sum-with-ymksum)
+  
 ## Step 1 - An ordinary recursive function
 We will get to Y progressively, transforming the original `sum` function with a series of refactoring moves. This means that, along the way, we will neither break the compilation nor the observable behavior of `sum`.<br/>
 
@@ -286,8 +298,8 @@ It *is* a result. But it stinks, it's sweeping the dust under the carpet. We can
 This will be a bit more challenging. Take a deep breath, have a beer and when you are ready, jump to the third and last installment.
 
 
-<hr/>
-References:
+
+## References
 
 
 * [JetBrains Refactorings](https://www.jetbrains.com/help/resharper/Main_Set_of_Refactorings.html)
