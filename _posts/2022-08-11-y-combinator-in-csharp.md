@@ -7,7 +7,7 @@ tags:
 - Functional Programming
 - Lambda Calculus
 ---
-![A tattoo with the Y Combinator](static/img/y-combinator/y-combinator.jpg)
+![A tattoo with the Y Combinator](static/img/y-combinator-in-csharp/y-combinator.jpg)
 
 **What the heck is that?** That's the Y Combinator!<br/>
 **Uh?** A higher-order function with which anonymous lambdas can be made recursive.<br/>

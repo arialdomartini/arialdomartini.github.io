@@ -21,7 +21,7 @@ We will get to Y progressively, transforming the original `sum` function with a 
 
 As a safety net, we can use a [FsCheck][fscheck] property test: it will make sure that, while refactoring, `sum` will always keep satisfying the well known [Gauss Formula][gauss-formula]:
 
-![Gauss Formula](static/img/y-combinator/gauss.png)
+![Gauss Formula](static/img/y-combinator-in-csharp/gauss.png)
 
 ```csharp
 public class YCombinator

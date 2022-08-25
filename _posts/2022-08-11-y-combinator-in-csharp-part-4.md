@@ -20,157 +20,259 @@ tags:
 
 Enjoyed your beer? Let's get started.
 
+There are several ways to get to the non-recursive Y.<br/>
+An approach, magnificently covered in Scheme by professor [Michael Vanier][michael-vanier] in [The Y Combinator (Slight Return)][y-combinator-michael-vanier], is to start over from the original recursive `sum` function, to extract `mkSum` and then to inject `mkSum` into itself. In C# it does not translate to the easiest path, but if you feel up for the challenge, go down the rabbit hole reading [Recursive Y Combinator in C# - alternative approach][part-4-alternative].
 
-* Step 1 - An ordinary recursive function
-* Step 2 - Inject `self(self)`
-* Step 3 - 
-
-## Step 1 - An ordinary recursive function
-Let's start over from our recusive `sum` function:
-
+A shorter and possibly more intuitive plan of attack is to directly play with the recursive Y we got in [Part 3][part-3]
 
 ```csharp
-public class YCombinator
+static Func<Func<Sum, Sum>, Sum> Y =
+  f =>
+    n =>
+      f(Y(f))(n);
+```
+
+refactoring the recursion away. This will require injecting a function into itself, just like in Michael Vanier's approach, only at an earlier stage. <br/>
+Let's get started.
+
+* [Step 1 - Extract Y to a local function][step-1]
+  * [Move local function out of scope](#move-local-function-out-of-scope)
+* [Step 2 - Replace `Y(mkSum)` with `sub`](#step-2---replace-ymkSum-with-sum)
+* [Step 3 - Inject self](#step-3---inject-self)
+* [Step 4 - Replace variable with lambda](#step-4---replace=variable-with-lambda)
+* [Step 5 - Inline `sub`](#step--5--inline-sub)
+
+[step-1]: #step-1---extract-y-to-a-local-function
+
+## Step 1 - Extract `Y` to a local function
+As we anticipated, in order to eliminate the recursion, in our refactoring journey we will eventually inject a function into itself. From `f()` to `f(f)`.<br/>
+We cannot do this directly with `Y`, though, because its signature must be preserved.<br/>
+So, we'd better create a bottleneck, extracting `Y` to a local function.
+
+It's easy to see that R# is not able to do that: if you select `n => f(Y(mkSum))(n)` and you apply [Extract Local Function][extract-method], R# would default to [Extract Method][extract-method] instead. It's probably a bug.<br/>
+We have to do this manually, in 3 steps, using a temporary variable:
+
+* Introduce a temporary variable
+* Extract a local function
+* Inline the temporary variable
+
+### Make `n => f(Y(mkSum))(n)` a variable
+Select `n => f(Y(f))(n)` and apply [Introduce Variable][introduce-variable]:
+
+```csharp
+private static Sum Y(Func<Sum, Sum> f)
 {
-    private const int Max = 12_000;
-    private readonly Arbitrary<int> PositiveNumbers = Arb.From(Gen.Choose(0, Max));
-    
-    private delegate int Sum(int n);
-
-    private static readonly Sum sum =
-        n =>
-            n == 0 ? 0 : n + sum(n - 1);
-
-    [Property]
-    Property it_meets_the_gauss_formula() =>
-        ForAll(PositiveNumbers, n =>
-            sum(n) == n * (n + 1) / 2);
+    Sum sum1 = n => f(Y(f))(n);
+    return sum1;
 }
 ```
 
-
-## Step 2 - Inject `self(self)`
-### Extract `MkSum`
-Just like before, we define `MkSum` applying [Extract Method][extract-method] to `n => n == 0 ? 0 : n + sum(n - 1)`.
+### Extract a local function
+Select `n => f(Y(mkSum))(n)` and [Extract a Local Function][extract-method] out of it (funny enough, now R# will not complain):
 
 ```csharp
-static readonly Sum sum =
-    MkSum();
-    
-static Sum MkSum() =>
-    n =>
-        n == 0 ? 0 : n + sum(n-1);
+private static Sum Y(Func<Sum, Sum> f)
+{
+    Sum sub() =>
+        n => f(Y(f))(n);
+
+    Sum sum1 = sub();
+    return sum1;
+}
 ```
 
-
-In the [previous installment][part-3] we proceded injecting `sum` as a continuation. Let's try something different now.<br/>
-
-### Replace `sum` with `MkSum`
-The current implementation of `MkSum` is (not surprisingly) very similar to the original `sum`. Let's make it directly recursive, letting it call itself:
+### Get rid of the temporary variable
+Target `sum1` and apply [Inline Variable][inline-variable] to get rid of it:
 
 ```csharp
-static readonly Sum sum =
-    MkSum();
-    
-static Sum MkSum() =>
-    n =>
-        n == 0 ? 0 : n + MkSum()(n-1);
+private static readonly Sum sum =
+    Y(mkSum);
+
+private static Sum Y(Func<Sum, Sum> f)
+{
+    Sum sub() =>
+        n => f(Y(f))(n);
+
+    return sub();
+}
 ```
 
-This is slightly different from what we obtained before. As a comparison:
+Voilà! We have `Y` in a local function. We can now play with `sub()` and safely change its signature without impacts on the `Y(mkSum)` calling site.<br/>
+
+
+## Step 2 - Replace `Y(f)` with `sub()`
+Focus on `f(Y(f))(n)`.<br/>
+By definition, `Y(f)` returns `sub()`. So, we can easily replace one with the other. Wherever you see `Y(f)`, replace it with `sub()`:
 
 ```csharp
-static Sum MkSum(Sum continuation) =>
-    n =>
-        n == 0 ? 0 : n + continuation(n-1);
+private static Sum Y(Func<Sum, Sum> f)
+{
+    Sum sub() =>
+        n => f(sub())(n);
+
+    return sub();
+}
 ```
 
-Notice how `continuation` was of type `Sum`, while `MkSum` is of type `Func<Sum>`.
+Is the test still green? Yes, it is! That's because `sub()` is lazy, and it does not fall into any stack overflow. This should clarify why in [Step 1][step-1] we extracted the lazy `n => f(Y(mkSum))(n)` instead of the eager `f(Y(mkSum))`.
 
+Is this a non-recursive Y? Not yet. Indeed, `sub()` is still recursive.<br/>
+But we are almost there! Get ready, we are going to perform the key step: removing the recursion.
 
-### Make `MkSum` a Parameter
-The idea is to feed `MkSum` with itself. This will require some refactoring moves that R# is not able to automate.<br/>
-In the expression:
+## Step 3 - Inject self
+Let's inject a continuation into `sub()`. What would the perfect continuation be? But of course, `sub` itself! Here we are: that' the announced step where we inject a function into itself.
+
+*Injecting* a function into itself is not like *calling* a function from itself: the latter is the classical recursion; the former is *almost* recursion, it's [Continuation Passing Style][continuation-passing-style].<br/>
+So, our next goal is to make `sub` a parameter of itself, which will make `sub` not recursive, just *almost*.
+
+Again, R# will not help us. This time, as we will see, we can forgive it.
+
+Let's focus on `sub`:
 
 ```csharp
-        n == 0 ? 0 : n + MkSum()(n-1);
+    Sum sub() =>
+        n => f(sub())(n);
 ```
 
-`MkSum()` is a value of type `Sum`. `MkSum` -- without `()` -- is of type `Func<Sum>`.<br/>
-R# is perfectly able to make `MkSum` a variable with [Introduce Variable][introduce-variable], which would get to:
+`sub` is of type `Func<Sum>`. Ideally, selecting `sub` we should be able to [make it a variable][introduce-variable], getting something like:
+
 
 ```csharp
-static readonly Sum sum =
-    MkSum();
-    
-static Sum MkSum() =>
-    n =>
+    Sum sub()
     {
-        Func<Sum> self = MkSum;
-        n == 0 ? 0 : n + self()(n-1);
-    };
+        var v = sub;
+        return n => f(v())(n);
+    }
+        
 ```
 
-But if you try to make it a parameter instead, with [Introduce Parameter][introduce-parameter], it would ruinously fail:
+
+If you try, though, you will get a depressing:
+
+![error message by ReSharper that it's not able to introduce a variable](static/img/y-combinator-in-csharp/inject-self.png)
+
+Can you guess why?<br/>
+Trying to make `sub` a parameter of itself with [Introduce Parameter][introduce-parameter] fails even more cryptically: R# would just ignore the keybinding.
+
+Definitely, we are taking R# to its limit. We have to do this manually.
+
 
 ```csharp
-static readonly Sum sum =
-    MkSum(MkSum);
+private static Sum Y(Func<Sum, Sum> f)
+{
+    Sum sub(??? self) =>
+        n => f(sub(self))(n);
+
+    return sub(sub);
+}
+```
+
+Ok, this one is tricky. Let's comment what we have written:
+
+* `Sub sub() => ...` gets a new parameter, which we called `self`. So it's now `Sum sub(??? self) => ...`.<br/>Besides the unknown type we marked with `???`, this makes sense
+* In the calling site, `n => f(sub(self)(n)`, we are correctly feeding `sub` with the continuation `self` 
+* `return sub()` becomes `return sub(sub)` because again we are providing `sub` with itself as a continuation
+
+All good.
+
+The only big deal is: what's the type of `self`? What to replace `???` with?<br/>
+By definition, `self = sub`, and `sub` *was* of type `Func<Sum>`. Notice: *it was*. Indeed, now `sub` takes a parameter of (still unknown) type `???`, so its type changed to from `Func<Sum>` to `Func<???, Sum>`.<br/>
+`???` is the type of `sub`. So, inlining, we get to `Func<Func<???, Sum>, Sum>`; if we continue inlining, we get `Func<Func<Func<???, Sum>, Sum>, Sum>` and so on, ab nauseam.<br/>
+It's `Func` all the way down...
+
+Smells like recursion, doesn't it?
+
+In fact, `sub`'s type *is* recursive. No surprises, after all, if R# was not able to realize that.<br/>
+Let's define a recursive type manually:
+
+```csharp
+private delegate Sum Rec(Rec self);
+```
+
+With this we can define:
+
+```csharp
+private static Sum Y(Func<Sum, Sum> f)
+{
+    Sum sub(Rec self) =>
+        n => f(sub(self))(n);
+
+    return sub(sub);
+}
+```
+Compilation's OK.<br/>
+Test's green.<br/>
+Wow.
+
+### Replace `sub` with `self`
+`self` is `sub`. Then `sub(self) = self(self)`:
+
+```csharp
+private delegate Sum Rec(Rec self);
+
+private static Sum Y(Func<Sum, Sum> f)
+{
+    Sum sub(Rec self) =>
+        n => f(self(self))(n);
+
+    return sub(sub);
+}
+```
+
+Take your time to meditade on the last snippet:
+
+* It is non-recursive
+* It has got the same signature of a Y Combinator
+* It satisfies our tests
+
+You know the saying "If it walks like a duck"?<br/>
+Is that, maybe, the non-recursive Y Combinator, already? Oh yes it is!
+
+But it's not yet in a form worth to be tattooed on your forearm.<br/>
+Let's just perform a last little effort to refactor it to its canonical shape, then you are ready to schedule an appointment to your preferred tattoo shop.
     
-static Sum MkSum(Func<Sum> self) =>
-    n =>
-    {
-        n == 0 ? 0 : n + self()(n-1);
-    };
-```
+## Step 4 - Replace variable with lambda
+The last snippet has got 2 little problems.
 
-This does not even compile.<br/>
-In the calling site in `sum`, R# correctly added a new argumento to `MkSum`, switching from `MkSum()` to `MkSum(MkSum)`.<br/>
-It was also smart enough to realize that `self` is actually `MkSum` itself, changed `self()` to `self(MkSum)`.<br/>
-Unfortunately, it failed to realize that, adding a new parameter to `MkSum`, it cannot be anymore of type  `Func<Sum>`. Its new type is non trivial, as it the recursive `MkSum :: Func<MkSum, Sum>`. Infering recursive types is too much for R#<br/>
-We need to manually define it with a delegate:
+The first one is:  we would like to have a single, fluent expression, with no local function.<br/>
+That's easy: we just have to [inline][inline-method] `sub`.
+
+The second problem is: `sub` is mentioned twice in `return sub(sub)`.<br/>
+Inlining `sub` would produce an insulting:
 
 ```csharp
-delegate Sum MkSum(MkSum mkSum);
+private static Sum Y(Func<Sum, Sum> f) =>
+    n1 => f(((Rec)(self => n => f(self(self))(n)))(self => n => f(self(self))(n)))(n1);
 ```
 
-and to fix the signature:
+You would never like to have a tattoo like this, would you? I'm sure you don't have enough long forearms.
+
+Ok. You need this last little trick:
 
 ```csharp
-static Sum MkSum(MkSum self) =>
-    n =>
-        n == 0 ? 0 : n + self(MkSum)(n-1);
+sub(sub)
 ```
 
-Now the code compiles successfully.
-
-### Replace `MkSum` with `self` to get `self(self)`
-Since it is injected, `self` is now a continuation. It makes sense to completely remove the recursion by replacing `self(MkSum)` with `self(self)`:
+is equivalent to
 
 ```csharp
-delegate int Sum(int n);
-delegate Sum MkSum(MkSum mkSum);
-
-static readonly Sum sum =
-    MkSum(MkSum);
-
-static Sum MkSum(MkSum self) =>
-    n =>
-        n == 0 ? 0 : n + self(self)(n-1);
+new Func<Rec, Sum>(f => f(f))(sub)
 ```
 
+where `sub` is mentioned only once.<br/>Now, this deserves a little explanation, right?
 
-### Replace `self(self)` with lambda
-The next refactoring move is easily done once figured out that [variables just are syntactic sugar for lambda expressions][sicp-let-syntactic-sugar-csharp]. This will not surprise our Lisp fellow programmers. In C# we could observe that:
+### Variables are just syntactic sugar of lambda expressions
+This refactoring move is easily done once figure out that [variables are just syntactic sugar for lamnda expressions][variables-are-syntactic-sugar-for-lambdas]. This will not surprise our fellow Lisp programmer. In C# we could observe that:
 
 ```csharp
 var foo = 42;
 ```
 
-can be written with a lambda expression, followed by its invocation:
+can be written with a lambda expressionh followed by its invocation:
 
 ```csharp
 Func<int> f = x => x;
+
 var foo = f(42);
 ```
 
@@ -205,7 +307,7 @@ int F(int i)
 ```
 
 
-and with multiple parameters:
+Thsi also works with multiple parameters:
 
 
 ```csharp
@@ -233,183 +335,55 @@ static int F()
 }
 ```
 
-Pretty neat, isn't it? Good, let's apply this to `self(self)` in
+Pretty neat, isn't it? 
+
+### Replace `sub(sub)` with lambda
+Good, let's apply this to `return sub(sub)`.
 
 ```csharp
-delegate int Sum(int n);
-delegate Sum MkSum(MkSum mkSum);
-
-static readonly Sum sum =
-    MkSum(MkSum);
-
-static Sum MkSum(MkSum self) =>
-    n =>
-        n == 0 ? 0 : n + self(self)(n-1);
-```
-
-
-#### Introduce Variable for `self(self)`
-We apply [Introduce Variable][introduce-variable] to `self(self)`:
-
-```csharp
-static Sum MkSum(MkSum self) =>
-    n =>
-    {
-        var f = self(self);
-        return n == 0 ? 0 : n + f(n - 1);
-    }
-```
-
-#### Move variable `f` to outer scope
-Let `f` float up beyond `n =>` with [Move Variable to Outer Scope][move-to-outer-scope]:
-
-```csharp
-static Sum MkSum(MkSum self)
+private static Sum Y(Func<Sum, Sum> f)
 {
-    Sum f = self(self);
-    return n => 
-        n == 0 ? 0 : n + f(n - 1);    n =>
+    Sum sub(Rec self) =>
+        n => f(self(self))(n);
+
+    return sub(sub);
 }
 ```
 
-Run the test: it will fail. Again because C# is strict. We have to make `self(self)` lazy, from
+becomes:
 
 ```csharp
-Sum f = self(self);
-```
-
-to 
-
-```csharp
-Sum f = x => self(self)(x);
-```
-
-Here we go:
-
-```csharp
-static Sum MkSum(MkSum self)
+private static Sum Y(Func<Sum, Sum> f)
 {
-    Sum f = x => self(self)(x);
-    return n => 
-        n == 0 ? 0 : n + f(n - 1);    n =>
+    Sum sub(Rec self) =>
+        n => f(self(self))(n);
+
+    return Func<Rec, Sum>(f => f(f))(sub);
 }
 ```
 
-Run the test: green. Cool.<br/>
-We are ready for the refactoring move From Variable to Lambda.
+where `sub` is mentioned only once. If you want to have the exact list of refactoring steps, go read [Refactoring Variables To Lambda Expressions][variables-are-syntactic-sugar-for-lambdas].
+
+## Step 5 - Inline `sub`
+Now [inlining][inline-method] `sub`, we get a nice looking:
 
 ```csharp
-static Sum MkSum(MkSum self)
-{
-    Sum f = x => self(self)(x);
-    return n => 
-        n == 0 ? 0 : n + f(n - 1);    n =>
-}
-```
-
-
-#### Convert Variable to Lambda
-Poor F# will not help here. This must be done manually:
-
-```csharp
-static readonly Sum mkSum(MkSum self) =>
-    new Func<Sum, Sum>(
-        f =>
-            n =>
-                n == 0 ? 0 : n + f(n - 1))
-    (x => self(self)(x));
-}
-```
-
-It's a pity that the C# type inference is not powerful enough to let us write:
-
-```csharp
-static readonly Sum mkSum(MkSum self) =>
-    (f =>
+private static Sum Y(Func<Sum, Sum> f) =>
+    new Func<Rec, Sum>(f =>
+        f(f))
+    (self =>
         n =>
-            n == 0 ? 0 : n + f(n - 1))
-    (x => self(self)(x));
+            f(self(self))(n));
 ```
 
-omitting the function type.
+This is the Y Combinator. Feel proud of yourself, we made it.
 
-### Extract `sum` away
-Can you see the [Continuation Passing Styled] `sum` function in `mkSum`'s body'? It's this part:
-
-```csharp
-    f =>
-        n =>
-            n == 0 ? 0 : n + f(n - 1))
-```
-
-We can make `mkSum` independent from `sum`'s logic'. Let's start with extracting it away, with [Extract Method][extract-method]:
-
-```csharp
-static readonly Func<Sum, Sum> mySum = 
-    f =>
-        n =>
-            n == 0 ? 0 : n + f(n - 1);
-
-static readonly Sum mkSum(MkSum self) =>
-    mySum(i => self(self)(i))
-
-static readonly Sum sum =
-    n =>
-        mkSum(mkSum)(n);
-```
-
-## Step 8: extract mkSum(mkSum) as a lambda
-Let's modify `sum` no, applying again the refactoring move of converting a variable to a lambda:
-
-We will go from:
-
-```csharp
-static readonly Sum sum =
-    n =>
-        mkSum(mkSum)(n);
-```
-
-to
-
-```csharp
-static readonly Sum sum =
-    n =>
-        new Func<MkSum, Sum>(p => p(p))(MkSum)(n);
-```
-
-We are almost there: the last 2 steps.
-
-## Inline `MkSum`
-We apply [Inline Method][inline-method] to `MkSum` 
-
-```csharp
-static readonly Sum sum =
-    n =>
-        new Func<MkSum, Sum>(p => p(p))(self =>
-            MySum(i => self(self)(i)))(n);
-```
-
-This really looks like Y, already.
-
-
-## Extract Y
-```csharp
-static readonly Func<SumC, Sum> Y =
-    f =>
-        n =>
-            new Func<MkSum, Sum>(p => p(p))(
-                self =>
-                    f(i => 
-                        self(self)(i)))(n);
-
-static readonly Sum sum = Y(mySum);
-```
-
+# Conclusion
 If we only could get rid of the boiler plate code C# needs, this would be: 
 
 ```csharp
 let Y = f =>
-    (p => p(p))(self => f(self(self));
+    (f => f(f))(self => f(self(self));
 
 let sum = Y(mySum);
 ```
@@ -424,26 +398,39 @@ which is equivalent to the original Lisp's Y Combinator:
 ```
 
 
-<hr/>
-References:
+Cool. Mission accomplished. You deserve a second beer.
+
+Prosit!
+
+## References
 
 * [JetBrains Refactorings](https://www.jetbrains.com/help/resharper/Main_Set_of_Refactorings.html)
   * [Extract Method][extract-method]
   * [Introduce Parameter][introduce-parameter]
+  * [Inline Variable][inline-variable]
   * [Inline Method][inline-method]
-  * [Move Variable To Outer Scope][move-to-outer-scope]
+  * [Context Actions][context-actions]
+  * [Move Variable To Outer Scope][context-actions]
+  * [Move Local Function To Outer Scope][context-actions]
 * [Continuation Passing Style][continuation-passing-style]
 * [Variables Just Are Syntactic Sugar For Lambda Expressions][sicp-let-syntactic-sugar-csharp]
+* [Continuation Passing Style][continuation-passing-style]
 
 [Extract-method]: https://www.jetbrains.com/help/resharper/Refactorings__Extract_Method.html
 [introduce-variable]: https://www.jetbrains.com/help/resharper/Refactorings__Introduce_Variable.html
 [introduce-parameter]: https://www.jetbrains.com/help/resharper/Refactorings__Introduce_Parameter.html
+[inline-variable]: https://www.jetbrains.com/help/resharper/Refactorings__Inline_Variable.html
 [inline-method]: https://www.jetbrains.com/help/resharper/Refactorings__Inline_Method.html
-[move-to-outer-scope]: xxx
+[context-actions]: https://www.jetbrains.com/help/rider/Reference__Options__Languages__CSharp__Context_Actions.html
 [continuation-passing-style]: https://en.wikipedia.org/wiki/Continuation-passing_style
 [sicp-let-syntactic-sugar-csharp]: sicp-let-syntactic-sugar-csharp 
+[y-combinator-michael-vanier]: https://mvanier.livejournal.com/2897.html
+[michael-vanier]: https://www.cms.caltech.edu/people/mvanier
+[variables-are-syntactic-sugar-for-lambdas]: variables-are-syntactic-sugar-for-lambdas
+[continuation-passing-style]: https://en.wikipedia.org/wiki/Continuation-passing_style
 
 [just-show-me-the-code]: y-combinator-in-csharp-code-only
 [part-1]: y-combinator-in-csharp
 [part-2]: y-combinator-in-csharp-part-2
 [part-3]: y-combinator-in-csharp-part-3
+[part-4-alternative]: y-combinator-in-csharp-part-4-alternative
