@@ -8,8 +8,7 @@ tags:
 - Functional Programming
 - Lambda Calculus
 ---
-## Index
-* [Part 1 - Recursive anonymous functions][part-1]
+## Index* [Part 1 - Recursive anonymous functions][part-1]
 * [Part 2 - The code problem][part-2]
 * [Part 3 - A recursive Y Combinator][part-3]
 * [Part 4 - Non-recursive Y Combinator][part-4]
@@ -336,6 +335,124 @@ static readonly Sum sum =
     Y(MkSum);
 ```
 
+
+
+[part-1]: y-combinator-in-csharp
+[part-2]: y-combinator-in-csharp-part-2
+[part-3]: y-combinator-in-csharp-part-3
+[part-4]: y-combinator-in-csharp-part-4
+
+
+# Non-recursive Y Combinator
+
+* [Step 1 - Extract Y to a local function](#step-1---extract-y-to-a-local-function)
+  * [Make `n => f(Y(mkSum))(n)` a variable](#make-n-fymksumn-a-variable)
+  * [Extract a local function](#extract-a-local-function)
+  * [Get rid of the temporary variable](#get-rid-of-the-temporary-variable)
+* [Step 2 - Replace `Y(mkSum)` with `sub`](#step-2---replace-ymksum-with-sum)
+* [Step 3 - Inject self](#step-3---inject-self)
+  * [Replace `sub` with `self`](#replace-sub-with-self)
+* [Step 4 - Replace variable with lambda](#step-4---replace=variable-with-lambda)
+  * [Variables are just syntactic sugar of lambda expressions](#variables-are-just-syntactic-sugar-of-lambda-expressions)
+  * [Replace `sub(sub)` with lambda](#replace-subsub-with-lambda)
+* [Step 5 - Inline `sub`](#step--5--inline-sub)
+
+
+## Step 1 - Extract `Y` to a local function
+### Make `n => f(Y(mkSum))(n)` a variable
+```csharp
+private static Sum Y(Func<Sum, Sum> f)
+{
+    Sum sum1 = n => f(Y(f))(n);
+    return sum1;
+}
+```
+
+### Extract a local function
+```csharp
+private static Sum Y(Func<Sum, Sum> f)
+{
+    Sum sub() =>
+        n => f(Y(f))(n);
+
+    Sum sum1 = sub();
+    return sum1;
+}
+```
+
+### Get rid of the temporary variable
+```csharp
+private static readonly Sum sum =
+    Y(mkSum);
+
+private static Sum Y(Func<Sum, Sum> f)
+{
+    Sum sub() =>
+        n => f(Y(f))(n);
+
+    return sub();
+}
+```
+
+## Step 2 - Replace `Y(f)` with `sub()`
+```csharp
+private static Sum Y(Func<Sum, Sum> f)
+{
+    Sum sub() =>
+        n => f(sub())(n);
+
+    return sub();
+}
+```
+
+## Step 3 - Inject self
+```csharp
+private delegate Sum Rec(Rec self);
+
+private static Sum Y(Func<Sum, Sum> f)
+{
+    Sum sub(Rec self) =>
+        n => f(sub(self))(n);
+
+    return sub(sub);
+}
+```
+
+
+### Replace `sub` with `self`
+```csharp
+private delegate Sum Rec(Rec self);
+
+private static Sum Y(Func<Sum, Sum> f)
+{
+    Sum sub(Rec self) =>
+        n => f(self(self))(n);
+
+    return sub(sub);
+}
+```
+    
+## Step 4 - Replace variable with lambda
+### Replace `sub(sub)` with lambda
+```csharp
+private static Sum Y(Func<Sum, Sum> f)
+{
+    Sum sub(Rec self) =>
+        n => f(self(self))(n);
+
+    return Func<Rec, Sum>(f => f(f))(sub);
+}
+```
+
+## Step 5 - Inline `sub`
+```csharp
+private static Sum Y(Func<Sum, Sum> f) =>
+    new Func<Rec, Sum>(f =>
+        f(f))
+    (self =>
+        n =>
+            f(self(self))(n));
+```
 
 
 [part-1]: y-combinator-in-csharp

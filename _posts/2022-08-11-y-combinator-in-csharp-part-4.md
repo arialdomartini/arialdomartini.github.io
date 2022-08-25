@@ -36,10 +36,15 @@ refactoring the recursion away. This will require injecting a function into itse
 Let's get started.
 
 * [Step 1 - Extract Y to a local function][step-1]
-  * [Move local function out of scope](#move-local-function-out-of-scope)
-* [Step 2 - Replace `Y(mkSum)` with `sub`](#step-2---replace-ymkSum-with-sum)
+  * [Make `n => f(Y(mkSum))(n)` a variable](#make-n-fymksumn-a-variable)
+  * [Extract a local function](#extract-a-local-function)
+  * [Get rid of the temporary variable](#get-rid-of-the-temporary-variable)
+* [Step 2 - Replace `Y(mkSum)` with `sub`](#step-2---replace-ymksum-with-sum)
 * [Step 3 - Inject self](#step-3---inject-self)
+  * [Replace `sub` with `self`](#replace-sub-with-self)
 * [Step 4 - Replace variable with lambda](#step-4---replace=variable-with-lambda)
+  * [Variables are just syntactic sugar of lambda expressions](#variables-are-just-syntactic-sugar-of-lambda-expressions)
+  * [Replace `sub(sub)` with lambda](#replace-subsub-with-lambda)
 * [Step 5 - Inline `sub`](#step--5--inline-sub)
 
 [step-1]: #step-1---extract-y-to-a-local-function
