@@ -14,8 +14,9 @@ tags:
 * **Part 3 - A recursive Y Combinator**
 * [Part 4 - Non-recursive Y Combinator][part-4]
 
-# Recursive Y Combinator
+**TL;DR: [just show me the code][just-show-me-the-code]**.
 
+# Recursive Y Combinator
 
 * [Step 1 - An ordinary recursive function](#step-1---an-ordinary-recursive-function)
   * [Type Alias](#type-alias)
@@ -67,13 +68,13 @@ private static readonly Sum sum =
         n == 0 ? 0 : n + sum(n - 1);
 ```
 
-Be aware though that while delegates can make the code a bit less verbose, they get in the way of the compiler type inference.
+Be aware though that, while delegates can make the code a bit less verbose, they get in the way of the compiler type inference.
 
 ## Step 2 - Inject a continuation
 As we saw before, we can remove the recursion from `sum` by letting it invoke a continuation instead of itself.
 
 The goal is to define a sum-generating function, `MkSum`, of type `Func<Sum, Sum>` that, given a continuation of type `Sum`, generates a sum function of type `Sum`.<br/>
-Why are we doing this? Remember what we commented in [part 2 - Feeding itself with itself][feeding-itself-with-itself]: `MkSum` is able to create `sum`, and `sum` is by definition a sound continuation. `MkSum` does need a continuation. The idea is then to feed `MkSum` with its own result.<br/>
+Why are we doing this? Remember what we commented in [part 2 - Feeding itself with itself][feeding-itself-with-itself]: `MkSum` is able to create `sum`, if only it is given a sound continuation, and `sum` *is* by definition a sound continuation. The idea is then to feed `MkSum` with its own result.<br/>
 Of course, in order to do that, we have to make `MkSum` a thing, we need to *extract* it.
 
 
@@ -178,9 +179,6 @@ Sum sum = Y(quasi_sum);
 We can get to this applying [Introduce Parameter][introduce-parameter] to `MkSum`:
 
 ```csharp
-delegate int Sum(int n);
-delegate Sum MkSum(Sum continuation);
-    
 static Sum MkSum(Sum continuation) =>
     n =>
         n == 0 ? 0 : n + continuation(n-1);
@@ -197,9 +195,6 @@ static readonly Sum sum =
 We can make `Y` lazy and revert `sum` to eager and point-free:
 
 ```csharp
-delegate int Sum(int n);
-delegate Sum MkSum(Sum continuation);
-    
 static Sum MkSum(Sum continuation) =>
         n =>
             n == 0 ? 0 : n + continuation(n-1);
@@ -223,16 +218,16 @@ static Sum Y(Func<Sum, Sum> f) =>
         f(sum)(n);
 ```
 
-We have to eliminate that `sum`. This is trivial, once we notice how `sum` is defined:
+We have to eliminate that `sum`. This is trivial, once we notice that `sum` is: 
 
 ```csharp
 static readonly Sum sum =
     Y(MkSum);
 ```
 
-If `sum = Y(MkSum)` and `Y = f(sum)`, we can replace the last `sum` with `Y(MkSum)`, getting to `Y = f(Y(MkSum))`, which can be finally simplified as `Y = f(Y(f))`.
+If `sum = Y(MkSum)` and `Y = f(sum)`, then `Y = f(Y(MkSum))`, and since `f = MkSum`, this can be finally simplified as `Y = f(Y(f))`.
 
-Ideally, it would be nice to let the IDE automatically refactor the code with [Inline Method][inline-method]. Unfortunately, we have to do this manually: R# has got [a bug][jetbrains-bug] not allowing the inline of only one specific usage.
+Ideally, we could do this applying [Inline Method][inline-method]. Unfortunately, we have to do this manually: R# has got [a bug][jetbrains-bug] and does not allow inlining only one specific usage.
 
 ```csharp
 delegate int Sum(int n);
@@ -259,7 +254,10 @@ static Func<Func<Sum, Sum>, Sum> Y = f => n => f(Y(f))(n);
 We made it. This is our coveted (recursive) Y Combinator.
 
 ## Conclusion
-Does it work? Let's see. Remember when we got stuck with the following?
+Does it work? The tests are still green.
+
+Let's see if it allows us to use a recursive sum function as an anonymous lambda.<br/>
+Remember when we got stuck with the following?
 
 ```csharp
 var result = new [] { 0, 1, 2, 3, 4 }.Select(n => n == 0 ? 0 : n + ???(n - 1));
@@ -267,7 +265,19 @@ var result = new [] { 0, 1, 2, 3, 4 }.Select(n => n == 0 ? 0 : n + ???(n - 1));
 result.Should().BeEquivalentTo(new [] { 0, 1, 3, 6, 10 });
 ```
 
-Let's verify how our brand new recursive Y Combinator helps here:
+Let's verify how our brand new recursive Y Combinator helps here. Our `sum` is:
+
+```csharp
+Sum sum =  Y(MkSum);
+```
+
+or, expanded:
+
+```csharp
+Sum sum =  Y( f => n => n == 0 ? 0 : n + f(n-1) );
+```
+
+Used as an anonymous function:
 
 ```csharp
 var result = 
@@ -292,10 +302,9 @@ you have to give up the `Sum` type alias, which makes it clear that C# delegates
 
 ## Non-recursive Y Combinator
 Is that all?<br/>
-Meh. I don't know you, but I feel like I cheated. Afterall, we extracted the recursion away from the original function, only to push it inside `Y`. <br/>
-It *is* a result. But it stinks, it's sweeping the dust under the carpet. We can surely do better: we can remove the recursion altogether, distilling a stricly non-recursive Y Combinator.
+Meh. I don't know you, but I feel like I cheated. Afterall, we extracted the recursion away from the original function, only to push it inside `Y`. It *is* a result. But it stinks, it's sweeping the dust under the carpet. We can surely do better: we can remove the recursion altogether, distilling a stricly non-recursive Y Combinator.
 
-This will be a bit more challenging. Take a deep breath, have a beer and when you are ready, jump to the third and last installment.
+This will be a bit more challenging. Take a deep breath, have a beer and when you are ready, jump to [the forth and last installment][part-4].
 
 
 
@@ -330,6 +339,7 @@ This will be a bit more challenging. Take a deep breath, have a beer and when yo
 [gauss-formula]: https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss#Anecdotes
 [point-free]: https://en.wikipedia.org/wiki/Tacit_programming
 
+[just-show-me-the-code]: y-combinator-in-csharp-code-only#recursive-y-combinator
 [part-1]: y-combinator-in-csharp
 [part-2]: y-combinator-in-csharp-part-2
 [part-4]: y-combinator-in-csharp-part-4

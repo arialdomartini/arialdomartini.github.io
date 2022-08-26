@@ -8,7 +8,9 @@ tags:
 - Functional Programming
 - Lambda Calculus
 ---
-## Index* [Part 1 - Recursive anonymous functions][part-1]
+## Index
+
+* [Part 1 - Recursive anonymous functions][part-1]
 * [Part 2 - The code problem][part-2]
 * [Part 3 - A recursive Y Combinator][part-3]
 * [Part 4 - Non-recursive Y Combinator][part-4]

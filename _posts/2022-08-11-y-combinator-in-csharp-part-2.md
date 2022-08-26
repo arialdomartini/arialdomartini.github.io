@@ -31,7 +31,7 @@ var quasi_sum =
         n == 0 ? 0 : n + continuation(n - 1)
 ```
 
-or, in a curried form:
+or, in a [curried form][currying]:
 
 ```csharp
 var quasi_sum =
@@ -47,8 +47,11 @@ var sum = quasi_sum( proper_continuation );
 ```
 
 
-Neither `sum` nor `quasi_sum` are recursive.<br/>
-Don't try to compile `quasi_sum`, though: C# would complain that it is not able to infer its type. We need to give the compiler a hand:
+Neither `sum` nor `quasi_sum` are recursive.
+
+We have a couple of little problems here.<br/>
+First: `proper_continuation` is still undefined.<br/>
+Second, `quasi_sum` does not even compile: the poor C#'s type inference is not able to workout the type. We need to give the compiler a hand:
 
 ```csharp
 Func<Func<int, int>, Func<int, int>> quasi_sum =
@@ -57,7 +60,7 @@ Func<Func<int, int>, Func<int, int>> quasi_sum =
             n == 0 ? 0 : n + continuation(n - 1)
 ```
 
-Wow. That's a mouthful.<br/> If only C# supported type aliases we could write:
+Ok, not it compiles. But, wow, that's a mouthful.<br/> If only C# supported type aliases we could write:
 
 ```csharp
 type Sum = Func<int, int>;
@@ -70,7 +73,7 @@ Func<Sum, Sum> quasi_sum =
 ```
 
 Much better.<br/>
-Actually, we can simulate (some) type aliases with delegates:
+Actually, we can partially simulate type aliasing with delegates:
 
 ```csharp
 delegate int Sum(int n);
@@ -87,7 +90,8 @@ Cool. This `quasi_sum` is kind of a sum-function maker: when it is given a prope
 
 ## Feeding itself with itself
 Problem solved?<br/>
-Not really: we have just shifted it. Now we are stuck with the question what the right continuation is.<br/>
+Not really: we have just shifted it. Now we are stuck with the question what the right continuation is.
+
 The ideal continuation must be a function able to continue the sum calulation. So, a function equivalent to `sum` itself. That is, exactly the function  `quasi_sum` is supposed to create.<br/>
 This gives the smart reader the idea of feeding `quasi_sum` with itself. Which, in turn, screams recursion.
 
@@ -126,15 +130,18 @@ making clear why we decided to have a type alias.
 
 This imaginary function would save us from the necessity of finding the *right continuation* to feed `quasi_sum` with. Internally, it will take care of feeding `quasi_sum` with its own result.
 
-This function is all but imaginry: it does exist, and it is called Fixed Point Combinator or (surprise, surprise) Y Combinator. Deriving it is a bit challenging, and its implementation (without type aliases) is kind of obscure:
+This function is all but imaginry: it does exist, and it is called Fixed Point Combinator or (surprise, surprise) Y Combinator. Deriving it is a bit challenging, and its implementation is kind of obscure:
 
 ```csharp
-Func<Func<Func<int, int>, Func<int, int>>, Func<int, int>> Y = 
-    f => n => new Func<Func<Func<int, int>, Func<int, int>>, Func<int, int>>
-                (p => p(p))( self => f(i => self(self)(i)))(n);
+private static Sum Y(Func<Sum, Sum> f) =>
+    new Func<Rec, Sum>(f =>
+        f(f))
+    (self =>
+        n =>
+            f(self(self))(n));
 ```
 
-But don't despair: deriving it is not that hard, after all. In the [next installment][part-3] we will first warm up deriving a Y Combinator which is itself recursive. Next, we will distill a more sophisticated non-recursive Y Combinator.
+But don't despair: deriving it is not that hard, after all. In the [next installment][part-3] we will first warm up deriving a Y Combinator which is itself recursive. [Next][part-4], we will distill a more sophisticated Y Combinator, making it non-recursive.
 
 [Let's go][part-3].
 
@@ -144,10 +151,11 @@ References:
 
 * [Continuation - Wikipedia][continuation]
 * [Continuation Passing Style][continuation-passing-style]
-
+* [Curried functions: optimized for partial application - Functional Programming in C# - Enrico Buonanno][currying]
 
 [continuation]: https://en.wikipedia.org/wiki/Continuation
 [continuation-passing-style]: https://en.wikipedia.org/wiki/Continuation-passing_style
+[currying]: https://livebook.manning.com/#!/book/functional-programming-in-c-sharp/chapter-7/ch07lev1sec3
 
 [part-1]: y-combinator-in-csharp
 [part-3]: y-combinator-in-csharp-part-3
