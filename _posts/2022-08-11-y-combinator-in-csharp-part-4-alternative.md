@@ -18,13 +18,6 @@ tags:
 
 # Non-recursive Y Combinator
 
-Enjoyed your beer? Let's get started.
-
-
-* Step 1 - An ordinary recursive function
-* Step 2 - Inject `self(self)`
-* Step 3 - 
-
 ## Step 1 - An ordinary recursive function
 Let's start over from our recusive `sum` function:
 
@@ -65,7 +58,7 @@ static Sum MkSum() =>
 
 In the [previous installment][part-3] we proceded injecting `sum` as a continuation. Let's try something different now.<br/>
 
-h### Replace `sum` with `MkSum`
+### Replace `sum` with `MkSum`
 The current implementation of `MkSum` is (not surprisingly) very similar to the original `sum`. Let's make it directly recursive, letting it call itself:
 
 ```csharp
@@ -405,15 +398,6 @@ static readonly Func<SumC, Sum> Y =
 static readonly Sum sum = Y(mySum);
 ```
 
-If we only could get rid of the boiler plate code C# needs, this would be: 
-
-```csharp
-let Y = f =>
-    (f => f(f))(self => f(self(self));
-
-let sum = Y(mySum);
-```
-
 which is equivalent to the original Lisp's Y Combinator:
 
 ```scheme
@@ -422,10 +406,6 @@ which is equivalent to the original Lisp's Y Combinator:
     ((lambda (x) (x x))
      (lambda (x) (f (lambda (y) ((x x) y)))))))
 ```
-
-Cool. Mission accomplished. You deserve a second beer.
-
-Prosit.
 
 ## References
 
