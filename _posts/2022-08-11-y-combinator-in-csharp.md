@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Implementing the Y Combinator in C#"
+title: "Deriving the Y Combinator in C#"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - C#

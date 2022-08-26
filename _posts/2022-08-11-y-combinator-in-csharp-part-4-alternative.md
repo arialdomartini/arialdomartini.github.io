@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Implementing the Y Combinator in C# - Part 4 Alternative - Non-recursive Y Combinator"
+title: "Deriving the Y Combinator in C# - Part 4 Alternative - Non-recursive Y Combinator"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 include_in_index: false
 tags:
