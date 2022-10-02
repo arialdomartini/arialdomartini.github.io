@@ -33,6 +33,9 @@ most_read: true
 
 {% include image.html url="static/img/demotivational-design-patterns/binary-tree.jpg" description="Binary Tree" credits_name="Ahmad Awais" credits_url="https://twitter.com/MrAhmadAwais/status/1526722046037741572?s=20&t=5j2Awi3j6pORSPpO909NjQ"%}
 
+{% include image.html url="static/img/demotivational-design-patterns/multi-paradigm-programming-language.jpg" description="Multi-paradigm Programming Language" credits_name="Graham Christensen" credits_url="https://twitter.com/grhmc/status/1576378819824431105?s=20&t=KEP1w6vE71nEADLQaSiFxg"%}
+
+
 
 {% include image.html url="static/img/demotivational-design-patterns/fix-it-later.jpg" description="Fix It Later" credits_name="Jared Palmer" credits_url="https://twitter.com/jaredpalmer/status/1481981571112611843?s=21"%}
 
