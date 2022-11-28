@@ -183,6 +183,16 @@ body {
     font-size: 2.5em;
 }
 
+.blogpost h2 {
+    font-weight: 600;
+    font-size: 1.9em;
+}
+
+
+.blogpost h3 {
+    font-weight: 600;
+}
+
 
 .blogpost h1 a {
     text-decoration: none;
