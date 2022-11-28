@@ -15,7 +15,6 @@ Or: how I learnt to stop cleaning the DB after each integration test.
 * It's often not even desirable
 * Tests can be easily made **independent from the initial DB state** and **from each other**
 * Just use **unique identifiers** and **avoid absolute asserts** 
-* You can also play with ***Delta Assertions***
 
 * Tests designed like this can be run **in parallel**
 * They run **faster**
@@ -23,7 +22,7 @@ Or: how I learnt to stop cleaning the DB after each integration test.
 
 <!--more-->
 ## The *clean-db-after-test* dogma
-Like many others, over the years I have spent a sheer amount of energy figuring out how to properly clean up the database after each integration test. I've used all the classical techniques:
+Like many others, over the years I have spent a sheer amount of energy figuring out how to clean up the database after each integration test. I've used all the classical techniques:
 
 * leveraging **DB transactions**
 * using in-memory DBs
@@ -35,28 +34,28 @@ Like many others, over the years I have spent a sheer amount of energy figuring 
 
 That was rarely easy: some DBs do not support nested transactions, some fail dropping because of locks. In general, it's either a lot of infrastructure code, or relying on magic libraries. 
 
-In recent months, I started pondering and experimenting a different perspective.<br/>
+In recent months, I started pondering on and experimenting a different perspective.<br/>
 Which starts from a basic question.
 
 ## Why do we need to reset the DB back to a clean state in the first place? 
-Well, why? Maybe we don't?<br/>
-The classical answers are
+Well, do we?<br/>
+The classical answers are:
 
-* bacause otherwise tests would start from an **unknown, unpredictable state**
+* because otherwise tests would start from an **unknown, unpredictable state**
 * because otherwise tests would **depend on each other**
 
-Until recently, I never argued these assumptions, and I have always blindly observed the dogma. But, honestly speaking, I still have to find a very compelling justification.
+Until recently, I never argued these assumptions, and I have always blindly observed the dogma. But I still have to find a very compelling justification.
 
 ### The classical answers as a smell of a design issue
 I propose a different point of view, based on 2 observations:
 
-**Starting from an unknown state is indeed a desirable trait**: if tests only work against either an empty or an artfully preconfigured database, they are designed to operate in an ideal condition which is never met in reality. In production our code will be faced with very different circumstances. And that's a pity, since Integration Tests were supposed to ["use the actual components that the app uses in production"][integration-in-asp].
+**Starting from an unknown state is indeed a desirable trait**: if tests only work against either an empty or an artfully preconfigured database, they are designed to operate in an ideal condition never met in reality. In production our code will face very different circumstances. And that's a pity, since Integration Tests were supposed to ["use the actual components that the app uses in production"][integration-in-asp].
 
-**If tests depend on each other, maybe that's a test design issue we should solve, not circumvent**: after all, in the real world our production code \*is\* used in concurrency. Having tests that break when run in parallel is most likely a design flaw.<br/>`[CollectionDefinition(DisableParallelization = true)]` is not a fix: it's sweeping the dirt uder the carpet. 
+**If tests depend on each other, maybe that's a design issue we should solve, not circumvent**: after all, in the real world our production code \*is\* used concurrently. Having tests breaking when run in parallel is most likely a design flaw.<br/>`[CollectionDefinition(DisableParallelization = true)]` is not a fix: it's sweeping the dirt uder the carpet. 
 
 In other words:
 
-* The necessity of an empty DB is a strong and often unrealistic assumption.
+* The necessity of an empty DB is often an unrealistic assumption.
 * Fictional, overly-simplistic assumptions lead to covering fictional, overly-simplistic use cases. 
 * The more production-like integration tests are, the better.
 
@@ -68,7 +67,7 @@ The good news is: designing such tests is actually easier than one might think.
 Basically, they just have:
 
 * to use **random** or **unique identifiers**
-* to assert based on differences ([Delta Assertions][delta-assertions]) rather than on absolute claims
+* to assert in a way compatible with other concurrent tests
 
 ## Show me the code
 Before seing the benefits, here are a couple of examples. You can easily figure out other cases, and how to tackle them.
@@ -171,9 +170,9 @@ public void AddBlog()
 }
 ```
 
-Now, when the test ends, why should we feel immediately compelled to delete the created blog? The real user would not. Nor the real testers, in their manual exploratory testing activities.
+Now, when the test ends, why should we feel compelled to delete the record? The real user would not. Nor the real testers during their manual exploratory testing activities.
 
-On the contrary: in the wake of exercising the application like a real user would, we could get rid of the backdoor for directly accessing the DB, using the real API instead:
+On the contrary: in the wake of exercising the application like a real user would, we could get rid of the backdoor for querying the DB, and we could rather use the real API:
 
 
 ```csharp
@@ -232,9 +231,10 @@ In turns, the idea of Delta Assertions is about "*specifying assertions based on
 
 [Gerard Meszaros - xUnit Test Patterns][xunit-test-patterns]
 
+I don't think Delta Assertions are the best fit for parallel tests, but they are worth mentioning.
 
 ## Conclusion
-Tests speak and send feedbacks which are often worth to be listened and contemplated.<br/>
+Tests speak and send feedbacks which are often worth to be listened.<br/>
 When testing is hard, it's often a sign of either a design problem with the production code, or a wrong approach to testing.
 
 So far, I find this approach a simplification, only providing benefits with neglibigle drawbacks. I'm looking forward to getting feedback from other fellow developers.. 
