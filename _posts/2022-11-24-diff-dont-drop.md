@@ -257,3 +257,7 @@ So far, I find this approach a simplification, only providing benefits with negl
 [bogus]: https://github.com/bchavez/Bogus
 [microsoft-testing]: https://learn.microsoft.com/en-us/ef/core/testing/testing-with-the-database?source=recommendations
 [integration-in-asp]: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-7.0
+
+# Comments
+
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/15)
