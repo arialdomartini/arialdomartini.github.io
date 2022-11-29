@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "Diff, don't drop"
+title: "When I'm done, I don't clean up"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - Testing
 - TDD
 - DB
 ---
-Or: how I learnt to stop cleaning the DB after each integration test.
+Or: how I learnt to stop resetting the DB after each integration test.
 
 **TL;DR**
 
