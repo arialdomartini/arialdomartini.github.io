@@ -108,6 +108,20 @@ body {
 .container a:hover {
   color: #4078c0;
 }
+
+img {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+ figure img {
+   margin-bottom:0em;
+ }
+
+ figcaption {
+   text-align:center;
+   margin-bottom: 1em;
+ }
+
 .img-responsive {
  display: block;
  height: auto;
@@ -263,4 +277,10 @@ tbody tr:nth-child(odd){
   color: black;
   text-align: right;
   right-top:1em;
+}
+
+
+hr {
+  margin-top:3em;
+  margin-bottom:3em;
 }
