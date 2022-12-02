@@ -95,7 +95,7 @@ The reviewer cares about the net effect of the PR, not about the half implemente
 ## ‣ Except that this promotes sloppy behaviors
 Don't commit broken code in the first place. 
 
-Conscientous developers do review their work before submitting a pull request, and each and every of their commits build, have green tests and are potentially deployable. 
+Conscientous developers do review their work before submitting a pull request, and each and every of their commits builds, has green tests and is potentially deployable. 
 
 Git offers the scrupulous developers all the tools for tidying up their commits
 
