@@ -119,7 +119,7 @@ I saw this happening: mandatory squashing rules eventually translated to tolerat
 # • Squashing saves disk space
 If you don't squash, all those commits will knock Git down!
 
-## ‣ Except it won't
+## ‣ Except they won't
 Reducing Scala repository (38,098 commits) to one (1) single commit just saves 47% of space:
 
 Try yourself:
