@@ -6,7 +6,7 @@ tags:
 - git
 ---
 **TL;DR**
-* Even without squashing, **Pull Requests include a squashed commit already** 
+* Even without squashing, **Pull Requests already include a squashed commit** 
 * You can get an on-the-fly **squashed view of history** using `--first-parent`
 * Squashing **would not save space**
 * Squashing makes **git bisect less effective**
@@ -18,11 +18,11 @@ tags:
 <!--more-->
 
 <!-- # TOC -->
-<!-- * [Squashing makes history cleaner](#squashing-makes-history-cleaner)  -->
-<!--   * [Except that you can do the same on-the-fly](#except-that-you-can-do-the-same-on-the-fly) -->
 <!-- * [Squash! 1-commit PRs are easier to review](#squash--1-commit-prs-are-easier-to-review) -->
 <!--   * [Except that PR contains alreasy a squashed commit](#except-that-pr-contains-alreasy-a-squashed-commit) -->
-<!-- * [Squash after the PR merge! Nobody will need the single commits after](#squash-after-the-pr-merge--nobody-will-need-the-single-commits-after) -->
+<!-- * [Squashing makes history cleaner](#squashing-makes-history-cleaner)  -->
+<!--   * [Except that you get the same, on-the-fly](#except-that-you-can-get-the-same--on-the-fly) -->
+<!-- * [At least, squash after the PR merge! Nobody will need the single commits after](#at-least-squash-after-the-pr-merge--nobody-will-need-the-single-commits-after) -->
 <!--   * [Except: good luck using git bisect](#except--good-luck-using-git-bisect) -->
 <!-- * [Squashing cleans up WIP and temporary commits](#squashing-cleans-up-wip-and-temporary-commits) -->
 <!--   * [Except that this promotes sloppy behaviors](#except-that-this-promotes-sloppy-behaviors) -->
@@ -31,17 +31,32 @@ tags:
 <!-- * [I'm telling you: squash! Look how awful](#i-m-telling-you--squash--look-how-awful) -->
 <!--   * [Except, there are saner workflows](#[except--there-are-saner-workflows) -->
 
+# • Squash! 1-commit PRs are easier to review
+If you squash, Pull Request reviewers will just have to read one single commit. Easier.
+
+## ‣ Except that PR contains already a squashed commit 
+You don't have to squash: the merge commit already contains the whole branch, squashed.
+
+![The merge commit contains the whole branch, squashed](static/img/squash/merge-commit.png)
+
+
+When the PR is **not squashed**, you can review **both** the final result **and** each single step. You can comment, amend, or exclude each single commit. Still, you can see the PR in one single, unified change from the merge commit.
+
+On the contrary, if the PR is squashed, you just have the final result, and **all the single steps are lost forever**.<br/>
+Hard to expect painstaking precision when details have been molten. 
+
+
 # • Squashing makes history cleaner
 A history like:
 
 ![Squashed git history](static/img/squash/squashed.png)
 
-is cleaner than displaying all the single commits of each pull requests:
+is cleaner than one displaying all the single commits of each pull requests:
 
 ![Not squashed git history](static/img/squash/not-squashed.png)
 
 
-## ‣ Except that you can do the same on-the-fly
+## ‣ Except that you can get the same, on-the-fly
 You don't need to squash to hide details. Just use `--first-parent`.
 
 ![SmartGit's follow-only-first-parent option](static/img/squash/smartgit.png)
@@ -57,32 +72,17 @@ and with some Git GUI clients such as [SmartGit][smartgit] and [Magit][magit]. N
 
 That's why Git provides the option **`--first-parent`** in the first place.
 
-<hr/>
-
-# • Squash! 1-commit PRs are easier to review
-If you squash, Pull Request reviewers will just have to read one single commit. Easier.
-
-## ‣ Except that PR contains already a squashed commit 
-You don't have to squash: the merge commit already contains the whole branch, squashed.
-
-![The merge commit contains the whole branch, squashed](static/img/squash/merge-commit.png)
-
-
-When the PR is **not squashed**, you can review **both** the final result **and** each single step. You can comment, amend, or exclude each single commit. Still, you can the overview fromthe merge commit. 
-
-On the contrary, if the PR is squashed, you just have the final result, and **all the single steps are lost forever**.<br/>
-Hard to expect painstaking precision when details have been molten. 
-
 
 <hr/>
 
-# • Squash after the PR merge! Nobody will need the single commits after
+
+# • At least wquash after the PR merge! Nobody will need the single commits after
 Ditto. Who cares?
 
 ## ‣ Except: good luck using git bisect
 You will probably regret having squashed the history the next time you troubleshoot.
 
-[git bisect][git-bisect] is your best friend when searching for which commit introduced a bug: if the devs stick with the good habit of commiting early, often and small, `git bisect` will have all the chances to return you the very specific line of code containing the issue.<br/>
+[git bisect][git-bisect] is your best friend when searching which commit introduced a bug: if the devs stick with the good habit of commiting early, often and small, `git bisect` will have all the chances to return you the very specific line of code containing the issue.<br/>
 
 With squashed and large commits, you are left alone troubleshooting by hand.
 
