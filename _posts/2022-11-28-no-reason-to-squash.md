@@ -28,8 +28,8 @@ tags:
 <!--   * [Except that this promotes sloppy behaviors](#except-that-this-promotes-sloppy-behaviors) -->
 <!-- * [Squashing saves disk space](#squashing-saves-disk-space) -->
 <!--   * [Except it won't](#except-it-won-t) -->
-<!-- * [Why is squashing popular, then?](#why-is-squashing-popular--then) -->
-
+<!-- * [I'm telling you: squash! Look how awful](#i-m-telling-you--squash--look-how-awful) -->
+<!--   * [Except, there are saner workflows](#[except--there-are-saner-workflows) -->
 
 # • Squashing makes history cleaner
 A history like:
