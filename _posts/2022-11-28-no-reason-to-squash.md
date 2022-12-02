@@ -212,6 +212,9 @@ But this deserves a separate article.
   * [Scott Vandehey - Squashing Your Pull Requests](https://cloudfour.com/thinks/squashing-your-pull-requests/)
 
 
+# Comments
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/17)
+
 
 [david-chudzicki]: https://www.davidchudzicki.com/posts/first-parent/
 [smartgit]: https://www.syntevo.com/smartgit/
