@@ -195,8 +195,8 @@ public void AddBlog()
 You might like these tests for the good traits they exhibit:
 
 * They **run faster**, because they skip the DB cleanup/rebuild phase
-* They can run **in parallel**, just like an actual user would<br/>
-  (Testing concurrency is per se a desirable side effect)
+* **They can run in parallel**, just like an actual user would<br/>
+  Testing concurrency is per se a desirable side effect. When tests run in parallel fail, I wish that is because they successfully identified a concurrency problem, not because they are designed to fail unless run in sequence. 
 * They are inherently **more realistic and solid**, since they are closer to emulating what real users would do with an ever changing database content
 * The same tests can be used in production-like environments, as the basis for Load and Stress Testing
 
