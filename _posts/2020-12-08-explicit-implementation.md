@@ -6,11 +6,14 @@ tags:
 - C#
 most_read: true
 ---
-* In C# interfaces can be implemented either implicitly or explicitly
-* I've started applying Explicit Implementation wherever possible
-* I figured out that there are not so many use cases for Implicit Implementation. After all, objects should be manipulated solely in terms of their interface, rather than in terms of their concrete types. 
-* With Explicit Implementation methods needn't be public, which is good for encapsulation
-* I ended up seeing Explicit Implementation as a design best practice, as it promotes Loose Coupling and enforces the Dependency Inversion Principle.
+* A C# classe can implement an interface either implicitly or explicitly
+* **Implement explicitly wherever possible**: it is a good practice
+* In fact, there are rare cases for Implicit Implementation.
+* Indeed, objects should be manipulated solely in terms of their interface, not in terms of their concrete types. 
+
+* With Explicit Implementation **methods can be `internal`**, which is good for encapsulation
+* Explicit Implementation is a design best practice, as it promotes Loose Coupling and enforces the Dependency Inversion Principle.
+* It gets rid of **Ghost Public Methods**, promoting maintenaibility
 
 <!--more-->
 
@@ -18,7 +21,7 @@ most_read: true
 In C#, a class can implement an interface either implicitly or explicitly:
 
 ```csharp
-internal interface ISomeService
+interface ISomeService
 {
     public void DoSomething();
 }
@@ -35,37 +38,13 @@ internal class ExplicitImplementation : ISomeService
 ```
 
 ## Disambiguate members with same signature
-As a matter of fact, the [Microsoft C# Progamming Guide][microsoft-programming-guide] suggests the Explicit Interface Method Implementation (EIMI) only as a way to resolve the rare cases where a class implements two interfaces that contain a member with the same name and signature.
-
-## The problem with casting
-When consumed in terms of implementation, classes implemented explicitly lead to cumbersome code:
-
-```csharp
-internal class Client
-{
-    internal void SomeMethod()
-    {
-        var implicit = new ImplicitImplementation();
-        implicit.DoSomething(); // this just works
-        
-        var explicit = new ExplicitImplementation();
-        explicit.DoSomething(); // this won't compile
-        ((ISomeService)explicit).DoSomething(); // this works, but it's horrible
-    }
-}
-```
-
-Finally, there's no doubt that Implicit Implementation is, by far, the most common style.
-
-## So what's the big deal?
-Despite the drawbacks above, I've decided to start using more and more extensively the Explicit Implementation, for the reasons depicted below. So far I found a lot of benefits.<br/>
-Bear with me. 
+For [Microsoft C# Progamming Guide][microsoft-programming-guide], Explicit Interface Method Implementation (EIMI) is only useful when  a class implements two interfaces containing members with the same name and signature.<br/>
+But that's only half of the story: Explicit Implementation provides way more benefits.
 
 ## Inject dependencies in terms of an interface
-The fact is, Explicit Interface Method Implementation and Depencency Injection are a match made in heaven.<br/>
-If you are used to use Dependency Injection, chances are you would find Explicit Implementation beneficial too.
+Fact is: Explicit Implementation and Depencency Injection are a match made in heaven.<br/>
 
-The following code:
+Code using Dependency Injection and interfaces works fine, regardless if the injected services are implemented explicitly or impicitly:
 
 ```csharp
 class Client
@@ -84,49 +63,78 @@ class Client
 }
 ```
 
-works regardless if `service` is implemented explicitly or impicitly. 
+Here, rightly, `service` is injected in terms of `ISomeService` and `Client` would never know the corresponding concrete class. And, indeed, it needn't know: it is the core of the [Dependency Inversion Principle][dependency-inversion].
 
-That's a trivial implementation of Dependency Injection where, rightly, `service` is injected in terms of an interface. `Client` would never know which is the corresponding concrete class.<br/>
-And, indeed, it needn't know: that's a just the application of the Dependency Inversion Principle:
+We implement interfaces exactly because we want to separate the contract from the implementation, and decouple the clients from implementation.<br/>
 
-> * High-level modules should not depend on low-level modules. Both should depend on abstractions (e.g., interfaces).
-> * Abstractions should not depend on details. Details (concrete implementations) should depend on abstractions.
+We don't inject `service` as its concrete class, because it would just create unnecessary and noxious coupling. 
 
-[Dependency Inversion Principle][dependency-inversion]
-
-Interfaces encourage loose coupling. We implement interfaces exactly because we want to separate the contract from the implementation, and decouple the clients from implementation.<br/>
-
-Injecting `service` in terms of a specific class would just create useless and noxious coupling. 
 
 ## Program to an interface, not an implementation
-> **TL;DR**<br/>
-> If you find yourself casting down to an implementation, you are doing it wrong.
+That's the key: **implementing the interface explicitly forces all the clients to use the interface. Who wants to use the concrete class, will have to downcast**.
 
-There's a reason why you define intefaces in the first place. Why not consuming them, rather then casting?
+Isn't it a limitation? No: it is in fact a feature. Because you will never need to downcast.
 
-I tend to use Explicit Interface Implementation when I want to promote "Programming To An Interface" and discourage "Programming To An Implementation".
+**If you find yourself casting down to an implementation, you are doing it wrong.**
 
-The idea behind Programming To An Interface is to base the programming logic on the interfaces of the objects used, rather than on the internal implementation details. Programming to the interface reduces dependency on implementation specifics and makes code more reusable.
+Interfaces are created in the first place to promote *Programming To An Interface* and discouraging *Programming To An Implementation*.
+
+The idea behind *Programming To An Interface* is to base the programming logic on the contract, rather than on the internal implementation details. *Programming To The Interface* makes code more reusable.
 
 > There are two benefits to manipulating objects solely in terms of the interface defined by abstract classes:
+>
 > * Clients remain unaware of the specific types of objects they use, as long as the objects adhere to the interface that clients expect.
 > * Clients remain unaware of the classes that implement these objects. Clients only know about the abstract class(es) defining the interface.
 > This so greatly reduces implementation dependencies between subsystems that it leads to the following principle of reusable object-oriented design:
 > * Program to an interface, not an implementation.
-> Don’t declare variables to be instances of particular concrete classes. Instead, commit only to an interface defined by an abstract class
+>
+> **Don’t declare variables to be instances of particular concrete classes**. Instead, commit only to an interface defined by an abstract class
 
 [Design Pattern: Elements of Reusable Object-Oriented Software][gof]
 
-I can't think of a single case in which an instance, passed down to a method or to a class constructor, in terms of an interface should be cast down to the concrete type. In other words, I don't see the reason to have Implicit Implementation on dependencies and parameters. 
+## The case for Implicit Inferface Implementation 
+What if you need to declare variables of particular concrete classes?<br/>
+I challenge that this is even needed. In fact, I can't think of a single case for an instance, passed down to a method or to a class constructor in terms of an interface, to be cast down to the concrete type. 
+
+In other words, **there is no single reason to have Implicit Implementation on dependencies and parameters**. 
 
 Explicit Implementation is just as a way to enforce that, and to prevent the consumption of concrete classes. As such, it is a best design practice, as it enforces the Dependency Inversion Principle.
 
 If there's an interface, why ever circumventing it?
 
-## Implicit Implementation forces using public
-Also, Implicit Implementation comes with some drawbacks: they pollute the code with unneeded `public` modifiers.
+## What about tests?
+> **TL;DR**<br/>
+> Prefer testing to the interface over testing on the implementation.
 
-To promote encapsulation, a class should use the lowest access modifier needed. There's no use of having a public class with public methods, if the class is not meant to be exposed to other projects.
+Tests too should only deal with explicitly implemented method: they should exercise the public interface anyway, as they are meant to test the behaviour of a class just like it is consumed by its clients. 
+
+You don't test private methods for the same reason: private methods are an implementation detail that could change during the refactor cycle, they are private for hiding the implementation, and you don’t want to test implementation details.
+
+**Private methods and methods not part of any interface are alike, and the same rational applies**: tests should always exercise a System Under Test in terms of its interface, rather than of its implementation. Explicit Implementation would just enforce this.
+
+```csharp
+public class ExplicitClassTest
+{
+    readonly ISomeService _sut;  // System Under Test is defined in terms of its contract
+    
+    public ExplicitClassTest()
+    {
+        _sut = new ExplicitImplementation();
+    }
+    
+    void test_some_functionality()
+    {
+        _sut.DoSomething();  // this consumes the interface, so the behavior, rather than the implementation
+        ...
+    }
+}
+```
+
+
+## Implicit Implementation forces using public
+On the contrary, Implicit Implementation comes with some drawbacks: it pollutes the code with unneeded `public` modifiers.
+
+To promote encapsulation, a class should use **the lowest access modifier needed**. There's no use of having a public class with public methods, if the class is not meant to be exposed to other projects.
 
 Unfortunately, implicitly implemented methods need to be `public`.
 
@@ -146,8 +154,7 @@ class SomeService : ISomeService
 
 `Foo()` needs to be `public` regardless of how it was designed to be consumed. That's unfortunate.
 
-Even worse, marking it as `public` in the class is not enough: the compiler would complain that also the upstream method in `ISomeService` needs to be made `public`.<br/>
-So, the problem would propagate up to the whole interface.
+Even worse, marking it as `public` in the class is not enough: the compiler would complain that also the upstream method in `ISomeService` needs to be made `public`. So, **the problem would propagate up to the whole interface**.
 
 ```csharp
 interface ISomeService
@@ -161,12 +168,15 @@ class SomeService : ISomeService
 }
 ```
 
-This does not happen with Explicit Implementation. The following would happily compile:
+## Explicit Implementation honors the minimum visibility
+
+This does not happen with Explicit Implementation.<br/>
+The following code would happily compile:
 
 ```csharp
 interface ISomeService
 {
-    internalvoid Foo();
+    internal void Foo();
 }
 
 class SomeService : ISomeService
@@ -175,35 +185,8 @@ class SomeService : ISomeService
 }
 ```
 
-## What about tests?
-> **TL;DR**<br/>
-> Prefer testing to the interface over testing on the implementation.
 
-Tests too should only deal with explicitly implemented method: tests should exercise the public interface anyway, as they are meant to test the behaviour of a class as it is consumed by its clients. 
-
-You don't test private methods for the same reason: private methods are an implementation detail that could change during the refactor cycle, they are private for hiding the implementation, and you don’t want to test implementation details.
-
-Private methods and methods not part of any interface are alike, and the same rational applies: tests should always exercise a System Under Test in terms of its interface, rather than of its implementation. Explicit Implementation would just enforce this.
-
-```csharp
-public class ExplicitClassTest
-{
-    readonly ISomeService _sut;  // System Under Test is defined in terms of its public interface
-    
-    public ExplicitClassTest()
-    {
-        _sut = new ExplicitImplementation();
-    }
-    
-    void test_some_functionality()
-    {
-        _sut.DoSomething();  // this tests the interface, so the behavior, rather than the implementation
-        ...
-    }
-}
-```
-
-### How to make internal classes visible to test projects?
+## What about tests, again? How to make internal classes visible to test projects?
 Just add the following to the project `.csproj` file:
 
 ```xml
@@ -224,9 +207,9 @@ If you stick to the convention of having test project names ending with `.Test`,
 
 
 
-## Ghost public functions
+## Ghost Public Methods
 > **TL;DR**<br/>
-> EIMI promotes maintenaibility 
+> Explicit Implementation promotes maintenaibility 
 
 When a method is removed from an interface (e.g. it's moved to another interface during a refactoring), explicit implementation would force the compiler to look all over the code and identify all the places where the method is no longer needed. With Implicit Implementation, a class might end up having am unused, ghost public function.
 
@@ -287,10 +270,6 @@ That's one of the justifications:
 
 Seems like the same argument I just described.
 
-## Bottom line
-I just tried sticking to the rule of using EIMI wherever possible for a while, and honestly I soon figured out that sticking to some design best practices (loose coupling, Dependency Inversion, encapsulation) was just made easier and enforced.
-
-I would just recommend trying that.
 
 ## References: 
 [dependency-inversion]: https://en.wikipedia.org/wiki/Dependency_inversion_principle
