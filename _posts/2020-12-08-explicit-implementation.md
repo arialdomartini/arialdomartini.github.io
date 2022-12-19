@@ -203,6 +203,27 @@ public class ExplicitClassTest
 }
 ```
 
+### How to make internal classes visible to test projects?
+Just add the following to the project `.csproj` file:
+
+```xml
+<ItemGroup>
+    <InternalsVisibleTo Include="YourTestProject" />
+</ItemGroup>
+```
+
+If you stick to the convention of having test project names ending with `.Test`, you can also use:
+
+
+```xml
+<ItemGroup>
+    <InternalsVisibleTo Include="$(MSBuildProjectName).Test" />
+</ItemGroup>
+```
+
+
+
+
 ## Ghost public functions
 > **TL;DR**<br/>
 > EIMI promotes maintenaibility 
