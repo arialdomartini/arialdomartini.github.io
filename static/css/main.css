@@ -240,11 +240,11 @@ tbody td {
 th {
     padding:7px;
     border:#555 1px solid;
+    background-color: #ddd;
 }
 
 tbody tr:nth-child(odd){
     background-color: #eee;
-    color: #fff;
     border: 1px solid #555;
 }
 
