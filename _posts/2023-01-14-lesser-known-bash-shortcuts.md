@@ -525,3 +525,9 @@ You can find the complete list of commands and features supported Readline in [r
 [bash-man]: https://manpages.org/bash
 [python-readline]: https://docs.python.org/3/library/readline.html
 [brian-fox]: https://en.wikipedia.org/wiki/Brian_Fox_%28computer_programmer%29
+
+
+
+# Comments
+
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/18)
