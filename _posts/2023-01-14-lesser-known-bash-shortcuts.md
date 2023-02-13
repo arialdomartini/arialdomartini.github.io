@@ -40,6 +40,7 @@ Did you know Bash has got macros, a multi-clipboard, an undo feature, and a word
 - [Return](#return)
 - [Aborting line](#aborting-line)
 - [Quitting](#quitting)
+- [Other Bindings](#other-bindings)
 - [Readline](#readline)
 
 <!-- - [Lesser unknown](#lesser-unknown) -->
@@ -438,10 +439,34 @@ I'm still figuring out what is the use, honestly.
 This saves you from writing `exit`.
 
 
+# Other bindings
+There are many other default keybindings which I did not cover here, and even more commands that have no keybindings and can be potentially activated.
 
+Display all of them with:
+
+```bash
+bind -P
+```
+
+You will get a long list like:
+
+```
+# abort (not bound)
+"\C-j": accept-line
+"\C-m": accept-line
+# alias-expand-line (not bound)
+# arrow-key-prefix (not bound)
+# backward-byte (not bound)
+"\eOD": backward-char
+"\e[D": backward-char
+"\C-h": backward-delete-char
+"\C-?": backward-delete-char
+```
+
+Refer to the [Bash][bash-man] and the [Readline][readline-man] man pages for more info.
 
 # Readline
-All these funtionalities come from [GNU Readline][readline], a library created in the late 1980s by [[Brian Fox][brian-fox], the same author of Bash. Over the years, readline has become vastly used in a lot of command-line tools such as Tmux, MySQL and [Python][python-readline]. So, those keybindings are almost ubiquitous. Even the GUI text fields in macOS, such as the address bar in browsers, use a Readline-like library, `libedit`, which is based on the Readline's code. No surprises that some of the shortcuts above work everywhere in macOS.
+Many of these funtionalities come from [GNU Readline][readline], a library created in the late 1980s by [[Brian Fox][brian-fox], the same author of Bash. Over the years, readline has become vastly used in a lot of command-line tools such as Tmux, MySQL and [Python][python-readline]. So, those keybindings are almost ubiquitous. Even the GUI text fields in macOS, such as the address bar in browsers, use a Readline-like library, `libedit`, which is based on the Readline's code. No surprises that some of the shortcuts above work everywhere in macOS.
 
 Zsh, instead, does not depend on readline, and implemented a line-editing library from the scratch.
 
