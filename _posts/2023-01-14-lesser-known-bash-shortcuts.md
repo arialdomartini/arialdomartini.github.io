@@ -9,47 +9,69 @@ tags:
 Did you know Bash has got macros, a multi-clipboard, an undo feature, and a word completion based on history?
 <!--more-->
 
-<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
-**Table of Contents**
+<details>
+  <summary><h3>&#9658;&nbsp;Table of Contents</h3></summary>
 
-- [Expand](#expand)
-  - [(History-based) Intellisense](#history-based-intellisense)
-- [Undo](#undo)
-  - [Revert line](#revert-line)
-- [Macros](#macros)
-<!-- - [Vim mode](#vim-mode) -->
-- [Open line in editor](#open-line-in-editor)
-- [Digit argument](#digit-argument)
-  - [Negative argument](#negative-argument)
-- [Character Inline Search](#character-inline-search)
-- [String Inline Search](#string-inline-search)
-- [Instant Comment](#instant-comment)
-- [Clipboard](#clipboard)
-  - [Special paste options](#special-paste-options)
-  - [Paste last argument](#paste-last-argument)
-  - [Paste n-th argunent](#paste-n-th-argunent)
-- [Deleting](#deleting)
-- [Transforming words](#transforming-words)
-  - [Swapping chars and words](#swapping-chars-and-words)
-  - [Changing the case](#changing-the-case)
-- [Suspending a stream](#suspending-a-stream)
-- [A faster clear](#a-faster-clear)
-  - [A faster and more aggressive clear](#a-faster-and-more-aggressive-clear)
-- [History](#history)
-- [Literal chars](#literal-chars)
-- [Return](#return)
-- [Aborting line](#aborting-line)
-- [Quitting](#quitting)
-- [Other Bindings](#other-bindings)
-- [Readline](#readline)
+<ul>
+  <li><a href="#expand">Expand</a>
+    <ul>
+      <li><a href="#history-based-intellisense">(History-based) Intellisense</a></li>
+    </ul>
+  </li>
+  <li><a href="#undo">Undo</a>
+    <ul>
+      <li><a href="#revert-line">Revert line</a></li>
+    </ul>
+  </li>
+  <li><a href="#macros">Macros</a>
+<!-- - [Vim mode](#vim-mode) --></li>
+  <li><a href="#open-line-in-editor">Open line in editor</a></li>
+  <li><a href="#digit-argument">Digit argument</a>
+    <ul>
+      <li><a href="#negative-argument">Negative argument</a></li>
+    </ul>
+  </li>
+  <li><a href="#character-inline-search">Character Inline Search</a></li>
+  <li><a href="#string-inline-search">String Inline Search</a></li>
+  <li><a href="#instant-comment">Instant Comment</a></li>
+  <li><a href="#clipboard">Clipboard</a>
+    <ul>
+      <li><a href="#special-paste-options">Special paste options</a></li>
+      <li><a href="#paste-last-argument">Paste last argument</a></li>
+      <li><a href="#paste-n-th-argunent">Paste n-th argunent</a></li>
+    </ul>
+  </li>
+  <li><a href="#deleting">Deleting</a></li>
+  <li><a href="#transforming-words">Transforming words</a>
+    <ul>
+      <li><a href="#swapping-chars-and-words">Swapping chars and words</a></li>
+      <li><a href="#changing-the-case">Changing the case</a></li>
+    </ul>
+  </li>
+  <li><a href="#suspending-a-stream">Suspending a stream</a></li>
+  <li><a href="#a-faster-clear">A faster clear</a>
+    <ul>
+      <li><a href="#a-faster-and-more-aggressive-clear">A faster and more aggressive clear</a></li>
+    </ul>
+  </li>
+  <li><a href="#history">History</a></li>
+  <li><a href="#literal-chars">Literal chars</a></li>
+  <li><a href="#return">Return</a></li>
+  <li><a href="#aborting-line">Aborting line</a></li>
+  <li><a href="#quitting">Quitting</a></li>
+  <li><a href="#other-bindings">Other Bindings</a></li>
+  <li><a href="#readline">Readline</a></li>
+</ul>
 
 <!-- - [Lesser unknown](#lesser-unknown) -->
 <!-- - [Unclear](#unclear) -->
 <!-- - [Execute commands](#execute-commands) -->
-- [Summary](#summary)
-- [References](#references)
+<ul>
+  <li><a href="#summary">Summary</a></li>
+  <li><a href="#references">References</a></li>
+</ul>
 
-<!-- markdown-toc end -->
+</details>
 
 ### Legenda
 
