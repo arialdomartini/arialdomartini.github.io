@@ -284,3 +284,7 @@ hr {
   margin-top:3em;
   margin-bottom:3em;
 }
+
+summary:hover {
+  cursor: pointer;
+}
