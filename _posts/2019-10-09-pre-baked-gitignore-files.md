@@ -16,7 +16,7 @@ A better alternative is a global `.gitignore` file.
 <!--more-->
 What's wrong with pre-baked Git ignore files?
 
-## It's premature optimization
+# It's premature optimization
 Pre-baked `.gitignore` files are appealing because they include out-of-the-box most of the possible tooling files name patterns.<br/>
 The [GitHub's ignore file for C#](https://github.com/github/gitignore/blob/master/VisualStudio.gitignore), for example, is a 357 lines file, including very legit items, such as the compilation directories and the IDE's user specific files `*.suo` and `*.user`.
 
@@ -48,21 +48,21 @@ It doesn't help that you were not using InstallShield at all: you probably jut d
 # What's the alternative?
 I tend to honor the XP's [YAGNI principle](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it) and add items only when necessary: it's much less likely to incur in similar suprises, and it gets to dramatically smaller `.gitignore` files.
 
-## Ok, but what about tooling files?
+# Ok, but what about tooling files?
 The problem with YAGNI and with adding items incrementally comes with editor and tooling files: it's just too annoying to add all of them over and over.<br/>
 The solution is to distinguish between the 2 categories of tools:
 
 * Project tools
 * Developer tools
 
-### Project tools
+## Project tools
 If the project uses a particular tool (such as npm, pip and Docker) or a particular executing environment (such as Java and Python), it is just ok to include its specific items in `.gitignore`.<br/>
 It makes sense to add them *contextually* to the other tool's files: for example, the first moment `package.json` file is added, it makes sense to contextually add `node_modules` to `.gitignore`; the moment you add InstallShield to your project, you add a line with `Express/` in `.gitignore`.
 
 The change will be self-contained, documented, reversable and well tracked in a commit.<br/>
 That simple.
 
-### Developer tools
+## Developer tools
 This should not apply to tools the project does not depend on, but which are a personal choice of one or more developers.
 
 In fact, it's much less understandable that a `.gitignore` file mentions Vim backup files only because one of the developers is a Vim enthusiast. It would be nice to keep this information in that specific developer's environment.
@@ -104,7 +104,7 @@ It would be nicer to store this information as a personal setting.
 
 There are 2 solutions to this:
 
-#### The global `.gitignore`
+### The global `.gitignore`
 Use `~/.gitconfig`: it's is your personal file, in your personal home directory. It's not part of any projects (besides maybe your dotfiles repository). You can store whatever information you like in it, without affecting other developers.
 
 `~/.gitconfig` cannot directly contain ignored items. But it can reference git ignore file. Just add:
@@ -118,7 +118,7 @@ The file `~/.gitignore-global` can be edited just like an ordinary `.gitignore` 
 
 You will probably wish to track that file down in a personal [dotfiles repository](https://github.com/arialdomartini/dotfiles/blob/master/.gitignore-global).
 
-#### The `exclude` directory
+### The `exclude` directory
 Otherwise, just add items to:
 
 {% highlight perl %}
@@ -136,3 +136,6 @@ echo notes.txt >> .git/info/exclude
 
 Neat, isn't it?
 
+# Comments
+
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/19)
