@@ -106,14 +106,14 @@ You can expand variables such as `$PATH` and `$HOME` (try with `$RANDOM`).
 
 Here are some sleek ideas for using it:
 
-| Write   | Result                                                                                              |
-|---------|-----------------------------------------------------------------------------------------------------|
-| `$(!!)` | This inserts the output of the previous command in the current line.<br/>Never use the mouse again! |
-| `!-1`   | Inserts the previous command itself, even if the current line is not empty                          |
-| `!*`    | All the arguments of the previous command                                                           |
-| `!^`    | Only the first argument                                                                             |
-| `!$`    | Only the last argument (Yes: `^` and `$` are reminescent of Vim)                                    |
-| `!#`    | Inserts a duplicate of the current line                                                             |
+| Write   | Result                                                                                                        |
+|---------|---------------------------------------------------------------------------------------------------------------|
+| `$(!!)` | Inserts the output of the previous command (re-executing it) in the current line.<br/>Never use the mouse again! |
+| `!-1`   | Inserts the previous command itself, even if the current line is not empty                                    |
+| `!*`    | All the arguments of the previous command                                                                     |
+| `!^`    | Only the first argument                                                                                       |
+| `!$`    | Only the last argument (Yes: `^` and `$` are reminescent of Vim)                                              |
+| `!#`    | Inserts a duplicate of the current line                                                                       |
 
 
 <br/>
