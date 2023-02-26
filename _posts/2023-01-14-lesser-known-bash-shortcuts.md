@@ -7,6 +7,9 @@ tags:
 - zsh
 ---
 Did you know Bash has got macros, a multi-clipboard, an undo feature, and a word completion based on history?
+
+If you prefer watching videos to reading posts, you can check it out [here][video].
+
 <!--more-->
 
 <details>
@@ -565,6 +568,7 @@ You can find the complete list of commands and features supported Readline in [r
 * [Bash manpage][bash-man]
 * [Brian Fox][brian-fox]
 * [Python readline][python-readline]
+* [Lesser Known Bash Shortcuts - YouTube Video][video]
 
 
 [readline]: https://tiswww.case.edu/php/chet/readline/rltop.html
@@ -572,7 +576,7 @@ You can find the complete list of commands and features supported Readline in [r
 [bash-man]: https://manpages.org/bash
 [python-readline]: https://docs.python.org/3/library/readline.html
 [brian-fox]: https://en.wikipedia.org/wiki/Brian_Fox_%28computer_programmer%29
-
+[video]: https://www.youtube.com/watch?v=Ds-DPbiRXFE
 
 
 # Comments
