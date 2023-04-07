@@ -208,7 +208,7 @@ It might have sense to define methods such as `AsAGift()` that affects both the 
 The same considerations of the previous paragraph stand: I would not push this too far. The builder shouldn't be to opaque, and most often than not, explicit is better than implicit. Concisiness is not always a benefit for tests readibility.
 
 ## Hide the implementation using default values
-From time to time we found that some values were needed by the implementation, but they were in fact not relevant at all to describe the test case. The rule of thumb is to reference only the values that are useful to describe the test case, and to set all the irrilevant (but needed) fields to some default values.
+From time to time we found that some values were needed by the implementation, but they were in fact not relevant at all to describe the test case. The rule of thumb is to reference only the values that are useful to describe the test case, and to set all the irrelevant (but needed) fields to some default values.
 
 For example, if the test is about books, it would be nicer to have a code like:
 
@@ -233,7 +233,7 @@ rather than:
         .Build();
 {% endhighlight %}
 
-In the former case, when the entity is built a lot of information, completely irrilevant to the specific test case, is mentioned. The resulting test is harder to understand and in general less expressive.
+In the former case, when the entity is built a lot of information, completely irrelevant to the specific test case, is mentioned. The resulting test is harder to understand and in general less expressive.
 
 Yet, this information is needed, so the builder cannot refrain from filling all the needed entity's fields.
 
