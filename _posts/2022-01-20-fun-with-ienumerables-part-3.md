@@ -32,7 +32,7 @@ We have a couple of restrictions here:
 
 * although we can easily have a `Func` instead of an `Action`, that would be constrained to return the same type as the encapsulating `IEnumerable`. That's a limitation we could not accept. We want to embed a `Func<A, B>` in an `IEnumerable<C>`, with independent `A`, `B` and `C`.
 
-You can try to play around these horrible limitations, but you will be stuck with the cruel fact that when you enumerate an `IEnumerable<C>` all you can get back is a stupid, irrilevant instance of `C`, while we wanted a `B`, as in `Func<A,B>`. 
+You can try to play around these horrible limitations, but you will be stuck with the cruel fact that when you enumerate an `IEnumerable<C>` all you can get back is a stupid, irrelevant instance of `C`, while we wanted a `B`, as in `Func<A,B>`. 
 
 
 ## Exceptions to the resque
