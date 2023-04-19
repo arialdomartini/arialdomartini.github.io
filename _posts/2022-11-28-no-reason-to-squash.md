@@ -76,7 +76,7 @@ That's why Git provides the option **`--first-parent`** in the first place.
 <hr/>
 
 
-# • At least wquash after the PR merge! Nobody will need the single commits after
+# • At least squash after the PR merge! Nobody will need the single commits after
 Ditto. Who cares?
 
 ## ‣ Except: good luck using git bisect
