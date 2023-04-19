@@ -76,7 +76,7 @@ That's why Git provides the option **`--first-parent`** in the first place.
 <hr/>
 
 
-# • At least squash after the PR merge! Nobody will need the single commits after
+# • At least wquash after the PR merge! Nobody will need the single commits after
 Ditto. Who cares?
 
 ## ‣ Except: good luck using git bisect
@@ -119,7 +119,7 @@ I saw this happening: mandatory squashing rules eventually translated to tolerat
 # • Squashing saves disk space
 If you don't squash, all those commits will knock Git down!
 
-## ‣ Except they won't
+## ‣ Except it doesn't
 Reducing Scala repository (38,098 commits) to one (1) single commit just saves 47% of space:
 
 Try yourself:
