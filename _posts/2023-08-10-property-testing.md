@@ -485,9 +485,8 @@ So, in a sense, Property-based testing is about decomposing your domain problem-
 
 
 # Let's code
-## Generators
-Since we want Generators to be composable, rather than defining them as functions generating random values.<br/>
-Instead, they are wrappers of polymorphic functions taking
+## Anatomy of a property test
+Since Generators are meant to be composable, rather than having them as simple functions emitting random values, they are defined as wrappers of polymorphic functions taking a couple of inputs:
 
 * a random generator source
 * a size parameter
@@ -568,7 +567,95 @@ ForAll(Arb.From<int>(), n => n * n >= 0);
 This test, fed to FsCheck, results in the execution of 100 tests.
 Pretty neat, isn't it?
 
-The same in F#:
+
+Arbitraries and Generators can be puzzling at first because of their abstractions. Focus on 
+
+```csharp
+var numbers = Arb.From<int>();
+```
+
+Is that a random number? A collection of random numbers?<br/>
+It's neither. It is the instance of a structure that, when fed with a source of randomicity and a size, can emit random numbers. Remember that I mentioned how generators are wrappers of functions?
+
+To better understand this, let's try to actually feed it with a source of randomicity and a size. You can do this with `Gen.Sample()`. In the following snippet we are asking the Generator contained in the Arbitrary to generate 100 numbers smaller than 50:
+
+```csharp
+[Fact]
+void what_is_an_Arb()
+{
+    Arbitrary<int> arbitraryNumber = Arb.From<int>();
+
+    var ns = Gen.Sample<int>(50, 100, arbitraryNumber.Generator).ToList();
+        
+    Assert.Equal(100, ns.Count);
+    Assert.True(ns.TrueForAll(n => n <= 50));
+}
+```
+
+Notice how, `arbitraryNumber` is not an `int`. It's an arbitrary of an `int`. You cannot directly feed it to the `squareIsNotNegative(int n)` function.<br/>
+This is one of the challenges in Property Testing. While in TDD you were used to manage values, in PBT you have often to deal with abstractions of values.<br/>
+
+If you are familiar with Functional Programming, this concept should not sound new: instead of operating on pri`int`s, you are lifing all the values to an elevated world, where you can operate on values in an effectful context. The effect the elevated world handles for you is randomicity.
+
+
+Let's inspect again the property test we wrote:
+
+```csharp
+[Property]
+Property square_of_numbers_are_non_negative()
+{
+    Arbitrary<int> numbers = Arb.From<int>();
+
+    int square(int n) => n * n;
+
+    bool squareIsNotNegative(int n) => square(n) >= 0;
+
+    return ForAll(numbers, squareIsNotNegative);
+}
+```
+
+Notice that it does not close with an assertion. But, after all, it is neither a `Fact`. It's a function returnign a `Property`. It all looks very weird, and magical.<br/>
+In fact, that was just a bit of syntactic sugar. Let me write this property as a classical xUnit Fact:
+
+```csharp
+[Fact]
+void square_of_numbers_are_non_negative_as_a_fact()
+{
+    Arbitrary<int> numbers = Arb.From<int>();
+
+    int square(int n) => n * n;
+
+    bool squareIsNotNegative(int n) => square(n) >= 0;
+
+    Property property = ForAll(numbers, squareIsNotNegative);
+        
+    Check.QuickThrowOnFailure(property);
+}
+```
+
+So, `ForAll` is a method that feed the Generator with some source of randomicity and a default size (100, specifically), generating a `Property`.<br/>
+In other words, `ForAll` does not execute the test yet: it gives you back an instance that you might possibly compose with something else, before executing it. Yes, functional programmers have a real obsession with composition.
+
+The assertions are actually performed by the final `Check.QuickThrowOnFailure(property)`. If you stick your nose in the xUnit code, you will convince yourself that an xUnit assertion is nothing but a piece of code that raises an exception when a particular condition holds. `Assert.True()` in xUnit boils down to:
+
+```csharp
+public static void True(bool? condition, string userMessage)
+{
+    if (!condition.HasValue || !condition.GetValueOrDefault())
+        throw new TrueException(userMessage, condition);
+}
+```
+
+FsCheck relies on this. `Check.QuickThrowOnFailure(property)` verifies all the generated predicates, and if one does not hold, it throws an exception that xUnit interprets as a failed test.
+
+Decorating a method with `[Property]` and returning an instance of `Property` just does the same, under the hood, saving you from calling `Check.QuickThrowOnFailure()`.
+
+
+
+
+
+
+The same test with in F# would look like:
 
 ```fsharp
 open Expecto
@@ -591,7 +678,7 @@ let treeTests =
 
 `let squareIsNotNegative n = square n >= 0` is the property you want to prove wrong. As you see, it's just a simple predicate.
 
-In Hedgehog, the syntax is just slighly different
+In Hedgehog, the syntax is just slighly different:
 
 ```fsharp
 test "Square of any number is not negative" {
