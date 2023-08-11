@@ -9,36 +9,39 @@ tags:
 
 <!--more-->
 
-Getting started with Property-based Testing (PBT) is inherently not easy. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
+Getting started with Property-based Testing (PBT) is inherently hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
 However, I hope it can be of some help to the fellow programmer.
 
 I will use mostly C# and F# examples, and only a bunch of Haskell bits here and there.
 
 
-## Property Testing! What's the fuss about?
-There is no fuss at all. Property Testing is a niche discipline. And this is a pity, because it is an amazingly powerful, effective and very rewarding technique.
+## What's the fuss about?
+There is no fuss at all. Property Testing is a niche discipline. It's almost unknown outside the tiny world of Functional Programming. And this is a pity, because it is an amazingly powerful, effective and very rewarding technique.
 
-Outside the Haskell world, where it is very popular thanks to QuickCheck, the grandfather of all the PBT libraries, in no other ecosystems it is given the attention it deserves.
+In the Haskell world it is very popular thanks to QuickCheck, the grandfather of all the PBT libraries. In no other ecosystems it is given the attention it deserves.
 
 ## Why is it powerful?
 Many would tell you it is because it's great at catching bugs. While this is absolutely true, I prefer to think I love it for a second reason.
 
-The Domain Expert communicates with us developers on 2 different levels.
-
+Domain Experts communicate with us developers on 2 different levels.<br/>
 First, they express the business rules in abstract and strict rules:
 
-- "The catalog always list products sorted alphabetically"
-- "Account names are unique and case insensitive"
-- "We never apply more than 1 discount promotion to a single purchasing cart; we always select the most convenient discount"
+| Abstract rules                                                                                                                 |
+|--------------------------------------------------------------------------------------------------------------------------------|
+| "The catalog always list products sorted alphabetically"                                                                       |
+| "Account names are unique and case insensitive"                                                                                |
+| "We never apply more than 1 discount promotion to a single purchasing cart;<br/>we always select the most convenient discount" |
 
 Then, to help us understand, they also provide us with some examples:
 
-- "With alphabetically I mean: Muffin, Coffee, Milk shall be printed as Coffee, Milk, Muffin"
-- "About account names, you cannot have 2 "john-doe". Also, "john-doe" and "John-Doe" are the same account
-- "Say a customer purchases 2 cups of coffee, 1 milk and 1 muffin for 4 people. 4 people are entitled for Promotion 1, 20% discount, 1 EUR. Milk and Muffin activates Promotion 2, 0.8 EUR. We apply Promotion 1"
+| Concrete examples                                                                                                                                                                                                       |
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| "With alphabetically I mean: Muffin, Coffee, Milk shall be printed as Coffee, Milk, Muffin"                                                                                                                             |
+| "About account names, you cannot have 2 "john-doe". <br/>"john-doe" and "John-Doe" are the same account                                                                                                                |
+| "Say a customer purchases 2 cups of coffee, 1 milk and 1 muffin for 4 people.<br/>4 people are entitled for Promotion 1, 20% discount, 1 EUR.<br/>Milk and Muffin activates Promotion 2, 0.8 EUR. We apply Promotion 1" |
 
-Both the levels are important.
-On the one hand, when the rules are defined in a strict way they are very powerful, because they are concise and they have a general application. They are the invariants of the domain.
+Both the levels are important.<br/>
+On the one hand, when the rules are defined in a strict way they are very powerful, because they are concise and they have a general application. They are the invariants of the domain.<br/>
 On the other hand, the examples ease the comprehension.
 
 It is just unfortunate how, when it comes to translating those requirements to code via tests, we inevitably only code examples. It's a pity, because the application must work for all the cases, not for the specific examples only.
