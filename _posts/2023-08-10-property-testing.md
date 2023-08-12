@@ -6,7 +6,6 @@ tags:
 - bash
 - zsh
 ---
-
 <!--more-->
 
 Getting started with Property-based Testing (PBT) is inherently hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
@@ -88,6 +87,35 @@ That sucks, but it's part of the challenge.
 <!-- The library automatically generates a comprehensive array of test cases, exercising the software in ways human testers would never imagine, exposing even the most insidious of corner cases. Failures are automatically simplified, giving developers coherent, intelligible error messages. (Adapted from the [Haskell Hedgehog homepage](haskell-hedgehog)) -->
 
 <!-- Confusing, isn't it? -->
+
+
+## Say random again, say random again, I dare you!
+Let me state this loudly: Property-based Testing is not about generating random inputs.
+
+When the domain expert of an e-commerce company tells you 
+
+```
+Food products are restricted from international shipping 
+due to regulatory compliance, 
+unless there is an active Promotion
+```
+
+and then you see an implementation such as:
+
+```csharp
+if(product.Type == Food && order.Destination != LocalCountry)
+    throw new CannotBeSentException();
+```
+
+missing a check on an active Promotion, you sense there is a bug.<br/>
+You understand that not because you exercised the code mentally generating thousands of inputs, but because you are a sentient being and you are able to logic.
+
+Compared to you, C# is dumb. If only it could do the same your brains does, using logic like in Prolog, relying on AI or on Automated Theorem Proving like in COQ, it could find counterexamples without wandering around aimlessly.<br/>
+It's only incidental that the programming language you use is not AI capable.
+
+Property Testing is the act of writing requirements in their essence. The strategies the library use to prove you wrong are an internal, incidental implementation detail.
+
+So, when you hear the term "Property", please don't think to mathematical traits like "commutativity of sum". Mentally translate "Property" to "The Business Requirement in its essence". That's the core of the improvement you will experience, compared to TDD.
 
 ## Properties 
 Wow, if got this far, you must really be motivated. Let's enter the rabbit hole, starting with a definition. I promise we will get to code soon.
@@ -689,7 +717,7 @@ test "Square of any number is not negative" {
 }
 ```
 
-Notice how the `squareIsNotNegative` predicate in Hedgehog is passed to a `Property.ofBool` function, so that it is wrapped into a higher level, composable `Property` structure.
+Notice how the `squareIsNotNegative` predicate in Hedgehog is passed to `Property.ofBool` so that it is wrapped into a higher level, composable `Property` structure.
 
 ## Observing Test Case Distribution
 It is important to be aware of the distribution of test cases: if test data is not well distributed then conclusions drawn from the test results may be invalid.
