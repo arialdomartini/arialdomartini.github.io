@@ -229,7 +229,8 @@ I get the general rule. But, hey! I found a counterexample! Here it is:
 
   new Product(name: ???, category: Categories.SoftDrinks, price: ??,  description: ???)}
 
-Don't even care about `name`, `price` and other fields: the element causing the problem is 
+Don't even care about `name`, `price` and other fields: the element 
+causing the problem is 
 
   `category = Categories.SoftDrinks.
   
@@ -343,11 +344,10 @@ void no_discounts_is_applied_to_carts_without_food([CartContainingNoFoodProducts
 I hope you get how paramount the generation of values is, in PBT.
 
 ### Fine. But enough with fictional attributes, please
-Yes, it's true: those were fictional examples. None of the attributes I used actually exist.
+By now you should have gained the intuition that just generating purely random values does not work. We need to craft *quasi-random* values, strictly satisfying some specific domain rules. Indeed, we need a way to instruct the test data generator which rules to stick to.
 
-By now, anyway, you should have gained the intuition that just generating purely random values does not work. We need to craft *quasi-random* values, strictly satisfying some specific domain rules. Indeed, we need a way to instruct the test data generator which rules to stick to.
-
-We could use functions to generate those values:
+And it's time to say goodbye to our fictional attributes.<br/>
+What about using functions instead?
 
 ```csharp
 [Property]
@@ -364,12 +364,12 @@ void account_name_is_unique()
 }
 ```
 
-A bit better. But it's a poor man's solution. We can surely do much better.<br/>
-I see the following problems:
+A bit better. But it's a poor man's solution, and we can surely do much better.<br/>
+I see the following traits:
 
-* The burden to generate quasi-random values obeying domain rules is completely shifted to the developer.<br/>We can think of a more solid approach.
+* It's still unclear what's inside those functions. So far, we just moved the problem one level up.
 
-* The test above only generates 1 set of random values. Ideally, we would like to generate thousands. Something like:
+* The test above only generates 1 set of random values. We are back to an example-based test. Ideally, we would like to generate thousands. Something like:
 
 ```csharp
 
@@ -390,18 +390,19 @@ void account_name_is_unique()
 }
 ```
 
-The amount of boilerplate code is not exciting.
+Notice how we needed a bit of boilerplate code to wrap the test inside a cycle.
 
 
 * It might not be immediately apparent, but they way random values are generated is not very reusable.
 If only the structures used by our homegrown generators were composable, you could have a second test with something like:
 
-
 ```csharp
-    Account[] existingAccountsIncludingDisabledOnes = GenerateAllDifferent().ComposedWith(HavingAtLeast3DisabledAccounts());
+    Account[] existingAccountsIncludingDisabledOnes = 
+	    GenerateAllDifferent()
+		    .ComposedWith(HavingAtLeast3DisabledAccounts());
 ```
 
-It's very unlikley that such a generic `ComposedWith` method could be defined, unless we invent something very powerful and elegant.
+It's very unlikley that such a generic `ComposedWith` method could be defined.
 
 The problem is that our generator functions immediately return values. Once we have values, it's too late to modify the rules for generating further ones.<br/>
 If instead it returned *structures able to eventually emit values*, such as wrappers of functions, you would still be in time to alter the domain rules before finally generating values.<br/>
@@ -428,13 +429,18 @@ Prior randomized testing tools required learning a special language and grammar 
 
 As everything in Functional Programming, the secret is to start simple
 
-* a structure able to generate random booleans: `Gen<int>`xxx
-* another able to generate random characters: `Gen<char>` xxx
+* a structure able to generate random booleans: `Gen<int>`
+* another able to generate random characters: `Gen<char>`
 
 and then to build on top of composable abstractions:
 
-* function able to generate a string can be built as a composition of char generators: `Gen.list Gen<int>` xxx
-* a food `Product` generator can be built as an algebraic composition of other smaller generators: xxx
+* function able to generate a string can be built as a composition of char generators: `Gen.list Gen<int> -> Gen<int list>`
+* a food `Product` generator can be built as an algebraic composition of other smaller generators:
+
+xxx
+
+```fsharp
+```
 
 
 Let's have a look to some real examples. Please, suspend for a while the judgment on syntax.
@@ -507,229 +513,11 @@ Just focus on the key messages:
 * They are compositional in nature. Combining Generators gives you another Generator. It's Generators all the way down.
 * Once you understand the mechanic behind composing them, you've broken every limit. Composing stuff requires a bit of Functional Programming. This is were the fun starts.
 
-Oh, wait: I forgot to mention that Properties are made of composable structures.
+Oh, wait: I forgot to mention that Properties too are made of composable structures.
 
 So, in a sense, Property-based Testing is about decomposing your domain problem-space into small properties and generation rules, and then about describing the business functionalities as a composition of those building blocks, for an automated library to try to prove you wrong.
 
 
-
-# Let's code
-## Anatomy of a property test
-Since Generators are meant to be composable, rather than having them as simple functions emitting random values, they are defined as wrappers of polymorphic functions taking a couple of inputs:
-
-* a random generator source
-* a size parameter
-
-and returning 
-
-* a value of a given type.
-
-In Haskell `Gen` is defined as:
-
-```haskell
-newtype Gen a = MkGen {
-    unGen :: QCGen -> Int -> a
-}
-```
-
-FsCheck defines it in C# as:
-
-```csharp
-public sealed class Gen<a> : IGen
-{
-    internal readonly FSharpFunc<int, FSharpFunc<Random.StdGen, a>> item;
-
-    internal Gen(FSharpFunc<int, FSharpFunc<Random.StdGen, a>> item) => this.item = item;
-    
-    ...
-```
-
-F# Hedgehog's definition boils down to something similar:
-
-
-```fsharp
-public struct Random<a>
-{
-    public static Random<a> NewRandom(FSharpFunc<Seed, FSharpFunc<int, a>> item) => new Random<a>(item);
-    
-    ...
-```
-
-I will show you shortly how Generators allow monadic effects,so they can be combined together.
-
-A last little note before getting our hands dirty.<br/>
-I mentioned that, when PBT libraries find a counterexample, they narrow down it to the minimum relevant value, to simplify your life. This operation is performed by the so called *shrinkers*. You don't need to deal with them directly just yet: just be informed that, once you created a generator, in some libraries you need to wrap it into a more sophisticated structure, called `Arbitrary`, which adds shrinking capabilities. That's true in the QuickCheck family libraries. Other libraries have embedded shrinkers, that is, they create a shrinker the moment you define a generator. But that's an advanced topic already.
-
-
-Each library defines default generators for most types. Let's finally write a real, runnable property test usine a default generator:
-
-```csharp
-using FsCheck;
-using FsCheck.Xunit;
-using static FsCheck.Prop;
-
-public class PropertyTesting
-{
-    [Property]
-    Property square_of_numbers_are_non_negative()
-    {
-        Arbitrary<int> numbers = Arb.From<int>();
-
-        int square(int n) => n * n;
-
-        bool squareIsNotNegative(int n) => square(n) >= 0;
-
-        return ForAll(numbers, squareIsNotNegative);
-    }
-}
-```
-
-
-I find the Point Free expression 
-
-```csharp
-Prop.forAll numbers squareIsNotNegative
-```
-
-particularly elegant. It really captures the requirement, although the trick here is that the requirement is super lame.<br/>
-If you prefer to see this property test as a one-liner, here it is:
-
-```csharp
-ForAll(Arb.From<int>(), n => n * n >= 0);
-```
-
-This test, fed to FsCheck, results in the execution of 100 tests.
-Pretty neat, isn't it?
-
-
-There are some puzzling elements in these test, though, such as this `Arbitrary<int>`. Focus on:
-
-```csharp
-Arbitrary<int> numbers = Arb.From<int>();
-```
-
-Is that a random number? A collection of random numbers?<br/>
-It's neither. It is the instance of a structure that, when fed with a source of randomicity and a size, can emit random numbers. Remember that I mentioned how generators are wrappers of functions?
-
-To better understand this, let's try to actually feed this `Arbitrary<int>` instance with a source of randomicity and a size. This can be done with `Gen.Sample()`. In the following snippet we are asking the Generator contained in the Arbitrary to generate `100` numbers smaller than `50`:
-
-```csharp
-[Fact]
-void what_is_an_Arb()
-{
-    Arbitrary<int> arbitraryNumber = Arb.From<int>();
-
-    var ns = Gen.Sample<int>(50, 100, arbitraryNumber.Generator).ToList();
-        
-    Assert.Equal(100, ns.Count);
-    Assert.True(ns.TrueForAll(n => n <= 50));
-}
-```
-
-So, if `arbitraryNumber` is not neither an `int` nor a collection of `int`, you cannot directly feed it to the `squareIsNotNegative(int n)` function.<br/>
-This is one of the challenges in Property Testing. While in TDD you can just manage values, in PBT you often have to deal with *abstractions* of values.<br/>
-
-If you are familiar with Functional Programming, this concept should not sound new: instead of operating on primitive `int` types, you are lifing all the types to an elevated world, where you can operate in an effectful context. 
-The effect the elevated world handles for you in Property Testing is *randomicity*.
-
-Let's inspect again the property test we wrote:
-
-```csharp
-[Property]
-Property square_of_numbers_are_non_negative()
-{
-    Arbitrary<int> numbers = Arb.From<int>();
-    int square(int n) => n * n;
-    bool squareIsNotNegative(int n) => square(n) >= 0;
-
-    return ForAll(numbers, squareIsNotNegative);
-}
-```
-
-Notice that it does not close with an assertion. That's disturbing! Worse, it is neither a `Fact`. It's a function returnign a `Property`. It all looks weird and magical.<br/>
-In fact, that was just a bit of syntactic sugar. Let me write this property as a classical xUnit Fact:
-
-```csharp
-[Fact]
-void square_of_numbers_are_non_negative_as_a_fact()
-{
-    Arbitrary<int> numbers = Arb.From<int>();
-    int square(int n) => n * n;
-    bool squareIsNotNegative(int n) => square(n) >= 0;
-
-    Property property = ForAll(numbers, squareIsNotNegative);
-        
-    Check.QuickThrowOnFailure(property);
-}
-```
-
-So, `ForAll` is a method that feeds the Generator with some source of randomicity and a default size (100, specifically), and which generates a `Property`.<br/>
-In other words, `ForAll` does not execute the test just yet: it gives you back an instance of `Property` that you might possibly compose with something else, before executing it. Yes, functional programmers have a real obsession with composition.
-
-The assertions are actually performed by the final `Check.QuickThrowOnFailure(property)`.<br/>If you crack open the xUnit code, you will convince yourself that an xUnit assertion is nothing but a piece of code that raises an exception when a particular condition holds. `Assert.True()` in xUnit boils down to:
-
-```csharp
-public static void True(bool? condition, string userMessage)
-{
-    if (!condition.HasValue || !condition.GetValueOrDefault())
-        throw new TrueException(userMessage, condition);
-}
-```
-
-FsCheck relies on this. `Check.QuickThrowOnFailure(property)` verifies all the generated predicates, and if one does not hold, it throws an exception that xUnit interprets as a failed test.<br/>
-Decorating a method with `[Property]` and returning an instance of `Property` just does the same, under the hood, saving you from calling `Check.QuickThrowOnFailure()`.  No rocket science.
-
-
-The same test with in F# would look like this:
-
-```fsharp
-open Expecto
-open FsCheck
-
-[<Tests>]
-let treeTests =
-    testList
-        "Simple Properties while playing with Generators"
-
-        [ testProperty
-              "Square of any number is not negative"
-              (let numbers = Arb.from<int>
-               let square n = n * n
-               let squareIsNotNegative (n: int) : bool = square n >= 0
-
-               Prop.forAll numbers squareIsNotNegative) ]
-```
-
-
-`let squareIsNotNegative n = square n >= 0` is the property you want to prove wrong. As you see, it's just a simple predicate. This is, in essence, the requirement (together with the subset of input values).
-
-In Hedgehog, the syntax is just slighly different:
-
-```fsharp
-test "Square of any number is not negative" {
-    let numbers = Gen.int32 (Range.linear 0 100)
-              
-    let square n = n * n
-
-    let squareIsNotNegative n = (square n >= 0) |> Property.ofBool
-
-    numbers |> Property.forAll squareIsNotNegative |> Property.check
-}
-```
-
-Notice how the `squareIsNotNegative` predicate in Hedgehog is passed to `Property.ofBool` so that it is wrapped into a higher level, composable `Property` structure.
-
-## Observing Test Case Distribution
-It is important to be aware of the distribution of test cases: if test data is not well distributed then conclusions drawn from the test results may be invalid.
-Test Cases can be counted and classified.
-
-
-
-## The Size of Test Data
-Test data generators have an implicit size parameter; the library begins by generating small test cases, and gradually increases the size as testing progresses
-
-## Arbitrary
-The library defines instances of Generators for the most common types. They are called Arbitrary: see them as the defaul generators of a give type `a`.
 
 
 # Notes
