@@ -247,6 +247,44 @@ Property serialization_deserialization_roundtrip()
 
 Notice how both the arbitrary and the property are defined for a specific type. In fact, Property must be monomorphic: I don't know of any PBT library supporting polimorphic properties.
 
+### Testing a DB repository
+Nothing prevents you to do integration tests via a property. After all, a property test is an ordinary test with arbitrary code, only input data is created out of thin air.
+
+Very similarly to the serialization case, you could test that your `ProductRepository` is able to save a product on the db.
+
+```csharp
+record Product(Guid Id, string Name, decimal price, Category category);
+
+public class ProductRepositoryPropertyTests
+{
+    private IProductRepository _repository;
+
+	public ProductRepositoryPropertyTests()
+	{
+	    // setup your test DB
+	}
+
+    [Property]
+    Property products_can_be_persisted()
+    {
+        Arbitrary<Product> products = Arb.From<Product>();
+
+        bool canBeSavedOnDb(Product product)
+        {
+            _repository.Save(product);
+
+            var found = _repository.LoadById(product.Id);
+
+            return found == product;
+        }
+
+        return Prop.ForAll(products, canBeSavedOnDb);
+    }
+}
+```
+
+
+
 ### A more complex functionality
 Let's work it out with the original requirements;
 
@@ -334,46 +372,3 @@ As you see, it's all very generic. No concrete values are ever provided.
 This is honestly a mouthful of code, isn't it? Consider though that once defined you will reuse generators over and over in several tests.<br/>
 Also, the equivalent in F# and Haskell is way more concise.<br/>
 
-
-## Observing Test Case Distribution
-It is important to be aware of the distribution of test cases: if test data is not well distributed then conclusions drawn from the test results may be invalid.
-Test Cases can be counted and classified.
-
-
-
-## The Size of Test Data
-Test data generators have an implicit size parameter; the library begins by generating small test cases, and gradually increases the size as testing progresses
-
-## Arbitrary
-The library defines instances of Generators for the most common types. They are called Arbitrary: see them as the defaul generators of a give type `a`.
-
-
-# Notes
-
-
-I personally never though this approach could provide a false sense of security. 
-
-Properties are universally quantified over their parameters, via the use of Test Data Generators.
-Properties must have monomorphic types.
-
-
-# References
-* [QuickCheck][quickcheck]: the original (a bit outdated) manual of the Haskell library
-* [Haskell Hedgehog][haskell-hedgehog]
-* [The Design and Use of QuickCheck][design-and-use-of-quickcheck]
-* [xUnit Theory: Working With InlineData, MemberData, ClassData][xunit-theory]
-Videos:
-
-* [The lazy programmer's guide to writing thousands of tests - Scott Wlaschin][lazy-programmer]
-
-
-# Comments
-
-[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/xxx)
-
-[quickcheck]: https://www.cse.chalmers.se/~rjmh/QuickCheck/manual.html
-[haskell-hedgehog]: https://github.com/hedgehogqa/haskell-hedgehog
-[design-and-use-of-quickcheck]: https://begriffs.com/posts/2017-01-14-design-use-quickcheck.html
-
-[lazy-programmer]: https://www.youtube.com/watch?v=IYzDFHx6QPY
-[xunit-theory]: https://hamidmosalla.com/2017/02/25/xunit-theory-working-with-inlinedata-memberdata-classdata/ 
