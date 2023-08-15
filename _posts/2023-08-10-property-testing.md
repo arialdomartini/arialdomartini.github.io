@@ -8,7 +8,7 @@ tags:
 ---
 <!--More-->
 
-Getting Started With Property-Based Testing (Pbt) Is Inherently Hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
+Getting started with property-Based Testing (PBT) is inherently hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
 However, I hope it can be of some help to the fellow programmer.
 
 I will use mostly C# and F# examples, and only a bunch of Haskell bits here and there.
@@ -17,17 +17,19 @@ I will use mostly C# and F# examples, and only a bunch of Haskell bits here and 
 ## What's the fuss about?
 There is no fuss at all. Property Testing is a niche discipline. It's almost unknown outside the tiny world of Functional Programming. And this is a pity, because it is an amazingly powerful, effective and very rewarding technique.
 
-In the Haskell world it is very popular thanks to QuickCheck, the grandfather of all the PBT libraries. In no other ecosystems it is given the attention it deserves.
+In the Haskell world it is very popular thanks to QuickCheck, the grandfather of all the PBT libraries. In other ecosystems it is not given the attention it deserves.
 
 ## Why is it powerful?
-Many would tell you it is because it's great at catching bugs. While this is absolutely true, I prefer to think I love it for a second reason.
+Many would tell you it is because it's great at catching bugs. Some will stress how it similar to fuzzing testing in the way it randomizes the input values.
+
+While all the above are true, I prefer to think I love it for a third reason: it elevates your comprehension of the domain.
 
 Domain Experts communicate with us developers on 2 different levels.<br/>
-First, they express the business rules in abstract and strict rules:
+First, they express the business rules using abstract and strict statements:
 
 | Abstract rules                                                                                                                 |
 |--------------------------------------------------------------------------------------------------------------------------------|
-| "The catalog always list products sorted alphabetically"                                                                       |
+| "The catalog always lists products in alphabetical order"                                                                       |
 | "Account names are unique and case insensitive"                                                                                |
 | "We never apply more than 1 discount promotion to a single purchasing cart;<br/>we always select the most convenient discount" |
 
@@ -35,28 +37,29 @@ Then, to help us understand, they also provide us with some examples:
 
 | Concrete examples                                                                                                                                                                                                       |
 |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| "With alphabetically I mean: Muffin, Coffee, Milk shall be printed as Coffee, Milk, Muffin"                                                                                                                             |
-| "About account names, you cannot have 2 "john-doe". <br/>"john-doe" and "John-Doe" are the same account                                                                                                                |
-| "Say a customer purchases 2 cups of coffee, 1 milk and 1 muffin for 4 people.<br/>4 people are entitled for Promotion 1, 20% discount, 1 EUR.<br/>Milk and Muffin activates Promotion 2, 0.8 EUR. We apply Promotion 1" |
+| "With alphabetical order I mean: Muffin, Coffee, Milk shall be printed as Coffee, Milk, Muffin"                                                                                                                         |
+| "About account names, you cannot have 2 "john.doe". <br/>"john.doe" and "John.Doe" are the same account                                                                                                                 |
+| "Say a customer purchases `2` cups of coffee, `1` milk and `1` muffin for `4` people.<br/>`4` people are entitled for `Promotion 1`, `20%` discount, `1 EUR`.<br/>Milk and Muffin activates `Promotion 2`, `0.8 EUR`.<br/>In this case, we apply `Promotion 1`" |
 
 Both the levels are important.<br/>
-On the one hand, when the rules are defined in a strict way they are very powerful, because they are concise and they have a general application. They are the invariants of the domain.<br/>
-On the other hand, the examples ease the comprehension.
+On the one hand, abstract rules are very powerful, because they are concise and they have a general application.<br/>
+On the other hand, the examples (which are derivated from abstract rules) ease the comprehension.
 
-It is just unfortunate how, when it comes to translating those requirements to tests, we inevitably only code examples. It's a pity, because the application must work for all the cases, not for the specific examples only.
+Unfortunately, when it comes to translating requirements to tests, we only code with examples. And this is risky: after all, the application must work in all the cases, not only in the few ones covered by the examples.
 
-We never do any effort for expressing the rules in their more general form.<br/>
-Not that it is our fault. We don't because the tools provided for TDD are very much example-based. It's mostly a technical limitation: we just don't know how to translate `"products are always sorted alphabetically"` without resorting to a specific list of products.
+Indeed, we rarely do any effort for expressing the rules in their more general form.<br/>
+Not our fault. We don't because the tools provided by TDD are very much example-based. It's mostly a technical limitation: we just don't know how to translate `"products are always sorted alphabetically"` without resorting to a specific list of products.
 
-If TDD is about coding examples, Property-based testing is about coding the pure rules.<br/>
+If TDD is about coding examples, Property-based Testing is about coding the pure rules.<br/>
 PBT provides a way to express the business functionalities abstracting from the specific examples. In a sense, to capture their core essence.<br/>
-The selling point of PBT is: it leads you to elevate your comprehension of the domain problem by forcing you to write statements independent from specific examples.
+The selling point of PBT is: it leads you to deepen your understanding of the domain problem by forcing you to write statements independent from specific values.
 
 As a side effect, you will get an excellent tool for catching nasty bugs.
 
 ## Show me the code
 
-OK, I see you are impatient. Here we go. I will give you 2 examples.<br/>
+OK, I see you are impatient. Here we go. I will give you 2 simple examples. In the next pages we will have the time to understand what happends behind the scenes.
+
 Given the following integration test:
 
 ```csharp
@@ -65,12 +68,12 @@ record Product(Guid Id, string Name, Category Category, decimal Price);
 [Fact]
 void products_can_be_persisted()
 {
-	var product = new Product(
-		Id: Guid.NewGuid(),
-		Name: "The Little Schemer", 
-		Category: Books, 
-		Price: 16.50M);
-	
+    var product = new Product(
+        Id: Guid.NewGuid(),
+        Name: "The Little Schemer", 
+        Category: Books, 
+        Price: 16.50M);
+    
     _repository.Save(product);
 
     var found = _repository.LoadById(product.Id);
@@ -94,7 +97,9 @@ bool products_can_be_persisted(Product product)
 }
 ```
 
-As a second case, given the following F# xUnit Theory:
+Basically, the same test, without the specific value for `Product`.
+
+As a second case, here's an F# xUnit Theory for the Fizz Buzz Kata:
 
 ```fsharp
 [<Theory>]
@@ -106,7 +111,7 @@ let ``multiples of 15 return "fizzbuzz"`` (multipleOf15) =
     Assert.Equal("fizzbuzz", fizzbuzz multipleOf15)
 ```
 
-which can be directly translated to
+This can be directly translated to
 
 ```fsharp
 [<Property>]
@@ -114,28 +119,32 @@ let ``All the multiples of 15 return "fizzbuzz"`` () =
     gen {
         let! n = Arb.generate<int>
         let multipleOf15 = n * 15
+		
         return fizzbuzz multipleOf15 = "fizzbuzz"
     }
 ```
 
+Notice how `fizzbuzz multipleOf15 = "fizzbuzz"` is almost the direct translation of the requirement `All the multiples of 15 return "fizzbuzz"`.
 
 ## So, define Property-based Testing
-Here's the big statement.<br/>
-Property Testing is TDD on steroids. It is about capturing the essence of business requirements -- rather than some arbitrary, often unmotivated examples -- and having them automatically tested almost as logical or mathematical statements, more or less for free.
+Here's the bold statement.<br/>
+Property Testing is TDD on steroids. It is about capturing the essence of business requirements &mdash; rather than some arbitrary, often unmotivated examples &mdash; and having them automatically tested almost as logical or mathematical statements, more or less for free.
 
 ## Too good. Where's the catch?
-You are right. I see 3 catches.
+You are right. It would be too good, right?<br/>
+I see 3 catches.
 
 **First**: Property-based Testing is not as easy as TDD.<br/>
 It's hard to start with, and overtime it keeps being more challenging than ordinary TDD. The libraries supporting it are usually more advanced, as they generally require some knowledge of Functional Programming: you should be prepared to have some understanding of how to write a lambda, how to map it to a functor, what combinators are, how to compose monads and the like.<br/>
 But don't despair: those are very very rewarding challenges, you will enjoy them!
 
 **Second**: the technical challelenge is possibly not even the thoughest one: figuring out which properties describe the business behavior is often the most confusing part.<br/>
-Writing TDD tests is as easy as finding a collection of example use cases: the customer selected an apple (`1 EUR`) and 3 books (`10 EUR` each), the total should be `31 EUR.` Easy peasy.<br/>
+Writing TDD tests is as easy as finding a collection of reference use cases: the customer ordered an apple (`.5 EUR`) and 3 books (`10 EUR` each), the total should be `30.5 EUR.` Easy peasy.<br/>
 Writing Property Tests for an the same e-commerce site is a different kettle of fish: it is not even clear what a "property" is.<br/>
 I'm afraid there are no silver bullets here, besides elbow grease and a lot of experience.
 
-**Finally**: PBT's niche nature: compared to TDD, the documentation is not likely copious, and the typical examples you can find online have often deceptively simple code, not directly applicable to real-world use cases. If you are looking for answers to your real-world needs, you will be disappointed to discover that much of the documentation will teach you over and over how to test the reversal of a list.<br/>
+**Finally**: PBT's niche nature.<br/>
+Compared to TDD, the documentation is not likely copious and the typical examples you can find online have often deceptively simple code, not directly applicable to real-world use cases. If you are looking for answers to your down-to-Earth needs, you will be disappointed to discover that much of the documentation will teach you over and over how to test the reversal of a list.<br/>
 That sucks, but it's part of the challenge.
 
 
@@ -151,7 +160,27 @@ That sucks, but it's part of the challenge.
 
 
 ## Say random again, say random again, I dare you!
-Let me state this loudly: Property-based Testing is not about generating random inputs.
+Consider again the example I provided earlier:
+
+
+```csharp
+[Property]
+bool products_can_be_persisted(Product product)
+{
+    _repository.Save(product);
+
+    var found = _repository.LoadById(product.Id);
+
+    return found == product;
+}
+```
+
+When you run it, FsCheck will generate a comprehensive number of randomly generated instances of `Product`.
+
+So, is FsCheck a library like AutoFixture for removing the need for hard-coded values and making the Arrange phase easir?<br/>
+No, it's not.
+
+Let me state this loudly: only at a first glance is Property-based Testing about generating random inputs. PBT is more about you than it is about the test runner.
 
 When the domain expert of an e-commerce company tells you 
 
@@ -169,19 +198,17 @@ if(product.Type == Food && order.Destination != LocalCountry)
 ```
 
 missing a check on an active Promotion, you sense there is a bug.<br/>
-You understand that not because you exercised the code mentally generating thousands of inputs, but because you are a sentient being and you are able to logic.
+You understand that not because you exercised the code, mentally generating thousands of inputs, but because you are a sentient being and you are able to use logic.
 
-Compared to you, C# is dumb. If only it could do the same your brains does, using logic like in Prolog, relying on AI or on Automated Theorem Proving like in COQ, it could find counterexamples without wandering around aimlessly.<br/>
-It's only incidental that the programming language you use is not AI capable.
+Compared to you, C# is dumb. If only C# could do the same your brains does, using logic like in Prolog, relying on AI or on Automated Theorem Proving like in COQ, it could find counterexamples without wandering around aimlessly.<br/>
+It's only incidental that your most beloved programming language is bovine.
 
-Property Testing is the act of writing requirements in their essence. The strategies the library use to prove you wrong are an internal, incidental implementation detail.
+Property Testing is the act of writing requirements in their essence. The strategies the library uses to prove you wrong are an internal, incidental implementation detail.
 
-So, when you hear the term "Property", please don't think to mathematical traits like "commutativity of sum". Mentally translate "Property" to "The Business Requirement in its essence". That's the core of the improvement you will experience, compared to TDD.
-
-## Properties 
-Wow, if got this far, you must really be motivated. Let's enter the rabbit hole, starting with a definition. I promise we will get to code soon.
 
 ## Going Beyond Fixtures
+Wow, if got this far, you must really be motivated. Let's enter the rabbit hole, starting with a definition. I promise we will get to code soon.
+
 Let me do a step back and start from something you already know.
 
 In TDD you often desire to exercise a piece of code with multiple input values, so to cover more than one single uses case.<br/>
@@ -395,7 +422,7 @@ void no_discounts_is_applied_to_carts_without_food([CartContainingNoFoodProducts
 I hope you get how paramount the generation of values is, in PBT.
 
 ### Fine. But enough with fictional attributes, please
-By now you should have gained the intuition that just generating purely random values does not work. We need to craft *quasi-random* values, strictly satisfying some specific domain rules. Indeed, we need a way to instruct the test data generator which rules to stick to.
+By now you should have built the intuition that just generating purely random values does not work. We need to craft *quasi-random* values, strictly satisfying some specific domain rules. Indeed, we need a way to instruct the test data generator which rules to stick to.
 
 And it's time to say goodbye to our fictional attributes.<br/>
 What about using functions instead?
@@ -449,8 +476,8 @@ If only the structures used by our homegrown generators were composable, you cou
 
 ```csharp
     Account[] existingAccountsIncludingDisabledOnes = 
-	    GenerateAllDifferent()
-		    .ComposedWith(HavingAtLeast3DisabledAccounts());
+        GenerateAllDifferent()
+            .ComposedWith(HavingAtLeast3DisabledAccounts());
 ```
 
 It's very unlikley that such a generic `ComposedWith` method could be defined.
