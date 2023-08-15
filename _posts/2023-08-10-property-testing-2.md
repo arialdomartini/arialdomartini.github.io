@@ -222,8 +222,32 @@ test "Square of any number is not negative" {
 Notice how the `squareIsNotNegative` predicate in Hedgehog is passed to `Property.ofBool` so that it is wrapped into a higher level, composable `Property` structure.
 
 
-## Real-world use cases
+## Toward real-world use cases
 You don't have to think this approach only works with simple mathematical statements.<br/>
+
+Let's see some examples, starting from a very simple one.
+
+Say you developed a serialization library. Testing it translates to making sure that 
+
+* serializing an instance creates a string 
+* deserializing that string brings the original instance back to life
+
+```csharp
+[Property]
+Property serialization_deserialization_roundtrip()
+{
+    Arbitrary<Product> products = Arb.From<Product>();
+
+    bool roundtripLooseNoInformation(Product product) =>
+        Deserialize(Serialize(product)) = product; 
+
+    return Prop.ForAll(products, roundtripLooseNoInformation);
+}
+```
+
+Notice how both the arbitrary and the property are defined for a specific type. In fact, Property must be monomorphic: I don't know of any PBT library supporting polimorphic properties.
+
+### A more complex functionality
 Let's work it out with the original requirements;
 
 ```
@@ -236,6 +260,8 @@ With FsCheck in C# this could be translated to something like:
 
 
 ```csharp
+bool Ship(Product product, Country country, Promotion promotion) => ...
+
 [Property]
 Property food_is_restricted_from_international_shipping_unless_there_is_an_active_promotion()
 {
@@ -255,7 +281,7 @@ Property food_is_restricted_from_international_shipping_unless_there_is_an_activ
 
 I suggest to read it from bottom to top.
 
-This uses a bunch of generators. A random date is generated with
+This uses a bunch of generators. Random dates are generated with:
 
 ```csharp
 private readonly Gen<DateTime> AnyDate = 
@@ -275,7 +301,7 @@ Gen<Country> InternationalCountries =
     select country;
 ```
 
-A food product is similarly generated with:
+Similarly, a food product is generated with:
 
 ```csharp
 record Product(string Name, decimal price, Category category);
@@ -303,10 +329,9 @@ Gen<Promotion> ValidPromotion(DateTime today) =>
         ValidTo: today.AddDays(daysAfter));
 ```
 
-As you see, it's all very generic. No concrete values are provided.
+As you see, it's all very generic. No concrete values are ever provided.
 
-Anyway, this is honestly a mouthful of code.<br/>
-Consider though that, once defined, you will reuse generators over and over in several tests.<br/>
+This is honestly a mouthful of code, isn't it? Consider though that once defined you will reuse generators over and over in several tests.<br/>
 Also, the equivalent in F# and Haskell is way more concise.<br/>
 
 
