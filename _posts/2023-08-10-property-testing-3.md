@@ -6,6 +6,19 @@ tags:
 - bash
 - zsh
 ---
+# Properties
+
+A Property is an observation on a piece of code that we expect to hold true regardless of the inputs. This generic -- but not very practicle definition -- describes well the 1st level of the domain expert requirements.
+
+If you want to translate a property to code, instead of writing individual unit tests consisting of certain arbitrary, possibly unmotivated input-output pairs, you will be forced to describe the functionality in a more abstract and general way. You will try to capture the invariants of the program.<br/>
+Then the library will use carefully forged random values, covering the most convenient subset of the input space, trying to falsify your statements and to prove you wrong.
+
+Proponents of formal methods sometimes stress the notion of specification above that of implementation. However it is the inconsistencies between these two independent descriptions of the desired behavior that reveal the truth. We discover incomplete understanding in the specs and bugs in the implementation. Programming does not flow in a single direction from specifications to implementation but evolves by cross-checking and updating the two. Property-based testing quickens this evolution.
+(from [Design and Use of QuickCheck][design-and-use-of-quickcheck])
+
+Makes sense? I'm sure, though, you are hungry of code, now. All right, let's go.
+
+
 
 ## Observing Test Case Distribution
 It is important to be aware of the distribution of test cases: if test data is not well distributed then conclusions drawn from the test results may be invalid.

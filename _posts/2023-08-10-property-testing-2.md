@@ -253,7 +253,7 @@ Nothing prevents you to do integration tests via a property. After all, a proper
 Very similarly to the serialization case, you could test that your `ProductRepository` is able to save a product on the db.
 
 ```csharp
-record Product(Guid Id, string Name, decimal price, Category category);
+record Product(Guid Id, string Name, decimal Price, Category Category);
 
 public class ProductRepositoryPropertyTests
 {
@@ -371,7 +371,7 @@ Gen<Country> InternationalCountries =
 Similarly, a food product is generated with:
 
 ```csharp
-record Product(string Name, decimal price, Category category);
+record Product(Guid Id, string Name, Category Category, decimal Price);
 
 Gen<Product> FoodProducts =
     from name in Arb.Generate<string>()

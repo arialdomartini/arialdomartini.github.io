@@ -6,9 +6,9 @@ tags:
 - bash
 - zsh
 ---
-<!--more-->
+<!--More-->
 
-Getting started with Property-based Testing (PBT) is inherently hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
+Getting Started With Property-Based Testing (Pbt) Is Inherently Hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
 However, I hope it can be of some help to the fellow programmer.
 
 I will use mostly C# and F# examples, and only a bunch of Haskell bits here and there.
@@ -43,7 +43,7 @@ Both the levels are important.<br/>
 On the one hand, when the rules are defined in a strict way they are very powerful, because they are concise and they have a general application. They are the invariants of the domain.<br/>
 On the other hand, the examples ease the comprehension.
 
-It is just unfortunate how, when it comes to translating those requirements to code via tests, we inevitably only code examples. It's a pity, because the application must work for all the cases, not for the specific examples only.
+It is just unfortunate how, when it comes to translating those requirements to tests, we inevitably only code examples. It's a pity, because the application must work for all the cases, not for the specific examples only.
 
 We never do any effort for expressing the rules in their more general form.<br/>
 Not that it is our fault. We don't because the tools provided for TDD are very much example-based. It's mostly a technical limitation: we just don't know how to translate `"products are always sorted alphabetically"` without resorting to a specific list of products.
@@ -56,7 +56,68 @@ As a side effect, you will get an excellent tool for catching nasty bugs.
 
 ## Show me the code
 
-OK, I see you are impatient. Here we go:
+OK, I see you are impatient. Here we go. I will give you 2 examples.<br/>
+Given the following integration test:
+
+```csharp
+record Product(Guid Id, string Name, Category Category, decimal Price);
+
+[Fact]
+void products_can_be_persisted()
+{
+	var product = new Product(
+		Id: Guid.NewGuid(),
+		Name: "The Little Schemer", 
+		Category: Books, 
+		Price: 16.50M);
+	
+    _repository.Save(product);
+
+    var found = _repository.LoadById(product.Id);
+
+    Assert.Equal(found, product);
+}
+```
+
+the equivalent Property-based one would be:
+
+
+```csharp
+[Property]
+bool products_can_be_persisted(Product product)
+{
+    _repository.Save(product);
+
+    var found = _repository.LoadById(product.Id);
+
+    return found == product;
+}
+```
+
+As a second case, given the following F# xUnit Theory:
+
+```fsharp
+[<Theory>]
+[<InlineData(15)>]
+[<InlineData(30)>]
+[<InlineData(45)>]
+[<InlineData(60)>]
+let ``multiples of 15 return "fizzbuzz"`` (multipleOf15) =
+    Assert.Equal("fizzbuzz", fizzbuzz multipleOf15)
+```
+
+which can be directly translated to
+
+```fsharp
+[<Property>]
+let ``All the multiples of 15 return "fizzbuzz"`` () =
+    gen {
+        let! n = Arb.generate<int>
+        let multipleOf15 = n * 15
+        return fizzbuzz multipleOf15 = "fizzbuzz"
+    }
+```
+
 
 ## So, define Property-based Testing
 Here's the big statement.<br/>
@@ -119,16 +180,6 @@ So, when you hear the term "Property", please don't think to mathematical traits
 
 ## Properties 
 Wow, if got this far, you must really be motivated. Let's enter the rabbit hole, starting with a definition. I promise we will get to code soon.
-
-A Property is an observation on a piece of code that we expect to hold true regardless of the inputs. This generic -- but not very practicle definition -- describes well the 1st level of the domain expert requirements.
-
-If you want to translate a property to code, instead of writing individual unit tests consisting of certain arbitrary, possibly unmotivated input-output pairs, you will be forced to describe the functionality in a more abstract and general way. You will try to capture the invariants of the program.<br/>
-Then the library will use carefully forged random values, covering the most convenient subset of the input space, trying to falsify your statements and to prove you wrong.
-
-Proponents of formal methods sometimes stress the notion of specification above that of implementation. However it is the inconsistencies between these two independent descriptions of the desired behavior that reveal the truth. We discover incomplete understanding in the specs and bugs in the implementation. Programming does not flow in a single direction from specifications to implementation but evolves by cross-checking and updating the two. Property-based testing quickens this evolution.
-(from [Design and Use of QuickCheck][design-and-use-of-quickcheck])
-
-Makes sense? I'm sure, though, you are hungry of code, now. All right, let's go.
 
 ## Going Beyond Fixtures
 Let me do a step back and start from something you already know.
