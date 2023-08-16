@@ -8,7 +8,7 @@ tags:
 ---
 <!--More-->
 
-Getting started with property-Based Testing (PBT) is inherently hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
+It's no secret that getting started with Property-Based Testing (PBT) is hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
 However, I hope it can be of some help to the fellow programmer.
 
 I will use mostly C# and F# examples, and only a bunch of Haskell bits here and there.
@@ -129,7 +129,6 @@ Notice how `fizzbuzz multipleOf15 = "fizzbuzz"` is almost the direct translation
 ## So, define Property-based Testing
 Here's the bold statement.<br/>
 Property Testing is TDD on steroids. It is about capturing the essence of business requirements &mdash; rather than some arbitrary, often unmotivated examples &mdash; and having them automatically tested almost as logical or mathematical statements, more or less for free.
-
 ## Too good. Where's the catch?
 You are right. It would be too good, right?<br/>
 I see 3 catches.
