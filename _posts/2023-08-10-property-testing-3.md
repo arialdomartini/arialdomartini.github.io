@@ -8,19 +8,18 @@ tags:
 - zsh
 ---
 # A matter of naming
-I always suspected that the low adoption of TDD might be partly due to its poor naming. Some developers who never practiced TDD find it counterintuitive that they are supposed to write a test for an implementation, even before that implementation exists. How can you blame them?<br/>
-If only tests were presented as the *formalization of requirements*, the same skeptic developers would probably find it completely natural: of course you code only after requirements! Of course it is absurd to write requirements as an afterthought.<br/>
-If TDD was called Requirement-Driven Design, maybe there will be less resistance on the approach.
+I always suspected that the low adoption of TDD might be partly due to its poor naming. Some developers who never practiced TDD find it counterintuitive that they are supposed to write a test for an implementation even before that implementation exists. How can you blame them? It really sounds crazy.<br/>
+If only tests were presented as the *requirements expressed with code*, the same skeptic developers would probably find TDD completely natural: of course you produce the code only after the requirements! Of course it would be absurd to write requirements as an afterthought.<br/>
+If TDD was called *Requirement-Driven Design*, maybe there will be less resistance to the approach.
 
-Along these lines, TDD could be called "Example-Driven Development", and PBD "Requirement-Driven Development".
+Along these lines, I think it would be fair to call TDD "Example-Driven Development", and PBD "Requirement-Driven Development".
 
-This leads us to the definition of "Property".<br/>
-Finally. In fact, I promised myself to push this definition as much as possible to the end of the series: I wanted you to build an intuition on what PBT was really about, before.
+This leads us to the definition of "Property", which I intentionally postponed as much as possible. Indeed, I wanted you to build an intuition on what PBT was really about, before.
 
 # Properties
 A Property is an observation on a piece of code that we expect to hold true regardless of the inputs.
 
-As a TDD practicioneer, it is something you already knew: an assertion in TDD is a property that holds for a specific input.
+To a certain extent, an assertion in TDD is a property that holds for a specific input:
 
 ```csharp
 record Product(Guid Id, string Name, Category Category, decimal Price);
@@ -43,9 +42,8 @@ void books_can_be_shipped_internationally()
 
 The property here is that "*The book 'The Little Schemer' can be shipped to France*"  (`∃ Product "The Little Schemer" ∈ Books | it can be shipped`).
 
-In PBT:
+In PBT the property is  "All the books can be shipped to France" (`∀ Product ∈ Books | it can be shipped`):
 
-xxx
 ```csharp
 [Property]
 Property books_can_be_shipped_to_France()
@@ -61,14 +59,27 @@ Property books_can_be_shipped_to_France()
 }
 ```
 
-the property is  "All the books can be shipped to France" (`∀ Product ∈ Books | it can be shipped`).
+
 
 Playing with mathematical terms, one could say that 
 
 * TDD resorts to Existential Quantified Properties: "*it does exist (`∃`) an example for which a property holds*"
-* PBT uses Universally Quantified Properties: "*for all the values (`∀`) this property holds*". No surprises that all the PBT libraries define functions called `ForAll`.
+* PBT uses Universally Quantified Properties: "*for all the values (`∀`) this property holds*". No surprises that all the PBT libraries define a function called `ForAll`.
 
-In a sense, all tests are about properties. You already knew how to do property testing, didn't you?
+Besised Existential and Universally Quantified properties, there is another dimension along which you can distinguish what I call the *Essential Properties* and the *Collateral* one
+
+* An *Essential Property* is the direct translation of the business requirement, like the example of the shipped books.
+
+* A *Collateral Property* is any observation that holds true in a context, and that can be indirectly deriveded from the business requirement. For example, the following facts:
+  * `sum(a, b)` is commutative
+  * sorting a collection does not change its size (a so called "invariant")
+  * in a bank transfer the sum of money between the two involved bank accounts remains constant (again, an invariant)
+
+Collateral Properties are so popular in PBT &mdash; and in Design by Contract &mdash; that one could think they are specific to it. There is the myth that developers must rack their brains to test complex business rules translating them to mysterious mathematical properties such as commutativity and associativity. It's not at all like this. They are much more down-to-earth (you can learn a lot about them from Scott Wlaschin's [Choosing properties for property-based testing][choosing-properties]).
+
+
+
+In a way, all tests are about properties. And you think about it, you already knew how to do property-based testing, didn't you?
 
 
 
@@ -108,11 +119,16 @@ Properties must have monomorphic types.
 * [Haskell Hedgehog][haskell-hedgehog]
 * [The Design and Use of QuickCheck][design-and-use-of-quickcheck]
 * [xUnit Theory: Working With InlineData, MemberData, ClassData][xunit-theory]
+* [Choosing properties for property-based testing - Scott Wlaschin][choosing-properties]
+* [Universal Quantification][universal-quantification]
+* [Universal Quantifier - in ncatlab.org][universal-quantifier]
+
 Videos:
 
 * [The lazy programmer's guide to writing thousands of tests - Scott Wlaschin][lazy-programmer]
-* [Universal Quantification][universal-quantification]
-* [Universal Quantifier - in ncatlab.org][universal-quantifier
+
+
 [xunit-theory]: https://hamidmosalla.com/2017/02/25/xunit-theory-working-with-inlinedata-memberdata-classdata/ 
 [universal-quantification]: https://en.wikipedia.org/wiki/Universal_quantification
 [universal-quantifier]: https://ncatlab.org/nlab/show/universal+quantifier
+[choosing-properties]: https://fsharpforfunandprofit.com/posts/property-based-testing-2
