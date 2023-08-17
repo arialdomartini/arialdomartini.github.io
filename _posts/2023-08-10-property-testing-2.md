@@ -77,8 +77,9 @@ The wrapping structure is designed to allow monadic effects, so to easily combin
 
 ### Shrinkers
 A last little note before getting our hands dirty.<br/>
-I mentioned that, when PBT libraries find a counterexample, they narrow down it to the minimum relevant value, to simplify your life. This operation is performed by the so called *shrinkers*. You don't need to deal with them directly just yet: just be informed that, once you created a generator, in some libraries you need to wrap it into a more sophisticated structure, called `Arbitrary`, which adds shrinking capabilities. That's true in the QuickCheck family libraries. Other libraries have embedded shrinkers, that is, they create a shrinker the moment you define a generator. But that's an advanced topic already.
+I mentioned that, when PBT libraries find a counterexample, they narrow down it to the minimum relevant value, to simplify your life. This operation is performed by the so called *shrinkers*. You don't need to deal with them directly just yet: just be informed that, once you created a generator, in some libraries you need to wrap it into a more sophisticated structure, called `Arbitrary`, which adds shrinking capabilities. That's true in the QuickCheck family libraries. Other libraries have embedded shrinkers, that is, they create a shrinker the moment you define a generator.
 
+Shrinking is probably the most useful feature of a PBT library because it generates counterexamples in which every element is relevant to the failure. It`s easily your best allied during debugging and troubleshooting.
 
 ## Code, finally
 

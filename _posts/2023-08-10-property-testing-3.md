@@ -88,8 +88,60 @@ Besised Existential and Universally Quantified properties, there is another dime
 
 Collateral Properties are so popular in PBT &mdash; and in Design by Contract &mdash; that one could think they are specific to it. There is the myth that developers must rack their brains to test complex business rules translating them to mysterious mathematical properties such as commutativity and associativity, and that because of this PBT is only theoretical and utterly unfeasible for real-world scenarios. It's not at all like this. Collateral Properties are very much  down-to-earth, and also fun to implement. You can learn a lot about them from Scott Wlaschin's [Choosing properties for property-based testing][choosing-properties] and John Hughes's [How to Specify it!][how-to-specify-it].
 
+## Essential is better than Collateral
+Many PBT tutorials start with the infamous reversal of a list example. I've never being completely happy with the classical implementation, because it is based on a Collateral Property:
 
-In a way, all tests are about properties. And if you are that kind of developer who likes to think by abstractions, you could have invented property-based testing, couldn't you?
+```csharp
+[Property]
+bool invariant_of_reversal(List<string> xs) => 
+    AreListsEqual(xs, Revert(Revert(xs)));}
+```
+
+This says nothing about what *reversing a list" is.<br/>
+In fact, it passes for the following dishonest implementation without batting an eyelid:
+
+```csharp
+IEnumerable<string> Reverse(IEnumerable<string> xs) => xs;
+```
+
+This sucks.
+
+If you really wanted to capture the essence of the requirement:
+
+```
+Reversing a list is the action of changing the order of elements 
+so that they appear in the opposite sequence:
+the first element becomes the last element, 
+the second element becomes the second-to-last element, 
+and so on, until the last element becomes the first element.
+```
+
+you could try with a direct translation to an Essential Property, that would lead to something like:
+
+
+```csharp
+[Property]
+bool specification_of_reversal(List<string> xs)
+{
+    var reversed = Reverse(xs);
+
+    var eachItemHasBeenReversed =
+        Enumerable.Range(0, xs.Count)
+            .All(i => xs[i] == reversed[xs.Count - i - 1]);
+
+    return eachItemHasBeenReversed;
+}
+```
+
+This easily spots the dishonest implementation. Hurray!
+
+
+# That's all
+I hope you grasped the intuition. And that, if you think about it, in a way all tests are about properties. And that more or less, you already knew how to write a property.
+
+Finally, I'm sure: if you are that kind of developer who likes to think by abstractions, you could have invented Property-based Testing already, and probably you had.
+
+Happy testing, and have a great day!
 
 
 # References

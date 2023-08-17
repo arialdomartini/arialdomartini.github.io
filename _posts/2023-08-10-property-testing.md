@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Property-based Testing For The Rest Of Us"
+title: "Property-based Testing For The Rest Of Us (or: The Natural Next Step After TDD)"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - bash
@@ -31,7 +31,7 @@ tags:
 It's no secret that getting started with Property-Based Testing (PBT) is hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
 However, I hope it can be of some help to the fellow programmer.
 
-I will use mostly C# and F# examples, and only a bunch of Haskell bits here and there.
+I will use mostly C# and F# examples, and only a bunch of Haskell bits here and there. While talking about PBT, I will refer to more traditional ways of writing tests as TDD: this isn't an accurate definition, but please indulge me, for the sake of conciseness.
 
 
 ## What's the fuss about?
@@ -220,9 +220,9 @@ missing a check on an active Promotion, you sense there is a bug.<br/>
 You understand that not because you exercised the code, mentally generating thousands of inputs, but because you are a sentient being and you are able to use logic.
 
 Compared to you, C# is dumb. If only C# could do the same your brains does, using logic like in Prolog, relying on AI or on Automated Theorem Proving like in COQ, it could find counterexamples without wandering around aimlessly.<br/>
-It's only incidental that your most beloved programming language is bovine.
+It's only incidental that your most beloved programming language is bovine. Other approaches, not merely based on generating random values, are possible, such as [Concolic Testing][concolic-testing], in which the program is exercised with a symbolic execution in conjunction with an automated theorem prover.
 
-Property Testing is the act of writing requirements in their essence. The strategies the library uses to prove you wrong are an internal, incidental implementation detail.
+Property Testing is the act of writing requirements in their essence, as general specifications. The strategies the library uses to prove you wrong are an internal, incidental implementation detail.
 
 
 ## Going Beyond Fixtures
@@ -632,6 +632,8 @@ Properties must have monomorphic types.
 * [Property-based Testing in Java - Johannes Link][property-based-testing-java]
 * [The Design and Use of QuickCheck][design-and-use-of-quickcheck]
 * [xUnit Theory: Working With InlineData, MemberData, ClassData][xunit-theory]
+* [Concolic Testing][concolic-testing]
+
 Videos:
 
 * [The lazy programmer's guide to writing thousands of tests - Scott Wlaschin][lazy-programmer]
@@ -647,3 +649,4 @@ Videos:
 [design-and-use-of-quickcheck]: https://begriffs.com/posts/2017-01-14-design-use-quickcheck.html
 [lazy-programmer]: https://www.youtube.com/watch?v=IYzDFHx6QPY
 [xunit-theory]: https://hamidmosalla.com/2017/02/25/xunit-theory-working-with-inlinedata-memberdata-classdata/ 
+[concolic-testing]: https://en.wikipedia.org/wiki/Concolic_testing
