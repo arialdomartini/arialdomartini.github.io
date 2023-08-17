@@ -124,7 +124,7 @@ let ``All the multiples of 15 return "fizzbuzz"`` () =
     }
 ```
 
-Notice how `fizzbuzz multipleOf15 = "fizzbuzz"` is almost the direct translation of the requirement `All the multiples of 15 return "fizzbuzz"`.
+Notice how `fizzbuzz multipleOf15 = "fizzbuzz"` is the direct translation of the requirement `All the multiples of 15 return "fizzbuzz"`.
 
 ## So, define Property-based Testing
 Here's the bold statement.<br/>

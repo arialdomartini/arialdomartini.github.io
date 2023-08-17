@@ -14,7 +14,7 @@ If TDD was called *Requirement-Driven Design*, maybe there will be less resistan
 
 Along these lines, I think it would be fair to call TDD "Example-Driven Development", and PBD "Requirement-Driven Development".
 
-This leads us to the definition of "Property", which I intentionally postponed as much as possible. Indeed, I wanted you to build an intuition on what PBT was really about, before.
+This leads us to the definition of "Property", which I intentionally pushed back as much as possible. Before, I wished you to build an intuition of what PBT was really about.
 
 # Properties
 A Property is an observation on a piece of code that we expect to hold true regardless of the inputs.
@@ -70,48 +70,16 @@ Besised Existential and Universally Quantified properties, there is another dime
 
 * An *Essential Property* is the direct translation of the business requirement, like the example of the shipped books.
 
-* A *Collateral Property* is any observation that holds true in a context, and that can be indirectly deriveded from the business requirement. For example, the following facts:
-  * `sum(a, b)` is commutative
-  * sorting a collection does not change its size (a so called "invariant")
-  * in a bank transfer the sum of money between the two involved bank accounts remains constant (again, an invariant)
+* A *Collateral Property* is any observation that holds true in a context, and that can be indirectly deriveded from the business requirement. For example:
+  * the fact that `sum(a, b)` is commutative
+  * the observation that sorting a collection does not change its size (a so called "invariant")
+  * the fact in a bank transfer the sum of money between the two involved bank accounts remains constant (again, an invariant)
+  * running both your system and a simplified model with the same input, and comparing the outputs (this is called [Model-based testing][model-based-testing])
 
-Collateral Properties are so popular in PBT &mdash; and in Design by Contract &mdash; that one could think they are specific to it. There is the myth that developers must rack their brains to test complex business rules translating them to mysterious mathematical properties such as commutativity and associativity. It's not at all like this. They are much more down-to-earth (you can learn a lot about them from Scott Wlaschin's [Choosing properties for property-based testing][choosing-properties]).
-
-
-
-In a way, all tests are about properties. And you think about it, you already knew how to do property-based testing, didn't you?
+Collateral Properties are so popular in PBT &mdash; and in Design by Contract &mdash; that one could think they are specific to it. There is the myth that developers must rack their brains to test complex business rules translating them to mysterious mathematical properties such as commutativity and associativity, and that because of this PBT is only theoretical and utterly unfeasible for real-world scenarios. It's not at all like this. Collateral Properties are very much  down-to-earth, and also fun to implement. You can learn a lot about them from Scott Wlaschin's [Choosing properties for property-based testing][choosing-properties] and John Hughes's [How to Specify it!][how-to-specify-it].
 
 
-
-## Testing is an act of awareness and design
-
-Proponents of formal methods sometimes stress the notion of specification above that of implementation. However it is the inconsistencies between these two independent descriptions of the desired behavior that reveal the truth. We discover incomplete understanding in the specs and bugs in the implementation. Programming does not flow in a single direction from specifications to implementation but evolves by cross-checking and updating the two. Property-based testing quickens this evolution.
-(from [Design and Use of QuickCheck][design-and-use-of-quickcheck])
-
-
-
-
-
-## Observing Test Case Distribution
-It is important to be aware of the distribution of test cases: if test data is not well distributed then conclusions drawn from the test results may be invalid.
-Test Cases can be counted and classified.
-
-
-
-## The Size of Test Data
-Test data generators have an implicit size parameter; the library begins by generating small test cases, and gradually increases the size as testing progresses
-
-## Arbitrary
-The library defines instances of Generators for the most common types. They are called Arbitrary: see them as the defaul generators of a give type `a`.
-
-
-# Notes
-
-
-I personally never though this approach could provide a false sense of security. 
-
-Properties are universally quantified over their parameters, via the use of Test Data Generators.
-Properties must have monomorphic types.
+In a way, all tests are about properties. And if you are that kind of developer who likes to think by abstractions, you could have invented property-based testing, couldn't you?
 
 
 # References
@@ -119,16 +87,33 @@ Properties must have monomorphic types.
 * [Haskell Hedgehog][haskell-hedgehog]
 * [The Design and Use of QuickCheck][design-and-use-of-quickcheck]
 * [xUnit Theory: Working With InlineData, MemberData, ClassData][xunit-theory]
-* [Choosing properties for property-based testing - Scott Wlaschin][choosing-properties]
-* [Universal Quantification][universal-quantification]
-* [Universal Quantifier - in ncatlab.org][universal-quantifier]
+* Discovering properties
+  * [Choosing properties for property-based testing - Scott Wlaschin][choosing-properties]
+  * [How to Specify it! - John Hughes][how-to-specify-it]
+* Universal Quantification
+  * [Universal Quantification][universal-quantification]
+  * [Universal Quantifier - in ncatlab.org][universal-quantifier]
+* Model-based Testing
+  * [Model-based Testing][model-based-testing]
+  * [Model-based Testing with Hedgehog][model-based-testing-hedgehog]
+  * [Model-based Testing with FsCheck][model-based-testing-fsharp]
+  * [Model-based Testing in Java with jqwik][model-based-testing-java]
+  * [Model-based Testing with Makina][model-based-testing-makina]
 
 Videos:
 
 * [The lazy programmer's guide to writing thousands of tests - Scott Wlaschin][lazy-programmer]
+* [How to Specify it! - John Hughes][how-to-specify-it-video]
 
 
 [xunit-theory]: https://hamidmosalla.com/2017/02/25/xunit-theory-working-with-inlinedata-memberdata-classdata/ 
 [universal-quantification]: https://en.wikipedia.org/wiki/Universal_quantification
 [universal-quantifier]: https://ncatlab.org/nlab/show/universal+quantifier
 [choosing-properties]: https://fsharpforfunandprofit.com/posts/property-based-testing-2
+[model-based-testing]: https://en.wikipedia.org/wiki/Model-based_testing
+[model-based-testing-fsharp]: https://fscheck.github.io/FsCheck//StatefulTestingNew.html
+[model-based-testing-hedgehog]: https://jacobstanley.io/how-to-use-hedgehog-to-test-a-real-world-large-scale-stateful-app/
+[model-based-testing-java]: https://johanneslink.net/model-based-testing/
+[model-based-testing-makina]: https://hexdocs.pm/makina/readme.html#using-makina
+[how-to-specify-it]: https://www.dropbox.com/s/tx2b84kae4bw1p4/paper.pdf
+[how-to-specify-it-video]: https://www.youtube.com/watch?v=G0NUOst-53U
