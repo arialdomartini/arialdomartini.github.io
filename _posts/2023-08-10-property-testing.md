@@ -10,6 +10,7 @@ tags:
 It's no secret that getting started with Property-Based Testing (PBT) is hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
 However, I hope it can be of some help to the fellow programmer.
 
+> To Keti, a passionate programmer I estimate.
 ## Index
 1. Utterly opinionated introduction to Property Testing
 2. [Shut up and code!](2023-08-10-property-testing-2.md)
