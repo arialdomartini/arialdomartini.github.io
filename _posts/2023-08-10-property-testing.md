@@ -6,6 +6,26 @@ tags:
 - bash
 - zsh
 ---
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+**Table of Contents**
+
+- [What's the fuss about?](#whats-the-fuss-about)
+- [Why is it powerful?](#why-is-it-powerful)
+- [Show me the code](#show-me-the-code)
+- [So, define Property-based Testing](#so-define-property-based-testing)
+- [Too good. Where's the catch?](#too-good-wheres-the-catch)
+- [Say random again, say random again, I dare you!](#say-random-again-say-random-again-i-dare-you)
+- [Going Beyond Fixtures](#going-beyond-fixtures)
+- [All right, but the `[Food]` attribute does not exist.](#all-right-but-the-food-attribute-does-not-exist)
+    - [Fine. But enough with fictional attributes, please](#fine-but-enough-with-fictional-attributes-please)
+    - [Test Data Generators](#test-data-generators)
+- [Notes](#notes)
+- [References](#references)
+- [Comments](#comments)
+
+<!-- markdown-toc end -->
+
+
 <!--More-->
 
 It's no secret that getting started with Property-Based Testing (PBT) is hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
@@ -609,6 +629,7 @@ Properties must have monomorphic types.
 # References
 * [QuickCheck][quickcheck]: the original (a bit outdated) manual of the Haskell library
 * [Haskell Hedgehog][haskell-hedgehog]
+* [Property-based Testing in Java - Johannes Link][property-based-testing-java]
 * [The Design and Use of QuickCheck][design-and-use-of-quickcheck]
 * [xUnit Theory: Working With InlineData, MemberData, ClassData][xunit-theory]
 Videos:
@@ -617,12 +638,12 @@ Videos:
 
 
 # Comments
-
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/xxx)
+
 
 [quickcheck]: https://www.cse.chalmers.se/~rjmh/QuickCheck/manual.html
 [haskell-hedgehog]: https://github.com/hedgehogqa/haskell-hedgehog
+[property-based-testing-java]: https://blog.johanneslink.net/2018/03/24/property-based-testing-in-java-introduction/
 [design-and-use-of-quickcheck]: https://begriffs.com/posts/2017-01-14-design-use-quickcheck.html
-
 [lazy-programmer]: https://www.youtube.com/watch?v=IYzDFHx6QPY
 [xunit-theory]: https://hamidmosalla.com/2017/02/25/xunit-theory-working-with-inlinedata-memberdata-classdata/ 

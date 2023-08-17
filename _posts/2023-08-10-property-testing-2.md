@@ -6,6 +6,21 @@ tags:
 - bash
 - zsh
 ---
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+**Table of Contents**
+
+- [Let's code](#lets-code)
+    - [Anatomy of a property test](#anatomy-of-a-property-test)
+        - [Shrinkers](#shrinkers)
+    - [Code, finally](#code-finally)
+        - [Unravel the mysterious types](#unravel-the-mysterious-types)
+        - [Wait, where's the assertion?](#wait-wheres-the-assertion)
+    - [Toward real-world use cases](#toward-real-world-use-cases)
+        - [Testing a DB repository](#testing-a-db-repository)
+        - [A more complex functionality](#a-more-complex-functionality)
+
+<!-- markdown-toc end -->
+
 
 # Let's code
 ## Anatomy of a property test

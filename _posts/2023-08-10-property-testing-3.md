@@ -7,6 +7,16 @@ tags:
 - bash
 - zsh
 ---
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+**Table of Contents**
+
+- [A matter of naming](#a-matter-of-naming)
+- [Properties](#properties)
+- [References](#references)
+
+<!-- markdown-toc end -->
+
+
 # A matter of naming
 I always suspected that the low adoption of TDD might be partly due to its poor naming. Some developers who never practiced TDD find it counterintuitive that they are supposed to write a test for an implementation even before that implementation exists. How can you blame them? It really sounds crazy.<br/>
 If only tests were presented as the *requirements expressed with code*, the same skeptic developers would probably find TDD completely natural: of course you produce the code only after the requirements! Of course it would be absurd to write requirements as an afterthought.<br/>
