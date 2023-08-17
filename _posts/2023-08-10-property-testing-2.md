@@ -6,8 +6,12 @@ tags:
 - bash
 - zsh
 ---
-<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
-**Table of Contents**
+## Index
+1. [Utterly opinionated introduction to Property Testing](2023-08-10-property-testing.md)
+2. Shut up and code!
+3. [It's properties all the way down](2023-08-10-property-testing-3.md)
+
+# Shut up and code!
 
 - [Let's code](#lets-code)
     - [Anatomy of a property test](#anatomy-of-a-property-test)

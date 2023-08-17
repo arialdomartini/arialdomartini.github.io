@@ -7,7 +7,15 @@ tags:
 - zsh
 ---
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
-**Table of Contents**
+It's no secret that getting started with Property-Based Testing (PBT) is hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
+However, I hope it can be of some help to the fellow programmer.
+
+## Index
+1. Utterly opinionated introduction to Property Testing
+2. [Shut up and code!](2023-08-10-property-testing-2.md)
+3. [It's properties all the way down](2023-08-10-property-testing-3.md)
+
+# Utterly opinionated introduction to Property Testing
 
 - [What's the fuss about?](#whats-the-fuss-about)
 - [Why is it powerful?](#why-is-it-powerful)
@@ -23,14 +31,12 @@ tags:
 - [References](#references)
 - [Comments](#comments)
 
+
+
 <!-- markdown-toc end -->
 
 
 <!--More-->
-
-It's no secret that getting started with Property-Based Testing (PBT) is hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
-However, I hope it can be of some help to the fellow programmer.
-
 I will use mostly C# and F# examples, and only a bunch of Haskell bits here and there. While talking about PBT, I will refer to more traditional ways of writing tests as TDD: this isn't an accurate definition, but please indulge me, for the sake of conciseness.
 
 

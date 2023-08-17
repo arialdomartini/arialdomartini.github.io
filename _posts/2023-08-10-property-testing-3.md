@@ -7,11 +7,17 @@ tags:
 - bash
 - zsh
 ---
-<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
-**Table of Contents**
+## Index
+1. [Utterly opinionated introduction to Property Testing](2023-08-10-property-testing.md)
+2. [Shut up and code!](2023-08-10-property-testing-2.md)
+3. It's properties all the way down
+
+# It's properties all the way down
 
 - [A matter of naming](#a-matter-of-naming)
 - [Properties](#properties)
+    - [Essential is better than Collateral](#essential-is-better-than-collateral)
+- [That's all](#thats-all)
 - [References](#references)
 
 <!-- markdown-toc end -->
@@ -145,8 +151,8 @@ Happy testing, and have a great day!
 
 
 # References
-* [QuickCheck][quickcheck]: the original (a bit outdated) manual of the Haskell library
-* [Haskell Hedgehog][haskell-hedgehog]
+* [Quickcheck][quickcheck]: the original (a bit outdated) manual of the Haskell library
+* [Hedgehog][hedgehog]
 * [The Design and Use of QuickCheck][design-and-use-of-quickcheck]
 * [xUnit Theory: Working With InlineData, MemberData, ClassData][xunit-theory]
 * Discovering properties
@@ -167,7 +173,9 @@ Videos:
 * [The lazy programmer's guide to writing thousands of tests - Scott Wlaschin][lazy-programmer]
 * [How to Specify it! - John Hughes][how-to-specify-it-video]
 
-
+[quickcheck]: https://www.cse.chalmers.se/~rjmh/QuickCheck/manual.html
+[hedgehog]: https://hedgehog.qa/
+[design-and-use-of-quickcheck]: https://begriffs.com/posts/2017-01-14-design-use-quickcheck.html
 [xunit-theory]: https://hamidmosalla.com/2017/02/25/xunit-theory-working-with-inlinedata-memberdata-classdata/ 
 [universal-quantification]: https://en.wikipedia.org/wiki/Universal_quantification
 [universal-quantifier]: https://ncatlab.org/nlab/show/universal+quantifier
