@@ -28,16 +28,18 @@ tags:
 
 # Let's code
 ## Anatomy of a property test
-Since Generators are meant to be composable, rather than simple functions emitting random values, they are wrappers of functions. We could use polymorphic functions taking:
+Let's delve deeper into the concept of utilizing generators as modular components that are simple to combine and layer one upon the another.
 
-* a random generator source
-* a size parameter
+<!-- A viable strategy could involve maintaining a distinction between the problem of generating values and enabling compositional structure. -->
 
-and emitting
+For generating a random value, we need a function taking:
 
-* values of a given type.
+* the type of data to generate (so a function generic, say, on `List<int>`)
+* a source of randomicity (such as a `new Random(seed)` instance)
+* a size parameter for controlling the scale of generation (such as the length of the generated lists)
 
-You can imagine a Generator as the recipe describing the shape and rules of the desired test data. Once fed it with a source of randomicity and a concrete size, it starts emitting actual data.
+It's a good idea to wrap each data generating function into a container, so that you can compose uniformally shaped containers independently from their content. If you are familiar with Functional Programming, you would be probably thinking of data structures with Functor, Applicative and Monad instances. And you would be right.
+
 
 Indeed, in Haskell `Gen` is defined as a `newtype`:
 
@@ -70,24 +72,28 @@ public struct Random<a>
     ...
 ```
 
-In all cases, as you see, it's a wrapped function with the signature:
+In all cases, as you see, there is a function with the signature:
 
 ```haskell
 Generator :: Random -> Size -> data
 ```
 
+wrapped inside a container. 
 
-The wrapping structure is designed to allow monadic effects, so to easily combine generators.
+You can imagine a Generator as the recipe describing the shape and rules of the desired test data: you can manipulate it in its container prior the execution, and combine it to build more elaborated generators.<br/>
+When you are done, you feed it with a source of randomicity and a concrete size, so it starts emitting actual data.
+
+The wrapping structure is designed to allow monadic effects, composing it is no different than composing Options, Eithers, Promises and other structures from the functional space.
 
 ### Shrinkers
 A last little note before getting our hands dirty.<br/>
 I mentioned that, when PBT libraries find a counterexample, they narrow down it to the minimum relevant value, to simplify your life. This operation is performed by the so called *shrinkers*. You don't need to deal with them directly just yet: just be informed that, once you created a generator, in some libraries you need to wrap it into a more sophisticated structure, called `Arbitrary`, which adds shrinking capabilities. That's true in the QuickCheck family libraries. Other libraries have integrated shrinkers, and they derive a shrinker the moment you define a generator, making sure that the same domain preconditions used during generation are preserved while shrinking.
 
-Shrinking is probably the most useful feature of a PBT library because it generates counterexamples in which every element is relevant to the failure. It`s easily your best allied during debugging and troubleshooting.
+Shrinking is probably the most useful feature of a PBT library because it generates counterexamples in which every element is relevant to the failure. It's easily your best allied during debugging and troubleshooting.
 
 ## Code, finally
 
-Each library defines default generators for most types. Let's finally write a real, runnable property test usinh a default generator:
+Each library defines default generators for most types. Let's finally write a real, runnable property test using a default generator:
 
 ```csharp
 using FsCheck;
@@ -127,14 +133,14 @@ This test, fed to FsCheck, results in the execution of 100 tests.
 Pretty neat, isn't it?
 
 ### Unravel the mysterious types
-There are some puzzling elements in these test, though. Focus on:
+Focus on:
 
 ```csharp
 Arbitrary<int> numbers = Arb.From<int>();
 ```
 
 Is that a random number? A collection of random numbers?<br/>
-It's neither. It is the instance of a structure that, when fed with a source of randomicity and a size, can emit random numbers. It's the structure wrapping our random-generationg functions.
+It's neither. `Arbitrary<int>` is exactly the container we discussed earlier: it  contains a function that, when fed with a source of randomicity and a size, emits random values of `int`.
 
 To better understand this, let's try to actually feed this `Arbitrary<int>` instance with a source of randomicity and a size. This can be done with `Gen.Sample()`. In the following snippet we are asking the function wrapped in `Arb.From<int>()` to generate `100` numbers smaller than `50`:
 
@@ -150,6 +156,8 @@ void what_is_an_Arb()
     Assert.True(ns.TrueForAll(n => n <= 50));
 }
 ```
+
+Notice that you are not just generating random numbers: you are generating random numbers *that satisfy a custom domain rule you defined*, in this case simply *being smaller than 50`.
 
 If `arbitraryNumber` is neither an `int` nor a collection of `int`, of course you cannot directly use it to feed the `squareIsNotNegative(int n)` function.<br/>
 This is one of the challenges in Property Testing. While in TDD you can just manage values, in PBT you have to deal with *abstractions* of values.<br/>
@@ -191,7 +199,7 @@ void square_of_numbers_are_non_negative_as_a_fact()
 
 `ForAll` is a method that feeds the Generator with some source of randomicity and a default size (`100`, specifically), and which generates a `Property`. In other words, `ForAll` does not execute the test just yet: it gives you back an instance of `Property` that you might possibly compose with something else before the eventual execution. Yes, functional programmers have a real obsession with composition.
 
-The assertion is actually performed by the final `Check.QuickThrowOnFailure(property)`.<br/>If you crack open the xUnit code, you will convince yourself that an xUnit assertion is nothing but a piece of code that raises an exception when a particular condition holds. `Assert.True()` in xUnit boils down to:
+The actual assertion performed by the final `Check.QuickThrowOnFailure(property)`.<br/>If you crack open the xUnit code, you will convince yourself that an xUnit assertion is nothing but a piece of code that raises an exception when a particular condition holds. `Assert.True()` in xUnit boils down to:
 
 ```csharp
 public static void True(bool? condition, string userMessage)
@@ -201,9 +209,8 @@ public static void True(bool? condition, string userMessage)
 }
 ```
 
-FsCheck relies on this. `Check.QuickThrowOnFailure(property)` verifies all the generated predicates, and if one does not hold, it throws an exception that finally xUnit interprets as a failed test.<br/>
-Decorating a method with `[Property]` and returning an instance of `Property` just does the same, saving you from calling `Check.QuickThrowOnFailure()`.  No rocket science.
-
+PBT libraries rely on this. `Check.QuickThrowOnFailure(property)` verifies all the generated predicates, and if one does not hold, it throws an exception, for xUnit to interpret as a failed test.<br/>
+You can save some keyboard hits by decorating the test method with `[Property]` and returning an instance of `Property` instead of `void`. The PBT library will call `Check.QuickThrowOnFailure()` for you. No rocket science.
 
 The same test with in F# would look like this:
 
@@ -233,7 +240,8 @@ test "Square of any number is not negative" {
               
     let square n = n * n
 
-    let squareIsNotNegative n = (square n >= 0) |> Property.ofBool
+    let squareIsNotNegative n = square n >= 0
+	                            |> Property.ofBool
 
     numbers |> Property.forAll squareIsNotNegative |> Property.check
 }
@@ -245,7 +253,7 @@ Notice how the `squareIsNotNegative` predicate in Hedgehog is passed to `Propert
 ## Toward real-world use cases
 You don't have to think this approach only works with simple mathematical statements.<br/>
 
-Let's see some examples, starting from a very simple one.
+Let's see some more realistic examples.
 
 Say you developed a serialization library. Testing it translates to making sure that 
 
@@ -265,10 +273,10 @@ Property serialization_deserialization_roundtrip()
 }
 ```
 
-Notice how both the arbitrary and the property are defined for a specific type. In fact, Property must be monomorphic: I don't know of any PBT library supporting polimorphic properties.
+Notice how both the arbitrary and the property are defined for a specific type. In fact, Property must be monomorphic: To my knowledge, there is no library able to test multiple types in polimorphic properties.
 
 ### Testing a DB repository
-Nothing prevents you to do integration tests via a property. After all, a property test is an ordinary test with arbitrary code, only input data is created out of thin air.
+Nothing prevents you to do integration tests via a property. After all, a property test is an ordinary test, whose input is created out of thin air.
 
 Very similarly to the serialization case, you could test that your `ProductRepository` is able to save a product on the db.
 
@@ -367,8 +375,8 @@ Notice how, instead of asking FsCheck to just inject any `Product`, the test is 
 
 All is wrapped in a `UseCase` record.
 
-Each input is generated by `Gen` instance, which are then combined together.<br/>
-Random dates are generated with:
+Each input is generated by a `Gen` instance, and then combined with the other generators.<br/>
+Random dates are created with:
 
 ```csharp
 private readonly Gen<DateTime> AnyDate = 
