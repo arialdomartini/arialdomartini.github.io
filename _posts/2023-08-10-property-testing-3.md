@@ -91,8 +91,12 @@ Besised Existential and Universally Quantified properties, there is another dime
   * the observation that sorting a collection does not change its size (a so called "invariant")
   * the fact in a bank transfer the sum of money between the two involved bank accounts remains constant (again, an invariant)
   * running both your system and a simplified model with the same input, and comparing the outputs (this is called [Model-based testing][model-based-testing])
+  * comparing your program's behavior with an test oracle (see [test oracle on Wikipedia][test-oracle])
+  
+  
+Collateral Properties do not in general completely specify the behaviour of the code under test. In some cases, though, a set of them does form a complete specification.
 
-Collateral Properties are so popular in PBT &mdash; and in Design by Contract &mdash; that one could think they are specific to it. There is the myth that developers must rack their brains to test complex business rules translating them to mysterious mathematical properties such as commutativity and associativity, and that because of this PBT is only theoretical and utterly unfeasible for real-world scenarios. It's not at all like this. Collateral Properties are very much  down-to-earth, and also fun to implement. You can learn a lot about them from Scott Wlaschin's [Choosing properties for property-based testing][choosing-properties] and John Hughes's [How to Specify it!][how-to-specify-it].
+Collateral Properties are so popular in PBT &mdash; and in Design by Contract &mdash; that one could think they are specific to it. There is the myth that developers must rack their brains to test complex business rules translating them to mysterious mathematical properties such as commutativity and associativity, and that because of this PBT is only theoretical and utterly unfeasible for real-world scenarios. It's not at all like this. Collateral Properties are very much  down-to-earth, and also fun to implement. You can learn a lot about them from Scott Wlaschin's [Choosing properties for property-based testing][choosing-properties] and from John Hughes's [How to Specify it!][how-to-specify-it], for which Johannes Link has written a brilliant version in Java, titled [How to Specify it! In Java!][how-to-specify-it-in-java].
 
 ## Essential is better than Collateral
 Many PBT tutorials start with the infamous reversal of a list example. I've never being completely happy with the classical implementation, because it is based on a Collateral Property:
@@ -158,6 +162,7 @@ Happy testing, and have a great day!
 * Discovering properties
   * [Choosing properties for property-based testing - Scott Wlaschin][choosing-properties]
   * [How to Specify it! - John Hughes][how-to-specify-it]
+  * [How to Specify it! In Java! - Johannes Link][how-to-specify-it-in-java]
 * Universal Quantification
   * [Universal Quantification][universal-quantification]
   * [Universal Quantifier - in ncatlab.org][universal-quantifier]
@@ -167,6 +172,8 @@ Happy testing, and have a great day!
   * [Model-based Testing with FsCheck][model-based-testing-fsharp]
   * [Model-based Testing in Java with jqwik][model-based-testing-java]
   * [Model-based Testing with Makina][model-based-testing-makina]
+* [Test Oracle - Wikipedia][test-oracle]
+
 
 Videos:
 
@@ -187,3 +194,5 @@ Videos:
 [model-based-testing-makina]: https://hexdocs.pm/makina/readme.html#using-makina
 [how-to-specify-it]: https://www.dropbox.com/s/tx2b84kae4bw1p4/paper.pdf
 [how-to-specify-it-video]: https://www.youtube.com/watch?v=G0NUOst-53U
+[test-oracle]: https://en.wikipedia.org/wiki/Test_oracle
+[how-to-specify-it-in-java]https://johanneslink.net/how-to-specify-it
