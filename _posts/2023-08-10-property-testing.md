@@ -1,3 +1,4 @@
+
 ---
 layout: post
 title: "Property-based Testing For The Rest Of Us (or: The Natural Next Step After TDD)"
@@ -6,7 +7,6 @@ tags:
 - bash
 - zsh
 ---
-<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 It's no secret that getting started with Property-Based Testing (PBT) is hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
 However, I hope it can be of some help to the fellow programmer.
 
@@ -32,8 +32,6 @@ I will mostly use C# and F#, and just some bits of Haskell here and there.
 - [Notes](#notes)
 - [References](#references)
 - [Comments](#comments)
-
-
 
 <!-- markdown-toc end -->
 
@@ -228,11 +226,17 @@ if(product.Type == Food && order.Destination != LocalCountry)
 ```
 
 missing a check on an active Promotion, you sense there is a bug.<br/>
-You understand that not because you mentally exercised the code generating thousands of inputs, but because you are a sentient being and you are able to use logic.
+You understand that, not because you mentally exercised the code generating thousands of inputs, but because you are a sentient being and you are able to use logic.
 
-Compared to you, C# is dumb. If only C# could do the same your brains does, using logic like in Prolog, relying on AI or on Automated Theorem Proving like in COQ, it could find counterexamples without wandering around aimlessly with random inputs.<br/>
-It's only incidental that your most beloved programming language is bovine. Other approaches, not merely based on generating random values, are possible: think of [Concolic Testing][concolic-testing], in which the program is exercised with a symbolic execution in conjunction with an automated theorem prover.
+Compared to your brains, C# is dumb, and it has to resort to brute force.<br/>
+But other approaches are possible. A library
 
+- could use logic reasoning, like in Prolog
+- or rely on AI
+- or have automated theorem provers like in COQ
+- or infer the proper input values using [Concolic Testing][concolic-testing], a crazy approach with which the code is exercised with symbolic execution in conjunction with a resolver based on constraint logic programming (have a look to Python's [CrossHair][crosshair] to watch this in play).
+
+It's only incidental that your most beloved programming language is bovine and has to wander around aimlessly with random inputs.<br/>
 Property Testing is not defined by the limits of its libraries, just like TDD is not merely what xUnit is capable of.<br/>
 PBT is the act of writing requirements in their essence, as general specifications. The strategies the library uses to prove you wrong are an internal, incidental implementation detail.
 
@@ -533,7 +537,7 @@ Now probably, I just lost half of my readers.
 
 
 ### Test Data Generators
-Great, still here, you brave! Let's see how deep is this rabbit hole, then.
+Great, still here, you brave! Let's see how deep this rabbit hole is, then.
 
 The canonical answer in the Property Testing world is to use Generators. You can think of Generators as a code-based recipe for generating random data accordingly to some custom rules. So, not a trivial random value generator at all. It is a much more advanced structure, able to support you with challenges like:
 
@@ -543,26 +547,38 @@ The canonical answer in the Property Testing world is to use Generators. You can
 * generate couples of `Product`s, whose price difference is between `10` and `20`, with same `description` but different `category`, picked from the options `Book, Other, Laptop` only.
 * generate a cart, containing up to `10` `Product`s, without exceeding the total of `100 EUR`.
 
-There is virtually no limit to the complexity you can cover. We clearly need a language to express those domain rules.
+There is virtually no limit to the complexity you want to cover. We clearly need a language to express those domain rules.
 
 Prior randomized testing tools required learning a special language and grammar to program the generation of complex test cases. QuickCheck was the first library providing an embedded Domain Specific Language (heavily based on Haskell's amazing type system), in the very same language tests are written in, for writing the test data generation specifications. 
 
 As everything in Functional Programming, the secret is to start simple
 
-* a structure able to generate random booleans: `Gen<int>`
+* a structure able to generate random booleans: `Gen<bool>`
 * another able to generate random characters: `Gen<char>`
 
-and then to build on top of composable abstractions:
+and then to create new  more complex building blocks composing the smallest ones: 
 
-* function able to generate a string can be built as a composition of char generators: `Gen.list Gen<int> -> Gen<int list>`
-* a food `Product` generator can be built as an algebraic composition of other smaller generators:
+* an F# generator of strings can be built as a composition of char generators: `Gen.list Gen<char>`
+* The generator for the Haskell record `data Product = Product { name :: Name, price :: Price, category :: Category }` can be built composing the generators for names, prices and categories, no matter how they are defined, with:
 
-xxx
-
-```fsharp
+```haskell
+Product
+    <$> genName
+    <*> genPrice
+    <*> genCategory
 ```
 
+or with
 
+```
+genProduct = do
+    name <- genName
+    price <- genPrice
+    category <- genCategory
+    return (Product name price category)
+```
+
+Usually, the algebra to use is the one for monadic composition, with the syntax offered by your language of choice.<br/>
 Let's have a look to some real examples. Please, suspend for a while the judgment on syntax.
 
 This (in Haskell) generates a random boolean values, with equal probability:
@@ -577,7 +593,7 @@ This (again in Haskell) generates random boleans weighting the probability of ch
 frequency [(2,return True), (1,return False)]
 ```
 
-Here's an F# example for emitting lists with two elements (bewteen `1` and `100`), with the restriction that the two elements are different:
+Here's an F# example for emitting lists of tuples of values bewteen `1` and `100`, with the restriction that the two elements in each tuple are different:
 
 ```fsharp
 Gen.choose (1, 100)
@@ -586,7 +602,7 @@ Gen.choose (1, 100)
 |> Gen.map (fun (x, y) -> [x; y])
 ```
 
-The following in F# generates users whose `FirstName` is one of `"Don"`, `"Henrik"` or `null`, a `LastName` with one of `"Syme"` and `"Feldt"` (but never `null`), and an `id` between `0` and `1000`:
+The following in F# generates Users whose `FirstName` is one of `"Don"`, `"Henrik"` or `null`, a `LastName` with one of `"Syme"` and `"Feldt"` (but never `null`), and an `id` between `0` and `1000`:
 
 ```fsharp
 type User = {
@@ -631,23 +647,11 @@ Just focus on the key messages:
 * Generators are composable structures. Each language would use its own tricks: in C# they are classes.
 * They are natively written in your preferred language. No extra languages to learn.
 * They are compositional in nature. Combining Generators gives you another Generator. It's Generators all the way down.
-* Once you understand the mechanic behind composing them, you've broken every limit. Composing stuff requires a bit of Functional Programming. This is were the fun starts.
+* Once you understand the mechanic behind composing them, you've broken every limit. Composing stuff requires a bit of Functional Programming. This is where the fun begins.
 
 Oh, wait: I forgot to mention that Properties too are made of composable structures.
 
-So, in a sense, Property-based Testing is about decomposing your domain problem-space into small properties and generation rules, and then about describing the business functionalities as a composition of those building blocks, for an automated library to try to prove you wrong.
-
-
-
-
-# Notes
-
-
-I personally never though this approach could provide a false sense of security. 
-
-Properties are universally quantified over their parameters, via the use of Test Data Generators.
-Properties must have monomorphic types.
-
+So, in a sense, Property-based Testing is about decomposing the problem-space of the domain into small properties and generation rules, and then about describing the business functionalities as a composition of those building blocks, for an automated library to challenge you.
 
 # References
 * [QuickCheck][quickcheck]: the original (a bit outdated) manual of the Haskell library
@@ -656,6 +660,7 @@ Properties must have monomorphic types.
 * [The Design and Use of QuickCheck][design-and-use-of-quickcheck]
 * [xUnit Theory: Working With InlineData, MemberData, ClassData][xunit-theory]
 * [Concolic Testing][concolic-testing]
+* [CrossHair][crosshair]
 
 Videos:
 
@@ -673,3 +678,4 @@ Videos:
 [lazy-programmer]: https://www.youtube.com/watch?v=IYzDFHx6QPY
 [xunit-theory]: https://hamidmosalla.com/2017/02/25/xunit-theory-working-with-inlinedata-memberdata-classdata/ 
 [concolic-testing]: https://en.wikipedia.org/wiki/Concolic_testing
+[crosshair]: https://github.com/pschanely/CrossHair
