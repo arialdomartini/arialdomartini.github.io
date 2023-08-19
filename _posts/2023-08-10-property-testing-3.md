@@ -24,8 +24,9 @@ tags:
 
 
 # A matter of naming
-I always suspected that the low adoption of TDD might be partly due to its poor naming. Some developers who never practiced TDD find it counterintuitive that they are supposed to write a test for an implementation even before that implementation exists. How can you blame them? It really sounds crazy.<br/>
-If only tests were presented as the *requirements expressed with code*, the same skeptic developers would probably find TDD completely natural: of course you produce the code only after the requirements! Of course it would be absurd to write requirements as an afterthought.<br/>
+I always suspected that the low adoption of TDD might be partly due to its poor naming. Some developers who never practiced TDD find it counterintuitive that they are supposed to write a test for an implementation even before that implementation exists. How can you blame them? It really sounds crazy.
+
+If only tests were presented as *requirements expressed with code*, the same skeptic developers would probably find TDD completely natural: of course you produce the code only after the requirements! Of course it would be absurd to write requirements as an afterthought.<br/>
 If TDD was called *Requirement-Driven Design*, maybe there will be less resistance to the approach.
 
 Along these lines, I think it would be fair to call TDD "Example-Driven Development", and PBD "Requirement-Driven Development".
@@ -50,8 +51,8 @@ void books_can_be_shipped_internationally()
         Price: 16.50M);
     
    
-   var canBeShipped = Ship(product, Countries.France);
-
+    var canBeShipped = Ship(product, Countries.France);
+	
     Assert.True(canBeShipped);
 }
 ```
@@ -79,10 +80,10 @@ Property books_can_be_shipped_to_France()
 
 Playing with mathematical terms, one could say that 
 
-* TDD resorts to Existential Quantified Properties: "*it does exist (`∃`) an example for which a property holds*"
+* TDD resorts to Existential Quantified Properties: "*it exists (`∃`) an example for which a property holds*"
 * PBT uses Universally Quantified Properties: "*for all the values (`∀`) this property holds*". No surprises that all the PBT libraries define a function called `ForAll`.
 
-Besised Existential and Universally Quantified properties, there is another dimension along which you can distinguish what I call the *Essential Properties* and the *Collateral* one
+Besides Existential and Universally Quantified properties, there is another dimension along which you can distinguish what I call the *Essential* and the *Collateral* Properties.
 
 * An *Essential Property* is the direct translation of the business requirement, like the example of the shipped books.
 
@@ -96,9 +97,14 @@ Besised Existential and Universally Quantified properties, there is another dime
   
 Collateral Properties do not in general completely specify the behaviour of the code under test. In some cases, though, a set of them does form a complete specification.
 
-Collateral Properties are so popular in PBT &mdash; and in Design by Contract &mdash; that one could think they are specific to it. There is the myth that developers must rack their brains to test complex business rules translating them to mysterious mathematical properties such as commutativity and associativity, and that because of this PBT is only theoretical and utterly unfeasible for real-world scenarios. It's not at all like this. Collateral Properties are very much  down-to-earth, and also fun to implement. You can learn a lot about them from Scott Wlaschin's [Choosing properties for property-based testing][choosing-properties] and from John Hughes's [How to Specify it!][how-to-specify-it], for which Johannes Link has written a brilliant version in Java, titled [How to Specify it! In Java!][how-to-specify-it-in-java].
+Collateral Properties are so popular in PBT &mdash; and in Design by Contract &mdash; that one could think they are specific to it.  There is the myth that developers must rack their brains to tranlate business requirements to mysterious mathematical properties such as commutativity, monotonicity and right-identity, and that consequently PBT is unfeasible for real-world scenarios. 
+
+It's not at all like this.<br/>
+Collateral Properties are more concrete, and often fun to find and implement. You can learn a lot about them from Scott Wlaschin's [Choosing properties for property-based testing][choosing-properties] and from John Hughes's [How to Specify it!][how-to-specify-it], for which Johannes Link has written a brilliant version in Java, titled [How to Specify it! In Java!][how-to-specify-it-in-java].
 
 ## Essential is better than Collateral
+I might be a voice outside the chorus, but I think Collateral Properties are a bit overrated &mdash and often excessively feared. 
+
 Many PBT tutorials start with the infamous reversal of a list example. I've never being completely happy with the classical implementation, because it is based on a Collateral Property:
 
 ```csharp
@@ -107,7 +113,7 @@ bool invariant_of_reversal(List<string> xs) =>
     AreListsEqual(xs, Revert(Revert(xs)));}
 ```
 
-This says nothing about what *reversing a list" is.<br/>
+This says nothing about what *reversing a list* is, about its essence. It tackles a side effect, a derived observation.<br/>
 In fact, it passes for the following dishonest implementation without batting an eyelid:
 
 ```csharp
@@ -119,11 +125,13 @@ This sucks.
 If you really wanted to capture the essence of the requirement:
 
 ```
-Reversing a list is the action of changing the order of elements 
-so that they appear in the opposite sequence:
+Reversing a list is the action of changing 
+the order of elements so that 
+they appear in the opposite sequence:
 the first element becomes the last element, 
 the second element becomes the second-to-last element, 
-and so on, until the last element becomes the first element.
+and so on, until the last element 
+becomes the first element.
 ```
 
 you could try with a direct translation to an Essential Property, that would lead to something like:
@@ -195,4 +203,4 @@ Videos:
 [how-to-specify-it]: https://www.dropbox.com/s/tx2b84kae4bw1p4/paper.pdf
 [how-to-specify-it-video]: https://www.youtube.com/watch?v=G0NUOst-53U
 [test-oracle]: https://en.wikipedia.org/wiki/Test_oracle
-[how-to-specify-it-in-java]https://johanneslink.net/how-to-specify-it
+[how-to-specify-it-in-java]: https://johanneslink.net/how-to-specify-it
