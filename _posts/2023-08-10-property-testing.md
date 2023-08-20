@@ -7,8 +7,9 @@ tags:
 - bash
 - zsh
 ---
-It's no secret that getting started with Property-Based Testing (PBT) is hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
-However, I hope it can be of some help to the fellow programmer.
+It's no secret that getting started with Property-Based Testing (PBT) is hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.
+
+By no means is this a comprehensive manual. Consider it as a friendly introduction to help dispel the fear.
 
 I will mostly use C# and F#, and just some bits of Haskell here and there. 
 
