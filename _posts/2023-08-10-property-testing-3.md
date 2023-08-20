@@ -153,23 +153,49 @@ bool specification_of_reversal(List<string> xs)
 This easily spots the dishonest implementation. Hurray!
 
 
-# That's all
-I hope you grasped the intuition. And that, if you think about it, in a way all tests are about properties. And that more or less, you already knew how to write a property.
+# What's next?
+I hope you got the idea. And that you agree that, in a way, all tests are about properties and that more or less you already knew how to write one.
 
-Finally, I'm sure: if you are that kind of developer who likes to think by abstractions, you could have invented Property-based Testing already, and probably you had.
+If you are that kind of developer who likes to think by abstractions, you could have invented Property-based Testing already, and the chances are probably you had.
 
-Happy testing, and have a great day!
+The next natural step is to crack open the manual of your preferred programming language PBT library and start playing. A non exaustive list is:
+
+| Library                    | Comment                                        | Languages              |
+|----------------------------|------------------------------------------------|------------------------|
+| [Hedgehog][hedgehog]       | An excellent choice, with integrated shrinking | C#, F#, Scala, Haskell |
+| [FsCheck][fscheck]         | From the QuickCheck's family                   | C#, F#                 |
+| [jquick][jquick]           | It comes with a lot of posts and documentation | Java, Kotlin           |
+| [Hypothesis][hypothesis]   |                                                | Python, Java, Ruby     |
+| [CrossHair][crosshair]     | More than a PBT library                        | Python                 |
+| [fast-check][fast-check]   |                                                | JavaScript, TypeScript |
+| [js-verify][js-verify]     | QuickCheck family                              | JavaScript, TypeScript |
+| [stream_data][stream_data] |                                                | Elixir                 |
+
+
+There are good tutorials around. I aim to write a hands-on one for C# and F# soon.
+
+Happy testing!
 
 
 # References
 * [Quickcheck][quickcheck]: the original (a bit outdated) manual of the Haskell library
-* [Hedgehog][hedgehog]
 * [The Design and Use of QuickCheck][design-and-use-of-quickcheck]
 * [xUnit Theory: Working With InlineData, MemberData, ClassData][xunit-theory]
+* [Concolic Testing][concolic-testing]
+* Libraries
+  * [Hedgehog][hedgehog]
+  * [FsCheck][fscheck]
+  * [jquick][jquick]
+  * [CrossHair][crosshair]
+  * [Hypothesis][hypothesis]
+  * [fast-check][fast-check]
+  * [js-verify][js-verify]
+  * [stream_data][stream_data]
 * Discovering properties
   * [Choosing properties for property-based testing - Scott Wlaschin][choosing-properties]
   * [How to Specify it! - John Hughes][how-to-specify-it]
   * [How to Specify it! In Java! - Johannes Link][how-to-specify-it-in-java]
+  * 
 * Universal Quantification
   * [Universal Quantification][universal-quantification]
   * [Universal Quantifier - in ncatlab.org][universal-quantifier]
@@ -177,9 +203,11 @@ Happy testing, and have a great day!
   * [Model-based Testing][model-based-testing]
   * [Model-based Testing with Hedgehog][model-based-testing-hedgehog]
   * [Model-based Testing with FsCheck][model-based-testing-fsharp]
-  * [Model-based Testing in Java with jqwik][model-based-testing-java]
+  * [Model-based Testing in Java with jqwik - Johannes Link][model-based-testing-java]
   * [Model-based Testing with Makina][model-based-testing-makina]
+  * [When properties are easier than examples - Mark Seemann][properties-are-easier]
 * [Test Oracle - Wikipedia][test-oracle]
+* [Property-based Testing in Java - Johannes Link][property-based-testing-in-java]
 
 
 Videos:
@@ -190,9 +218,14 @@ Videos:
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
 
-
 [quickcheck]: https://www.cse.chalmers.se/~rjmh/QuickCheck/manual.html
+[fscheck]: https://fscheck.github.io/FsCheck/
 [hedgehog]: https://hedgehog.qa/
+[jquick]: https://jqwik.net/
+[hypothesis]: https://hypothesis.works/
+[fast-check]: https://github.com/dubzzz/fast-check
+[js-verify]: https://github.com/jsverify/jsverify
+[stream_data]: https://github.com/whatyouhide/stream_data
 [design-and-use-of-quickcheck]: https://begriffs.com/posts/2017-01-14-design-use-quickcheck.html
 [xunit-theory]: https://hamidmosalla.com/2017/02/25/xunit-theory-working-with-inlinedata-memberdata-classdata/ 
 [universal-quantification]: https://en.wikipedia.org/wiki/Universal_quantification
@@ -207,5 +240,7 @@ Videos:
 [how-to-specify-it-video]: https://www.youtube.com/watch?v=G0NUOst-53U
 [test-oracle]: https://en.wikipedia.org/wiki/Test_oracle
 [how-to-specify-it-in-java]: https://johanneslink.net/how-to-specify-it
-
-
+[concolic-testing]: https://en.wikipedia.org/wiki/Concolic_testing
+[crosshair]: https://github.com/pschanely/CrossHair
+[property-based-testing-in-java]: https://blog.johanneslink.net/2018/03/24/property-based-testing-in-java-introduction/
+[properties-are-easier]: https://blog.ploeh.dk/2021/02/15/when-properties-are-easier-than-examples/

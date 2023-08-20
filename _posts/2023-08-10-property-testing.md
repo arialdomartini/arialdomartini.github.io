@@ -657,18 +657,25 @@ It's time to see some code, in the [second installment](2023-08-10-property-test
 
 
 
-
 # References
 * [Quickcheck][quickcheck]: the original (a bit outdated) manual of the Haskell library
-* [Hedgehog][hedgehog]
 * [The Design and Use of QuickCheck][design-and-use-of-quickcheck]
 * [xUnit Theory: Working With InlineData, MemberData, ClassData][xunit-theory]
 * [Concolic Testing][concolic-testing]
-* [CrossHair][crosshair]
+* Libraries
+  * [Hedgehog][hedgehog]
+  * [FsCheck][fscheck]
+  * [jquick][jquick]
+  * [CrossHair][crosshair]
+  * [Hypothesis][hypothesis]
+  * [fast-check][fast-check]
+  * [js-verify][js-verify]
+  * [stream_data][stream_data]
 * Discovering properties
   * [Choosing properties for property-based testing - Scott Wlaschin][choosing-properties]
   * [How to Specify it! - John Hughes][how-to-specify-it]
   * [How to Specify it! In Java! - Johannes Link][how-to-specify-it-in-java]
+  * 
 * Universal Quantification
   * [Universal Quantification][universal-quantification]
   * [Universal Quantifier - in ncatlab.org][universal-quantifier]
@@ -676,9 +683,11 @@ It's time to see some code, in the [second installment](2023-08-10-property-test
   * [Model-based Testing][model-based-testing]
   * [Model-based Testing with Hedgehog][model-based-testing-hedgehog]
   * [Model-based Testing with FsCheck][model-based-testing-fsharp]
-  * [Model-based Testing in Java with jqwik][model-based-testing-java]
+  * [Model-based Testing in Java with jqwik - Johannes Link][model-based-testing-java]
   * [Model-based Testing with Makina][model-based-testing-makina]
+  * [When properties are easier than examples - Mark Seemann][properties-are-easier]
 * [Test Oracle - Wikipedia][test-oracle]
+* [Property-based Testing in Java - Johannes Link][property-based-testing-in-java]
 
 
 Videos:
@@ -689,9 +698,14 @@ Videos:
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
 
-
 [quickcheck]: https://www.cse.chalmers.se/~rjmh/QuickCheck/manual.html
+[fscheck]: https://fscheck.github.io/FsCheck/
 [hedgehog]: https://hedgehog.qa/
+[jquick]: https://jqwik.net/
+[hypothesis]: https://hypothesis.works/
+[fast-check]: https://github.com/dubzzz/fast-check
+[js-verify]: https://github.com/jsverify/jsverify
+[stream_data]: https://github.com/whatyouhide/stream_data
 [design-and-use-of-quickcheck]: https://begriffs.com/posts/2017-01-14-design-use-quickcheck.html
 [xunit-theory]: https://hamidmosalla.com/2017/02/25/xunit-theory-working-with-inlinedata-memberdata-classdata/ 
 [universal-quantification]: https://en.wikipedia.org/wiki/Universal_quantification
@@ -706,20 +720,7 @@ Videos:
 [how-to-specify-it-video]: https://www.youtube.com/watch?v=G0NUOst-53U
 [test-oracle]: https://en.wikipedia.org/wiki/Test_oracle
 [how-to-specify-it-in-java]: https://johanneslink.net/how-to-specify-it
-
-
-
-# References
-
-
-# Comments
-[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
-
-[quickcheck]: https://www.cse.chalmers.se/~rjmh/QuickCheck/manual.html
-[haskell-hedgehog]: https://github.com/hedgehogqa/haskell-hedgehog
-[property-based-testing-java]: https://blog.johanneslink.net/2018/03/24/property-based-testing-in-java-introduction/
-[design-and-use-of-quickcheck]: https://begriffs.com/posts/2017-01-14-design-use-quickcheck.html
-[lazy-programmer]: https://www.youtube.com/watch?v=IYzDFHx6QPY
-[xunit-theory]: https://hamidmosalla.com/2017/02/25/xunit-theory-working-with-inlinedata-memberdata-classdata/ 
 [concolic-testing]: https://en.wikipedia.org/wiki/Concolic_testing
 [crosshair]: https://github.com/pschanely/CrossHair
+[property-based-testing-in-java]: https://blog.johanneslink.net/2018/03/24/property-based-testing-in-java-introduction/
+[properties-are-easier]: https://blog.ploeh.dk/2021/02/15/when-properties-are-easier-than-examples/
