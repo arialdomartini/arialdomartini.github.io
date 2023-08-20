@@ -205,7 +205,7 @@ Happy testing!
   * [Choosing properties for property-based testing - Scott Wlaschin][choosing-properties]
   * [How to Specify it! - John Hughes][how-to-specify-it]
   * [How to Specify it! In Java! - Johannes Link][how-to-specify-it-in-java]
-  * 
+* [Hypothesis - Integrated vs type based shrinking][integrated-vs-type-based-shrinking]
 * Universal Quantification
   * [Universal Quantification][universal-quantification]
   * [Universal Quantifier - in ncatlab.org][universal-quantifier]
@@ -236,7 +236,7 @@ Videos:
 [quick-theories]: https://github.com/quicktheories/QuickTheories
 [scala-check]: https://scalacheck.org/
 [test.check]: https://github.com/clojure/test.check
-[kotest]: https://github.com/kotest/kotest
+	[kotest]: https://github.com/kotest/kotest
 [hypothesis]: https://hypothesis.works/
 [fast-check]: https://github.com/dubzzz/fast-check
 [js-verify]: https://github.com/jsverify/jsverify
@@ -259,3 +259,4 @@ Videos:
 [crosshair]: https://github.com/pschanely/CrossHair
 [property-based-testing-in-java]: https://blog.johanneslink.net/2018/03/24/property-based-testing-in-java-introduction/
 [properties-are-easier]: https://blog.ploeh.dk/2021/02/15/when-properties-are-easier-than-examples/
+[integrated-vs-type-based-shrinking]: https://hypothesis.works/articles/integrated-shrinking/
