@@ -160,16 +160,21 @@ If you are that kind of developer who likes to think by abstractions, you could 
 
 The next natural step is to crack open the manual of your preferred programming language PBT library and start playing. A non exaustive list is:
 
-| Library                    | Comment                                        | Languages              |
-|----------------------------|------------------------------------------------|------------------------|
-| [Hedgehog][hedgehog]       | An excellent choice, with integrated shrinking | C#, F#, Scala, Haskell |
-| [FsCheck][fscheck]         | From the QuickCheck's family                   | C#, F#                 |
-| [jquick][jquick]           | It comes with a lot of posts and documentation | Java, Kotlin           |
-| [Hypothesis][hypothesis]   |                                                | Python, Java, Ruby     |
-| [CrossHair][crosshair]     | More than a PBT library                        | Python                 |
-| [fast-check][fast-check]   |                                                | JavaScript, TypeScript |
-| [js-verify][js-verify]     | QuickCheck family                              | JavaScript, TypeScript |
-| [stream_data][stream_data] |                                                | Elixir                 |
+| Library                              | Comment                                        | Languages              |
+|--------------------------------------|------------------------------------------------|------------------------|
+| [Hedgehog][hedgehog]                 | An excellent choice, with integrated shrinking | C#, F#, Scala, Haskell |
+| [FsCheck][fscheck]                   | From the QuickCheck's family                   | C#, F#                 |
+| [jquick][jquick]                     | It comes with a lot of posts and documentation | Java, Kotlin           |
+| [junit-quickcheck][junit-quickcheck] |                                                | Java                   |
+| [QuickTheories][quicktheories]       |                                                | Java                   |
+| [ScalaCheck][scala-check]            |                                                | Scala                  |
+| [test.check][test.check]             |                                                | Clojure                |
+| [Kotest][kotest]                     |                                                | Kotlin                 |
+| [Hypothesis][hypothesis]             |                                                | Python, Java, Ruby     |
+| [CrossHair][crosshair]               | More than a PBT library                        | Python                 |
+| [fast-check][fast-check]             |                                                | JavaScript, TypeScript |
+| [js-verify][js-verify]               | QuickCheck family                              | JavaScript, TypeScript |
+| [stream_data][stream_data]           |                                                | Elixir                 |
 
 
 There are good tutorials around. I aim to write a hands-on one for C# and F# soon.
@@ -186,6 +191,11 @@ Happy testing!
   * [Hedgehog][hedgehog]
   * [FsCheck][fscheck]
   * [jquick][jquick]
+  * [junit-quickcheck][junit-quickcheck]
+  * [QuickTheories][quicktheories]
+  * [ScalaCheck][scalacheck]
+  * [test.check][test.check]
+  * [Kotest][kotest]
   * [CrossHair][crosshair]
   * [Hypothesis][hypothesis]
   * [fast-check][fast-check]
@@ -222,6 +232,11 @@ Videos:
 [fscheck]: https://fscheck.github.io/FsCheck/
 [hedgehog]: https://hedgehog.qa/
 [jquick]: https://jqwik.net/
+[junit-quickcheck]: https://pholser.github.io/junit-quickcheck/site/1.0/
+[quick-theories]: https://github.com/quicktheories/QuickTheories
+[scala-check]: https://scalacheck.org/
+[test.check]: https://github.com/clojure/test.check
+[kotest]: https://github.com/kotest/kotest
 [hypothesis]: https://hypothesis.works/
 [fast-check]: https://github.com/dubzzz/fast-check
 [js-verify]: https://github.com/jsverify/jsverify
