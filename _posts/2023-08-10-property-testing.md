@@ -623,6 +623,29 @@ type UserGen() =
        genUser |> Arb.fromGen
 ```
 
+That's an example from [Property-based Testing in Java - Johannes Link][property-based-testing-in-java], based on [jquick][jquick]:
+
+```Java
+@Provide
+Arbitrary<Person> validPerson() {
+  Arbitrary<String> firstName = Arbitraries.strings()
+      .withCharRange('a', 'z')
+      .ofMinLength(2).ofMaxLength(10)
+      .map(this::capitalize);
+  Arbitrary<String> lastName = Arbitraries.strings()
+      .withCharRange('a', 'z')
+      .ofMinLength(2).ofMaxLength(20);
+  return Combinators.combine(firstName, lastName).as(Person::new);
+}
+
+@Property
+boolean anyValidPersonHasAFullName(@ForAll("validPerson") Person aPerson) {
+    return aPerson.fullName().length() >= 5;
+}
+```
+
+I bet it does not need comments to be understood: it's almost narrative English.
+
 Finally, this one in Haskell generates random images like:
 
 <img src="static/img/property-testing/quickcheck-generated-image.png"/>
