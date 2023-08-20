@@ -429,3 +429,56 @@ As you see, it's all very generic. No concrete values are ever provided.
 This is honestly a mouthful of code, isn't it? Consider though that once defined you will reuse generators over and over in several tests.<br/>
 Also, the equivalent in F# and Haskell is way more concise.<br/>
 
+
+Next: [It's properties all the way down](2023-08-10-property-testing-3.md)
+
+
+# References
+* [Quickcheck][quickcheck]: the original (a bit outdated) manual of the Haskell library
+* [Hedgehog][hedgehog]
+* [The Design and Use of QuickCheck][design-and-use-of-quickcheck]
+* [xUnit Theory: Working With InlineData, MemberData, ClassData][xunit-theory]
+* [Concolic Testing][concolic-testing]
+* [CrossHair][crosshair]
+* Discovering properties
+  * [Choosing properties for property-based testing - Scott Wlaschin][choosing-properties]
+  * [How to Specify it! - John Hughes][how-to-specify-it]
+  * [How to Specify it! In Java! - Johannes Link][how-to-specify-it-in-java]
+* Universal Quantification
+  * [Universal Quantification][universal-quantification]
+  * [Universal Quantifier - in ncatlab.org][universal-quantifier]
+* Model-based Testing
+  * [Model-based Testing][model-based-testing]
+  * [Model-based Testing with Hedgehog][model-based-testing-hedgehog]
+  * [Model-based Testing with FsCheck][model-based-testing-fsharp]
+  * [Model-based Testing in Java with jqwik][model-based-testing-java]
+  * [Model-based Testing with Makina][model-based-testing-makina]
+* [Test Oracle - Wikipedia][test-oracle]
+
+
+Videos:
+
+* [The lazy programmer's guide to writing thousands of tests - Scott Wlaschin][lazy-programmer]
+* [How to Specify it! - John Hughes][how-to-specify-it-video]
+
+# Comments
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
+
+[quickcheck]: https://www.cse.chalmers.se/~rjmh/QuickCheck/manual.html
+[hedgehog]: https://hedgehog.qa/
+[design-and-use-of-quickcheck]: https://begriffs.com/posts/2017-01-14-design-use-quickcheck.html
+[xunit-theory]: https://hamidmosalla.com/2017/02/25/xunit-theory-working-with-inlinedata-memberdata-classdata/ 
+[universal-quantification]: https://en.wikipedia.org/wiki/Universal_quantification
+[universal-quantifier]: https://ncatlab.org/nlab/show/universal+quantifier
+[choosing-properties]: https://fsharpforfunandprofit.com/posts/property-based-testing-2
+[model-based-testing]: https://en.wikipedia.org/wiki/Model-based_testing
+[model-based-testing-fsharp]: https://fscheck.github.io/FsCheck//StatefulTestingNew.html
+[model-based-testing-hedgehog]: https://jacobstanley.io/how-to-use-hedgehog-to-test-a-real-world-large-scale-stateful-app/
+[model-based-testing-java]: https://johanneslink.net/model-based-testing/
+[model-based-testing-makina]: https://hexdocs.pm/makina/readme.html#using-makina
+[how-to-specify-it]: https://www.dropbox.com/s/tx2b84kae4bw1p4/paper.pdf
+[how-to-specify-it-video]: https://www.youtube.com/watch?v=G0NUOst-53U
+[test-oracle]: https://en.wikipedia.org/wiki/Test_oracle
+[how-to-specify-it-in-java]: https://johanneslink.net/how-to-specify-it
+[concolic-testing]: https://en.wikipedia.org/wiki/Concolic_testing
+[crosshair]: https://github.com/pschanely/CrossHair

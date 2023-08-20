@@ -77,7 +77,6 @@ Property books_can_be_shipped_to_France()
 ```
 
 
-
 Playing with mathematical terms, one could say that 
 
 * TDD resorts to Existential Quantified Properties: "*it exists (`∃`) an example for which a property holds*"
@@ -188,6 +187,10 @@ Videos:
 * [The lazy programmer's guide to writing thousands of tests - Scott Wlaschin][lazy-programmer]
 * [How to Specify it! - John Hughes][how-to-specify-it-video]
 
+# Comments
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
+
+
 [quickcheck]: https://www.cse.chalmers.se/~rjmh/QuickCheck/manual.html
 [hedgehog]: https://hedgehog.qa/
 [design-and-use-of-quickcheck]: https://begriffs.com/posts/2017-01-14-design-use-quickcheck.html
@@ -204,3 +207,5 @@ Videos:
 [how-to-specify-it-video]: https://www.youtube.com/watch?v=G0NUOst-53U
 [test-oracle]: https://en.wikipedia.org/wiki/Test_oracle
 [how-to-specify-it-in-java]: https://johanneslink.net/how-to-specify-it
+
+
