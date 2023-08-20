@@ -84,14 +84,15 @@ Playing with mathematical terms, one could say that
 
 Besides Existential and Universally Quantified properties, there is another dimension along which you can distinguish what I call the *Essential* and the *Collateral* Properties.
 
-* An *Essential Property* is the direct translation of the business requirement, like the example of the shipped books.
+* An *Essential Property* is the direct translation of the business requirement, like the example of the shipped books.<br/>Alternative names are *Obvious Property* and *Business Rule as Property*. You can read a Java example in Johannes Link's [Pattern: Business Rule as Property][https://blog.johanneslink.net/2018/07/16/patterns-to-find-properties/#pattern-business-rule-as-property]
+
 
 * A *Collateral Property* is any observation that holds true in a context, and that can be indirectly deriveded from the business requirement. For example:
   * the fact that `sum(a, b)` is commutative
   * the observation that sorting a collection does not change its size (a so called "invariant")
   * the fact in a bank transfer the sum of money between the two involved bank accounts remains constant (again, an invariant)
   * running both your system and a simplified model with the same input, and comparing the outputs (this is called [Model-based testing][model-based-testing])
-  * comparing your program's behavior with an test oracle (see [test oracle on Wikipedia][test-oracle])
+  * comparing your program's behavior with an test oracle (see [Test Oracle][test-oracle] on Wikipedia)
   
   
 Collateral Properties do not in general completely specify the behaviour of the code under test. In some cases, though, a set of them does form a complete specification.
@@ -100,6 +101,9 @@ Collateral Properties are so popular in PBT &mdash; and in Design by Contract &m
 
 It's not at all like this.<br/>
 Collateral Properties are more concrete, and often fun to find and implement. You can learn a lot about them from Scott Wlaschin's [Choosing properties for property-based testing][choosing-properties] and from John Hughes's [How to Specify it!][how-to-specify-it], for which Johannes Link has written a brilliant version in Java, titled [How to Specify it! In Java!][how-to-specify-it-in-java].
+
+
+
 
 ## Essential is better than Collateral
 I might be a voice outside the chorus, but I think Collateral Properties are a bit overrated &mdash and often excessively feared. 
