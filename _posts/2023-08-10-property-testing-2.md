@@ -452,6 +452,7 @@ Next: [It's properties all the way down](2023-08-10-property-testing-3.md)
   * [Choosing properties for property-based testing - Scott Wlaschin][choosing-properties]
   * [How to Specify it! - John Hughes][how-to-specify-it]
   * [How to Specify it! In Java! - Johannes Link][how-to-specify-it-in-java]
+  * [Patterns to Find Good Properties - Johannes Link][patterns-to-find-good-properties]
 * [Hypothesis - Integrated vs type based shrinking][integrated-vs-type-based-shrinking]
 * Universal Quantification
   * [Universal Quantification][universal-quantification]
@@ -502,3 +503,4 @@ Videos:
 [property-based-testing-in-java]: https://blog.johanneslink.net/2018/03/24/property-based-testing-in-java-introduction/
 [properties-are-easier]: https://blog.ploeh.dk/2021/02/15/when-properties-are-easier-than-examples/
 [integrated-vs-type-based-shrinking]: https://hypothesis.works/articles/integrated-shrinking/
+[patterns-to-find-good-properties]: https://blog.johanneslink.net/2018/07/16/patterns-to-find-properties/#patterns-to-find-good-properties

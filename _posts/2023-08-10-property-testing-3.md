@@ -104,7 +104,7 @@ Collateral Properties are more concrete, and often fun to find and implement. Yo
 
 * Scott Wlaschin's [Choosing properties for property-based testing][choosing-properties]
 * John Hughes's [How to Specify it!][how-to-specify-it] for which Johannes Link has written a brilliant version in Java, titled [How to Specify it! In Java!][how-to-specify-it-in-java].
-* from Johannes Link's [Patterns to Find Good Properties][https://blog.johanneslink.net/2018/07/16/patterns-to-find-properties/#patterns-to-find-good-properties]
+* from Johannes Link's [Patterns to Find Good Properties][patterns-to-find-good-properties]
 
 
 ## Essential is better than Collateral
@@ -211,6 +211,7 @@ Happy testing!
   * [Choosing properties for property-based testing - Scott Wlaschin][choosing-properties]
   * [How to Specify it! - John Hughes][how-to-specify-it]
   * [How to Specify it! In Java! - Johannes Link][how-to-specify-it-in-java]
+  * [Patterns to Find Good Properties - Johannes Link][patterns-to-find-good-properties]
 * [Hypothesis - Integrated vs type based shrinking][integrated-vs-type-based-shrinking]
 * Universal Quantification
   * [Universal Quantification][universal-quantification]
@@ -266,3 +267,4 @@ Videos:
 [property-based-testing-in-java]: https://blog.johanneslink.net/2018/03/24/property-based-testing-in-java-introduction/
 [properties-are-easier]: https://blog.ploeh.dk/2021/02/15/when-properties-are-easier-than-examples/
 [integrated-vs-type-based-shrinking]: https://hypothesis.works/articles/integrated-shrinking/
+[patterns-to-find-good-properties]: https://blog.johanneslink.net/2018/07/16/patterns-to-find-properties/#patterns-to-find-good-properties
