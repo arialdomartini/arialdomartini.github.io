@@ -100,9 +100,11 @@ Collateral Properties do not in general completely specify the behaviour of the 
 Collateral Properties are so popular in PBT &mdash; and in Design by Contract &mdash; that one could think they are specific to it.  There is the myth that developers must rack their brains to tranlate business requirements to mysterious mathematical properties such as commutativity, monotonicity and right-identity, and that consequently PBT is unfeasible for real-world scenarios. 
 
 It's not at all like this.<br/>
-Collateral Properties are more concrete, and often fun to find and implement. You can learn a lot about them from Scott Wlaschin's [Choosing properties for property-based testing][choosing-properties] and from John Hughes's [How to Specify it!][how-to-specify-it], for which Johannes Link has written a brilliant version in Java, titled [How to Specify it! In Java!][how-to-specify-it-in-java].
+Collateral Properties are more concrete, and often fun to find and implement. You can learn a lot about them from:
 
-
+* Scott Wlaschin's [Choosing properties for property-based testing][choosing-properties]
+* John Hughes's [How to Specify it!][how-to-specify-it] for which Johannes Link has written a brilliant version in Java, titled [How to Specify it! In Java!][how-to-specify-it-in-java].
+* from Johannes Link's [Patterns to Find Good Properties][https://blog.johanneslink.net/2018/07/16/patterns-to-find-properties/#patterns-to-find-good-properties]
 
 
 ## Essential is better than Collateral
