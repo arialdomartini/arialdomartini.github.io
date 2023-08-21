@@ -3,8 +3,9 @@ layout: post
 title: "Property-based Testing For The Rest Of Us - 2"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
-- bash
-- zsh
+- tdd
+- functional programming
+- property-based testing
 ---
 ## Index
 1. [Utterly opinionated introduction to Property Testing](2023-08-10-property-testing.md)

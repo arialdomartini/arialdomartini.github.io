@@ -4,8 +4,9 @@ layout: post
 title: "Property-based Testing For The Rest Of Us (or: The Natural Next Step After TDD)"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
-- bash
-- zsh
+- tdd
+- functional programming
+- property-based testing
 ---
 It's no secret that getting started with Property-Based Testing (PBT) is hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.
 

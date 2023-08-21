@@ -4,8 +4,9 @@ layout: post
 title: "Property-based Testing For The Rest Of Us - 2"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
-- bash
-- zsh
+- tdd
+- functional programming
+- property-based testing
 ---
 If you apply the practices of TDD relying on Property-based Tests rather than on Example-based ones, what you get is *Property-driven Development* (PDD).
 
