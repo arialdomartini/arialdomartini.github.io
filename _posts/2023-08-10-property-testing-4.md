@@ -301,11 +301,13 @@ Yet, it captures the requirement, it *reads* like a requirement. It conveys a do
 
 If tests are intended to serve as documentation, I argue that this particular property test imparts significantly more information than the original `10` examples.
 
+
 ### Covering the examples
 Can this single test replace the original `10`, without loss of information?<br/>
 As a matter of fact, yes: it explores a much larger domain space, and almost for free.
 
 By default, it will be exercised with `100` cases, but it would be a matter of configuration to increase the number to `1.000` or `200.000`.
+
 
 ### But can it be used to *lead development*?
 Tests in TDD are a design tool. I like to think that they end up forming a non-regression test harness almost as a side-effect: their main goal, the reason why they are written in the first place, is to guide the programmers during the development, and let a design emerge.
@@ -371,6 +373,7 @@ When it comes to using "Fake it", PBT doesn't forgive: it split hairs, and chase
 
 Far from being perfect (it still isn't a theorem prover), when a PBT library gives up and declare to be unable to find counterexamples, you can be more confident that your algorithm is finally complete.
 
+
 ### Is it faster?
 So, `2` fails, and you need to enhance the code the same way Bob did. `3` will fail next and so on, in the very same order Bob chose.
 
@@ -387,6 +390,15 @@ More probably, instead, you will be curious to know how the random values genera
     too young    54% ██████████▊········· ✓ 5%
     too old      46% █████████▏·········· ✓ 5%
 ```
+
+
+### Is it safer?
+Compare this 2 traits: 
+
+* With TDD, we started with a simplification of the requirement (the function shall return `emptyList`). In each step, we enhanced the requirement. This means that, along the process, the specification was incomplete, partially lying. 
+
+* With PDD we we could practice an incremental development letting the shrinker identify the increasingly complex use cases. Doing thise we did not to modify the test/requirement: the specification was durably stable and complete, since the beginning.
+
 
 ### What about Collateral Properties?
 We started with a direct translation of the business requirement into an Essential Property.
