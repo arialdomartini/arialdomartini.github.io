@@ -10,19 +10,22 @@ tags:
 ---
 If you apply the practices of TDD relying on Property-based Tests rather than on Example-based ones, what you get is *Property-driven Development* (PDD).
 
-I claim that PDD is more correct, safer and faster than the example-based TDD. I will argument my bold statement through the implementation of a classical, simple coding kata.
+I claim that PDD leads to a more correct, safer and faster development experience than the example-based TDD. I will argument my bold statement through the implementation of a classical, simple coding kata.
 
 ## The Prime Factors Kata
 
-I'm using the [ThePrimeFactorsKata][the-prime-factor-kata], a little exercise that Bob Martin is being using since 2005 to demo TDD. We will first follow the classical approach, mirroring what Bob Martin does; then we will repeat the same using PBT, commenting on the differences.
+I'm using the [ThePrimeFactorsKata][the-prime-factor-kata], a little exercise that Bob Martin has been employing since 2005 to demo TDD. We will first follow the classical approach, mirroring what Bob Martin does; then we will repeat the same using PBT, commenting on the differences.
 
 The requirement is:
 
-> Write a function that takes an integer and returns the collection of its prime factors;
-> Factors of a number are integers that, when multiplied together, result in the original number.
+> Write a function that takes an integer and returns the collection of its prime factors;<br/>
+> 
+> Factors of a number are integers that,<br/>
+> when multiplied together, result in the original number.
+>
 > A number is prime if it has no divisors other than 1 and itself
 
-Bob Martin solves it with few tests (from 7 to 10, depending on the session). You can watch him in action in the video [The Three Laws of TDD (Featuring Kotlin) - Bob Martin][the-three-laws-of-tdd].
+Bob Martin solves it with few tests (from 7 to 10, depending on the session). You can watch him in action in the video [The Three Laws of TDD (Featuring Kotlin)][the-three-laws-of-tdd].
 
 ## The classic TDD approach
 
@@ -253,8 +256,11 @@ I guess that displayed like that, it would not be apparent to everyone that this
 How can this be improved?<br/>
 Let's do a step back, starting from the original requirement:
 
-> Write a function that takes an integer and returns the collection of its prime factors;
-> Factors of a number are integers that, when multiplied together, result in the original number.
+> Write a function that takes an integer and returns the collection of its prime factors;<br/>
+> 
+> Factors of a number are integers that,<br/>
+> when multiplied together, result in the original number.
+>
 > A number is prime if it has no divisors other than 1 and itself
 
 Using a C# FsCheck property-test, this could be translated to:
