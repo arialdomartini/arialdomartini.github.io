@@ -1,4 +1,3 @@
-
 ---
 layout: post
 title: "Property-based Testing For The Rest Of Us (or: The Natural Next Step After TDD)"
@@ -682,8 +681,10 @@ So, in a sense, Property-based Testing is about decomposing the problem-space of
 It's time to see some code, in the [second installment](2023-08-10-property-testing-2.md).
 
 
+<details>
+  <summary><h1>&#9658;&nbsp;References</h1></summary>
 
-# References
+
 * [Quickcheck][quickcheck]: the original (a bit outdated) manual of the Haskell library
 * [The Design and Use of QuickCheck][design-and-use-of-quickcheck]
 * [xUnit Theory: Working With InlineData, MemberData, ClassData][xunit-theory]
@@ -721,6 +722,8 @@ Videos:
 
 * [The lazy programmer's guide to writing thousands of tests - Scott Wlaschin][lazy-programmer]
 * [How to Specify it! - John Hughes][how-to-specify-it-video]
+
+</details>
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
