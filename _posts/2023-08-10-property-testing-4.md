@@ -43,7 +43,7 @@ The simplest possible requirement is: the list of the prime factors of `1` is em
 
 Now, technically speaking, this is a mathematical nonsense: prime factorization is defined for numbers `n >= 2` (see [Prime Factorization - Wolfram Mathworld][prime-factorization-wolfram]), so Bob should have been started from `2`. But let me ignore that.
 
-The test to be passed is:
+The requirement to implement is:
 
 ```kotlin
 @Test fun factors() {
