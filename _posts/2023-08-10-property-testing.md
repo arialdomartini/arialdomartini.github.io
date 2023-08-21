@@ -42,7 +42,7 @@ I will mostly use C# and F#, and just some bits of Haskell here and there.
 Note: while discoursing about PBT, I will refer to the traditional way of writing tests as *TDD*: although not an accurate definition, please indulge me for the sake of conciseness.
 
 ## Property Testing! What's the fuss about?
-There is no fuss at all. Property Testing is a niche discipline. It's almost unknown outside the tiny world of Functional Programming. And this is a pity, because it is an amazingly powerful, effective and rewarding technique.
+There is no fuss at all. Property Testing is a niche discipline. It's almost unknown outside the tiny world of Functional Programming. And this is a pity, because it is amazingly powerful, effective and rewarding.
 
 In the Haskell world it is very popular thanks to QuickCheck, the grandfather of all the PBT libraries. In other ecosystems it is not given the attention it deserves.
 
@@ -51,26 +51,25 @@ Many would tell you it is because it's great at catching bugs. Some will stress 
 
 While all the above are true, I prefer to think I love it for a third reason: it elevates your comprehension of the domain.
 
-Domain Experts communicate with us developers on 2 different levels.<br/>
-First, they express the business rules using abstract and strict statements:
+Domain Experts communicate with us developers on 2 different levels. First, they express the business rules using abstract and strict statements:
 
-| Abstract rules                                                                                                                 |
-|--------------------------------------------------------------------------------------------------------------------------------|
-| "The catalog always lists products in alphabetical order"                                                                       |
-| "Account names are unique and case insensitive"                                                                                |
-| "We never apply more than 1 discount promotion to a single purchasing cart;<br/>we always select the most convenient discount" |
+| Abstract rules                                                                                                          |
+|-------------------------------------------------------------------------------------------------------------------------|
+| "The catalog always lists products in alphabetical order"                                                               |
+| "Account names are unique and case insensitive"                                                                         |
+| "We never apply more than 1 discount promotion to a single purchase;<br/>we always select the most convenient discount" |
 
 Then, to help us understand, they also provide us with some examples:
 
 | Concrete examples                                                                                                                                                                                                       |
 |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | "With alphabetical order I mean: Muffin, Coffee, Milk shall be printed as Coffee, Milk, Muffin"                                                                                                                         |
-| "About account names, you cannot have 2 "john.doe". <br/>"john.doe" and "John.Doe" are the same account                                                                                                                 |
+| "About account names, you cannot have 2 "`john.doe`". <br/>"`john.doe`" and "`John.Doe`" are the same account                                                                                                                 |
 | "Say a customer purchases `2` cups of coffee, `1` milk and `1` muffin for `4` people.<br/>`4` people are entitled for `Promotion 1`, `20%` discount, `1 EUR`.<br/>Milk and Muffin activates `Promotion 2`, `0.8 EUR`.<br/>In this case, we apply `Promotion 1`" |
 
 Both levels are important.<br/>
 On the one hand, abstract rules are very powerful, because they are concise and they have a general application.<br/>
-On the other hand, the examples &mdash; which are derivated from abstract rules &mdash; ease the comprehension.
+On the other hand, the examples &mdash; which are derivated from the abstract rules &mdash; ease the comprehension.
 
 Unfortunately, when it comes to translating requirements to tests, we only code with examples. Not only is this risky &mdash; after all, the application must work in all the cases, not exclusively in the few ones covered by the examples &mdash; it is also a lost opportunity, a loss of information in the communication between business and development.
 
@@ -80,13 +79,13 @@ Not our fault. We don't because the tools provided by TDD are very much example-
 If TDD is about coding examples, Property-based Testing is about coding the pure rules.<br/>
 PBT provides a way to express the business functionalities abstracting from the specific examples. In a sense, to capture their core essence.
 
-That's exactly the selling point of PBT, to me: it leads you to deepen your understanding of the domain problem by forcing you to write statements independent from specific anectodal cases.
+That's exactly the selling point of PBT: it leads you to deepen your understanding of the domain problem by forcing you to write statements independent from specific anectodal cases.
 
 As a side effect, you will get an excellent tool for catching nasty bugs and, most likely, a lot of fun.
 
 ## Show me the code
 
-OK, I see you are impatient. Here we go. I will give you 2 simple examples. In the next pages we will have the time to understand what happends behind the scenes.
+OK, I see you are impatient. Here we go. I will give you 2 simple examples. In the next pages we will delve more into details.
 
 Given the following integration test:
 
@@ -159,21 +158,21 @@ Here's the bold statement.<br/>
 Property Testing is TDD on steroids. It is about capturing the essence of business requirements &mdash; rather than some arbitrary, often unmotivated examples &mdash; and having them automatically tested as logical or mathematical statements, more or less for free.
 
 ## Too good. Where's the catch?
-You are right. It would be too good, right?<br/>
+You are right. It would be too good.<br/>
 I see 3 catches.
 
 **First**: Property-based Testing is not as easy as TDD.<br/>
 It's hard to start with, and overtime it keeps being more challenging than ordinary TDD. The libraries supporting it are usually more advanced, as they generally require some knowledge of Functional Programming: you should be prepared to have some understanding of how to write a lambda, how to map it to a functor, what combinators are, how to compose monads and the like.<br/>
 But don't despair: those are very very rewarding challenges, you will enjoy them!
 
-**Second**: the technical challelenge is possibly not even the thoughest one: figuring out which properties describe the business behavior is often the most confusing part.<br/>
+**Second**: figuring out which properties describe the business behavior can be confusing.<br/>
 Writing TDD tests is as easy as finding a collection of reference use cases: the customer ordered an apple (`.5 EUR`) and 3 books (`10 EUR` each), the total should be `30.5 EUR.` Easy peasy.<br/>
-Writing Property Tests for an the same e-commerce site is a different kettle of fish: it is not even clear what a "property" is.<br/>
+Writing Property Tests for the same e-commerce site is a different kettle of fish: it is not even clear what a "property" is.<br/>
 I'm afraid there are no silver bullets here, besides elbow grease and a lot of experience.
 
 **Finally**: PBT's niche nature.<br/>
 Compared to TDD, the documentation is not likely copious and the typical examples you can find online have often deceptively simple code, not directly applicable to real-world use cases. If you are looking for answers to your down-to-Earth needs, you will be disappointed to discover that much of the documentation will teach you over and over how to test the reversal of a list.<br/>
-Finding a buddy for writing PBT in pair is harder. Most likely, you will find resistance and skepticism.
+Finding a buddy for writing PBT in pair is hard. Most likely, you will find resistance and skepticism.
 
 That sucks, but it's part of the challenge.
 
@@ -210,14 +209,14 @@ When you run it, FsCheck will generate a comprehensive number of randomly genera
 You might think that PBT libraries are similar to AutoFixture, and only useful for removing the need of hard-coded values and making the Arrange phase easier.<br/>
 But they are not.
 
-Let me stress this loudly: only at a first glance is Property-based Testing about generating random inputs. PBT is more about you than it is about the test runner.
+Let me stress this loudly: only at a first glance is Property-based Testing about generating random inputs. PBT is more about *you* and your conversation with the compiler, than it is about *the test runner*.
 
 When the domain expert of an e-commerce company tells you 
 
 ```
 Food products are restricted from international shipping 
 due to regulatory compliance, 
-unless there is an active Promotion
+unless there is an active Promotion.
 ```
 
 and then you see an implementation such as:
@@ -227,19 +226,20 @@ if(product.Type == Food && order.Destination != LocalCountry)
     throw new CannotBeSentException();
 ```
 
-missing a check on an active Promotion, you sense there is a bug.<br/>
+missing a check on an active Promotion, you *sense* there is a bug.<br/>
 You understand that, not because you mentally exercised the code generating thousands of inputs, but because you are a sentient being and you are able to use logic.
 
-Compared to your brains, C# is dumb, and it has to resort to brute force.<br/>
-But other approaches are possible. A library
+Compared to your brains, C# is dumb, therefore it has to resort to brute force.<br/>
+But other approaches are possible. A library:
 
 - could use logic reasoning, like in Prolog
 - or rely on AI
 - or have automated theorem provers like in COQ
-- or infer the proper input values using [Concolic Testing][concolic-testing], a crazy approach with which the code is exercised with symbolic execution in conjunction with a resolver based on constraint logic programming (have a look to Python's [CrossHair][crosshair] to watch this in play).
+- or infer the proper input values to input the test with, using [Concolic Testing][concolic-testing] &mdash; a crazy approach with which the code is exercised with symbolic execution in conjunction with a resolver based on constraint logic programming. Have a look to Python's [CrossHair][crosshair] to see this in play.
 
 It's only incidental that your most beloved programming language is bovine and has to wander around aimlessly with random inputs.<br/>
-Property Testing is not defined by the limits of its libraries, just like TDD is not merely what xUnit is capable of.<br/>
+Property Testing is not defined by the limits of its libraries, just like TDD is not merely what xUnit is capable of.
+
 PBT is the act of writing requirements in their essence, as general specifications. The strategies the library uses to prove you wrong are an internal, incidental implementation detail.
 
 
@@ -280,7 +280,7 @@ void calcutates_the_sum_of_2_numbers(int a, int b, int expectedSum)
 ```
 
 This is fine, although a bit tedious.<br/>
-One problem with xUnit's `InlineData` is that it only works with constant values, which are known at compile time. You can't use the instance of a class:
+One problem with xUnit's `InlineData` is that it only works with constant values, which are known at compile time. You can't use instances of a class:
 
 ```csharp
 [Theory]
@@ -293,23 +293,13 @@ void discountable_products(Product product)
     
     Assert.True(discountIsApplyed);
 }
-
-
-[InlineData(new Product(name: "Book",   category: Categories.FreeTime, price: 15.40,  description: "The Little Schemer"))
-[InlineData(new Product(name: "HHKB2",  category: Categories.Keybords, price: 200.00, description: "The mythical Happy Hacking Keyboard 2"))
-void not_discountable_products(Product product)
-{
-    var discountIsApplyed = _catalog.CanBeDiscounted(product);
-    
-    Assert.False(discountIsApplyed);
-}
-
 ```
 
 Sure enough, there are workarounds (see [xUnit Theory: Working With InlineData, MemberData, ClassData][xunit-theory]), but this bears the questions: 
 
 * Are you sure the values of `description` and `name` are relevant for those tests? Are't they just distracting?
-* Would it be a good idea to just have random values?
+* Would it be a good idea to just have random values, for all the fields?
+* Should those random data have any constraint, derived from the domain rules?
 * How many different instances should be created to have a good use-case coverage?
 * Are you sure you are not missing any important edge case?
 
@@ -333,7 +323,7 @@ If we could write that, there would be interesting consequences:
 * The library would have the chance to discover that the case:
 
 ```csharp
-new Product(name: ???, category: Categories.SoftDrinks, price: ??,  description: ???)}
+new Product(name: ___, category: Categories.SoftDrinks, price: ___,  description: ___)}
 ```
 
 fails.
@@ -343,18 +333,18 @@ Indeed, it would be super nice if the library could tell us:
 ```
 I get the general rule. But, hey! I found a counterexample! Here it is:
 
-  new Product(name: ???, category: Categories.SoftDrinks, price: ??,  description: ???)}
+  new Product(name: ___, category: Categories.SoftDrinks, price: ___,  description: ___)}
 
 Don't even care about `name`, `price` and other fields: the element 
 causing the problem is 
 
-  `category = Categories.SoftDrinks.
+  category = Categories.SoftDrinks
   
 Apparently, the production code is not considering soft drinks as a food. 
-Either this this is a bug or your specification is incomplete.
+Either this this is a bug, or your specification is incomplete.
 ```
 
-Oh, cool: this woule be much more than finding bugs. It would be the beginning of a conversation in which you can reason about the correctness of both the code and the requirement.
+Oh, cool! This would be much more than finding bug! It would be the beginning of a conversation in which you can reason about the correctness of both the code and the requirement.
 
 As Joe Nelson wrote:
 
@@ -366,12 +356,11 @@ As Joe Nelson wrote:
 (from [Design and Use of QuickCheck][design-and-use-of-quickcheck])
 
 
-OK, but down to Earth: no Property-based Testing library is *that* smart. They are not too far, though. They can really *shrink* down the counterexample, letting you focus on the minimum relevant values.
+OK, but down to Earth: no Property-based Testing library is *that* smart. They are not too far, though. They can really *shrink* the counterexamples down, letting you focus on the minimum relevant values. We will see this in practice in the next paragraphs.
 
 
 ## All right, but the `[Food]` attribute does not exist.
-Yes, this is still hypothetical, we don't have any `[Food]` attribute yet.
-We'll solve this problem soon.
+Yes, this is still hypothetical, we don't have any `[Food]` attribute yet. Solving this problem really isn't impossible.
 
 Let's pause a moment to ruminate an intuition: this approach is likely to lead you to a big paradigm shift. Since the library takes away from you the control over which values to base your tests, this forces you to design your tests in a very different way.
 
@@ -404,7 +393,7 @@ void calcutates_the_sum_of_2_numbers(int a, int b)
 }
 ```
 
-you will have no chance to write the assertion. No chances that the expected value is also randomly generated.<br/>
+you will have no possibility to write the assertion. No chances that the expected value is also randomly generated.<br/>
 Neither is using `a + b` in the assertion a good choice:
 
 ```csharp
@@ -434,7 +423,7 @@ void adding_zero_does_no_change_the_result(int a)
 }
 ```
 
-I chose the silly sum example because it is the basis of the epic video [The lazy programmer's guide to writing thousands of tests][lazy-programmer] by Scott Wlashlin. It's a joy to watch, trust me.
+I chose the silly sum example because it is the basis of the epic video [The lazy programmer's guide to writing thousands of tests][lazy-programmer] by Scott Wlashlin. It's a joy to watch.
 
 As funny the sum example is, it is pointless for the real world cases.
 In more complex cases, you want to have tests such as:
@@ -455,7 +444,8 @@ or
 
 ```csharp
 [Property]
-void no_discounts_is_applied_to_carts_without_food([CartContainingNoFoodProducts] List<Product> products)
+void no_discounts_is_applied_to_carts_without_food(
+    [CartContainingNoFoodProducts] List<Product> products)
 {
     var plainSumOfPrices = products.Sum(p => p.Price);
     _cart.Add(products)
@@ -471,9 +461,9 @@ Again, notice the fictional attributes.
 I hope you get how paramount the generation of values is, in PBT. It's time to talk about that.
 
 ### Enough with fictional attributes
-By now you should have built the intuition that just generating purely random values does not work. We need to craft *quasi-random* values, strictly satisfying some specific domain rules. Indeed, we need a way to instruct the test data generator which rules to stick to. Because, after all, requirements are all about domain rules.
+By now you should have built the intuition that just generating purely random values does not work. We need to craft *quasi-random* values, strictly satisfying some specific domain rules. Indeed, if also we had a test data generator, we need a way to instruct it which rules to stick to. Because, after all, requirements are all about domain rules.
 
-What about replacing our fictional attributes with functions?
+What about replacing our fictional attributes with custom made functions?
 
 ```csharp
 [Property]
@@ -493,7 +483,7 @@ void account_name_is_unique()
 Better. But it's a poor man's solution, and we can surely do more.<br/>
 I see the following traits:
 
-* It's still unclear what's inside those functions. So far, we just moved the problem one level up.
+* It's still unclear what's inside those functions. So far, we just moved the problem one level up;
 
 * The test above only generates 1 set of random values. Ideally, we would like to generate thousands. Something like:
 
@@ -519,8 +509,8 @@ void account_name_is_unique()
 Notice how we needed a bit of boilerplate code to wrap the test inside a cycle.
 
 
-* It might not be immediately apparent, but they way random values are generated is not very reusable.
-If only the structures used by our homegrown generators were composable, you could have a second test with something like:
+* It might not be immediately apparent, but they way random values are generated is not very reusable.<br/>
+We wish we could write a second test elaborating the random existing accounts:
 
 ```csharp
     Account[] existingAccountsIncludingDisabledOnes = 
@@ -528,10 +518,10 @@ If only the structures used by our homegrown generators were composable, you cou
             .ComposedWith(HavingAtLeast3DisabledAccounts());
 ```
 
-It's very unlikley that such a generic `ComposedWith()` method could be defined.
+It's unlikley that such a generic `ComposedWith()` method could be defined. Maybe it could for collections, using Linq: but extending this idea to any possible type would be a tough challenge.
 
 The problem is that our generator functions immediately return values. Once we have values, it's too late to modify the rules for generating further ones.<br/>
-If instead it returned *structures able to eventually emit values*, such as wrappers of functions, you would still be in time to alter the domain rules before finally generating values.<br/>
+If instead they returned *structures capable of eventually emitting values*, such as wrappers of functions, you would still be in time to alter the domain rules before finally generating values.<br/>
 
 You need a structure with solid compositional capabilities, such as a monad.
 
@@ -541,27 +531,27 @@ Now probably, I just lost half of my readers.
 ### Test Data Generators
 Great, still here, you brave! Let's see how deep this rabbit hole is, then.
 
-The canonical answer in the Property Testing world is to use Generators. You can think of Generators as a code-based recipe for generating random data accordingly to some custom rules. So, not a trivial random value generator at all. It is a much more advanced structure, able to support you with challenges like:
+The canonical answer in the Property Testing world is to use Generators. You can think of a Generator as a code-based recipe for generating random data accordingly to some custom rules. So, not a trivial random value generator, but a much more advanced structure, able to support you with challenges like:
 
 * generate odd numbers, starting from small ones, and exponentially increasing them, up to the maximum value `N`
-* generate instances of `Product`, 30% with prices between `10` and `100`, the rest with lower prices
-* generate lists of `Product`s, without duplications, ordered by `description`, maximum 20 items
-* generate couples of `Product`s, whose price difference is between `10` and `20`, with same `description` but different `category`, picked from the options `Book, Other, Laptop` only.
-* generate a cart, containing up to `10` `Product`s, without exceeding the total of `100 EUR`.
+* generate instances of `Product`, 30% of which with prices between `10` and `100`, the rest with lower prices
+* generate lists of `Products`, without duplications, ordered by `description`, maximum 20 items
+* generate couples of `Products`, whose price difference is between `10` and `20`, with same `description` but different `category`, picked from the options `Book, Other, Laptop` only
+* generate a cart, containing up to `10` `Products`, without exceeding the total of `100 EUR`.
 
 There is virtually no limit to the complexity you want to cover. We clearly need a language to express those domain rules.
 
 Prior randomized testing tools required learning a special language and grammar to program the generation of complex test cases. QuickCheck was the first library providing an embedded Domain Specific Language (heavily based on Haskell's amazing type system), in the very same language tests are written in, for writing the test data generation specifications. 
 
-As everything in Functional Programming, the secret is to start simple
+As everything in Functional Programming, the secret is to start simple. Imagine having:
 
 * a structure able to generate random booleans: `Gen<bool>`
 * another able to generate random characters: `Gen<char>`
 
-and then to create new  more complex building blocks composing the smallest ones: 
+and then being able to create new  more complex building blocks composing the smallest ones: 
 
-* an F# generator of strings can be built as a composition of char generators: `Gen.list Gen<char>`
-* The generator for the Haskell record `data Product = Product { name :: Name, price :: Price, category :: Category }` can be built composing the generators for names, prices and categories, no matter how they are defined, with:
+* an F# generator of strings built as a composition of char generators: `Gen.list Gen<char>`
+* The generator for the Haskell record `data Product = Product { name :: Name, price :: Price, category :: Category }` built composing the generators for names, prices and categories, no matter how they are defined, with:
 
 ```haskell
 Product
@@ -580,7 +570,8 @@ genProduct = do
     return (Product name price category)
 ```
 
-Usually, the algebra to use is the one for monadic composition, with the syntax offered by your language of choice.<br/>
+Usually, the algebra to use is the one for monadic composition, with the syntax offered by your language of choice.
+
 Let's have a look to some real examples. Please, suspend for a while the judgment on syntax.
 
 This (in Haskell) generates a random boolean values, with equal probability:
@@ -595,7 +586,7 @@ This (again in Haskell) generates random boleans weighting the probability of ch
 frequency [(2,return True), (1,return False)]
 ```
 
-Here's an F# example for emitting lists of tuples of values bewteen `1` and `100`, with the restriction that the two elements in each tuple are different:
+Here's an F# example for emitting lists of tuples of values bewteen `1` and `100`, with the restriction that the two elements in each tuple must be different:
 
 ```fsharp
 Gen.choose (1, 100)
@@ -604,7 +595,7 @@ Gen.choose (1, 100)
 |> Gen.map (fun (x, y) -> [x; y])
 ```
 
-The following in F# generates Users whose `FirstName` is one of `"Don"`, `"Henrik"` or `null`, a `LastName` with one of `"Syme"` and `"Feldt"` (but never `null`), and an `id` between `0` and `1000`:
+The following in F# generates `Users` whose `FirstName` is one of `"Don"`, `"Henrik"` or `null`, a `LastName` with one of `"Syme"` and `"Feldt"` (but never `null`), and an `id` between `0` and `1000`:
 
 ```fsharp
 type User = {
@@ -625,7 +616,7 @@ type UserGen() =
        genUser |> Arb.fromGen
 ```
 
-That's an example from [Property-based Testing in Java - Johannes Link][property-based-testing-in-java], based on [jquick][jquick]:
+That's an example from Johannes Link's [Property-based Testing in Java][property-based-testing-in-java], based on [jquick][jquick]:
 
 ```Java
 @Provide
@@ -666,8 +657,7 @@ genImage = do
 ```
 
 
-I don't expect you to understand the code above yet.<br/>
-Just focus on the key messages:
+I don't expect you to understand the code above yet. Just focus on the key messages:
 
 * Generators are composable structures. Each language would use its own tricks: in C# they are classes.
 * They are natively written in your preferred language. No extra languages to learn.
@@ -676,9 +666,10 @@ Just focus on the key messages:
 
 Oh, wait: I forgot to mention that Properties too are made of composable structures.
 
-So, in a sense, Property-based Testing is about decomposing the problem-space of the domain into small properties and g\eneration rules, and then about describing the business functionalities as a composition of those building blocks, for an automated library to challenge you.
+So, in a sense, Property-based Testing is about decomposing the problem-space of the domain into small properties and generation rules, and then about describing the business functionalities as a composition of those building blocks, for an automated library to challenge you.
 
-It's time to see some code, in the [second installment](2023-08-10-property-testing-2.md).
+It's time to see some code. Take 5 minutes to have an icecream and when ready jump to the [second installment](2023-08-10-property-testing-2.md).
+
 
 
 <details>
@@ -725,8 +716,12 @@ It's time to see some code, in the [second installment](2023-08-10-property-test
   * [fast-check][fast-check]
   * [js-verify][js-verify]
   * [stream_data][stream_data]
-
-
+  * [junit-quickheck][junit-quickcheck]
+  * [QuickTheories][quicktheories]
+  * [ScalaCheck][scala-check]
+  * [test.check][test.check]
+  * [Kotest][kotest]
+  
 **Books**
 * [Test-Driven Development By Example][tdd-by-example]
 
@@ -746,6 +741,11 @@ It's time to see some code, in the [second installment](2023-08-10-property-test
 [fscheck]: https://fscheck.github.io/FsCheck/
 [hedgehog]: https://hedgehog.qa/
 [jquick]: https://jqwik.net/
+[junit-quickcheck]: https://pholser.github.io/junit-quickcheck/site/1.0/
+[quicktheories]: https://github.com/quicktheories/QuickTheories
+[scala-check]: https://scalacheck.org/
+[test.check]: https://github.com/clojure/test.check
+[kotest]: https://github.com/kotest/kotest
 [hypothesis]: https://hypothesis.works/
 [fast-check]: https://github.com/dubzzz/fast-check
 [js-verify]: https://github.com/jsverify/jsverify

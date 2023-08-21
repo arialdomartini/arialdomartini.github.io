@@ -29,16 +29,16 @@ tags:
 I always suspected that the low adoption of TDD might be partly due to its poor naming. Some developers who never practiced TDD find it counterintuitive that they are supposed to write a test for an implementation even before that implementation exists. How can you blame them? It really sounds crazy.
 
 If only tests were presented as *requirements expressed with code*, the same skeptic developers would probably find TDD completely natural: of course you produce the code only after the requirements! Of course it would be absurd to write requirements as an afterthought.<br/>
-If TDD was called *Requirement-Driven Design*, maybe there will be less resistance to the approach.
+If TDD was called *Requirement-Driven Design*, maybe there would be less resistance to the approach.
 
-Along these lines, I think it would be fair to call TDD "Example-Driven Development", and PBD "Requirement-Driven Development".
+Along these lines, I think it would be fair to call TDD "*Example-Driven Development*", and PBD "*Requirement-Driven Development*".
 
 This leads us to the definition of "Property", which I intentionally pushed back as much as possible. Before, I wished you to build an intuition of what PBT was really about.
 
 # Properties
 A Property is an observation on a piece of code that we expect to hold true regardless of the inputs.
 
-To a certain extent, an assertion in TDD is a property that holds for a specific input:
+To a certain extent, an assertion in TDD is a property that holds for a specific input. Take this case:
 
 ```csharp
 record Product(Guid Id, string Name, Category Category, decimal Price);
@@ -59,9 +59,31 @@ void books_can_be_shipped_internationally()
 }
 ```
 
-The property here is that "*The book 'The Little Schemer' can be shipped to France*"  (`∃ Product "The Little Schemer" ∈ Books | it can be shipped`).
+The property here is
 
-In PBT the property is  "All the books can be shipped to France" (`∀ Product ∈ Books | it can be shipped`):
+```
+The book 'The Little Schemer' can be shipped to France
+```
+
+or if you like
+
+```
+∃ Product "The Little Schemer" ∈ Books | it can be shipped`
+```
+
+In PBT the property is extended to
+
+```
+All the books can be shipped to France
+```
+
+or equivalently
+
+```
+∀ Product ∈ Books | it can be shipped
+```
+
+which translates to:
 
 ```csharp
 [Property]
@@ -81,28 +103,28 @@ Property books_can_be_shipped_to_France()
 
 Playing with mathematical terms, one could say that 
 
-* TDD resorts to Existential Quantified Properties: "*it exists (`∃`) an example for which a property holds*"
-* PBT uses Universally Quantified Properties: "*for all the values (`∀`) this property holds*". No surprises that all the PBT libraries define a function called `ForAll`.
+* TDD resorts to *Existential Quantified Properties*: "*it exists (`∃`) an example for which a property holds*"
+* PBT uses *Universally Quantified Properties*: "*for all the values (`∀`) this property holds*".<br/>No surprises that many PBT libraries define a function called `forAll`.
 
 Besides Existential and Universally Quantified properties, there is another dimension along which you can distinguish what I call the *Essential* and the *Collateral* Properties.
 
-* An *Essential Property* is the direct translation of the business requirement, like the example of the shipped books.<br/>Alternative names are *Obvious Property* and *Business Rule as Property*. You can read a Java example in Johannes Link's [Pattern: Business Rule as Property][https://blog.johanneslink.net/2018/07/16/patterns-to-find-properties/#pattern-business-rule-as-property]
+* An *Essential Property* is the direct translation of the business requirement, like the example of the shipped books.<br/>Alternative names are *Obvious Property* and *Business Rule as Property*. You can read a Java example in Johannes Link's [Pattern: Business Rule as Property](https://blog.johanneslink.net/2018/07/16/patterns-to-find-properties/#pattern-business-rule-as-property)
 
 
 * A *Collateral Property* is any observation that holds true in a context, and that can be indirectly deriveded from the business requirement. For example:
   * the fact that `sum(a, b)` is commutative
-  * the observation that sorting a collection does not change its size (a so called "invariant")
-  * the fact in a bank transfer the sum of money between the two involved bank accounts remains constant (again, an invariant)
-  * comparing your program's behavior with an test oracle, that is a alternative, simpler and predictable implementaion of the function under test (see [Test Oracle][test-oracle] on Wikipedia)
+  * the observation that sorting a collection does not change its size (a so called "*invariant*")
+  * the fact that in a bank transfer the sum of money between the two involved bank accounts remains constant (again, an invariant)
+  * comparing your program's behavior with an *Test Oracle*, that is an alternative, simpler and predictable implementaion of the function under test (see [Test Oracle][test-oracle] on Wikipedia)
   * running both your system and a simplified model with the same randomized series of input values, and comparing the output and the state. This is called [Model-based testing][model-based-testing] and it is particularly powerful for stateful applicatins. There are entire article series dedicated to it.
   
-  
-Collateral Properties do not in general completely specify the behaviour of the code under test. In some cases, though, a set of them does form a complete specification.
+Collateral Properties don't directly capture the requirements, but derive from them.<br/>
+Also, in general they don't completely specify the behaviour of the code under test: usually you need a set of them to form a complete specification.
 
-Collateral Properties are so popular in PBT &mdash; and in Design by Contract &mdash; that one could think they are specific to it.  There is the myth that developers must rack their brains to tranlate business requirements to mysterious mathematical properties such as commutativity, monotonicity and right-identity, and that consequently PBT is unfeasible for real-world scenarios. 
+Collateral Properties are so popular in PBT &mdash; and in Design by Contract &mdash; that one could think they are specific to it.  There is the myth that developers must rack their brains to tranlate business requirements to mysterious mathematical properties such as commutativity, monotonicity and right-identity, and that consequently PBT is unfeasible for real-world scenarios.<br/> 
+It's not at all like this.
 
-It's not at all like this.<br/>
-Collateral Properties are more concrete, and often fun to find and implement. You can learn a lot about them from:
+Collateral Properties are more concrete than this, and they are often fun to find and implement. You can learn a lot about them from:
 
 * Scott Wlaschin's [Choosing properties for property-based testing][choosing-properties]
 * John Hughes's [How to Specify it!][how-to-specify-it] for which Johannes Link has written a brilliant version in Java, titled [How to Specify it! In Java!][how-to-specify-it-in-java].
@@ -110,9 +132,9 @@ Collateral Properties are more concrete, and often fun to find and implement. Yo
 
 
 ## Essential is better than Collateral
-I might be a voice outside the chorus, but I think Collateral Properties are a bit overrated &mdash and often excessively feared. 
+I might be a voice outside the chorus, but I think Collateral Properties are a bit overrated &mdash; and often excessively feared. 
 
-Many PBT tutorials start with the infamous reversal of a list example. I've never being completely happy with the classical implementation, because it is based on a Collateral Property:
+Many PBT tutorials start with the infamous reversal of a list example. I've never being completely happy with the classical implementation, exactly because it is based on a Collateral Property. The idea is that reversing a list can be tested observing that reversing the reversal of a list gives back the original list:
 
 ```csharp
 [Property]
@@ -129,7 +151,7 @@ IEnumerable<string> Reverse(IEnumerable<string> xs) => xs;
 
 This sucks.
 
-If you really wanted to capture the essence of the requirement:
+If you really wanted to capture the essence of revesing a list, you should start from the requirement:
 
 ```
 Reversing a list is the action of changing 
@@ -141,7 +163,7 @@ and so on, until the last element
 becomes the first element.
 ```
 
-you could try with a direct translation to an Essential Property, that would lead to something like:
+Then you could try with a direct translation to an Essential Property. That would lead to something like:
 
 
 ```csharp
@@ -186,7 +208,7 @@ The next natural step is to crack open the manual of your preferred programming 
 
 
 
-In the [last part](2023-08-10-property-testing-4.md) I show you how applying property testing affects the practice of TDD. Let's go.
+In the [last part](2023-08-10-property-testing-4.md) I show you how applying property testing affects the practice of TDD. Grab a fruit, bite it and let's get started.
 
 
 
@@ -234,8 +256,12 @@ In the [last part](2023-08-10-property-testing-4.md) I show you how applying pro
   * [fast-check][fast-check]
   * [js-verify][js-verify]
   * [stream_data][stream_data]
-
-
+  * [junit-quickheck][junit-quickcheck]
+  * [QuickTheories][quicktheories]
+  * [ScalaCheck][scala-check]
+  * [test.check][test.check]
+  * [Kotest][kotest]
+  
 **Books**
 * [Test-Driven Development By Example][tdd-by-example]
 
@@ -255,6 +281,11 @@ In the [last part](2023-08-10-property-testing-4.md) I show you how applying pro
 [fscheck]: https://fscheck.github.io/FsCheck/
 [hedgehog]: https://hedgehog.qa/
 [jquick]: https://jqwik.net/
+[junit-quickcheck]: https://pholser.github.io/junit-quickcheck/site/1.0/
+[quicktheories]: https://github.com/quicktheories/QuickTheories
+[scala-check]: https://scalacheck.org/
+[test.check]: https://github.com/clojure/test.check
+[kotest]: https://github.com/kotest/kotest
 [hypothesis]: https://hypothesis.works/
 [fast-check]: https://github.com/dubzzz/fast-check
 [js-verify]: https://github.com/jsverify/jsverify

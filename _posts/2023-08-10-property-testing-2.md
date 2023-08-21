@@ -86,17 +86,18 @@ wrapped inside a container.
 You can imagine a Generator as the recipe describing the shape and rules of the desired test data: you can manipulate it in its container prior the execution, and combine it to build more elaborated generators.<br/>
 When you are done, you feed it with a source of randomicity and a concrete size, so it starts emitting actual data.
 
-The wrapping structure is designed to allow monadic effects, composing it is no different than composing Options, Eithers, Promises and other structures from the functional space.
+The wrapping structure is designed to allow monadic effects, so that composing it is no different than composing Options, Eithers, Promises and other structures from the functional space. In a sense, nothing new to learn.
 
 ### Shrinkers
 A last little note before getting our hands dirty.<br/>
-I mentioned that, when PBT libraries find a counterexample, they narrow down it to the minimum relevant value, to simplify your life. This operation is performed by the so called *shrinkers*. You don't need to deal with them directly just yet: just be informed that, once you created a generator, in some libraries you need to wrap it into a more sophisticated structure, called `Arbitrary`, which adds shrinking capabilities. That's true in the QuickCheck family libraries. Other libraries have integrated shrinkers, and they derive a shrinker the moment you define a generator, making sure that the same domain preconditions used during generation are preserved while shrinking. More on this on [Hypothesis - Integrated vs type based shrinking][integrated-vs-type-based-shrinking].
+I mentioned that, when PBT libraries find a counterexample, they narrow down it to the minimum relevant value, to simplify your life. This operation is performed by the so called *shrinkers*. You don't need to deal with them directly just yet: just be informed that, once you created a generator, in some libraries you need to wrap it into a more sophisticated structure, called `Arbitrary`, which adds shrinking capabilities. That's true in the QuickCheck family libraries.<br/>
+Other libraries have integrated shrinkers, and they derive a shrinker the moment you define a generator, making sure that the same domain preconditions used during generation are preserved while shrinking. More on this on [Hypothesis - Integrated vs type based shrinking][integrated-vs-type-based-shrinking].
 
-Shrinking is probably the most useful feature of a PBT library because it generates counterexamples in which every element is relevant to the failure. It's easily your best allied during debugging and troubleshooting.
+Shrinking is probably the most useful feature of a PBT library because it generates counterexamples in which every element is relevant to the failure. It's easily your best allied during debugging and troubleshooting. We will see this in action in the last installment, with the Prime Factors Kata.
 
 ## Code, finally
 
-Each library defines default generators for most types. Let's finally write a real, runnable property test using a default generator:
+Each library defines default generators for most the standard types. Let's finally write a real, runnable property test using one of such default generators:
 
 ```csharp
 using FsCheck;
@@ -119,13 +120,12 @@ public class PropertyTesting
 }
 ```
 
-Focus on the Point Free expression:
-
+The last line
 ```csharp
-Prop.forAll numbers squareIsNotNegative
+ForAll(numbers, squareIsNotNegative)
 ```
 
-It captures the requirement, although a very simple one.<br/>
+captures the requirement, although a very simple one.<br/>
 If you prefer to see this property test as a one-liner, here it is:
 
 ```csharp
@@ -160,11 +160,11 @@ void what_is_an_Arb()
 }
 ```
 
-Notice that you are not just generating random numbers: you are generating random numbers *that satisfy a custom domain rule you defined*, in this case simply *being smaller than 50`.
+Notice that you are not just generating random numbers: you are generating random numbers *that satisfy a custom domain rule you defined*, in this case simply *being smaller than `50`*.
 
-If `arbitraryNumber` is neither an `int` nor a collection of `int`, of course you cannot directly use it to feed the `squareIsNotNegative(int n)` function.<br/>
+If `arbitraryNumber` is neither an `int` nor a collection of `int`, of course you cannot directly use it to feed the `squareIsNotNegative(int n)` function.
+
 This is one of the challenges in Property Testing. While in TDD you can just manage values, in PBT you have to deal with *abstractions* of values.<br/>
-
 If you are familiar with Functional Programming, this concept should not sound new: instead of operating on primitive types, you lift all the types to an *elevated world*, where the code operates in an *effectful context*. 
 The effect in the Property Testing elevated world is a controlled *randomicity*.
 
@@ -183,8 +183,8 @@ Property square_of_numbers_are_non_negative()
 }
 ```
 
-Notice that it does not close with an assertion. That's disturbing! Worse, it is neither a `Fact`, returning `void`. It's a function returning a `Property`. It all looks weird and magical.<br/>
-In fact, that was just a bit of syntactic sugar. Let me write this property as a classical xUnit Fact:
+Notice that it does not close with an assertion. That's disturbing! Worse, neither is it a `Fact` returning `void`: it's a function returning a `Property`. It all looks weird and magical.<br/>
+In fact, it's just a bit of syntactic sugar. Let me write this property as a classical xUnit `Fact`:
 
 ```csharp
 [Fact]
@@ -202,7 +202,9 @@ void square_of_numbers_are_non_negative_as_a_fact()
 
 `ForAll` is a method that feeds the Generator with some source of randomicity and a default size (`100`, specifically), and which generates a `Property`. In other words, `ForAll` does not execute the test just yet: it gives you back an instance of `Property` that you might possibly compose with something else before the eventual execution. Yes, functional programmers have a real obsession with composition.
 
-The actual assertion performed by the final `Check.QuickThrowOnFailure(property)`.<br/>If you crack open the xUnit code, you will convince yourself that an xUnit assertion is nothing but a piece of code that raises an exception when a particular condition holds. `Assert.True()` in xUnit boils down to:
+The actual assertion is performed by the final `Check.QuickThrowOnFailure(property)`.<br/>
+If you crack open the xUnit code, you will convince yourself that an xUnit assertion is nothing but a piece of code that raises an exception when a particular condition holds.<br/>
+xUnit's `Assert.True()` boils down to:
 
 ```csharp
 public static void True(bool? condition, string userMessage)
@@ -213,7 +215,7 @@ public static void True(bool? condition, string userMessage)
 ```
 
 PBT libraries rely on this. `Check.QuickThrowOnFailure(property)` verifies all the generated predicates, and if one does not hold, it throws an exception, for xUnit to interpret as a failed test.<br/>
-You can save some keyboard hits by decorating the test method with `[Property]` and returning an instance of `Property` instead of `void`. The PBT library will call `Check.QuickThrowOnFailure()` for you. No rocket science.
+You can save some keyboard hits by decorating the test method with `[Property]` and returning an instance of `Property` instead of `void`. The PBT library will call `Check.QuickThrowOnFailure()` for you. No rocket science. We will see later even more concise ways to write a property test, as a simple predicate.
 
 The same test with in F# would look like this:
 
@@ -233,7 +235,7 @@ let treeTests =
 ```
 
 
-`let squareIsNotNegative n = square n >= 0` is the property you want to prove wrong. As you see, it's just a simple predicate. This is, in essence, the requirement (together with the subset of input values).
+`let squareIsNotNegative n = square n >= 0` is the property you want to prove wrong. As you see, it's just an ordinary function. This is, together with the properly forged input values, the requirement.
 
 In Hedgehog, the syntax is only slighly different:
 
@@ -258,7 +260,7 @@ You don't have to think this approach only works with simple mathematical statem
 
 Let's see some more realistic examples.
 
-Say you developed a serialization library. Testing it translates to making sure that 
+Say you developed a serialization library. Testing it translates to making sure that:
 
 * serializing an instance creates a string 
 * deserializing that string brings the original instance back to life
@@ -276,7 +278,7 @@ Property serialization_deserialization_roundtrip()
 }
 ```
 
-Notice how both the arbitrary and the property are defined for a specific type. In fact, Property must be monomorphic: To my knowledge, there is no library able to test multiple types in polimorphic properties.
+Notice how both the arbitrary and the property are defined for a specific type. In fact, Property must be monomorphic: to my knowledge, there is no library able to test multiple types in polimorphic properties.
 
 ### Testing a DB repository
 Nothing prevents you to do integration tests via a property. After all, a property test is an ordinary test, whose input is created out of thin air.
@@ -290,10 +292,10 @@ public class ProductRepositoryPropertyTests
 {
     private IProductRepository _repository;
 
-	public ProductRepositoryPropertyTests()
-	{
-	    // setup your test DB
-	}
+    public ProductRepositoryPropertyTests()
+    {
+        // setup your test DB
+    }
 
     [Property]
     Property products_can_be_persisted()
@@ -330,12 +332,12 @@ bool products_can_be_persisted(Product product)
 }
 ```
 
-By default, this will run as a Theory of 100 tests.<br/>
+This is a perfectly legit property test. When executed, this will run as a Theory of 100 tests.<br/>
 It does not look intimidating, does it?
 
 
 ### A more complex functionality
-The previous approach works as long as you don't need to fine tune the creation of the input value. Let's see something more challenging<br/>
+The previous approach works as long as you don't need to fine tune the creation of the input value. Let's see something more challenging.<br/>
 Recoll the original requirement:
 
 ```
@@ -372,7 +374,7 @@ I suggest to read it from bottom to top.
 Notice how, instead of asking FsCheck to just inject any `Product`, the test is forging its input in a very specific way. It creates multiple correlated instances 
 
 * an arbitrary date representing today
-* a list of intenarnational destinations
+* a list of international destinations
 * a product belonging to a specific category
 * a promotion that is valid today
 
@@ -433,7 +435,8 @@ This is honestly a mouthful of code, isn't it? Consider though that once defined
 Also, the equivalent in F# and Haskell is way more concise.<br/>
 
 
-Next: [It's properties all the way down](2023-08-10-property-testing-3.md)
+Time for a cake, before moving to [It's properties all the way down](2023-08-10-property-testing-3.md)
+
 
 
 <details>
@@ -480,8 +483,12 @@ Next: [It's properties all the way down](2023-08-10-property-testing-3.md)
   * [fast-check][fast-check]
   * [js-verify][js-verify]
   * [stream_data][stream_data]
-
-
+  * [junit-quickheck][junit-quickcheck]
+  * [QuickTheories][quicktheories]
+  * [ScalaCheck][scala-check]
+  * [test.check][test.check]
+  * [Kotest][kotest]
+  
 **Books**
 * [Test-Driven Development By Example][tdd-by-example]
 
@@ -501,6 +508,11 @@ Next: [It's properties all the way down](2023-08-10-property-testing-3.md)
 [fscheck]: https://fscheck.github.io/FsCheck/
 [hedgehog]: https://hedgehog.qa/
 [jquick]: https://jqwik.net/
+[junit-quickcheck]: https://pholser.github.io/junit-quickcheck/site/1.0/
+[quicktheories]: https://github.com/quicktheories/QuickTheories
+[scala-check]: https://scalacheck.org/
+[test.check]: https://github.com/clojure/test.check
+[kotest]: https://github.com/kotest/kotest
 [hypothesis]: https://hypothesis.works/
 [fast-check]: https://github.com/dubzzz/fast-check
 [js-verify]: https://github.com/jsverify/jsverify
@@ -537,4 +549,3 @@ Next: [It's properties all the way down](2023-08-10-property-testing-3.md)
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
-

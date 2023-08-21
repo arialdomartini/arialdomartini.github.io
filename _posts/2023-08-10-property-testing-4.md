@@ -432,6 +432,10 @@ Interestingly, the last 2 he mentions constitute the Essential Property we have 
 On the one hand, the Essential Property has the benefit of capturing the domain meaning of the original requirement; on the other hand, the Collateral Properties Johannes relies on for his implementation possibly give an extra solidity to the test suite. There is an excellent study on the effectiveness of bug hunting of different styles of properties in [Bug Hunting: How to Specify it! In Java!][bug-hunting].
 
 
+We made it to the end. I wish you happy testing, and a lot of chocolate.
+
+
+
 <details>
   <summary><h1>&#9658;&nbsp;References</h1></summary>
 
@@ -476,8 +480,12 @@ On the one hand, the Essential Property has the benefit of capturing the domain 
   * [fast-check][fast-check]
   * [js-verify][js-verify]
   * [stream_data][stream_data]
-
-
+  * [junit-quickheck][junit-quickcheck]
+  * [QuickTheories][quicktheories]
+  * [ScalaCheck][scala-check]
+  * [test.check][test.check]
+  * [Kotest][kotest]
+  
 **Books**
 * [Test-Driven Development By Example][tdd-by-example]
 
@@ -497,6 +505,11 @@ On the one hand, the Essential Property has the benefit of capturing the domain 
 [fscheck]: https://fscheck.github.io/FsCheck/
 [hedgehog]: https://hedgehog.qa/
 [jquick]: https://jqwik.net/
+[junit-quickcheck]: https://pholser.github.io/junit-quickcheck/site/1.0/
+[quicktheories]: https://github.com/quicktheories/QuickTheories
+[scala-check]: https://scalacheck.org/
+[test.check]: https://github.com/clojure/test.check
+[kotest]: https://github.com/kotest/kotest
 [hypothesis]: https://hypothesis.works/
 [fast-check]: https://github.com/dubzzz/fast-check
 [js-verify]: https://github.com/jsverify/jsverify
