@@ -17,7 +17,7 @@ I will mostly use C# and F#, and just some bits of Haskell here and there.
 1. Utterly opinionated introduction to Property Testing
 2. [Shut up and code!](2023-08-10-property-testing-2.md)
 3. [It's properties all the way down](2023-08-10-property-testing-3.md)
-4. [The Prime Factors Kata](2023-08-10-property-testing-4.md)
+4. [Property-driven Development](2023-08-10-property-testing-4.md)
 
 # Utterly opinionated introduction to Property Testing
 

@@ -12,7 +12,7 @@ tags:
 1. [Utterly opinionated introduction to Property Testing](2023-08-10-property-testing.md)
 2. Shut up and code!
 3. [It's properties all the way down](2023-08-10-property-testing-3.md)
-4. [The Prime Factors Kata](2023-08-10-property-testing-4.md)
+4. [Property-driven Development](2023-08-10-property-testing-4.md)
 
 # Shut up and code!
 

@@ -12,14 +12,13 @@ tags:
 1. [Utterly opinionated introduction to Property Testing](2023-08-10-property-testing.md)
 2. [Shut up and code!](2023-08-10-property-testing-2.md)
 3. It's properties all the way down
-4. [The Prime Factors Kata](2023-08-10-property-testing-4.md)
+4. [Property-driven Development](2023-08-10-property-testing-4.md)
 
 # It's properties all the way down
 
 - [A matter of naming](#a-matter-of-naming)
 - [Properties](#properties)
     - [Essential is better than Collateral](#essential-is-better-than-collateral)
-- [That's all](#thats-all)
 - [References](#references)
 
 <!-- markdown-toc end -->
@@ -181,31 +180,6 @@ bool specification_of_reversal(List<string> xs)
 ```
 
 This easily spots the dishonest implementation. Hurray!
-
-
-# What's next?
-I hope you got the idea. And that you agree that, in a way, all tests are about properties and that more or less you already knew how to write one.
-
-If you are that kind of developer who likes to think by abstractions, you could have invented Property-based Testing already, and the chances are probably you had.
-
-The next natural step is to crack open the manual of your preferred programming language PBT library and start playing. A non exaustive list is:
-
-| Library                              | Comment                                                       | Languages              |
-|--------------------------------------|---------------------------------------------------------------|------------------------|
-| [Hedgehog][hedgehog]                 | An excellent choice, with integrated shrinking                | C#, F#, Scala, Haskell |
-| [FsCheck][fscheck]                   | From the QuickCheck's family                                  | C#, F#                 |
-| [jquick][jquick]                     | It comes with a lot of documentation and integrated shrinking | Java, Kotlin           |
-| [junit-quickcheck][junit-quickcheck] |                                                               | Java                   |
-| [QuickTheories][quicktheories]       |                                                               | Java                   |
-| [ScalaCheck][scala-check]            |                                                               | Scala                  |
-| [test.check][test.check]             |                                                               | Clojure                |
-| [Kotest][kotest]                     |                                                               | Kotlin                 |
-| [Hypothesis][hypothesis]             |                                                               | Python, Java, Ruby     |
-| [CrossHair][crosshair]               | More than a PBT library                                       | Python                 |
-| [fast-check][fast-check]             |                                                               | JavaScript, TypeScript |
-| [js-verify][js-verify]               | QuickCheck family                                             | JavaScript, TypeScript |
-| [stream_data][stream_data]           |                                                               | Elixir                 |
-
 
 
 In the [last part](2023-08-10-property-testing-4.md) I show you how applying property testing affects the practice of TDD. Grab a fruit, bite it and let's get started.
