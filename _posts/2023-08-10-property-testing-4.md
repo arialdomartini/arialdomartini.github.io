@@ -399,12 +399,11 @@ More probably, instead, you will be curious to know how the random values genera
 ### Is it safer?
 Compare this 2 traits: 
 
-* With TDD, we started with a simplification of the requirement (the function shall return `emptyList`). In each step, we enhanced the requirement. This means that, along the process, until we reached the completeness, the specification was incomplete and partially lying. 
+* With TDD, we started with a simplification of the requirement (the function shall return `emptyList`). In each step, we extended the requirement, until it was finallycomplete.<br/>This means that, along the process, the specification was incomplete and partially lying.<br/>Some green tests were deceiving.
 
-* With PDD we practiced an incremental development letting the shrinker identify increasingly complex use cases. Doing this, we never needed to modify the requirement: on the contrary, the specification was durably stable and complete, since the beginning.
+* With PDD we practiced an incremental development letting the shrinker identify increasingly complex use cases. Doing this, we never needed to modify the requirement: on the contrary,we started since the beginning with a complete specification, and we maintained it immutated till the end.<br/>Green test really meant completeness.
 
-Generally, we pursue a green test suite for the confidence it instills. There are few exceptions where green tests do not necessarily imply we are done.<br/>
-The approach of PDD tends to have lesser exceptions than TDD.
+Generally, we pursue a green test suite for the confidence it instills. There might be exceptions where green tests do not necessarily imply we are done, but as a matter of facts, in the prime factors kata, the approach of PDD tended to have lesser exceptions than TDD. I'm inclined to think that this holds broader validity.
 
 ### What about Collateral Properties?
 We started with a direct translation of the business requirement into an Essential Property.
