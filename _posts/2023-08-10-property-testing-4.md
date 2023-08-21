@@ -431,26 +431,7 @@ Interestingly, the last 2 he mentions constitute the Essential Property we have 
 
 On the one hand, the Essential Property has the benefit of capturing the domain meaning of the original requirement; on the other hand, the Collateral Properties Johannes relies on for his implementation possibly give an extra solidity to the test suite. There is an excellent study on the effectiveness of bug hunting of different styles of properties in [Bug Hunting: How to Specify it! In Java!][bug-hunting].
 
-# Resources
 
-* [ThePrimeFactorsKata - Bob Martin][the-prime-factor-kata]
-* [Prime Factorization - Wolfram Mathworld][prime-factorization-wolfram]
-* [Test-Driven Development By Example][tdd-by-example]
-* [Property-based Testing in Java: Property-driven Development  - Johannes Link][property-driven-development]
-* [Triangulation in Test-Driven Development - Dmitri Pavlutin][triangulation-in-tdd]
-* [Time Travelling and Fixing Bugs with Property-Based Testing - Oskar Wickström][time-travelling]
-
-## Videos
-* [The Three Laws of TDD (Featuring Kotlin) - Bob Martin][the-three-laws-of-tdd]
-
-[the-prime-factor-kata]: http://www.butunclebob.com/ArticleS.UncleBob.ThePrimeFactorsKata
-[the-three-laws-of-tdd]: https://www.youtube.com/watch?v=qkblc5WRn-U
-[prime-factorization-wolfram]: https://mathworld.wolfram.com/PrimeFactorization.html
-[tdd-by-example]: https://www.pearson.com/en-us/subject-catalog/p/test-driven-development-by-example/P200000009421/9780321146533
-[property-driven-development]: https://blog.johanneslink.net/2019/05/11/property-based-driven-development/
-[triangulation-in-tdd]: https://dmitripavlutin.com/triangulation-test-driven-development/
-[time-travelling]: https://wickstrom.tech/2019-11-17-time-travelling-and-fixing-bugs-with-property-based-testing.html
-[bug-hunting]: https://johanneslink.net/how-to-specify-it/#5-bug-hunting
 
 
 # Comments
