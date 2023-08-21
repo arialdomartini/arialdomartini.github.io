@@ -185,9 +185,8 @@ The next natural step is to crack open the manual of your preferred programming 
 | [stream_data][stream_data]           |                                                               | Elixir                 |
 
 
-There are good tutorials around. I aim to write a hands-on one for C# and F# soon.
 
-Happy testing!
+In the [last part](2023-08-10-property-testing-4.md) I show you how applying property testing affects the practice of TDD. Let's go.
 
 
 # References
