@@ -188,62 +188,72 @@ The next natural step is to crack open the manual of your preferred programming 
 In the [last part](2023-08-10-property-testing-4.md) I show you how applying property testing affects the practice of TDD. Let's go.
 
 
-# References
+
+<details>
+  <summary><h1>&#9658;&nbsp;References</h1></summary>
+
+
+**Articles and manuals**
+
 * [Quickcheck][quickcheck]: the original (a bit outdated) manual of the Haskell library
 * [The Design and Use of QuickCheck][design-and-use-of-quickcheck]
+* [Property-based Testing in Java - Johannes Link][property-based-testing-in-java]
 * [xUnit Theory: Working With InlineData, MemberData, ClassData][xunit-theory]
 * [Concolic Testing][concolic-testing]
-* Libraries
-  * [Hedgehog][hedgehog]
-  * [FsCheck][fscheck]
-  * [jquick][jquick]
-  * [junit-quickcheck][junit-quickcheck]
-  * [QuickTheories][quicktheories]
-  * [ScalaCheck][scalacheck]
-  * [test.check][test.check]
-  * [Kotest][kotest]
-  * [CrossHair][crosshair]
-  * [Hypothesis][hypothesis]
-  * [fast-check][fast-check]
-  * [js-verify][js-verify]
-  * [stream_data][stream_data]
-* Discovering properties
+* [Hypothesis - Integrated vs type based shrinking][integrated-vs-type-based-shrinking] 
+* [When properties are easier than examples - Mark Seemann][properties-are-easier]
+* [Test Oracle - Wikipedia][test-oracle]
+* [ThePrimeFactorsKata - Bob Martin][the-prime-factor-kata]
+* [Prime Factorization - Wolfram Mathworld][prime-factorization-wolfram]
+  
+* **Discovering properties**
   * [Choosing properties for property-based testing - Scott Wlaschin][choosing-properties]
   * [How to Specify it! - John Hughes][how-to-specify-it]
   * [How to Specify it! In Java! - Johannes Link][how-to-specify-it-in-java]
   * [Patterns to Find Good Properties - Johannes Link][patterns-to-find-good-properties]
-* [Hypothesis - Integrated vs type based shrinking][integrated-vs-type-based-shrinking]
-* Universal Quantification
-  * [Universal Quantification][universal-quantification]
-  * [Universal Quantifier - in ncatlab.org][universal-quantifier]
-* Model-based Testing
+
+* **Model-based Testing**
   * [Model-based Testing][model-based-testing]
   * [Model-based Testing with Hedgehog][model-based-testing-hedgehog]
   * [Model-based Testing with FsCheck][model-based-testing-fsharp]
   * [Model-based Testing in Java with jqwik - Johannes Link][model-based-testing-java]
   * [Model-based Testing with Makina][model-based-testing-makina]
-  * [When properties are easier than examples - Mark Seemann][properties-are-easier]
-* [Test Oracle - Wikipedia][test-oracle]
-* [Property-based Testing in Java - Johannes Link][property-based-testing-in-java]
+
+* **Universal Quantification**
+  * [Universal Quantification][universal-quantification]
+  * [Universal Quantifier - in ncatlab.org][universal-quantifier]
 
 
-Videos:
+**Libraries**
+  * [Hedgehog][hedgehog]
+  * [FsCheck][fscheck]
+  * [jquick][jquick]
+  * [CrossHair][crosshair]
+  * [Hypothesis][hypothesis]
+  * [fast-check][fast-check]
+  * [js-verify][js-verify]
+  * [stream_data][stream_data]
 
+
+**Books**
+* [Test-Driven Development By Example][tdd-by-example]
+
+**Videos**
 * [The lazy programmer's guide to writing thousands of tests - Scott Wlaschin][lazy-programmer]
 * [How to Specify it! - John Hughes][how-to-specify-it-video]
+* [The Three Laws of TDD (Featuring Kotlin) - Bob Martin][the-three-laws-of-tdd]
+* [Property-based Testing in Java: Property-driven Development  - Johannes Link][property-driven-development]
+* [Triangulation in Test-Driven Development - Dmitri Pavlutin][triangulation-in-tdd]
+* [Time Travelling and Fixing Bugs with Property-Based Testing - Oskar Wickström][time-travelling]
+* [Bug Hunting: How to Specify it! In Java!][bug-hunting]
 
-# Comments
-[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
+</details>
+
 
 [quickcheck]: https://www.cse.chalmers.se/~rjmh/QuickCheck/manual.html
 [fscheck]: https://fscheck.github.io/FsCheck/
 [hedgehog]: https://hedgehog.qa/
 [jquick]: https://jqwik.net/
-[junit-quickcheck]: https://pholser.github.io/junit-quickcheck/site/1.0/
-[quick-theories]: https://github.com/quicktheories/QuickTheories
-[scala-check]: https://scalacheck.org/
-[test.check]: https://github.com/clojure/test.check
-	[kotest]: https://github.com/kotest/kotest
 [hypothesis]: https://hypothesis.works/
 [fast-check]: https://github.com/dubzzz/fast-check
 [js-verify]: https://github.com/jsverify/jsverify
@@ -269,3 +279,14 @@ Videos:
 [integrated-vs-type-based-shrinking]: https://hypothesis.works/articles/integrated-shrinking/
 [patterns-to-find-good-properties]: https://blog.johanneslink.net/2018/07/16/patterns-to-find-properties/#patterns-to-find-good-properties
 [lazy-programmer]: https://www.youtube.com/watch?v=IYzDFHx6QPY
+[the-three-laws-of-tdd]: https://www.youtube.com/watch?v=qkblc5WRn-U
+[the-prime-factor-kata]: http://www.butunclebob.com/ArticleS.UncleBob.ThePrimeFactorsKata
+[prime-factorization-wolfram]: https://mathworld.wolfram.com/PrimeFactorization.html
+[tdd-by-example]: https://www.pearson.com/en-us/subject-catalog/p/test-driven-development-by-example/P200000009421/9780321146533
+[property-driven-development]: https://blog.johanneslink.net/2019/05/11/property-based-driven-development/
+[triangulation-in-tdd]: https://dmitripavlutin.com/triangulation-test-driven-development/
+[time-travelling]: https://wickstrom.tech/2019-11-17-time-travelling-and-fixing-bugs-with-property-based-testing.html
+[bug-hunting]: https://johanneslink.net/how-to-specify-it/#5-bug-hunting
+
+# Comments
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
