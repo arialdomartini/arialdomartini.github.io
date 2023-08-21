@@ -89,7 +89,7 @@ if (n>1)
 return factors 
 ```
 
-Basically, Bob Martin keeps adding the next assert, each time incrementing the number by `1`. That's the application of "*Triangulation*", an other technique described in Kent Beck's book, which is meant to be complementary to "Fake it".
+Basically, Bob Martin keeps adding the next assert, each time incrementing the number by `1`. That's the application of "*Triangulation*", an other technique described in Kent Beck's book, which is meant to be complementary to "*Fake it*".
 
 ### Step 3
 Asserting that `factorsOf(3)` is `listOf(3)` takes to replacing `2` with `n`:
