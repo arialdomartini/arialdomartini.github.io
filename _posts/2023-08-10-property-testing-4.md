@@ -19,7 +19,11 @@ I claim that PDD is more correct, safer and faster than the example-based TDD. I
 
 I'm using the [ThePrimeFactorsKata][the-prime-factor-kata], a little exercise that Bob Martin is being using since 2005 to demo TDD. We will first follow the classical approach, mirroring what Bob Martin does; then we will repeat the same using PBT, commenting on the differences.
 
-The requirement is to write a function that takes an integer and returns the collection of the prime factors.
+The requirement is:
+
+> Write a function that takes an integer and returns the collection of its prime factors;
+> Factors of a number are integers that, when multiplied together, result in the original number.
+> A number is prime if it has no divisors other than 1 and itself
 
 Bob Martin solves it with few tests (from 7 to 10, depending on the session). You can watch him in action in the video [The Three Laws of TDD (Featuring Kotlin) - Bob Martin][the-three-laws-of-tdd].
 
@@ -202,7 +206,96 @@ Here Bob Martin senses that the algorithm must be complete, and challenges it wi
 factorsOf(2*2*3*3*5*7*11*13)
 ```
 
-getting a green test.
+getting again green test.
+
+
+## Can we do better?
+Kent Beck is my hero, and I'm an avid admirer of Bob Martin. I profoundly love TDD since I got infected, years ago, and I'm convinced I still have everything to learn on the topic.
+
+So, it's with a heart full of respect that I try to challenge the approach above, looking for chances of progress.
+
+Let me start from the test suite we got:
+
+```kotlin
+@Test fun factors() {
+  assertThat(factorsOf(1), `is` (emptyList()))
+  assertThat(factorsOf(2), `is` listOf(2)))
+  assertThat(factorsOf(3), `is` listOf(3)))
+  assertThat(factorsOf(4), `is` listOf(2, 2)))
+  assertThat(factorsOf(5), `is` listOf(5)))
+  assertThat(factorsOf(6), `is` listOf(2, 3)))
+  assertThat(factorsOf(7), `is` listOf(7)))
+  assertThat(factorsOf(8), `is` listOf(2, 2, 2)))
+  assertThat(factorsOf(9), `is` listOf(3, 3)))
+  assertThat(factorsOf(2*2*3*3*5*7*11*13), `is` (listOf(2, 2, 3, 3, 5, 7, 11, 13)))
+}
+```
+
+It's fine, but it says nothing about the "prime factorization". Nowhere does the idea of "prime number" emerge. Besides the name `factorsOf()`, little intuition is expressed about what it is going to happend.
+
+Foundamentally, it is a collection of input-output pairs:
+
+
+| Input               | Output                       |
+|---------------------|------------------------------|
+| `1`                 | `[]`                         |
+| `2`                 | `[2]`                        |
+| `3`                 | `[3]`                        |
+| `4`                 | `[2, 2]`                     |
+| `5`                 | `[5]`                        |
+| `6`                 | `[2, 3]`                     |
+| `7`                 | `[7]`                        |
+| `8`                 | `[2, 2, 2]`                  |
+| `9`                 | `[3, 3]`                     |
+| `2*2*3*3*5*7*11*13` | `[2, 2, 3, 3, 5, 7, 11, 13]` |
+
+
+
+
+### Capturing the requirement
+Let's do a step back, starting from the requirement:
+
+
+> Write a function that takes an integer and returns the collection of its prime factors;
+> Factors of a number are integers that, when multiplied together, result in the original number.
+> A number is prime if it has no divisors other than 1 and itself
+
+Using a C# FsCheck property-test, this could be translated to:
+
+```csharp
+[Property]
+bool boolean_factorization_in_prime_numbers(PositiveInt positiveNumber)
+{
+    var n = positiveNumber.Item;
+        
+    var factors = factorsOf(n);
+        
+    return factors.AreAllPrime() && factors.Multiplied() == n;
+}
+```
+
+where `AreAllPrime()` and `Multiplied()` are the literal translation of their definition:
+
+```csharp
+internal static bool IsPrime(this int n) => 
+    Enumerable.Range(1, n)
+        .Where(i => !(i == 1 || i == n))
+        .All(i => n.CannotBeDividedBy(i));
+
+private static bool CannotBeDividedBy(this int n, int i) => 
+    n % i != 0;
+
+internal static bool AreAllPrime(this IEnumerable<int> xs) => 
+    xs.All(IsPrime);
+
+internal static int Multiplied(this IEnumerable<int> xs) => 
+    xs.Aggregate(1, (product, i) => product * i);
+```
+
+Notice that you don't need to put brains in writing this test and its helping functions: it took no judment nor opinion, no commonsense evaluation which values to consider or which shortcuts to take. This is the result of the verbatim transcription into C# of the specification
+
+Yet, it captures the requirement. It *reads* like a requirement. It conveys a domain meaning and it's not arbitrary.
+
 
 
 
