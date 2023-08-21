@@ -1,4 +1,3 @@
-
 ---
 layout: post
 title: "Property-based Testing For The Rest Of Us - 2"
@@ -269,3 +268,4 @@ Videos:
 [properties-are-easier]: https://blog.ploeh.dk/2021/02/15/when-properties-are-easier-than-examples/
 [integrated-vs-type-based-shrinking]: https://hypothesis.works/articles/integrated-shrinking/
 [patterns-to-find-good-properties]: https://blog.johanneslink.net/2018/07/16/patterns-to-find-properties/#patterns-to-find-good-properties
+[lazy-programmer]: https://www.youtube.com/watch?v=IYzDFHx6QPY

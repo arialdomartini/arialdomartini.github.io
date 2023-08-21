@@ -1,4 +1,3 @@
-
 ---
 layout: post
 title: "Property-based Testing For The Rest Of Us - 2"
@@ -440,10 +439,9 @@ On the one hand, the Essential Property has the benefit of capturing the domain 
 * [Property-based Testing in Java: Property-driven Development  - Johannes Link][property-driven-development]
 * [Triangulation in Test-Driven Development - Dmitri Pavlutin][triangulation-in-tdd]
 * [Time Travelling and Fixing Bugs with Property-Based Testing - Oskar Wickström][time-travelling]
+
 ## Videos
 * [The Three Laws of TDD (Featuring Kotlin) - Bob Martin][the-three-laws-of-tdd]
-
-
 
 [the-prime-factor-kata]: http://www.butunclebob.com/ArticleS.UncleBob.ThePrimeFactorsKata
 [the-three-laws-of-tdd]: https://www.youtube.com/watch?v=qkblc5WRn-U
@@ -453,3 +451,7 @@ On the one hand, the Essential Property has the benefit of capturing the domain 
 [triangulation-in-tdd]: https://dmitripavlutin.com/triangulation-test-driven-development/
 [time-travelling]: https://wickstrom.tech/2019-11-17-time-travelling-and-fixing-bugs-with-property-based-testing.html
 [bug-hunting]: https://johanneslink.net/how-to-specify-it/#5-bug-hunting
+
+
+# Comments
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
