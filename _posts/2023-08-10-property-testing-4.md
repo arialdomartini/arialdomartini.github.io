@@ -17,7 +17,7 @@ I claim that PDD is more correct, safer and faster than the example-based TDD. I
 
 ## The Prime Factors Kata
 
-I'm using the [ThePrimeFactorsKata][the-prime-factor-kata], a little exercise that Bob Martin is being using since 2005 to demo TDD. We will first follow the classical approach, mirroring what Bob Martin does; then we will repeat the same using PBT, commenting the differences.
+I'm using the [ThePrimeFactorsKata][the-prime-factor-kata], a little exercise that Bob Martin is being using since 2005 to demo TDD. We will first follow the classical approach, mirroring what Bob Martin does; then we will repeat the same using PBT, commenting on the differences.
 
 The requirement is to write a function that takes an integer and returns the collection of the prime factors.
 
@@ -27,17 +27,17 @@ Bob Martin solves it with few tests (from 7 to 10, depending on the session). Yo
 
 Bob Martin's approach boils down to this iterative process:
 
-1. He starts from the extreme simplification of the requirement, recuced to the simplest possible, trivial, problem
+1. He starts from the most extreme simplification of the requirement, recuced to the simplest possible, trivial, problem
 2. He resolves the requirement with a minimal implementation, making sure the test is green
 3. He asks himself if the implementation is complete
-4. If is not, he extends the requirement, adding the next logical use-case, and he starts over from 2.
+4. If is not, he extends the requirement adding the next logical use-case, and he starts over from 2.
 
-Here's a summary of the steps he performs.
+Here's a summary of the steps he performs in the video.
 
 ### Step 1
 The simplest possible requirement is: the list of the prime factors of `1` is empty.
 
-Now, technically speaking, this is a mathematical nonsense: prime factorization is defined for numbers `n >= 2` (see [Prime Factorization - Wolfram Mathworld][prime-factorization-wolfram]), so Bob should have been started from `2`. But let's take it as good and let's keep following the original implementation.
+Now, technically speaking, this is a mathematical nonsense: prime factorization is defined for numbers `n >= 2` (see [Prime Factorization - Wolfram Mathworld][prime-factorization-wolfram]), so Bob should have been started from `2`. But let me ignore that.
 
 The test to be passed is:
 
@@ -55,7 +55,7 @@ private fun factorsOf(n: Int): List<int> {
 }
 ```
 
-Here Bob Martin is applying "Fake it until you make it", an idiomatic technique described by Kent Beck in his seminal "Test-Driven Development
+Here Bob Martin applied "*Fake it until you make it*", an idiomatic technique described by Kent Beck in his seminal "Test-Driven Development
 By Example" as:
 
 > return a constant and gradually replace constants with variables 
@@ -86,7 +86,7 @@ if (n>1)
 return factors 
 ```
 
-Basically, Bob Martin keeps adding the next assert, each time incrementing the number by `1`. That's the application of "Triangulation", a technique described in Kent Beck's book which is meant to be complementary to "Fake it".
+Basically, Bob Martin keeps adding the next assert, each time incrementing the number by `1`. That's the application of "*Triangulation*", an other technique described in Kent Beck's book, which is meant to be complementary to "Fake it".
 
 ### Step 3
 Asserting that `factorsOf(3)` is `listOf(3)` takes to replacing `2` with `n`:
@@ -131,24 +131,23 @@ Also with `factorsOf(6)`, the algorithm works.
 
 Does it mean we are done?<br/>
 We don't know. The test suite is green and technically this should mean there are no evidences of bugs.<br/>
-But we also know we have proceeded by arbitrary, and probably simplistic examples. 
+But we also know we have proceeded by arbitrary &mdash; and probably simplistic &mdash; examples. 
 
-The said truth is: we cannot trust the test suite too much, at this point. Not being led by tests, we cannot but use our brains and commonsense, and keep adding a further test.
+The said truth is: we cannot trust the test suite, at this point. Not being led by tests, we cannot but use our brains and commonsense, and keep adding a further test.
 
 
 ### Step 7
-Again, all the tests are green.
-
-Shall we finally stop? Maybe yes, the algorithm is complete, and there are no bugs.
-
+Again, all the tests are green.<br/>
+Damn. Shall we finally stop? Maybe yes, the algorithm is complete, and there are no bugs.<br/>
 But there are! The algorithm will not work with `8`. 
 
 ### Step 8
 `factorsOf(8)` should be `listOf(2, 2, 2)`. 
 
-Finally, we found how to proceed. We should consider ourselves very lucky: what if the algorithm continued being green until `100`? I'm sure many would have just stopped trying.
+Finally, a red test! We found how to proceed!<br/>
+We should consider ourselves very lucky: what if the tests kept being green until `30` or `150`? I'm sure many would have just stopped trying.
 
-Here's the fixed / improved implementation:
+Here's the improved (I would say, fixed) implementation:
 
 ```kotlin
 var remainder = n
@@ -195,6 +194,8 @@ return factors
 ```
 
 ### Step 10
+Green test.
+
 Here Bob Martin senses that the algorithm must be complete, and challenges it with 
 
 ```kotlin
