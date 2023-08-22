@@ -301,7 +301,7 @@ void discountable_products(Product product)
 
 Sure enough, there are workarounds (see [xUnit Theory: Working With InlineData, MemberData, ClassData][xunit-theory]), but this bears the questions: 
 
-* Are you sure the values of `description` and `name` are relevant for those tests? Are't they just distracting?
+* Are you sure the values of `description` and `name` are relevant for those tests? Aren't they just distracting?
 * Would it be a good idea to just have random values, for all the fields?
 * Should those random data have any constraint, derived from the domain rules?
 * How many different instances should be created to have a good use-case coverage?
