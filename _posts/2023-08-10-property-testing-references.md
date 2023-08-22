@@ -51,6 +51,9 @@ tags:
   * [Hypothesis - Integrated vs type based shrinking][integrated-vs-type-based-shrinking] 
   * [The Shrinking Challenge - Johannes Link][the-shrinking-challenge]
 
+**Programming Languages**
+
+* [The Coq Proof Assistant][coq]
 
 **Libraries**
   * [Hedgehog][hedgehog]
@@ -108,6 +111,7 @@ tags:
 [test-oracle]: https://en.wikipedia.org/wiki/Test_oracle
 [how-to-specify-it-in-java]: https://johanneslink.net/how-to-specify-it
 [concolic-testing]: https://en.wikipedia.org/wiki/Concolic_testing
+[coq]: https://coq.inria.fr/
 [crosshair]: https://github.com/pschanely/CrossHair
 [property-based-testing-in-java]: https://blog.johanneslink.net/2018/03/24/property-based-testing-in-java-introduction/
 [properties-are-easier]: https://blog.ploeh.dk/2021/02/15/when-properties-are-easier-than-examples/

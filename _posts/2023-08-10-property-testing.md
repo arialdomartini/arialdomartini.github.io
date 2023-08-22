@@ -238,7 +238,7 @@ But other approaches are possible. A library:
 
 - could use logic reasoning, like in Prolog
 - or rely on AI
-- or have automated theorem provers like in [COQ][coq]
+- or have automated theorem provers like in [Coq][coq]
 - or infer the proper input values to input the test with, using [Concolic Testing][concolic-testing] &mdash; a crazy approach with which the code is exercised with symbolic execution in conjunction with a resolver based on constraint logic programming. Have a look to Python's [CrossHair][crosshair] to see this in play.
 
 It's only incidental that your most beloved programming language is bovine and has to wander around aimlessly with random inputs.<br/>
@@ -711,7 +711,7 @@ See [References](property-testing-references)
 [how-to-specify-it-video]: https://www.youtube.com/watch?v=G0NUOst-53U
 [test-oracle]: https://en.wikipedia.org/wiki/Test_oracle
 [how-to-specify-it-in-java]: https://johanneslink.net/how-to-specify-it
-[coq]: https://en.wikipedia.org/wiki/Coq
+[coq]: https://coq.inria.fr/
 [concolic-testing]: https://en.wikipedia.org/wiki/Concolic_testing
 [crosshair]: https://github.com/pschanely/CrossHair
 [property-based-testing-in-java]: https://blog.johanneslink.net/2018/03/24/property-based-testing-in-java-introduction/
