@@ -208,9 +208,9 @@ bool products_can_be_persisted(Product product)
 }
 ```
 
-When you run it, FsCheck will generate a comprehensive number of randomly generated instances of `Product`.
+When you run it, [FsCheck][fscheck] will generate a comprehensive number of randomly generated instances of `Product`.
 
-You might think that PBT libraries are similar to AutoFixture, and only useful for removing the need of hard-coded values and making the Arrange phase easier.<br/>
+You might think that PBT libraries are similar to [AutoFixture][autofixture], and only useful for removing the need of hard-coded values and making the Arrange phase easier.<br/>
 But they are not.
 
 Let me stress this loudly: only at a first glance is Property-based Testing about generating random inputs. PBT is more about *you* and your conversation with the compiler, than it is about *the test runner*.
@@ -685,6 +685,7 @@ See [References](property-testing-references)
 
 [quickcheck]: https://www.cse.chalmers.se/~rjmh/QuickCheck/manual.html
 [fscheck]: https://fscheck.github.io/FsCheck/
+[autofixture]: https://github.com/AutoFixture/AutoFixture
 [hedgehog]: https://hedgehog.qa/
 [jqwik]: https://jqwik.net/
 [junit-quickcheck]: https://pholser.github.io/junit-quickcheck/site/1.0/
