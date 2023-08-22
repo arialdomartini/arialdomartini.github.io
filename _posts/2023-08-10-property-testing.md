@@ -215,7 +215,7 @@ But they are not.
 
 Let me stress this loudly: only at a first glance is Property-based Testing about generating random inputs. PBT is more about *you* and your conversation with the compiler, than it is about *the test runner*.
 
-When the domain expert of an e-commerce company tells you 
+When the domain expert of an e-commerce company tells you:
 
 ```
 Food products are restricted from international shipping 
@@ -331,7 +331,8 @@ new Product(name: ___, category: Categories.SoftDrinks, price: ___,  description
 ```
 
 fails.
-
+
+
 Indeed, it would be super nice if the library could tell us:
 
 ```
