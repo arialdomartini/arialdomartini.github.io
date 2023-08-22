@@ -482,9 +482,9 @@ The next natural step is to crack open the manual of your preferred programming 
 | [js-verify][js-verify]               | QuickCheck family                                             | JavaScript, TypeScript |
 | [stream_data][stream_data]           |                                                               | Elixir                 |
 
-
-
-We made it to the end. I wish you happy testing, and a lot of chocolate.
+<br/><br/>
+Yuppie! We made it to the end!<br/>
+I wish you happy testing, and a lot of chocolate!
 
 
 # References
