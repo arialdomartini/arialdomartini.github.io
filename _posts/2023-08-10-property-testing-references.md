@@ -24,7 +24,6 @@ tags:
 * [Property-based Testing in Java - Johannes Link][property-based-testing-in-java]
 * [xUnit Theory: Working With InlineData, MemberData, ClassData][xunit-theory]
 * [Concolic Testing][concolic-testing]
-* [Hypothesis - Integrated vs type based shrinking][integrated-vs-type-based-shrinking] 
 * [When properties are easier than examples - Mark Seemann][properties-are-easier]
 * [Test Oracle - Wikipedia][test-oracle]
 * [ThePrimeFactorsKata - Bob Martin][the-prime-factor-kata]
@@ -46,6 +45,10 @@ tags:
 * **Universal Quantification**
   * [Universal Quantification][universal-quantification]
   * [Universal Quantifier - in ncatlab.org][universal-quantifier]
+
+* **Shrinking**
+  * [Hypothesis - Integrated vs type based shrinking][integrated-vs-type-based-shrinking] 
+  * [The Shrinking Challenge - Johannes Link][the-shrinking-challenge]
 
 
 **Libraries**
@@ -118,6 +121,7 @@ tags:
 [triangulation-in-tdd]: https://dmitripavlutin.com/triangulation-test-driven-development/
 [time-travelling]: https://wickstrom.tech/2019-11-17-time-travelling-and-fixing-bugs-with-property-based-testing.html
 [bug-hunting]: https://johanneslink.net/how-to-specify-it/#5-bug-hunting
+[the-shrinking-challenge]: https://github.com/jlink/shrinking-challenge
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)

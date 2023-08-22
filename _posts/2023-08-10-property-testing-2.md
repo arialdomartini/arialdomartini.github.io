@@ -91,7 +91,7 @@ The wrapping structure is designed to allow monadic effects, so that composing i
 ### Shrinkers
 A last little note before getting our hands dirty.<br/>
 I mentioned that, when PBT libraries find a counterexample, they narrow down it to the minimum relevant value, to simplify your life. This operation is performed by the so called *shrinkers*. You don't need to deal with them directly just yet: just be informed that, once you created a generator, in some libraries you need to wrap it into a more sophisticated structure, called `Arbitrary`, which adds shrinking capabilities. That's true in the QuickCheck family libraries.<br/>
-Other libraries have integrated shrinkers, and they derive a shrinker the moment you define a generator, making sure that the same domain preconditions used during generation are preserved while shrinking. More on this on [Hypothesis - Integrated vs type based shrinking][integrated-vs-type-based-shrinking].
+Other libraries have integrated shrinkers, and they derive a shrinker the moment you define a generator, making sure that the same domain preconditions used during generation are preserved while shrinking. More on this on [Hypothesis - Integrated vs type based shrinking][integrated-vs-type-based-shrinking] and on [The Shrinking Challenge][the-shrinking-challenge].
 
 Shrinking is probably the most useful feature of a PBT library because it generates counterexamples in which every element is relevant to the failure. It's easily your best allied during debugging and troubleshooting. We will see this in action in the last installment, with the Prime Factors Kata.
 
@@ -487,3 +487,4 @@ See [References](property-testing-references)
 [triangulation-in-tdd]: https://dmitripavlutin.com/triangulation-test-driven-development/
 [time-travelling]: https://wickstrom.tech/2019-11-17-time-travelling-and-fixing-bugs-with-property-based-testing.html
 [bug-hunting]: https://johanneslink.net/how-to-specify-it/#5-bug-hunting
+[the-shrinking-challenge]: https://github.com/jlink/shrinking-challenge
