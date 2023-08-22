@@ -195,7 +195,7 @@ See [References](property-testing-references)
 [quickcheck]: https://www.cse.chalmers.se/~rjmh/QuickCheck/manual.html
 [fscheck]: https://fscheck.github.io/FsCheck/
 [hedgehog]: https://hedgehog.qa/
-[jquick]: https://jqwik.net/
+[jqwik]: https://jqwik.net/
 [junit-quickcheck]: https://pholser.github.io/junit-quickcheck/site/1.0/
 [quicktheories]: https://github.com/quicktheories/QuickTheories
 [scala-check]: https://scalacheck.org/
