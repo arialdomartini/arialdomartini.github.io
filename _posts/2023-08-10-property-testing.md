@@ -15,9 +15,9 @@ I will mostly use C# and F#, and just some bits of Haskell here and there.
 
 ## Index
 1. Utterly opinionated introduction to Property Testing
-2. [Shut up and code!](2023-08-10-property-testing-2.md)
-3. [It's properties all the way down](2023-08-10-property-testing-3.md)
-4. [Property-driven Development](2023-08-10-property-testing-4.md)
+2. [Shut up and code!](property-testing-2)
+3. [It's properties all the way down](property-testing-3)
+4. [Property-driven Development](property-testing-4)
 
 <!--more-->
 
@@ -329,7 +329,7 @@ new Product(name: ___, category: Categories.SoftDrinks, price: ___,  description
 ```
 
 fails.
-
+
 Indeed, it would be super nice if the library could tell us:
 
 ```

@@ -9,10 +9,10 @@ tags:
 - property-based testing
 ---
 ## Index
-1. [Utterly opinionated introduction to Property Testing](2023-08-10-property-testing.md)
+1. [Utterly opinionated introduction to Property Testing](property-testing)
 2. Shut up and code!
-3. [It's properties all the way down](2023-08-10-property-testing-3.md)
-4. [Property-driven Development](2023-08-10-property-testing-4.md)
+3. [It's properties all the way down](property-testing-3)
+4. [Property-driven Development](property-testing-4)
 
 # Shut up and code!
 
