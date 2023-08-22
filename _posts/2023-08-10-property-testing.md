@@ -346,7 +346,7 @@ causing the problem is
   category = Categories.SoftDrinks
   
 Apparently, the production code is not considering soft drinks as a food. 
-Either this this is a bug, or your specification is incomplete.
+Either this is a bug, or your specification is incomplete.
 ```
 
 Oh, cool! This would be much more than finding bug! It would be the beginning of a conversation in which you can reason about the correctness of both the code and the requirement.
