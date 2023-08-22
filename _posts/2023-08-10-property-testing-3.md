@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Property-based Testing For The Rest Of Us - 2"
+title: "Property-based Testing For The Rest Of Us - It's properties all the way down"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 include_in_index: false
 tags:
