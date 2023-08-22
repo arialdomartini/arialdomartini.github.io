@@ -69,6 +69,7 @@ tags:
   * [ScalaCheck][scala-check]
   * [test.check][test.check]
   * [Kotest][kotest]
+  * [AutoFixture][autofixture]
   
 **Books**
 * [Test-Driven Development By Example][tdd-by-example]
@@ -128,6 +129,7 @@ tags:
 [bug-hunting]: https://johanneslink.net/how-to-specify-it/#5-bug-hunting
 [the-shrinking-challenge]: https://github.com/jlink/shrinking-challenge
 [property-based-testing-patterns]: https://blog.ssanj.net/posts/2016-06-26-property-based-testing-patterns.html
+[autofixture]: https://github.com/AutoFixture/AutoFixture
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
