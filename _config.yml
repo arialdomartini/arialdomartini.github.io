@@ -22,8 +22,11 @@ linkedin: https://it.linkedin.com/in/arialdomartini
 stackoverflow: /users/202443/arialdo-martini
 #Comment out if you don't want disqus 
 #disqus: arialdomartini-github-io
-google_analytics:
-  measurement_id: G-DC68MMLW4T
+analytics:
+  provider: "google-gtag"
+  google:
+    measurement_id: G-DC68MMLW4T
+    anonymize_ip: false
 
 
 # needed for travis-ci build
