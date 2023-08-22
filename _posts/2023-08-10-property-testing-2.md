@@ -435,7 +435,7 @@ This is honestly a mouthful of code, isn't it? Consider though that once defined
 Also, the equivalent in F# and Haskell is way more concise.<br/>
 
 
-Time for a cake, before moving to [It's properties all the way down](2023-08-10-property-testing-3.md)
+Time for a cake, before moving to [It's properties all the way down](property-testing-3)
 
 
 # References

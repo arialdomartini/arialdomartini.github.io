@@ -672,7 +672,7 @@ Oh, wait: I forgot to mention that Properties too are made of composable structu
 
 So, in a sense, Property-based Testing is about decomposing the problem-space of the domain into small properties and generation rules, and then about describing the business functionalities as a composition of those building blocks, for an automated library to challenge you.
 
-It's time to see some code. Take 5 minutes to have an icecream and when ready jump to the [second installment](2023-08-10-property-testing-2.md).
+It's time to see some code. Take 5 minutes to have an icecream and when ready jump to the [second installment](property-testing-2).
 
 
 # References

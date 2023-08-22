@@ -181,7 +181,7 @@ bool specification_of_reversal(List<string> xs)
 This easily spots the dishonest implementation. Hurray!
 
 
-In the [last part](2023-08-10-property-testing-4.md) I show you how applying property testing affects the practice of TDD. Grab a fruit, bite it and let's get started.
+In the [last part](property-testing-4) I show you how applying property testing affects the practice of TDD. Grab a fruit, bite it and let's get started.
 
 
 # References
