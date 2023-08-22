@@ -18,7 +18,7 @@ tags:
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 # Property-driven Development
 
-- [The kata](#the-prime-factors-kata)
+- [The Prime Factors Kata](#the-prime-factors-kata)
 - [The classic TDD approach](#the-classic-tdd-approach)
 - [Can we do better?](#can-we-do-better)
     - [Capturing the requirement](#capturing-the-requirement)
@@ -38,7 +38,7 @@ If you apply the practices of TDD relying on Property-based Tests rather than on
 
 I claim that PDD leads to a more correct, safer and faster development experience than the example-based TDD. I will argument my bold statement through the implementation of a classical, simple coding kata.
 
-## The kata
+## The Prime Factors Kata
 
 I'm using the [ThePrimeFactorsKata][the-prime-factor-kata], a little exercise that Bob Martin has been employing since 2005 to demo TDD. We will first follow the classical approach, mirroring what Bob Martin does; then we will repeat the same using PBT, commenting on the differences.
 
