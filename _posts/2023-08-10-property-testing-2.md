@@ -31,7 +31,7 @@ tags:
 
 # Let's code
 ## Anatomy of a property test
-Let's delve deeper into the concept of utilizing generators as modular components that are simple to combine and layer one upon the another.
+Let's delve deeper into the concept of utilizing generators as modular components that are simple to combine and layer one upon the other.
 
 <!-- A viable strategy could involve maintaining a distinction between the problem of generating values and enabling compositional structure. -->
 
