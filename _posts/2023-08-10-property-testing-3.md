@@ -127,7 +127,7 @@ Collateral Properties are more concrete than this, and they are often fun to fin
 * Scott Wlaschin's [Choosing properties for property-based testing][choosing-properties]
 * John Hughes's [How to Specify it!][how-to-specify-it] for which Johannes Link has written a brilliant version in Java, titled [How to Specify it! In Java!][how-to-specify-it-in-java].
 * from Johannes Link's [Patterns to Find Good Properties][patterns-to-find-good-properties]
-
+* from [Property-based Testing Patterns][property-based-testing-patterns]
 
 ## Essential is better than Collateral
 I might be a voice outside the chorus, but I think Collateral Properties are a bit overrated &mdash; and often excessively feared. 
@@ -234,3 +234,4 @@ See [References](property-testing-references)
 [triangulation-in-tdd]: https://dmitripavlutin.com/triangulation-test-driven-development/
 [time-travelling]: https://wickstrom.tech/2019-11-17-time-travelling-and-fixing-bugs-with-property-based-testing.html
 [bug-hunting]: https://johanneslink.net/how-to-specify-it/#5-bug-hunting
+[property-based-testing-patterns]: https://blog.ssanj.net/posts/2016-06-26-property-based-testing-patterns.html

@@ -34,6 +34,7 @@ tags:
   * [How to Specify it! - John Hughes][how-to-specify-it]
   * [How to Specify it! In Java! - Johannes Link][how-to-specify-it-in-java]
   * [Patterns to Find Good Properties - Johannes Link][patterns-to-find-good-properties]
+  * [Property-based Testing Patterns][property-based-testing-patterns]
 
 * **Model-based Testing**
   * [Model-based Testing][model-based-testing]
@@ -122,6 +123,7 @@ tags:
 [time-travelling]: https://wickstrom.tech/2019-11-17-time-travelling-and-fixing-bugs-with-property-based-testing.html
 [bug-hunting]: https://johanneslink.net/how-to-specify-it/#5-bug-hunting
 [the-shrinking-challenge]: https://github.com/jlink/shrinking-challenge
+[property-based-testing-patterns]: https://blog.ssanj.net/posts/2016-06-26-property-based-testing-patterns.html
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
