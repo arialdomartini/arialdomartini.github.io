@@ -19,6 +19,8 @@ I will mostly use C# and F#, and just some bits of Haskell here and there.
 3. [It's properties all the way down](2023-08-10-property-testing-3.md)
 4. [Property-driven Development](2023-08-10-property-testing-4.md)
 
+<!--more-->
+
 # Utterly opinionated introduction to Property Testing
 
 - [Property Testing! What's the fuss about?](#property-testing-whats-the-fuss-about)
