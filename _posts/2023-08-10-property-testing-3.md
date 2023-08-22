@@ -119,7 +119,7 @@ Besides Existential and Universally Quantified properties, there is another dime
 Collateral Properties don't directly capture the requirements, but derive from them.<br/>
 Also, in general they don't completely specify the behaviour of the code under test: usually you need a set of them to form a complete specification.
 
-Collateral Properties are so popular in PBT &mdash; and in Design by Contract &mdash; that one could think they are specific to it.  There is the myth that developers must rack their brains to tranlate business requirements to mysterious mathematical properties such as commutativity, monotonicity and right-identity, and that consequently PBT is unfeasible for real-world scenarios.<br/> 
+Collateral Properties are so popular in PBT &mdash; and in [Design by Contract][design-by-contract] &mdash; that one could think they are specific to it.  There is the myth that developers must rack their brains to tranlate business requirements to mysterious mathematical properties such as commutativity, monotonicity and right-identity, and that consequently PBT is unfeasible for real-world scenarios.<br/> 
 It's not at all like this.
 
 Collateral Properties are more concrete than this, and they are often fun to find and implement. You can learn a lot about them from:
@@ -235,3 +235,4 @@ See [References](property-testing-references)
 [time-travelling]: https://wickstrom.tech/2019-11-17-time-travelling-and-fixing-bugs-with-property-based-testing.html
 [bug-hunting]: https://johanneslink.net/how-to-specify-it/#5-bug-hunting
 [property-based-testing-patterns]: https://blog.ssanj.net/posts/2016-06-26-property-based-testing-patterns.html
+[design-by-contract]: https://en.wikipedia.org/wiki/Design_by_contract
