@@ -121,6 +121,7 @@ public class PropertyTesting
 ```
 
 The last line
+
 ```csharp
 ForAll(numbers, squareIsNotNegative)
 ```
@@ -217,27 +218,7 @@ public static void True(bool? condition, string userMessage)
 PBT libraries rely on this. `Check.QuickThrowOnFailure(property)` verifies all the generated predicates, and if one does not hold, it throws an exception, for xUnit to interpret as a failed test.<br/>
 You can save some keyboard hits by decorating the test method with `[Property]` and returning an instance of `Property` instead of `void`. The PBT library will call `Check.QuickThrowOnFailure()` for you. No rocket science. We will see later even more concise ways to write a property test, as a simple predicate.
 
-The same test with in F# would look like this:
-
-```fsharp
-open Expecto
-open FsCheck
-
-[<Tests>]
-let treeTests =
-    testProperty
-        "Square of any number is not negative"
-        (let numbers = Arb.from<int>
-         let square n = n * n
-         let squareIsNotNegative (n: int) : bool = square n >= 0
-
-         Prop.forAll numbers squareIsNotNegative)
-```
-
-
-`let squareIsNotNegative n = square n >= 0` is the property you want to prove wrong. As you see, it's just an ordinary function. This is, together with the properly forged input values, the requirement.
-
-In Hedgehog, the syntax is only slighly different:
+In Hedgehog, with F#, the syntax is a bit different:
 
 ```fsharp
 test "Square of any number is not negative" {
@@ -290,7 +271,7 @@ record Product(Guid Id, string Name, decimal Price, Category Category);
 
 public class ProductRepositoryPropertyTests
 {
-    private IProductRepository _repository;
+    private Repository _repository;
 
     public ProductRepositoryPropertyTests()
     {
