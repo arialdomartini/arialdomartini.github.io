@@ -12,7 +12,7 @@ By no means is this a comprehensive manual. Consider it as a friendly introducti
 
 I will rely on C# examples with [FsCheck][fscheck], although my heart is with [Hedgehog][hedgehog].
 
-**Note**: if you prefer to start directly with code, go straight with the [4th installment on Property-driven Development](property-testing-4): the other 3 posts can be read later.
+**Note**: if you prefer to start directly with code, go straight with the [4th installment](property-testing-4): the other 3 posts can be read later.
 
 All the code samples are on [GitHub](https://github.com/arialdomartini/property-based-testing-for-the-rest-of-us).
 
