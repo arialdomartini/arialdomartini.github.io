@@ -102,7 +102,7 @@ Property books_can_be_shipped_to_France()
 Playing with mathematical terms, one could say that 
 
 * TDD resorts to *Existential Quantified Properties*: "*it exists (`∃`) an example for which a property holds*"
-* PBT uses *Universally Quantified Properties*: "*for all the values (`∀`) this property holds*".<br/>No surprises that many PBT libraries define a function called `forAll`.
+* PBT uses *Universally Quantified Properties*: "*for all the values (`∀`) this property holds*".<br/>No surprises that many PBT libraries define a function called `forAll`, and that [the FsCheck's logo](https://fscheck.github.io/FsCheck/img/logo.png) is a `∀`.
 
 Besides Existential and Universally Quantified properties, there is another dimension along which you can distinguish what I call the *Essential* and the *Collateral* Properties.
 
