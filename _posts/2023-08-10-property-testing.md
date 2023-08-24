@@ -10,7 +10,7 @@ tags:
 It's no secret that getting started with Property-Based Testing (PBT) is hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
 By no means is this a comprehensive manual. Consider it as a friendly introduction to help dispel the fear.
 
-I will mostly use C# and F#, and just some bits of Haskell here and there.
+I will use examples in C#.
 
 **Note**: if you prefer to start directly with a code example, go straight with the [4th installment on Property-driven Development](property-testing-4): the other 3 posts can be read later.
 
@@ -118,7 +118,7 @@ the equivalent Property-based one would be:
 
 ```csharp
 [Property]
-bool products_can_be_persisted(Product product)
+bool all_products_can_be_persisted(Product product)
 {
     _repository.Save(product);
 
@@ -133,29 +133,32 @@ Basically, the same test, without the specific value for `Product`.
 As a second case, here's an F# xUnit Theory for the Fizz Buzz Kata:
 
 ```fsharp
-[<Theory>]
-[<InlineData(15)>]
-[<InlineData(30)>]
-[<InlineData(45)>]
-[<InlineData(60)>]
-let ``multiples of 15 return "fizzbuzz"`` (multipleOf15) =
-    Assert.Equal("fizzbuzz", fizzbuzz multipleOf15)
+[Theory]
+[InlineData(15)]
+[InlineData(30)]
+[InlineData(45)]
+[InlineData(60)]
+void multiples_of_15_return_fizzbuzz(int multipleOf15)
+{
+    Assert.Equal("fizzbuzz", fizzbuzz(multipleOf15));
+}
 ```
 
 This can be directly translated to
 
-```fsharp
-[<Property>]
-let ``All the multiples of 15 return "fizzbuzz"`` () =
-    gen {
-        let! n = Arb.generate<int>
-        let multipleOf15 = n * 15
-		
-        return fizzbuzz multipleOf15 = "fizzbuzz"
-    }
+```csharp
+[Property]
+Property all_the_multiples_of_15_return_fizzbuzz()
+{
+    var multiplesOf15 = Arb.From( 
+        Arb.Generate<int>()
+            .Select(i => i * 15));
+
+    return Prop.ForAll(multiplesOf15, n => fizzbuzz(n) == "fizzbuzz");
+}
 ```
 
-Notice how `fizzbuzz multipleOf15 = "fizzbuzz"` is a direct and honest translation of the requirement `All the multiples of 15 return "fizzbuzz"`.
+Notice how `ForAll(multiplesOf15, n => fizzbuzz(n) == "fizzbuzz");` is a direct and honest translation of the requirement `All the multiples of 15 return "fizzbuzz"`.
 
 ## So, define Property-based Testing
 Here's the bold statement.<br/>
@@ -416,16 +419,12 @@ You are forced to think of some other *property* which holds whatever the input.
 
 ```csharp
 [Property]
-void sum_is_commutative(int a, int b)
-{
-    Assert.Equal(add(a, b), add(b, a));
-}
+bool sum_is_commutative(int a, int b) => 
+    a + b == b + b;
 
 [Property]
-void adding_zero_does_no_change_the_result(int a)
-{
-    Assert.True(a, add(a, 0))
-}
+bool adding_zero_does_not_change_the_result(int a) => 
+    a + 0 == a;
 ```
 
 I chose the silly sum example because it is the basis of the epic video [The lazy programmer's guide to writing thousands of tests][lazy-programmer] by Scott Wlashlin. It's a joy to watch.
@@ -493,7 +492,6 @@ I see the following traits:
 * The test above only generates 1 set of random values. Ideally, we would like to generate thousands. Something like:
 
 ```csharp
-
 record Input(Account[] ExistingAccounts, RegistrationForm form)
 
 [Property]
