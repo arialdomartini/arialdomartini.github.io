@@ -67,7 +67,7 @@ public sealed class Gen<a> : IGen
 Hedgehog's definition boils down to something similar:
 
 
-```fsharp
+```csharp
 public struct Random<a>
 {
     public static Random<a> NewRandom(FSharpFunc<Seed, FSharpFunc<int, a>> item) => new Random<a>(item);
