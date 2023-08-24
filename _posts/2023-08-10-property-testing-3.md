@@ -24,7 +24,7 @@ tags:
 
 
 # A matter of naming
-I always suspected that the low adoption of TDD might be partly due to its poor naming. Some developers who never practiced TDD find it counterintuitive that they are supposed to write a test for an implementation even before that implementation exists. How can you blame them? It really sounds crazy.
+I've always suspected that the low adoption of TDD might be partly due to its poor naming. Some developers who never practiced TDD find it counterintuitive that they are supposed to write a test for an implementation even before that implementation exists. How can you blame them? It really sounds crazy.
 
 If only tests were presented as *requirements expressed with code*, the same skeptic developers would probably find TDD completely natural: of course you produce the code only after the requirements! Of course it would be absurd to write requirements as an afterthought.<br/>
 If TDD was called *Requirement-Driven Design*, maybe there would be less resistance to the approach.
@@ -69,7 +69,8 @@ or if you like
 ∃ Product "The Little Schemer" ∈ Books | it can be shipped`
 ```
 
-In PBT the property is extended to
+
+<br/>In PBT the property is extended to
 
 ```
 All the books can be shipped to France
@@ -85,7 +86,7 @@ which translates to:
 
 ```csharp
 [Property]
-Property books_can_be_shipped_to_France()
+Property all_books_can_be_shipped_to_France()
 {
     Gen<Product> books = 
         Arb.Generate<Product>()
@@ -136,8 +137,8 @@ Many PBT tutorials start with the infamous reversal of a list example. I've neve
 
 ```csharp
 [Property]
-bool invariant_of_reversal(List<string> xs) => 
-    AreListsEqual(xs, Revert(Revert(xs)));}
+void invariant_of_reversal(ImmutableArray<string> xs) =>
+    Assert.Equal(xs, (Reverse(Reverse(xs))));
 ```
 
 This says nothing about what *reversing a list* is, about its essence. It tackles a side effect, a derived observation.<br/>
@@ -168,13 +169,15 @@ Then you could try with a direct translation to an Essential Property. That woul
 [Property]
 bool specification_of_reversal(List<string> xs)
 {
-    var reversed = Reverse(xs);
+    var reversed = Reverse(xs).ToList();
 
-    var eachItemHasBeenReversed =
-        Enumerable.Range(0, xs.Count)
-            .All(i => xs[i] == reversed[xs.Count - i - 1]);
+    for(var i = 0; i < xs.Count; i++)
+    {
+        if (xs[i] != reversed[xs.Count - i - 1])
+            return false;
+    }
 
-    return eachItemHasBeenReversed;
+    return true;
 }
 ```
 
