@@ -303,7 +303,7 @@ Since a property is always expressed via a predicate, you can even make the test
 
 ```csharp
 [Property]
-bool products_can_be_persisted(Product product)
+bool products_can_be_persisted_as_a_predicate(Product product)
 {
     _repository.Save(product);
 
