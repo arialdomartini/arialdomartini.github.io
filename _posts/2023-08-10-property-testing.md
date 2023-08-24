@@ -638,8 +638,6 @@ Finally, this one in Haskell generates random images like:
 <img src="static/img/property-testing/quickcheck-generated-image.png"/>
 
 ```haskell
-frequency [(2,return True), (1,return False)]
-
 instance Arbitrary PixelRGB8 where
   arbitrary = PixelRGB8 <$> arbitrary <*> arbitrary <*> arbitrary
 
