@@ -428,7 +428,7 @@ So what's next? Go and use it for deriving Y. Have fun!
   * [Inline Method][inline-method]
   * [Extract Local Function To Regular Method][context-actions]
 
-[sicp]: https://mitpress.mit.edu/sites/default/files/sicp/index.html
+[sicp]: https://web.mit.edu/6.001/6.037/sicp.pdf
 [variables-syntactic-sugar-csharp]: sicp-let-syntactic-sugar-csharp
 [variables-syntactic-sugar-scala]: sicp-let-syntactic-sugar-scala
 [refactoring]: https://martinfowler.com/tags/refactoring.html

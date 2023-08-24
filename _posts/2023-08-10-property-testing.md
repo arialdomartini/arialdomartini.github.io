@@ -10,7 +10,7 @@ tags:
 It's no secret that getting started with Property-Based Testing (PBT) is hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
 By no means is this a comprehensive manual. Consider it as a friendly introduction to help dispel the fear.
 
-I will use examples in C#.
+I will use examples with [FsCheck][fscheck] in C#, although my heart is with [Hedgehog][hedgehog].
 
 **Note**: if you prefer to start directly with a code example, go straight with the [4th installment on Property-driven Development](property-testing-4): the other 3 posts can be read later.
 
@@ -548,76 +548,67 @@ Prior randomized testing tools required learning a special language and grammar 
 
 As everything in Functional Programming, the secret is to start simple. Imagine having:
 
-* a structure able to generate random booleans: `Gen<bool>`
-* another able to generate random characters: `Gen<char>`
+* a structure able to generate random booleans: `Arb.Generate<bool>`
+* another able to generate random characters: `Arb.Generate<char>`
 
 and then being able to create new  more complex building blocks composing the smallest ones: 
 
-* an F# generator of strings built as a composition of char generators: `Gen.list Gen<char>`
-* The generator for the Haskell record `data Product = Product { name :: Name, price :: Price, category :: Category }` built composing the generators for names, prices and categories, no matter how they are defined, with:
+* an generator of strings built as a composition of char generators: `Gen.ListOf(Arb.Generate<char>).Select(string.Concat)`
+* The generator for the record `record Product(Guid Id, string Name, Category Category, decimal Price);` built composing the generators for names, prices and categories, no matter how they are defined, with:
 
-```haskell
-Product
-    <$> genName
-    <*> genPrice
-    <*> genCategory
+```csharp
+Gen<Product> products =
+    from id in Arb.Generate<Guid>()
+    from name in Arb.Generate<string>()
+    from price in Arb.Generate<decimal>()
+    from category in Arb.Generate<Category>()
+	
+    select new Product(Id: id, Name: name, Price: price, Category: category);
 ```
-
-or with
-
-```
-genProduct = do
-    name <- genName
-    price <- genPrice
-    category <- genCategory
-    return (Product name price category)
-```
-
 Usually, the algebra to use is the one for monadic composition, with the syntax offered by your language of choice.
 
-Let's have a look to some real examples. Please, suspend for a while the judgment on syntax.
+Let's have a look to some real examples.
 
-This (in Haskell) generates a random boolean values, with equal probability:
+This generates a random boolean values, with equal probability:
 
-```haskell
-oneof [return True, return False]
+```csharp
+Gen<bool> equallyDistributedBooleans =
+    Arb.Generate<bool>();
 ```
 
-This (again in Haskell) generates random boleans weighting the probability of choosing each alternative by some factors:
+This generates random boleans weighting the probability of choosing each alternative by some factors:
 
-```haskell
-frequency [(2,return True), (1,return False)]
+```csharp
+Gen<bool> tenMoreTrueValuesThanFalseOnes =
+    Gen.Frequency(new Tuple<int, Gen<bool>>[]
+    {
+        new(10, Gen.Constant(true)),
+        new(1, Gen.Constant(false))
+    });
 ```
 
-Here's an F# example for emitting lists of tuples of values bewteen `1` and `100`, with the restriction that the two elements in each tuple must be different:
+Notice how both are `Gen<bool>`: you can manipulate both of them consistenly.
+
+This emitting tuples of values bewteen `1` and `100`, with the restriction that the two elements in each tuple must be different:
+
+```csharp
+var tuplesWithDifferentElements =
+    Gen.Two(Gen.Choose(1, 100))
+        .Where(t => t.Item1 != t.Item2);
+```
+
+The following generates `Users` whose `FirstName` is one of `"Don"`, `"Henrik"` or `null`, a `LastName` with one of `"Syme"` and `"Feldt"` (but never `null`), and an `id` between `0` and `1000`:
 
 ```fsharp
-Gen.choose (1, 100)
-|> Gen.two
-|> Gen.filter (fun (x, y) -> x <> y)
-|> Gen.map (fun (x, y) -> [x; y])
+record User(int Id, string FirstName, string LastName);
+
+Gen<User> users =
+    from fistName in Gen.Elements("Don", "Henrik", null)
+    from secondName in Gen.Elements("Syme", "Feldt")
+    from id in Gen.Choose(0, 1000)
+    select new User(id, firstName, secondName);
 ```
 
-The following in F# generates `Users` whose `FirstName` is one of `"Don"`, `"Henrik"` or `null`, a `LastName` with one of `"Syme"` and `"Feldt"` (but never `null`), and an `id` between `0` and `1000`:
-
-```fsharp
-type User = {
-    Id : int
-    FirstName : string
-    LastName : string
-}
-
-type UserGen() =
-   static member User() : Arbitrary<User> =
-       let genFirsName = Gen.elements ["Don"; "Henrik"; null]
-       let genLastName = Gen.elements ["Syme"; "Feldt"]
-       let createUser id firstName lastName =
-           {Id = id; FirstName = firstName ; LastName = lastName}
-       let getId = Gen.choose(0, 1000)
-       let genUser =
-           createUser <!> getId <*> genFirsName <*> genLastName
-       genUser |> Arb.fromGen
-```
 
 That's an example from Johannes Link's [Property-based Testing in Java][property-based-testing-in-java], based on [jqwik][jqwik]:
 
@@ -660,7 +651,7 @@ genImage = do
 ```
 
 
-I don't expect you to understand the code above yet. Just focus on the key messages:
+I don't expect you to fully understand the code above yet. Just focus on the key messages:
 
 * Generators are composable structures. Each language would use its own tricks: in C# they are classes.
 * They are natively written in your preferred language. No extra languages to learn.

@@ -10,7 +10,7 @@ tags:
 most_read: true
 ---
 
-[SICP](https://mitpress.mit.edu/sites/default/files/sicp/index.html) doesn't cease to amaze me. Here's a challenge for you to solve, which I found in the chapter *Building Abstractions with Data*. I will provide a solution in C#.
+[SICP](https://web.mit.edu/6.001/6.037/sicp.pdf) doesn't cease to amaze me. Here's a challenge for you to solve, which I found in the chapter *Building Abstractions with Data*. I will provide a solution in C#.
 
 The quiz is: 
 
