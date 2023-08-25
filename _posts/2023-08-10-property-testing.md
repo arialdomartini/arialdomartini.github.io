@@ -130,9 +130,9 @@ bool all_products_can_be_persisted(Product product)
 
 Basically, the same test, without the specific value for `Product`.
 
-As a second case, here's an F# xUnit Theory for the Fizz Buzz Kata:
+As a second case, here's a xUnit Theory for the Fizz Buzz Kata:
 
-```fsharp
+```csharp
 [Theory]
 [InlineData(15)]
 [InlineData(30)]
