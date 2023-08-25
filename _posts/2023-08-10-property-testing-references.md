@@ -28,7 +28,8 @@ tags:
 * [Test Oracle - Wikipedia][test-oracle]
 * [ThePrimeFactorsKata - Bob Martin][the-prime-factor-kata]
 * [Prime Factorization - Wolfram Mathworld][prime-factorization-wolfram]
-  
+* [Minithesis, a minimal implementation of the core idea of Hypothesis][minithesis], also ported to Elm, Racket, Haskell, Rust and Java
+
 * **Discovering properties**
   * [Choosing properties for property-based testing - Scott Wlaschin][choosing-properties]
   * [How to Specify it! - John Hughes][how-to-specify-it]
@@ -130,6 +131,7 @@ tags:
 [the-shrinking-challenge]: https://github.com/jlink/shrinking-challenge
 [property-based-testing-patterns]: https://blog.ssanj.net/posts/2016-06-26-property-based-testing-patterns.html
 [autofixture]: https://github.com/AutoFixture/AutoFixture
+[minithesis]: https://github.com/DRMacIver/minithesis
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
