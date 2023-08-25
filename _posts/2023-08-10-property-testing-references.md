@@ -28,6 +28,7 @@ tags:
 * [Test Oracle - Wikipedia][test-oracle]
 * [ThePrimeFactorsKata - Bob Martin][the-prime-factor-kata]
 * [Prime Factorization - Wolfram Mathworld][prime-factorization-wolfram]
+* [Property-based Testing in Kotlin - Johannes Link][property-based-testing-in-kotlin]
 * [Minithesis, a minimal implementation of the core idea of Hypothesis][minithesis], also ported to Elm, Racket, Haskell, Rust and Java
 
 * **Discovering properties**
@@ -132,6 +133,7 @@ tags:
 [property-based-testing-patterns]: https://blog.ssanj.net/posts/2016-06-26-property-based-testing-patterns.html
 [autofixture]: https://github.com/AutoFixture/AutoFixture
 [minithesis]: https://github.com/DRMacIver/minithesis
+[property-based-testing-in-kotlin]: https://johanneslink.net/property-based-testing-in-kotlin
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
