@@ -114,8 +114,9 @@ Besides Existential and Universally Quantified properties, there is another dime
   * the fact that `sum(a, b)` is commutative
   * the observation that sorting a collection does not change its size (a so called "*invariant*")
   * the fact that in a bank transfer the sum of money between the two involved bank accounts remains constant (again, an invariant)
-  * comparing your program's behavior with a *Test Oracle*, that is an alternative, simpler and predictable implementation of the function under test (see [Test Oracle][test-oracle] on Wikipedia)
-  * running both your system and a simplified model with the same randomized series of input values, and comparing the output and the state. This is called [Model-based testing][model-based-testing] and it is particularly powerful for stateful applicatins. There are entire article series dedicated to it.
+  * comparing your program's behavior with an *Test Oracle*, that is an alternative, simpler and predictable implementaion of the function under test (see [Test Oracle][test-oracle] on Wikipedia)
+  * running both your system and a simplified model with the same randomized series of input values, and comparing the output and the state. This is called [Model-based testing][model-based-testing] and it is particularly powerful for stateful applications. There are entire article series dedicated to it.
+
   
 Collateral Properties don't directly capture the requirements, but derive from them.<br/>
 Also, in general they don't completely specify the behaviour of the code under test: usually you need a set of them to form a complete specification.
