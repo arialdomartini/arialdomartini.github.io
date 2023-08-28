@@ -79,7 +79,7 @@ All the books can be shipped to France
 or equivalently
 
 ```
-∀ Product ∈ Books | it can be shipped
+∀ Product ∈ Books => it can be shipped
 ```
 
 which translates to:
