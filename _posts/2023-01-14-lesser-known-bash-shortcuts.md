@@ -10,6 +10,8 @@ Did you know Bash has got macros, a multi-clipboard, an undo feature, and a word
 
 If you prefer watching videos to reading posts, you can check it out [here][video].
 
+
+
 <!--more-->
 
 <details>
@@ -75,6 +77,11 @@ If you prefer watching videos to reading posts, you can check it out [here][vide
 </ul>
 
 </details>
+
+For those unfamiliar with Emacs, it's worth mentioning that the vast majority of these shortcuts are identical to the Emacs shortcuts for the same operations.
+
+So if you're an emacser most of your muscle memory will work on the shell. Alternatively, if you don't use Emacs but learn these shortcuts on the shell, you might find yourself right at home in Emacs later on. (via [u/alraban](https://www.reddit.com/r/linux/comments/166cq65/comment/jyjhcbx/?utm_source=share&utm_medium=web2x&context=3))
+
 
 ### Legenda
 
