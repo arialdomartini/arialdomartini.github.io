@@ -61,7 +61,7 @@ You don't need to squash to hide details. Just use `--first-parent`.
 
 ![SmartGit's follow-only-first-parent option](static/img/squash/smartgit.png)
 
-This works from the command line:
+This works from the command line using `--first-parent`:
 
 ![result of git log --first-parent](static/img/squash/git-log.png)
 
