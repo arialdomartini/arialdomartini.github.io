@@ -15,13 +15,13 @@ All the [code samples are on GitHub](https://github.com/arialdomartini/property-
 
 **Note**: do you prefer to start directly with a practical example? Go straight with the [4th installment](property-testing-4).
 
+<!--more-->
+
 ## Index
 1. Utterly opinionated introduction to Property Testing
 2. [Shut up and code!](property-testing-2)
 3. [It's properties all the way down](property-testing-3)
 4. [Property-driven Development](property-testing-4)
-
-<!--more-->
 
 # Utterly opinionated introduction to Property Testing
 
