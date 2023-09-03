@@ -45,6 +45,7 @@ class Client
     void aync uses_ping_handler()
     {
         var response = await _mediator.Send(new Ping());
+
         Assert.Equal("Pong", response);
     }
 }
@@ -108,8 +109,13 @@ class Client
 ```
 
 ## FAQs
+* [The OOP solution creates coupling!](#the-oop-solutioncreates-coupling)
+* [Isn't this exactly what MediatR does?](#isn-t-this-exactly-what-mediatr-does)
+* [But the more decoupling the better, right?](#but-the-more-decoupling-the-better--right)
+* [This is all theoretical](#this-is-all-theoretical)
+* [The OOP solution violates CQRS!](#the-oop-solution-violates-cqrs)
+
 ### The OOP solution creates coupling!
-**Question**<br/>
 Doesn't the OOP implementation create a strong coupling between `Client` and `PingHandler`?
 
 **Answer**<br/>
@@ -188,7 +194,6 @@ class Client
 
 
 ### Isn't this exactly what MediatR does?
-**Question**<br/>
 MediatR too interposes an abstraction between `Client` and `PingHandler`. Therefore, isn't it a legit implementation of the Dependency Inversion Principle?
 
 **Answer**<br/>
@@ -200,7 +205,6 @@ With MediatR `Client` depends on `IM-ediator` which in turn depends on `IRequest
 It's an unnecessary extra hop, that has negative effects.
 
 ### But the more decoupling the better, right?
-**Question**<br/>
 What's the issue? An extra level of abstraction is harmless.
 
 **Answer**<br/>
@@ -244,8 +248,8 @@ internal Client(IPingHandler handler)
 This is a violation of the [Explicit Dependencies Principle][explicit-dependencies-principle].
     
 ### This is all theoretical
-**Question**<br/>
 I don't see any practical problem. Only academic fixations.
+
 **Answer**<br/>
 There are pragmatic consequences. You will find some examples in the next pages of this article:
 
@@ -254,8 +258,8 @@ There are pragmatic consequences. You will find some examples in the next pages 
 * Sending a subclass of a Request results in a failure
 
 ### The OOP solution violates CQRS!
-**Question**<br/>
 The MediatR solution has got a `Ping` class to represent a Command or a Query object. This is CQRS. The OOP solution is inferior.
+
 **Answer**<br/>
 If you mean that methods should either be commands performing an action, or queries returning data without side effects, you mean [CQS][cqs], not CQRS.<br/>
 In fact, conforming to CQS does't necessarily require a class for any request. You are free to define one, though, if you like:
