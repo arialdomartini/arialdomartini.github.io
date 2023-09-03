@@ -90,15 +90,49 @@ class Client
 ```
 [code][multiple-dispatch-composite-pattern]
 
+You might prefer a functional approach and use an enhanced method dispatch, such as:
+
+```csharp
+internal static class CompositeExtensions
+{
+    internal static async Task InvokeAll<T>(this IEnumerable<T> handlers, Func<T, Task> f)
+    {
+        await Task.WhenAll(handlers.Select(f));
+    }
+}
+```
+
+## FAQs
+* [This can be done with notifications!](#this-can-be-done-with-notifications)
+* [How can you dispatch a request to multiple targets and get a response?](how-can-you-dispatch-a-request-to-multiple-targets-and-get-a-response)
+
+### This can be done with notifications!
+You can send the same message to multiple targets using Notifications instead of Requests!
+
+**Answer**<br/>
+No, that's not equivalent. There are 2 notable differences:
+
+1. MediatR raises an error if there is no handler registered for a specific request. With notifications, it does not, and the dispatch silently fails.
+
+2. Requests can return a value, Notifications cannot.
+
+Queries/Commands and Notifications are not equivalent.
+
+### How can you dispatch a request to multiple targets and get a response?
+**Answer**<br/>
+Very good question. This deserves [a dedicated page](without-mediatr-request-response-multiple-handlers-with-reply).
+
 
 # References
 
 * [MediatR wiki - Basics][mediatr-basics]
 * [Without MediatR - Request/response, multiple registration](without-mediatr-request-response-multiple-registration)
+* [Without MediatR - Request/response, multiple dispatch with return value](without-mediatr-request-response-multiple-handlers-with-reply)
 * [Composite Pattern - Wikipedia][composite-pattern]
 * Code
   * [Multiple dispatch with a collection][multiple-dispatch-collection]
   * [Multiple dispatch with Composite Pattern][multiple-dispatch-composite-pattern]
+
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
