@@ -211,7 +211,7 @@ I don't see any practical problem. Only academic fixations.
 **Answer**<br/>
 There are pragmatic consequences. You will find some examples in the next pages of this article:
 
-* If you record more than one handler, one will be silently ignored
+* If you record more than one handler, they will be silently ignored
 * You cannot send a request to multiple handlers
 * Sending a subclass of a Request results in a failure
 

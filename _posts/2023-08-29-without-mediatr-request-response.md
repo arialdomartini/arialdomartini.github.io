@@ -254,7 +254,7 @@ I don't see any practical problem. Only academic fixations.
 There are pragmatic consequences. You will find some examples in the next pages of this article:
 
 * [If you record more than one handler, one will be silently ignored](without-mediatr-request-response-multiple-registration)
-* You cannot send a request to multiple handlers
+* [You cannot send a request to multiple handlers](without-mediatr-request-response-multiple-handlers)
 * Sending a subclass of a Request results in a failure
 
 ### The OOP solution violates CQRS!
