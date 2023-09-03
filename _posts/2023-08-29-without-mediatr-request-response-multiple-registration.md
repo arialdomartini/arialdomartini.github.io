@@ -1,112 +1,70 @@
 ---
 layout: post
-title: "Without MediatR - Request/response"
+title: "Without MediatR - Request/response, multiple registration"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 include_in_index: false
 tags:
 - C#
 - MediatR
 ---
-# Request/response
+# Request/response, multiple registration
 
-| MediatR                                                                                        |
-|------------------------------------------------------------------------------------------------|
-| [Wiki](https://github.com/jbogard/MediatR/wiki#requestresponse)                                |
-| [Code](xxx) |
+| MediatR      |
+|--------------|
+| Undocumented |
+| Undocumented |
 
 ## With MediatR
 
-The request and the handler are defined as:
+What happens if two different handlers for the same request are registered with MediatR?<br/>
+Say you have `HandlerA` and `HandlerB` for the same request `Echo`:
 
 ```csharp
-public class Ping : IRequest<string> { }
+public record Echo(string Message) : IRequest<string>;
 
-public class PingHandler : IRequestHandler<Ping, string>
+public class HandlerA : IRequestHandler<Echo, string>
 {
-    public Task<string> Handle(Ping request, CancellationToken cancellationToken)
-    {
-        return Task.FromResult("Pong");
-    }
+    public Task<string> Handle(Echo request, CancellationToken cancellationToken) => Task.FromResult(request.Message);
+}
+
+public class HandlerB : IRequestHandler<Echo, string>
+{
+    public Task<string> Handle(Echo request, CancellationToken cancellationToken) => Task.FromResult("doh!");
 }
 ```
 
-Invocation is done with:
+and that you record them in the IoC container:
 
 ```csharp
-class Client
+cfg.Scan(scanner =>
 {
-    private readonly IMediator _mediator;
-
-    internal Client(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
-    void aync uses_ping_handler()
-    {
-        var response = await _mediator.Send(new Ping());
-
-        Assert.Equal("Pong", response);
-    }
-}
+    scanner.AssemblyContainingType(typeof(With));
+    scanner.IncludeNamespaceContainingType<Echo>();
+    scanner.WithDefaultConventions();
+    scanner.AddAllTypesOf(typeof(IRequestHandler<,>));
+});
+            
+cfg.For<IMediator>().Use<Mediator>();
 ```
 
-For this to work, the MediatR instance has to be informed that `PingHandler` is the handler of requests of type `IRequest<Ping, string>:
+Which response is returned by:
 
 ```csharp
-var serviceProvider =
-    new ServiceCollection()
-        .AddTransient<IRequestHandler<Ping, string>, PingHandler>()
-        .BuildServiceProvider();
-
-mediator = new Mediator(serviceProvider);
+var echoResponse = await mediator.Send(new Echo("some message"));
+        
+Assert.Equal(???, echoResponse); 
 ```
+
+Answer: it depends on the order the 2 handlers are defined in the file. Move `HandlerB` before `HandlerA` and the result will change.
+
+That's not a problem with IoC. The same also happens with a [direct configuration of MediatR](https://github.com/arialdomartini/without-mediatr/blob/master/src/WithoutMediatR/RequestResponseMultipleRegistration/Direct/With.cs).
+
+The issue is, by design MediatR dispatches the request to the last recorded handler, silently ignoring any other previously registered ones.
 
 ## Without MediatR
-The handler can implement a domain-based interface, defining a `Ping()` method:
+This just does not apply to the OOP solution. You are in full control of which instance is injected into `Client`'s costructor.
 
-```charp
-file interface IPingHandler
-{
-    string Ping();
-}
-```
-
-It then directly implements it:
-
-```csharp
-file class PingHandler : IPingHandler
-{
-    string IPingHandler.Ping() => "Pong";
-}
-```
-
-Given an instance 
-
-```csharp
-IPingHandler pingHandler
-```
-
-invocation is done with:
-
-```csharp
-class Client
-{
-    private readonly PingHandler _pingHandler;
-
-    internal Client(PingHandler pingHandler)
-    {
-        _pingHandler = pingHandler;
-    }
-
-    void ping_request_response()
-    {
-        var response = pingHandler.Ping();
-
-        Assert.Equal("Pong", response);
-    }
-}
-```
+Some IoC containers such as Autofac may optionally exhibit the same behavior, but you still have authority over the instances to get (for example, with the [Autofac's Default Registrations](https://docs.autofac.org/en/latest/register/registration.html#default-registrations)).
 
 ## FAQs
 * [The OOP solution creates coupling!](#the-oop-solutioncreates-coupling)
@@ -253,7 +211,7 @@ I don't see any practical problem. Only academic fixations.
 **Answer**<br/>
 There are pragmatic consequences. You will find some examples in the next pages of this article:
 
-* [If you record more than one handler, one will be silently ignored](without-mediatr-request-response-multiple-registration)
+* If you record more than one handler, one will be silently ignored
 * You cannot send a request to multiple handlers
 * Sending a subclass of a Request results in a failure
 
