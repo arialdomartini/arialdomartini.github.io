@@ -194,10 +194,10 @@ class Client
 
 
 ### Isn't this exactly what MediatR does?
-MediatR too interposes an abstraction between `Client` and `PingHandler`. Therefore, isn't it a legit implementation of the Dependency Inversion Principle?
+MediatR too interposes an abstraction between `Client` and `PingHandler`. It is a legit implementation of the Dependency Inversion Principle, isn't it?
 
 **Answer**<br/>
-No, it's not. MediatR interposes an extra abstraction layer.
+No, it's not. MediatR interposes an extra, unneeded abstraction layer.
 
 ![Client depends on an abstraction of PingHandler](static/img/without-mediatr/with-mediatr.png)
 
@@ -210,7 +210,7 @@ What's the issue? An extra level of abstraction is harmless.
 **Answer**<br/>
 Unfortunately, it's not. It brings some negative consequences:
 
-* `Client` now depends on `IMediator`, from which it can send whatever request to whatever handler.
+* `Client` now depends on `IMediator`, from which it can send whatever request to whatever handler. This created an implicit, global coupling: as a matter of fact, `Client` can reach the whole application.
 
 ```csharp
 class Client
@@ -229,10 +229,9 @@ class Client
 }
 ```
 
-This created an implicit, global coupling: as a matter of fact, `Client` can reach the whole application.<br/>
-Technically, this is a violation of the [Interface Segregation Principle][interface-segregation].
+With the OOP approach, `Client` has a restricted visibility of the external world, constrainted by confines of the `IPingHandler` interface. It it not forced to depend on any method it does not use. This adherence to the [Interface Segregation Principle][interface-segregation],  is widely regarded as a hallmark of sound design.
 
-* The `Client`'s signatures are not honest anymore: you cannot infer which class `Client` depends on only by inspecting its signatures. Compare the constructors:
+* With MediatR, you cannot infer which class `Client` depends on only by inspecting its signatures. Compare the constructors:
 
 
 ```csharp
@@ -245,7 +244,9 @@ with
 internal Client(IPingHandler handler)
 ```
 
-This is a violation of the [Explicit Dependencies Principle][explicit-dependencies-principle].
+There is no chance to infer the relationship between `Client` and `Ping` from the signature, but reading the implementation code.
+
+The signature with the OOP approach is honest. The loose-coupled dependency to `PingHandler` is explicit and self-documenting. This makes the code compliant with the [Explicit Dependencies Principle][explicit-dependencies-principle], which is considered a design best practice..
     
 ### This is all theoretical
 I don't see any practical problem. Only academic fixations.
@@ -302,7 +303,8 @@ file interface IPeopleService
 * [wihout-mediatr repository][without-mediatr-repo]
 
 * [Dependency Inversion Principle - Wikipedia][dependency-inversion-principle]
-* [Explicit Dependencies Principle][explicit-dependencies-principle]
+* [Explicit Dependencies Principle - Microsoft][explicit-dependencies-principle]
+* [Explicit-Dependencies-Principle - principles.dev][explicit-dependencies-principle-dev]
 * [Interface Segregation Principle][interface-segregation]
 * [Command-Query Separation (CQS)][cqs]
 
@@ -314,6 +316,7 @@ file interface IPeopleService
 [without-mediatr-repo]: github.com/arialdomartini/without-mediatr
 [dependency-inversion-principle]: https://en.wikipedia.org/wiki/Dependency_inversion_principle
 [explicit-dependencies-principle]: https://docs.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/architectural-principles#explicit-dependencies
+[explicit-dependencies-principle-dev]: https://principles.dev/p/explicit-dependencies-principle/
 [interface-segregation]: https://en.wikipedia.org/wiki/Interface_segregation_principle
 [cqs]: https://en.wikipedia.org/wiki/Command%E2%80%93query_separation
 [query-object]: https://martinfowler.com/eaaCatalog/queryObject.html
