@@ -56,7 +56,7 @@ class PingHandler : IPingHandler
 ## FAQs
 ### Why is the OOP approach better?
 **Answer**<br/>
-The interface of `PingHandler` does not change only because one of its methods returns `void` instead of `string`.
+The interface of `PingHandler` does not change only because one of its methods returns `void` instead of `string` (e.g., there is no impact on the IoC registration).
 
 By the way, notice that you have the freedom to return either `void` or `Task`, depending on the asynchronous nature of the method.
 
