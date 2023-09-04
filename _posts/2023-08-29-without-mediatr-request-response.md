@@ -247,7 +247,9 @@ internal Client(IPingHandler handler)
 There is no chance to infer the relationship between `Client` and `Ping` from the signature, but reading the implementation code.
 
 The signature with the OOP approach is honest. The loose-coupled dependency to `PingHandler` is explicit and self-documenting. This makes the code compliant with the [Explicit Dependencies Principle][explicit-dependencies-principle], which is considered a design best practice..
-    
+
+* Because your handler must implement the interface defined by an external library, its `Handle` method has to return a `Task` even for strictly synchronous.
+
 ### This is all theoretical
 I don't see any practical problem. Only academic fixations.
 
