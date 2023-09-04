@@ -38,4 +38,4 @@ For each use case, though, the [without-mediatr][without-mediatr-repo] repositor
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
 
 [you-probably-dont-need-mediatr]: https://arialdomartini.github.io/mediatr
-[without-mediatr-repo]: github.com/arialdomartini/without-mediatr
+[without-mediatr-repo]: https://github.com/arialdomartini/without-mediatr
