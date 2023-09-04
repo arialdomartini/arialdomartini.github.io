@@ -259,7 +259,7 @@ There are pragmatic consequences. You will find some examples in the next pages 
 * Sending a subclass of a Request results in a failure
 
 ### The OOP solution violates CQRS!
-The MediatR solution has got a `Ping` class to represent a Command or a Query object. This is CQRS. The OOP solution is inferior.
+The MediatR solution has got a `Ping` class to represent a Command or a Query object. This is CQRS. The OOP solution is inferior: it does not have the message!
 
 **Answer**<br/>
 If you mean that methods should either be commands performing an action, or queries returning data without side effects, you mean [CQS][cqs], not CQRS.<br/>
@@ -297,6 +297,11 @@ file interface IPeopleService
 }
 ```
 
+While there are benefits in clustering the parameters of a method in a separate class (for example, with [Data clamp][data-clamp]), the idea that only with it is the code performing a proper message oriented architecture is foundamentally a myth<br/>
+In fact, technically speaking, in OOP there is no real difference between method calling and message passing. The "message" is not a class used to group the method parameters, but the method itself. In Simula, the first object-oriented, language, method call is described with `object.message(arg1, arg2)`. In Smalltalk a *protocol* (that in C# we would call an *interface*) is defined as "the complete set of messages an object responds to". 
+
+"*A message is a name that can be sent from one object to another, possibly with additional objects as arguments*" (from [What is Method Dispatch][what-is-method-dispatch]). Probably not the most familiar notion for us C# programmers, but it makes sense.
+
 # References
 
 * [You probably don't need MediatR][you-probably-dont-need-mediatr]
@@ -307,6 +312,8 @@ file interface IPeopleService
 * [Explicit-Dependencies-Principle - principles.dev][explicit-dependencies-principle-dev]
 * [Interface Segregation Principle][interface-segregation]
 * [Command-Query Separation (CQS)][cqs]
+* [Data clamp][data-clamp]
+* [What is Method-Dispatch?][what-is-method-dispatch]
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
@@ -320,4 +327,5 @@ file interface IPeopleService
 [interface-segregation]: https://en.wikipedia.org/wiki/Interface_segregation_principle
 [cqs]: https://en.wikipedia.org/wiki/Command%E2%80%93query_separation
 [query-object]: https://martinfowler.com/eaaCatalog/queryObject.html
-[command-object]: 
+[data-clamp]: https://en.wikipedia.org/wiki/Data_clump
+[what-is-method-dispatch]: https://stackoverflow.com/a/1811769
