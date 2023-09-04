@@ -26,7 +26,7 @@ For each use case, though, the [without-mediatr][without-mediatr-repo] repositor
   * Sending the same request to multiple handlers
 	  * [Fire and forget](without-mediatr-request-response-multiple-handlers)
       * [Collecting the return values](without-mediatr-request-response-multiple-handlers-with-reply)
-
+* [Streams and AsyncEnumerables](without-mediatr-streams)
 
 
 
