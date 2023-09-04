@@ -20,6 +20,7 @@ For each use case, though, the [without-mediatr][without-mediatr-repo] repositor
 # Table of contents
 * Request/response
   * [Request/response](without-mediatr-request-response)
+  * [Request/response, without any return value](without-mediatr-request-response-not-returning-a-value)
   * [Registration of multiple handlers](without-mediatr-request-response-multiple-registration)
   * [Multiple handlers with return value](without-mediatr-request-response-multiple-handlers-with-reply)
   * [Request/response, sending the same request to multiple handlers](without-mediatr-request-response-multiple-handlers)
