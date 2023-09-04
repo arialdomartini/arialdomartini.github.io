@@ -8,12 +8,6 @@ tags:
 - MediatR
 ---
 # Request/response
-
-| MediatR                                                                                        |
-|------------------------------------------------------------------------------------------------|
-| [Wiki](https://github.com/jbogard/MediatR/wiki#requestresponse)                                |
-| [Code](xxx) |
-
 ## With MediatR
 
 The request and the handler are defined as:

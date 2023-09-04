@@ -9,12 +9,12 @@ tags:
 ---
 # Request/response with a handler not returning a value
 ## With MediatR
-In MediatR there are two flavors of request types (see [Request types][mediatr-request-types])
+In MediatR there are two flavors of request types (see [Request types][mediatr-request-types]):
 
 * `IRequest<TResponse>`, for requests returning a value
 * `IRequest`, for the ones not returning any value
 
-Depending which case the handler covers, it needs to implement either:
+Depending on which case the handler covers, it needs to implement either:
 
 * `IRequestHandler<TRequest, TResponse>`, or
 * `IRequestHandler<TRequest>`
@@ -49,8 +49,6 @@ class PingHandler : IPingHandler
 }
 ```
 [code](https://github.com/arialdomartini/without-mediatr/blob/master/src/WithoutMediatR/RequestResponseNotReturningAValue/Without.cs)
-
-
 
 
 ## FAQs

@@ -8,14 +8,12 @@ tags:
 - MediatR
 ---
 # Request/response, sending the same request to multiple handlers
+You want to deliver the same message to more than 1 target. 
 
-| MediatR       |
-|---------------|
-| Not supported |
-| Not supported |
+We will explore the two cases, whether you want to perform a fire-and-forget (this page), or you wish to collect a reply back from all the targets, a case covered by [Multiple handlers with return value](without-mediatr-request-response-multiple-handlers-with-reply).
+
 
 ## With MediatR
-
 This is not supported. By design, Request/response messages are dispatched to a single handler (see [MediatR wiki - Basics][mediatr-basics]).
 
 If you register more than a handler for the same request, only the last one will be dispatched the request, while [the other ones will be silently discarded](without-mediatr-request-response-multiple-registration).

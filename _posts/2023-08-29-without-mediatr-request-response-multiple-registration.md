@@ -9,11 +9,6 @@ tags:
 ---
 # Request/response, multiple registration
 
-| MediatR      |
-|--------------|
-| Undocumented |
-| Undocumented |
-
 ## With MediatR
 
 What happens if two different handlers for the same request are registered with MediatR?<br/>

@@ -9,11 +9,6 @@ tags:
 ---
 # Request/response, multiple handlers, with reply
 
-| MediatR       |
-|---------------|
-| Not supported |
-| Not supported |
-
 ## With MediatR
 This pattern is not supported by MediatR. By design, [Request/response messages are dispatched to a single handler][mediatr-basics].
 
