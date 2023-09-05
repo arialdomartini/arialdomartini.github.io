@@ -7,7 +7,7 @@ tags:
 - MediatR
 most_read: true
 ---
-This is an appendix of [You probably don't need MediatR][you-probably-dont-need-mediatr]: it offers practical guidance for those looking to implement the MediatR's functionalities using a plain object-oriented or functional approach.
+This is an appendix of [You probably don't need MediatR][you-probably-dont-need-mediatr]: it offers practical guidance to implement the MediatR's functionalities using a plain object-oriented approach.
 
 It goes through all the examples in the MediatR readme file and all the snippets in the 'samples' project: for each of them, it provides an implementation based on OOP standard patterns, together with some design considerations.
 <!--more-->
