@@ -50,10 +50,6 @@ class StreamHandler : IStreamHandler
 **Answer**<br/>
 Just like for Requests [not returning any value](without-mediatr-request-response-not-returning-a-value), MediatR requires a special type for stream requests and another special one for their handlers, while the native C# OOP does not need any special treatment and works out-of-the-box.
 
-Similarly, support to Streams with MediatR does not work with [subtyping](without-mediatr-request-response-subtyping), while OOP does.
-
-# References
-
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
 

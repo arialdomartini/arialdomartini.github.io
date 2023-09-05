@@ -252,7 +252,6 @@ There are pragmatic consequences. You will find some examples in the next pages 
 
 * [If you record more than one handler, one will be silently ignored](without-mediatr-request-response-multiple-registration)
 * [You cannot send a request to multiple handlers](without-mediatr-request-response-multiple-handlers)
-* [Sending a subclass of a Request results in a failure](without-mediatr-request-response-subtyping)
 
 ### The OOP solution violates CQRS!
 The MediatR solution has got a `Ping` class to represent a Command or a Query object. This is CQRS. The OOP solution is inferior: it does not have the message!

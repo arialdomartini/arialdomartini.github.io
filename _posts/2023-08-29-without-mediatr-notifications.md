@@ -34,7 +34,6 @@ Compared to Request/response, there are some crucial differences:
 |------------------------------|----------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
 | No handlers registered       | Published notifications are not delivered                      | Sending requests raise an exception                                                                        |
 | Multiple registered handlers | Notifications are delivered to all the registered handers      | [Any extra registered handler is silently ignored](without-mediatr-request-response-multiple-registration) |
-| Use of a subtype             | Notification handling is polymorphic so it works with subtypes | [Request handling does not work with subtypes](without-mediatr-request-response-subtyping)                 |
 
 ## Without MediatR
 Publishing a notification is no different than [sending a request to multiple handlers in a fire and forget fashion](without-mediatr-request-response-multiple-handlers).

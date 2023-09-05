@@ -21,13 +21,14 @@ For each use case, though, the [without-mediatr][without-mediatr-repo] repositor
 * Request/response
   * [Request/response](without-mediatr-request-response)
   * [Without returning any value](without-mediatr-request-response-not-returning-a-value)
-  * [Subtyping](without-mediatr-request-response-subtyping)
   * [Registration of multiple handlers](without-mediatr-request-response-multiple-registration)
   * Sending the same request to multiple handlers
 	  * [Fire and forget](without-mediatr-request-response-multiple-handlers)
       * [Collecting the return values](without-mediatr-request-response-multiple-handlers-with-reply)
 * [Streams and AsyncEnumerables](without-mediatr-streams)
-* [Notifications](without-mediatr-notifications)
+* Notifications
+  * [Notifications](without-mediatr-notifications)
+  * [Custom notification publishers](without-mediatr-notifications-custom-notification-publisher)
 
 
 # References
