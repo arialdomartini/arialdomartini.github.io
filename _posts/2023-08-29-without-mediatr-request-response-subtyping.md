@@ -59,7 +59,33 @@ Assert.Equal("Pong", response);
 ## FAQs
 ### Which approach is correct?
 **Answer**<br/>
-C# exhibits a [strong behavioral subtyping][behavioral-subtyping], so the OOP approach is compliant with the [Liskov Substitution Principle][liskov], which states that subtypes must be substitutable for their base types without altering the correctness of the program. This is how all the object-oriented programming languages are designed.
+C# exhibits a [strong behavioral subtyping][behavioral-subtyping], so the OOP approach is compliant with the [Liskov Substitution Principle][liskov], which states that subtypes must be substitutable for their base types without altering the correctness of the program. So, this behavior is natively supported by the language.
+
+With MediatR there the polymorphic dispatch relies on the capabilities of the underlying dependency injection library, and depending on the setup you might encounter some surprises (see for example the discussion at [Issue - Polymorphic dispatch not working](https://github.com/jbogard/MediatR.Extensions.Microsoft.DependencyInjection/issues/24)).
+
+As an example, the following would result in a `InvalidOperationException`, despite `AddTransient<IRequestHandler<Ping, string>, PingHandler>()` looks like a legit registration:
+
+```csharp
+file record SubTypeOfPing : Ping;
+file record Ping : IRequest<string>;
+
+file class PingHandler : IRequestHandler<Ping, string>
+{
+    public Task<string> Handle(Ping request, CancellationToken cancellationToken)
+    {
+        return Task.FromResult("Pong");
+    }
+}
+
+var serviceProvider =
+    new ServiceCollection()
+        .AddTransient<IRequestHandler<Ping, string>, PingHandler>()
+        .BuildServiceProvider();
+
+var mediator = new Mediator(serviceProvider);
+mediator.Send(new SubTypeOfPing());
+```
+[code](https://github.com/arialdomartini/without-mediatr/blob/master/src/WithoutMediatR/RequestResponseSubtyping/Direct/With.cs)
 
 ### What happens if a handler for the subtype is also registered?
 What if with MediatR a handler for `SubTypeOfPing` is also registered?
