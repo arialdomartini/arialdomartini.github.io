@@ -34,5 +34,19 @@ class CustomNotificationPublisher : INotificationPublisher
 ## Without MediatR
 This it no special case: it's the implementation of the composite we already saw in [handling notifications without MediatR](without-mediatr-notifications).
 
+## FAQs
+### Why should the OOP implementation be preferrable?
+**Answer**<br/>
+A MediatR Custom Notification Publisher
+
+* is global
+* only works for Notifications, since [registering multiple request handlers is not supported](without-mediatr-request-response-multiple-registration).
+
+With the OOP approach:
+
+* this is no special case
+* different custom notification publishers can be used for different handlers
+* it works for both notifications and reqeusts.
+
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)

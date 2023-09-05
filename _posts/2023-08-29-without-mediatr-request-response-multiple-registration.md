@@ -61,6 +61,12 @@ This just does not apply to the OOP solution. You are in full control of which i
 
 Some IoC containers such as Autofac may optionally exhibit the same behavior, but you still have authority over the instances to get (for example, with the [Autofac's Default Registrations](https://docs.autofac.org/en/latest/register/registration.html#default-registrations)).
 
+Furthermore, if you wish to deliver the same request to multiple handlers, that is easily done both
+
+* [with a fire and forget style](without-mediatr-request-response-multiple-handlers) and
+* [collecting the return values](without-mediatr-request-response-multiple-handlers-with-reply)
+
+
 ## FAQs
 * [The OOP solution creates coupling!](#the-oop-solutioncreates-coupling)
 * [Isn't this exactly what MediatR does?](#isn-t-this-exactly-what-mediatr-does)
