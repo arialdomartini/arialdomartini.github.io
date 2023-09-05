@@ -7,12 +7,35 @@ tags:
 - MediatR
 most_read: true
 ---
-This is an extension of [You probably don't need MediatR][you-probably-dont-need-mediatr]: it offers practical guidance for those looking to implement all of MediatR's functionalities using a plain object-oriented or functional approach.
+This is an appendix of [You probably don't need MediatR][you-probably-dont-need-mediatr]: it offers practical guidance for those looking to implement the MediatR's functionalities using a plain object-oriented or functional approach.
 
 It goes through all the examples in the MediatR readme file and all the snippets in the 'samples' project: for each of them, it provides an implementation based on OOP standard patterns, together with some design considerations.
 <!--more-->
 
-All the code mentioned below is available in the [without-mediatr][without-mediatr-repo] repository.<br/>
+All the code mentioned hereinafter is available in the [without-mediatr][without-mediatr-repo] repository.<br/>
+
+# TL; DR
+* A simple handler implementing a custom, domain-based interface already covers the majority of the MediatR's functionalities (Request/response, void returns, Streams and AsyncEnumerables, Notifications, polymorphic dispatch and async)
+
+```csharp
+interface IMyHandler
+{
+    string Echo(string message, int whatever);
+}
+
+class MyHandler : IMyHandler
+{
+    string IMyHandler.Echo(string message, int whatever) => "do work";
+}
+```
+
+* Other functionalities such as notifications and pipelines are easily implemented with the [Composite Pattern](composite-pattern).
+
+* As surprising it might seem, this is really all that's necessary.<br/>
+Not only does this cover all of the MediatR functionalities, but also some not possible with MediatR, such as pipelines for notifications, handling of multiple requests and sending requests to multiple handlers.
+
+* A plain OOP approach typically demonstrates better design qualities compared to one built with MediatR.
+
 
 # Table of contents
 * Request/response
@@ -29,13 +52,16 @@ All the code mentioned below is available in the [without-mediatr][without-media
 * [Subtyping](without-mediatr-request-response-subtyping)
 
 
+
 # References
 
 * [You probably don't need MediatR][you-probably-dont-need-mediatr]
 * [wihout-mediatr repository][without-mediatr-repo]
+* [Composite Pattern][composite-pattern]
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
 
 [you-probably-dont-need-mediatr]: https://arialdomartini.github.io/mediatr
 [without-mediatr-repo]: https://github.com/arialdomartini/without-mediatr
+[composite-pattern]: https://en.wikipedia.org/wiki/Composite_pattern
