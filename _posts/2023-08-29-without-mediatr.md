@@ -29,6 +29,7 @@ For each use case, though, the [without-mediatr][without-mediatr-repo] repositor
 * Notifications
   * [Notifications](without-mediatr-notifications)
   * [Custom notification publishers](without-mediatr-notifications-custom-notification-publisher)
+* [Subtyping](without-mediatr-request-response-subtyping)
 
 
 # References
