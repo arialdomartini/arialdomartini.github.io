@@ -21,7 +21,7 @@ class PingHandler : IRequestHandler<Ping, string>
 }
 ```
 
-receives both instances of `Ping` and of subtypes of `Ping`:
+receives instances of both `Ping` and subtypes of `Ping`:
 
 ```csharp
 record Ping : IRequest<string>;
@@ -31,7 +31,9 @@ record SubTypeOfPing : Ping;
 
 
 ## Without MediatR
-Method dispatching in C# is polymorhic by design, so no surpsises that this works out of the box:
+Method dispatching in C# is polymorhic by design, so no surpsises that everything works out-of-the-box.<br/>
+
+This equally succeds both with `Ping` and `SubTypeOfPing`:
 
 ```csharp
 record SubTypeOfPing : Ping;
@@ -42,11 +44,8 @@ class PingHandler : IPingHandler
     Task<string> IPingHandler.Handle(Ping request) => 
         Task.FromResult("Pong");
 }
-```
 
-This equally succeds both with `Ping` and `SubTypeOfPing`:
 
-```csharp
 var response = await _client.UsePingHandler(new Ping());
 Assert.Equal("Pong", response);
 
@@ -57,13 +56,15 @@ Assert.Equal("Pong", response);
 
 
 ## FAQs
-### Which approach is correct?
+### Which approach is preferrable?
 **Answer**<br/>
-C# exhibits a [strong behavioral subtyping][behavioral-subtyping], so the OOP approach is compliant with the [Liskov Substitution Principle][liskov], which states that subtypes must be substitutable for their base types without altering the correctness of the program. So, this behavior is natively supported by the language.
+C# exhibits a [strong behavioral subtyping][behavioral-subtyping], so the OOP approach is compliant with the [Liskov Substitution Principle][liskov], which states that subtypes must be substitutable for their base types without altering the correctness of the program.<br/>
+So, this behavior is natively supported by the language and consistently applied.
 
-With MediatR there the polymorphic dispatch relies on the capabilities of the underlying dependency injection library, and depending on the setup you might encounter some surprises (see for example the discussion at [Issue - Polymorphic dispatch not working](https://github.com/jbogard/MediatR.Extensions.Microsoft.DependencyInjection/issues/24)).
+With MediatR the polymorphic dispatch relies on the capabilities of the underlying dependency injection library.<br/>
+The behavior is a bit more sensitive and depending on the setup you might encounter some surprises.
 
-As an example, the following would result in a `InvalidOperationException`, despite `AddTransient<IRequestHandler<Ping, string>, PingHandler>()` looks like a legit registration:
+As an example, the following would result in an `InvalidOperationException`, despite `AddTransient<IRequestHandler<Ping, string>, PingHandler>()` looks like a legit registration:
 
 ```csharp
 file record SubTypeOfPing : Ping;
@@ -83,12 +84,14 @@ var serviceProvider =
         .BuildServiceProvider();
 
 var mediator = new Mediator(serviceProvider);
-mediator.Send(new SubTypeOfPing());
+mediator.Send(new SubTypeOfPing()); // throws an exception
 ```
 [code](https://github.com/arialdomartini/without-mediatr/blob/master/src/WithoutMediatR/RequestResponseSubtyping/Direct/With.cs)
 
+You may read more in the discussion at [Issue - Polymorphic dispatch not working](https://github.com/jbogard/MediatR.Extensions.Microsoft.DependencyInjection/issues/24).
+
 ### What happens if a handler for the subtype is also registered?
-What if with MediatR a handler for `SubTypeOfPing` is also registered?
+What if a handler for `SubTypeOfPing` is also registered?
 
 ```csharp
 public class SubTypeOfPingHandler : IRequestHandler<SubTypeOfPing, string>
@@ -100,7 +103,7 @@ public class SubTypeOfPingHandler : IRequestHandler<SubTypeOfPing, string>
 }
 ```
 
-Which will get the request, `SubTypeOfPingHandler` or `PingHandler`?
+Which handler will get the request, `SubTypeOfPingHandler` or `PingHandler`?
 
 **Answer**<br/>
 It all depends on the order of registration, because [MediatR does not support registering multiple handlers for the same request](without-mediatr-request-response-multiple-registration).
