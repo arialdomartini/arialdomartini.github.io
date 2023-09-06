@@ -32,7 +32,7 @@ class MyHandler : IMyHandler
 * Other functionalities such as notifications and pipelines are easily implemented with the [Composite Pattern](composite-pattern).
 
 * As surprising it might seem, this is really all that's necessary.<br/>
-Not only does this cover all of the MediatR functionalities, but also some not possible with MediatR, such as pipelines for notifications, handling of multiple requests and sending requests to multiple handlers.
+Not only does this cover all of the MediatR functionalities, but also some that are not possible with MediatR, such as pipelines for notifications, handling of multiple requests and sending requests to multiple handlers.
 
 * A plain OOP approach typically demonstrates better design qualities compared to one built with MediatR.
 
