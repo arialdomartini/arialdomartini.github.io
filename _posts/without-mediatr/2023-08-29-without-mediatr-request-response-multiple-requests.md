@@ -7,7 +7,7 @@ tags:
 - C#
 - MediatR
 ---
-# Request/response, single handler, multiple requests
+# Request/response, single handler handling multiple requests
 
 What about having a class being responsible for handling more than one request?<br/>
 

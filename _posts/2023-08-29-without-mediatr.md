@@ -36,12 +36,12 @@ Not only does this cover all of the MediatR functionalities, but also some that 
 
 * A plain OOP approach typically demonstrates better design qualities compared to one built with MediatR.
 
-
 # Table of contents
 * Request/response
   * [Request/response](without-mediatr-request-response)
   * [Without returning any value](without-mediatr-request-response-not-returning-a-value)
   * [Registration of multiple handlers](without-mediatr-request-response-multiple-registration)
+  * [Single handler handling multiple requests](without-mediatr-request-response-multiple-requests)
   * Sending the same request to multiple handlers
 	  * [Fire and forget](without-mediatr-request-response-multiple-handlers)
       * [Collecting the return values](without-mediatr-request-response-multiple-handlers-with-reply)
