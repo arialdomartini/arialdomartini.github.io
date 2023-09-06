@@ -57,7 +57,7 @@ Not only does this cover all of the MediatR functionalities, but also some that 
 # References
 
 * [You probably don't need MediatR][you-probably-dont-need-mediatr]
-* [wihout-mediatr repository][without-mediatr-repo]
+* [wihout-mediatr code repository][without-mediatr-repo]
 * [Composite Pattern][composite-pattern]
 
 # Comments
