@@ -49,7 +49,7 @@ Not only does this cover all of the MediatR functionalities, but also some that 
 * Notifications
   * [Notifications](without-mediatr-notifications)
   * [Custom notification publishers](without-mediatr-notifications-custom-notification-publisher)
-* [Subtyping](without-mediatr-request-response-subtyping)
+* [Polymorphic dispatch](without-mediatr-request-response-subtyping)
 
 
 
