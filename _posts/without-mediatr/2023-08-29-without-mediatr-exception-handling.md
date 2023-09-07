@@ -112,7 +112,7 @@ There is value in the consistency and simplicity of this approach. The less you 
 
 
 # Comments
-[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/7)
 
 [decorator-pattern]: https://en.wikipedia.org/wiki/Decorator_pattern
 [composite-pattern]: https://en.wikipedia.org/wiki/Composite_pattern

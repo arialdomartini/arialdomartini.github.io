@@ -49,4 +49,4 @@ With the OOP approach:
 * it works for both notifications and reqeusts.
 
 # Comments
-[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/7)

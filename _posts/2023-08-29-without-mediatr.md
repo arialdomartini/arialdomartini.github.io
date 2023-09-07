@@ -62,7 +62,7 @@ Not only does this cover all of the MediatR functionalities, but also some that 
 * [Composite Pattern][composite-pattern]
 
 # Comments
-[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/7)
 
 [you-probably-dont-need-mediatr]: https://arialdomartini.github.io/mediatr
 [without-mediatr-repo]: https://github.com/arialdomartini/without-mediatr

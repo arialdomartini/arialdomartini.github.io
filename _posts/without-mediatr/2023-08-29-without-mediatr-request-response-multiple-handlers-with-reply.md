@@ -181,7 +181,7 @@ I tend to listen to code: if something is hard to develop, either I'm trying to 
 * [MapReduce][map-reduce]
 
 # Comments
-[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/7)
 
 [observer-pattern]: https://en.wikipedia.org/wiki/Observer_pattern
 [composite-pattern]: https://en.wikipedia.org/wiki/Composite_pattern

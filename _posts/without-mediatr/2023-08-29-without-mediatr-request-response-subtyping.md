@@ -114,7 +114,7 @@ It all depends on the order of registration, because [MediatR does not support r
 * [Behavioral Subtyping][behavioral-subtyping]
 
 # Comments
-[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/7)
 
 [liskov]: https://en.wikipedia.org/wiki/Liskov_substitution_principle
 [behavioral-subtyping]: https://en.wikipedia.org/wiki/Behavioral_subtyping

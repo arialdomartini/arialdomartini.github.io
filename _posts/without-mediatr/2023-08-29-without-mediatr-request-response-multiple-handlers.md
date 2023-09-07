@@ -135,7 +135,7 @@ Very good question. This deserves [a dedicated page](without-mediatr-request-res
 * [Question: Multiple parallel send with merge result][parallel-send]
 
 # Comments
-[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/7)
 
 [mediatr-basics]: https://github.com/jbogard/MediatR/wiki#basics
 [composite-pattern]: https://en.wikipedia.org/wiki/Composite_pattern

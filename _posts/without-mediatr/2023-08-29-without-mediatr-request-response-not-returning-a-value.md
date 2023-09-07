@@ -38,6 +38,20 @@ class PingHandler : IRequestHandler<Ping>
 
 Although this is still supported, since version 5 (see [Migration guide 4.1.0 > 5.0.1][migration-guide]) requests handler that return a value, and those that do not were unified into one single type `IRequestHandler<T, U>`. Handler not returning a value shall return `Unit`.
 
+```csharp
+class Ping : IRequest<Unit> { }
+
+class PingHandler : IRequestHandler<Ping, Unit>
+{
+    public Task<Unit> Handle(Ping request, CancellationToken cancellationToken)
+    {
+        // do work
+        return Task.FromResult(Unit.Value);
+    }
+}
+```
+[code](https://github.com/arialdomartini/without-mediatr/blob/master/src/WithoutMediatR/RequestResponseNotReturningAValue/ReturningUnit/With.cs)
+
 
 ## Without MediatR
 C# method dispathing supports `void` methods out of the box, so there is nothing special you have to do other than declaring the method as void:
@@ -74,7 +88,7 @@ By the way, notice that you have the freedom to return either `void` or `Task`, 
 * [MediatR - Migration Guide 4.1.0 > 5.0.1][migration-guide]
 
 # Comments
-[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/7)
 
 [mediatr-request-types]: https://github.com/jbogard/MediatR/wiki/#request-types
 [migration-guide]: https://github.com/jbogard/MediatR/issues/274#issuecomment-394716576

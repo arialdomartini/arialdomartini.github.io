@@ -266,7 +266,7 @@ file interface IPeopleService
 * [Command-Query Separation (CQS)][cqs]
 
 # Comments
-[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/7)
 
 
 [you-probably-dont-need-mediatr]: https://arialdomartini.github.io/mediatr

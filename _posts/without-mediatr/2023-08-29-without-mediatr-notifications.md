@@ -201,7 +201,7 @@ subject.SendMessage(new Ping("some message"));
 * [C# Events][events]
 
 # Comments
-[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/7)
 
 [composite-pattern]: https://en.wikipedia.org/wiki/Composite_pattern
 [observer-pattern]: https://en.wikipedia.org/wiki/Observer_pattern

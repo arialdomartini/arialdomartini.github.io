@@ -311,7 +311,7 @@ In fact, technically speaking, in OOP there is no real difference between method
 * [What is Method-Dispatch?][what-is-method-dispatch]
 
 # Comments
-[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/7)
 
 
 [you-probably-dont-need-mediatr]: https://arialdomartini.github.io/mediatr

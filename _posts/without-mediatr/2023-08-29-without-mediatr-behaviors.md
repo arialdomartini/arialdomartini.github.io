@@ -128,7 +128,7 @@ The developer is in full control of the order and the way behaviors are combined
 * [Chain of Responsibility - refactoring.guru][chain-of-responsibility-refactoring-guru]
 
 # Comments
-[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/7)
 
 [mediatr-behaviors]: https://github.com/jbogard/MediatR/wiki/Behaviors
 [decorator-pattern]: https://en.wikipedia.org/wiki/Decorator_pattern
