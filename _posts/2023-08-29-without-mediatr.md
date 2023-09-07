@@ -51,6 +51,7 @@ Not only does this cover all of the MediatR functionalities, but also some that 
   * [Custom notification publishers](without-mediatr-notifications-custom-notification-publisher)
 * [Polymorphic dispatch](without-mediatr-request-response-subtyping)
 * [Async](without-mediatr-async)
+* [Exception Handling](without-mediatr-exception-handling)
 
 
 
