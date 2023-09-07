@@ -18,6 +18,8 @@ This is not supported. By design, Request/response messages are dispatched to a 
 
 If you register more than a handler for the same request, only the last one will be dispatched the request, while [the other ones will be silently discarded](without-mediatr-request-response-multiple-registration).
 
+The idiomatic way to cover this case is to merge the logic of the ideal multiple handlers in a single one (see [Question: Multiple parallel send with merge result][parallel-send]).
+
 ## Without MediatR
 With plain OOP and FP there are plenty of options for dispatching the same call to multiple targets.
 
@@ -130,7 +132,7 @@ Very good question. This deserves [a dedicated page](without-mediatr-request-res
 * Code
   * [Multiple dispatch with a collection][multiple-dispatch-collection]
   * [Multiple dispatch with Composite Pattern][multiple-dispatch-composite-pattern]
-
+* [Question: Multiple parallel send with merge result][parallel-send]
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/22)
@@ -139,3 +141,4 @@ Very good question. This deserves [a dedicated page](without-mediatr-request-res
 [composite-pattern]: https://en.wikipedia.org/wiki/Composite_pattern
 [multiple-dispatch-collection]: https://github.com/arialdomartini/without-mediatr/blob/master/src/WithoutMediatR/RequestResponseMultipleDispatch/Collection/Without.cs#L6
 [multiple-dispatch-composite-pattern]: https://github.com/arialdomartini/without-mediatr/blob/master/src/WithoutMediatR/RequestResponseMultipleDispatch/Composite/Without.cs
+[parallel-send]: https://github.com/jbogard/MediatR/issues/609
