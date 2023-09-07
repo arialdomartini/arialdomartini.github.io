@@ -52,7 +52,7 @@ Not only does this cover all of the MediatR functionalities, but also some that 
 * [Polymorphic dispatch](without-mediatr-request-response-subtyping)
 * [Async](without-mediatr-async)
 * [Exception Handling](without-mediatr-exception-handling)
-
+* [Behaviors](without-mediatr-behaviors)
 
 
 # References
