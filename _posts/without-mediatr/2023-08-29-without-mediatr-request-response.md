@@ -60,7 +60,7 @@ mediator = new Mediator(serviceProvider);
 The handler can implement a domain-based interface, defining a `Ping()` method:
 
 ```charp
-file interface IPingHandler
+interface IPingHandler
 {
     string Ping();
 }
@@ -69,7 +69,7 @@ file interface IPingHandler
 It then directly implements it:
 
 ```csharp
-file class PingHandler : IPingHandler
+class PingHandler : IPingHandler
 {
     string IPingHandler.Ping() => "Pong";
 }
