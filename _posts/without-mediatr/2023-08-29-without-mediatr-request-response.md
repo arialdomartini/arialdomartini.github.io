@@ -75,32 +75,27 @@ class PingHandler : IPingHandler
 }
 ```
 
-Given an instance 
-
-```csharp
-IPingHandler pingHandler
-```
-
-invocation is done with:
+Invocation is done with:
 
 ```csharp
 class Client
 {
-    private readonly PingHandler _pingHandler;
+    private readonly IPingHandler _pingHandler;
 
-    internal Client(PingHandler pingHandler)
+    internal Client(IPingHandler pingHandler)
     {
         _pingHandler = pingHandler;
     }
 
     void ping_request_response()
     {
-        var response = pingHandler.Ping();
+        var response = _pingHandler.Ping();
 
         Assert.Equal("Pong", response);
     }
 }
 ```
+[code](https://github.com/arialdomartini/without-mediatr/blob/master/src/WithoutMediatR/RequestResponse/Direct/Without.cs)
 
 ## FAQs
 * [The OOP solution creates coupling!](#the-oop-solutioncreates-coupling)
