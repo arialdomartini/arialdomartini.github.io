@@ -45,7 +45,7 @@ class Client
 }
 ```
 
-For this to work, the MediatR instance has to be informed that `PingHandler` is the handler of requests of type `IRequest<Ping, string>:
+For this to work, the MediatR instance has to be informed that `PingHandler` is the handler of requests of type `IRequest<Ping, string>`:
 
 ```csharp
 var serviceProvider =
