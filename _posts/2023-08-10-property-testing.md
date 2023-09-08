@@ -420,7 +420,7 @@ You are forced to think of some other *property* which holds whatever the input.
 ```csharp
 [Property]
 bool sum_is_commutative(int a, int b) => 
-    a + b == b + b;
+    a + b == b + a;
 
 [Property]
 bool adding_zero_does_not_change_the_result(int a) => 
