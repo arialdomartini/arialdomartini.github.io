@@ -21,6 +21,8 @@ tags:
 - [The Prime Factors Kata](#the-prime-factors-kata)
 - [The classic TDD approach](#the-classic-tdd-approach)
 - [Can we do better?](#can-we-do-better)
+- [The PBT approach](#the-pbt-approach)
+- [Ruminating on PBT](ruminating-on-pbt)
     - [Capturing the requirement](#capturing-the-requirement)
     - [Covering the examples](#covering-the-examples)
     - [But can it be used to *lead development*?](#but-can-it-be-used-to-lead-development)
@@ -78,6 +80,7 @@ The requirement to implement is:
 ```
 
 which can be resolved with:
+
 
 ```kotlin
 private fun factorsOf(n: Int): List<int> {
@@ -278,7 +281,9 @@ Foundamentally, the test is a collection of input-output pairs:
 
 I guess that displayed like that, it would not be apparent to everyone that this is about extracting the prime factors.
 
-How can this be improved?<br/>
+How can this be improved?
+
+## The PBT approach
 Let's do a step back, starting from the original requirement:
 
 > Write a function that takes an integer and returns the collection of its prime factors;<br/>
@@ -326,8 +331,176 @@ Yet, it captures the requirement, it *reads* like a requirement. It conveys a do
 
 If tests are intended to serve as documentation, I argue that this particular property test imparts significantly more information than the original `10` examples.
 
+So, let's run this single Property-Testing to see how this will lead the development.
 
+### Step 1
+The test fails stating that `factorsOf(1)` is not matched:
+
+```
+Falsifiable, after 1 test (1 shrink) (StdGen (1957335681,297231759)):
+Original:
+PositiveInt 2
+Shrunk:
+PositiveInt 1
+```
+
+which leads you to write:
+
+
+```csharp
+IEnumerable<int> factorsOf(int n) => 
+        new[] { 1 };
+```
+
+That's exactly the same that happened with TDD.
+
+Interestingly, though, running the test again with no modification, gives you a new red, stating that now it's the cae for `2` to be broken.
+
+```csharp
+Falsifiable, after 1 test (0 shrinks) (StdGen (334860507,297231761)):
+Original:
+PositiveInt 2
+```
+
+This immediately introduces you to the next use case.
+
+### Step 2
+This leads you to write:
+
+```csharp
+IEnumerable<int> factorsOf(int n)
+{
+    var factors = new List<int>();
+    if(n > 1)
+        factors.Add(2);
+        
+    return factors;
+}
+```
+
+Run the test again and again get a new red case, this time for the `3` case. Do you start seeing the pattern? This is mirroring the TDD experience, without the need of updating the test, and without misleading green results.
+
+### Step 3
+As before, your replace `2` with `n`:
+
+```csharp
+IEnumerable<int> factorsOf(int n)
+{
+    var factors = new List<int>();
+    if(n > 1)
+        factors.Add(n);
+        
+    return factors;
+}
+```
+
+No surprises: the test now fails for `4`:
+
+```
+Falsifiable, after 6 tests (0 shrinks) (StdGen (605250109,297231772)):
+Original:
+PositiveInt 4
+```
+
+### Step 4.
+As before, you implement:
+
+```csharp
+IEnumerable<int> factorsOf(int n)
+{
+    var remainder = n;
+    var factors = new List<int>();
+    if(n > 1)
+    {
+        if(remainder % 2 ==  0)
+        {
+            factors.Add(2);
+            remainder /= 2;
+        }
+    }
+
+    if (remainder > 1)
+        factors.Add(remainder);
+        
+    return factors;
+}
+```
+## Steps 5, 6 and 7
+Remember when with TDD you had to write the case for `5`, `6` and `7`, only to discover that they were already covered?<br/>
+Interestingly, this is not needed with PBT: re-executing the test, it jumps right to the case for `8`:
+
+```
+Falsifiable, after 7 tests (0 shrinks) (StdGen (1965459728,297231772)):
+Original:
+PositiveInt 8
+```
+
+### Step 8
+Again, the implementation is identical to the one with TDD. After all, you *are* doing TDD:
+
+```csharp
+IEnumerable<int> factorsOf(int n)
+{
+    var remainder = n;
+    var factors = new List<int>();
+    if(remainder > 1)
+    {
+        while(remainder % 2 ==  0)
+        {
+            factors.Add(2);
+            remainder /= 2;
+        }
+    }
+
+    if (remainder > 1)
+        factors.Add(remainder);
+    
+    return factors;
+}
+```
+
+Run again, get again a failure, for `9`:
+
+```
+Falsifiable, after 8 tests (0 shrinks) (StdGen (2011486583,297231773)):
+Original:
+PositiveInt 9
+```
+
+### Step 9
+As before:
+
+```csharp
+IEnumerable<int> factorsOf(int n)
+{
+    var remainder = n;
+    var divisor = 2;
+    var factors = new List<int>();
+    while(remainder > 1)
+    {
+        while(remainder % divisor ==  0)
+        {
+            factors.Add(divisor);
+            remainder /= divisor;
+        }
+
+        divisor++;
+    }
+
+    return factors;
+}
+```
+
+Run the test again. Tada! Green!
+
+As hard the library tried to prove you false, it surrended admitting that you finally implemented the right algorithm.
+
+### Step 10
+Pause a little and ask yourself: do you need to test `2*2*3*3*5*7*11*13` as before?
+
+## Ruminating on PBT
 ### Covering the examples
+
 Can this single test replace the original `10`, without loss of information?<br/>
 As a matter of fact, yes: indeed, it explores a much larger domain space, and almost for free.
 
