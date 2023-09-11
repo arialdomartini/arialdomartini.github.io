@@ -258,7 +258,7 @@ Let me start from the test suite we got with the classic approach:
 }
 ```
 
-It's fine, but it says nothing about the "prime factorization". Nowhere does the idea of "prime number" emerge. Besides the name `factorsOf()`, little intuition is expressed about what it is going to happen.
+It's fine, but it says nothing about "*prime factorization*". Nowhere does the idea of "prime number" emerge. Besides the name `factorsOf()`, little intuition is expressed about what it is going to happen.
 
 Foundamentally, the test is a collection of input-output pairs:
 
