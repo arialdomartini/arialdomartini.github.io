@@ -190,7 +190,7 @@ No, it's not. MediatR interposes an extra, unneeded abstraction layer.
 
 ![Client depends on an abstraction of PingHandler](static/img/without-mediatr/with-mediatr.png)
 
-With MediatR `Client` depends on `IM-ediator` which in turn depends on `IRequestHandler<Ping, string>`, implemented by `PingHander`.<br/>
+With MediatR `Client` depends on `IMediator` which in turn depends on `IRequestHandler<Ping, string>`, implemented by `PingHander`.<br/>
 It's an unnecessary extra hop, that has negative effects.
 
 ### But the more decoupling the better, right?
