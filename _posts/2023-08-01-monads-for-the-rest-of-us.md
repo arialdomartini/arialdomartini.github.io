@@ -128,6 +128,20 @@ B apply<A, B>(Func<A, B> f, A a)
 * it gives you the possibility to extend the very meaning of Function Application. You will soon see that with Monads you will need a special `apply` implementation that is able to apply functions to incompatible value types.
 
 
+### Function Application of multi-parameter functions
+
+The version of `apply` we got only works with 1-parameter functions. The following does not even compile:
+
+```csharp
+int f(string s, string z) => s.Length + z.Length;
+
+apply(f, "foo", "bar");
+```
+
+It turns out that it is always possible to reduce multi-parameter functions to single-parameter ones, with by a technique called *currying*. We will see this later.
+
+## Function Composition
+
 # References
 
 [Mike Vanier][yet-another-tutorial]
