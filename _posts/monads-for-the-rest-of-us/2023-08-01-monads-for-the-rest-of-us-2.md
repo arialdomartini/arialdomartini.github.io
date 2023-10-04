@@ -52,7 +52,7 @@ Let's then write a High Order Function (HOF) that taken a function `f :: String 
 Func<string, int> myLength = s => s.Length;
 string s = "foo";
 
-int apply(Func<string, int> f, string a) => f(a);
+int Apply(Func<string, int> f, string a) => f(a);
 
 var length = apply(myLength, s);
 
@@ -63,7 +63,7 @@ It's easy to make it generic, so it works with any function `f :: a -> b` whatev
 
 ```csharp
 // apply :: (A -> B) -> A -> B
-B apply<A, B>(Func<A, B> f, A a) => f(a);
+B Apply<A, B>(Func<A, B> f, A a) => f(a);
 ```
 
 Take a few seconds to meditate on what we just wrote. Not surprisingly, we have discovered that Function Application is implemented as `f(a)`.  
@@ -80,7 +80,7 @@ It may seem that `apply` is a useless redundant function, but it's not:
 * it can be extended, giving you the opportunity to do *something else* while applying a function to a value. For example, you can decorate the invocation surrounding it with some logging calls: 
 
 ```csharp
-B apply<A, B>(Func<A, B> f, A a)
+B Apply<A, B>(Func<A, B> f, A a)
 {
     Log.Information("Got a value {A}", a);
     var b = f(a);
@@ -97,9 +97,9 @@ B apply<A, B>(Func<A, B> f, A a)
 The version of `apply` we got only works with 1-parameter functions. The following code does not even compile:
 
 ```csharp
-int f(string s, string z) => s.Length + z.Length;
+int F(string s, string z) => s.Length + z.Length;
 
-apply(f, "foo", "bar");
+apply(F, "foo", "bar");
 ```
 
 It turns out that it is always possible to reduce multi-parameter functions to single-parameter ones, with a technique called *currying*. We will see this later.
@@ -158,17 +158,17 @@ Assert.Equal(1.5M, halfTheLength);
 Of course, this works with any `f :: string -> int` and `g :: int -> decimal` functions, so we can safely rename `halfOf` and `length` to something more generic:
 
 ```csharp
-Func<string, decimal> compose(Func<string, int> f, Func<int, decimal> g) => a => g(f(a));
+Func<string, decimal> Compose(Func<string, int> f, Func<int, decimal> g) => a => g(f(a));
 ```
 
 Talking about being generic, we can in fact make this function generic on its types, so that given two functions `f :: a -> b` and `g :: b -> c` it composes them into a `gComposedWithf :: a -> c` composite function:
 
 ```csharp
 // compose :: (a -> b) -> (b -> c) -> (a -> c)
-Func<A, C> compose<A, B, C>(Func<A, B> f, Func<B, C> g) => a => g(f(a));
+Func<A, C> Compose<A, B, C>(Func<A, B> f, Func<B, C> g) => a => g(f(a));
 ```
 
-In Haskell, `compose` is written as `.` at [its implementation][haskell-composition-implementation] is:
+In Haskell, `Compose` is written as `.` at [its implementation][haskell-composition-implementation] is:
 
 ```haskell
 (.) :: (b -> c) -> (a -> b) -> a -> c
@@ -178,15 +178,15 @@ In Haskell, `compose` is written as `.` at [its implementation][haskell-composit
 It's essentially the same, besides the parameters being swapped in their positions.
 
 ### What we got
-As it happened with `apply`, with the formula `compose(f, g) => a => f(g(a))` we have just reinvented the weel.  
-And yet, our little `compose` implementation is not for nothing:
+As it happened with `Apply`, with the formula `Compose(f, g) => a => f(g(a))` we have just reinvented the weel.  
+And yet, our little `Compose` implementation is not for nothing:
 
 * It is slightly more more powerful than the native C# feature.  
-C# does not exacly implement function composition. `f(g(a))` composes 2 functions and then also *applies* the resulting function to a value. Our `compose()` function is more humble and interesting: it is a High Order Function that composes 2 generic, single-parameter functions, returning back a new function, *without* applying it.
+C# does not exacly implement function composition. `f(g(a))` composes 2 functions and then also *applies* the resulting function to a value. Our `Compose()` function is more humble and interesting: it is a High Order Function that composes 2 generic, single-parameter functions, returning back a new function, *without* applying it.
 
-* As for `apply()`, the manually implemented `compose()` gives us the opportunity to do *something else* in addition to composing functions.
+* As for `Apply()`, the manually implemented `Compose()` gives us the opportunity to do *something else* in addition to composing functions.
 
-* Finally, as for `apply()`, `compose()` gives us the chance to redefine the very meaning of Function Composition.  
+* Finally, as for `Apply()`, `Compose()` gives us the chance to redefine the very meaning of Function Composition.  
 For example, we could work it out to compose functions with not exactly compatible signatures.  
 And this turns out to be exactly the key for implementing and undestanding Monads.
 

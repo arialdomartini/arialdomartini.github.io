@@ -52,15 +52,15 @@ In fact, ideally a pure function can be replaced with a dictionary whose keys ar
 
 ```csharp
 // double :: Int -> Int
-int double(int i) => i * 2;
+int Double(int i) => i * 2;
 ```
 
 is fully described and replaced by the (very large) dictionary:
 
 ```csharp
-int double(int i) => codomain[i];
+int Double(int i) => Codomain[i];
 
-Dictionary<int, int> codomain = new Dictionary<int, int>
+Dictionary<int, int> Codomain = new Dictionary<int, int>
 {
     ...
     [-1] = -2
@@ -75,8 +75,8 @@ Dictionary<int, int> codomain = new Dictionary<int, int>
 Notice how the Dictionary's type arguments match the function type ones.
 
 ```csharp
-double :: Func<int, int>
-codomain:: Dictionary<int, int>
+Double :: Func<int, int>
+Codomain:: Dictionary<int, int>
 ```
 
 ## Extra computations
@@ -107,19 +107,19 @@ The signature of `closure` declares that it only depends on an `string`. But thi
 A function that possibly raises an exception is clearly dishonest:
 
 ```csharp
-decimal divide(decimal n, decimal d) => n / d;
+decimal Divide(decimal n, decimal d) => n / d;
 
-Assert.Equal(3M, divide(9M, 3M));
-Assert.Equal(4.5M, divide(9M, 2M));
+Assert.Equal(3M, Divide(9M, 3M));
+Assert.Equal(4.5M, Divide(9M, 2M));
 
-Assert.Throws<DivideByZeroException>(() => divide(9M, 0M));
+Assert.Throws<DivideByZeroException>(() => Divide(9M, 0M));
 ```
 
 ## Honest Functions
 It would be interesting if `divide`'s signature could somehow indicate that it can return either a `decimal` *or* throw `DivideByZeroException`, with something like:
 
 ```csharp
-(decimal | DivideByZeroException) divide(decimal n, decimal d) => n / d;
+(decimal | DivideByZeroException) Divide(decimal n, decimal d) => n / d;
 ```
 
 Of course, this does not even compile. Indeed, that's something C# does not support natively. Java, with its infamous Checked Exceptions, provides developers with a way to decorate a function signature to indicate that it could throw:
@@ -169,7 +169,7 @@ The function:
 
 ```csharp
 // decimal -> decimal -> decimal
-decimal divide(decimal n, decimal d) => n / d;
+decimal Divide(decimal n, decimal d) => n / d;
 ```
 
 would be better represented with a signature
@@ -203,7 +203,7 @@ would be better characterized as
 ## Dreaming of Monads
 So far, we fantasized about a different notion of functions, replacing the arrow `->` with `--[does something else]-->`, getting to signatures such as:
 
-```haskell
+```
 string --[reads an extra string]--> int
 decimal -> decimal --[might raise an exception]--> decimal
 [string] --[also writes to Console]--> int
@@ -212,20 +212,20 @@ decimal -> decimal --[might raise an exception]--> decimal
 Let`s do a little step forward, replacing the narrative English sentences with some hypothetical but legit type:
 
 
-| Case                                                      | Example of type                         |
-|-----------------------------------------------------------|-----------------------------------------|
-| A function that depends (reads) an extra string parameter | string --[Reader<String>]--> int        |
-| A function that might raise an exception                  | decimal -> decimal --[Error]--> decimal |
-| A function that also writes to the Console                | [string] --[IO]--> int                  |
+| Case                                                      | Example of type                           |
+|-----------------------------------------------------------|-------------------------------------------|
+| A function that depends (reads) an extra string parameter | `string --[Reader<String>]--> int`        |
+| A function that might raise an exception                  | `decimal -> decimal --[Error]--> decimal` |
+| A function that also writes to the Console                | `[string] --[IO]--> int`                  |
 
 We could think to other types representing arbitrary extra behaviors for functions:
 
-| Case                                                                  | Example of type                    |
-|-----------------------------------------------------------------------|------------------------------------|
-| A function that could fail to return a value                          | string --[Maybe]--> int            |
-| A function returning non-deterministic values                         | string --[NonDeterministic]--> int |
-| A function returning a value and also writing a double somewhere else | string --[Writer<double>] --> int  |
-| A function which depends and updates a shared state                   | string --[State<MyState>]--> int   |
+| Case                                                                  | Example of type                      |
+|-----------------------------------------------------------------------|--------------------------------------|
+| A function that could fail to return a value                          | `string --[Maybe]--> int`            |
+| A function returning non-deterministic values                         | `string --[NonDeterministic]--> int` |
+| A function returning a value and also writing a double somewhere else | `string --[Writer<double>] --> int`  |
+| A function which depends and updates a shared state                   | `string --[State<MyState>]--> int`   |
 
 
 If such function kinds existed and there was a way to extend Function Application and Function Composition, we could use them as enhanced versions of regular C# functions.
