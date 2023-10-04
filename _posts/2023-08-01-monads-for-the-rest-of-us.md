@@ -24,6 +24,19 @@ I challenged myself to write a post that:
 - is tailored for C# developers
 
 # Table of contents
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+**Table of Contents**
+
+- [The Goal](#the-goal)
+- [Function Application and Function Composition](#function-application-and-function-composition)
+    - [Function Application](#function-application)
+        - [What we got](#what-we-got)
+        - [Function Application of multi-parameter functions](#function-application-of-multi-parameter-functions)
+    - [Function Composition](#function-composition)
+        - [What we got](#what-we-got-1)
+- [References](#references)
+
+<!-- markdown-toc end -->
 
 
 **Disclaimer**: here and there I use a bit of Haskell-like notation; I capitalize type names, I keep method names in lowercase, and I translate function signatures like `Func<string, int, double>` as `f :: String -> Int -> Double`.  
