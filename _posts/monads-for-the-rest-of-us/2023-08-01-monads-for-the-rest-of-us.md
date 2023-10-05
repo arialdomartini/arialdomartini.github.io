@@ -143,9 +143,6 @@ The Monad approach tackle exactly those 2 issues.
 The direction it takes is more similar to the fictional C# code than the latter Java example: Monads are about providing a function with a type that gives both the developer and the compiler a clear indication of which *extra actions* it performs, in addition to the pure computation.  
 Monads are also more generic, and not limited to exceptions. There are many kinds of *extra actions*, and the idea of Monads is to represent each of them with a specific type.
 
-Monads are a way to model side effects without loosing the benefits of using pure functions.  
-They are a way to generalize the notions of Function Application and Function Composition to kinds of computation which are different from pure functions.
-
 ## Extending the notion of functions
 Think again to the function we saw before:
 
@@ -249,13 +246,26 @@ string --> Maybe<int>
 
 It turns out, the canonical way to define monadic functions is with the second form.
 
-In defining those types, and especially the consequent Function Application and Function Composition, we will make sure of 2 important traits:
+So, the monadic functions we mentioned before could have types similar to:
 
-* that the result will be a *pure function*, so we will get the benefits of both pure functions, and controlled side effects
-* that the pure calculation and the extra-behavior are not mixed together, so we can tackle them separately.
+| Case                                                                  | Example of type                   |
+|-----------------------------------------------------------------------|-----------------------------------|
+| A function that depends (reads) an extra string parameter             | `string -> Reader<String, int>`   |
+| A function that might raise an exception                              | `decimal -> Error<decimal>`       |
+| A function that also writes to the Console                            | `[string] -> IO<int>`             |
+| A function that could fail to return a value                          | `string -> Maybe<int>`            |
+| A function returning non-deterministic values                         | `string -> NonDeterministic<int>` |
+| A function returning a value and also writing a double somewhere else | `string -> Writer<double, int>`   |
+| A function which depends and updates a shared state                   | `string -> State<MyState, int`    |
+
+In the next part we will implement some of them.  
+In defining those types, we will make sure of 3 important traits:
+
+* that the result will be about *pure functions*, so we will get the benefits of both pure functions, and controlled side effects
+* that the pure calculation and the extra-behavior are not mixed together, so we can tackle them separately
+* that a version of Function Application and Function Composition exist for them, so we can use them in real scenarios.
 
 Grab your keyboard. It's time to give birth to your first monad.
-
 
 # References
 
