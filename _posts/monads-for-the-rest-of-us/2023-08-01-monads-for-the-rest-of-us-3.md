@@ -8,9 +8,10 @@ tags:
 include_in_index: false
 ---
 # Function Application and Function Composition
-The key of Monads is to use the type system to separate out side-effecting computations from pure computations, so that they do not interfere with each other.
+We learnt that the key of Monads is to use the type system to separate out side-effecting computations from pure computations, so that they do not interfere with each other.
 
-Let's get started characterizing the main notions about pure functions useful for our case: Function Application and Function Composition. It turns out these are all you need to re-implement to get Monads.
+We also found out that all revolves about being able to apply and compose monadic functions.  
+So, let's get started characterizing those notions more in detail. It turns Function Application and Function Composition is all you need to re-implement to get Monads.
 
 ## Function Application
 Consider the method:
@@ -41,11 +42,7 @@ In C# that's a trivial exercise, as Function Application is natively supported b
 var length = MyLength("foo");
 Assert.Equal(3, length);
 ```
-
-Why are we talking about such a basic operation such as function application?  
-In the next pages we are going to define *pure functions with a signature modelling the side effects they perform* (also known as "*monadic functions*"), and we will need to figure out how to apply them to values. We will discover that function application with those fancy functions is not natively supported by C#, and that a specific implementation is needed.
-
-So, it could be interesting to see if we are able to manually re-implement the native C# Function Application, so we can possibly extend it. Indeed, our implementation will be the basis for the future *Monadic* Function Application.  
+Manually re-implement the native C# Function Application might sound as a silly exercise, but it will be useful to learn how we can possibly extend it. Indeed, our implementation will be the basis for the future *Monadic* Function Application, which is not natively supported by C#.  
 Let's then write a High Order Function (HOF) that taken a function `f :: String -> Int` and a `String` value `a` applies `f` to `a` returning an `Int` result:
 
 ```csharp
@@ -67,7 +64,7 @@ B Apply<A, B>(Func<A, B> f, A a) => f(a);
 ```
 
 Take a few seconds to meditate on what we just wrote. Not surprisingly, we have discovered that Function Application is implemented as `f(a)`.  
-In Haskell, `apply` is written as `$` at its (simplified) [implementation][haskell-apply-implementation] is:
+In Haskell, `apply` is written as `$` at its (slightly simplified) [implementation][haskell-apply-implementation] is:
 
 ```haskell
 ($) :: (a -> b) -> a -> b
@@ -75,10 +72,10 @@ In Haskell, `apply` is written as `$` at its (simplified) [implementation][haske
 ```
 
 ### What we got
-It may seem that `apply` is a useless redundant function, but it's not:
+`apply` might seems a useless redundant function, but it's not:
 
-* it can be extended, giving you the opportunity to do *something else* while applying a function to a value. For example, you can decorate the invocation surrounding it with some logging calls: 
-
+* it can be extended, giving you the opportunity to do *something else* while applying a function to a value. For example, you can decorate the invocation surrounding it with some logging calls:   
+<br/>
 ```csharp
 B Apply<A, B>(Func<A, B> f, A a)
 {
@@ -87,10 +84,13 @@ B Apply<A, B>(Func<A, B> f, A a)
     Log.Information("Returning a value {B}", b);
     return b;
 }
-```
+```  
+The *something else* we are interested to do might be related to extra-computation characterizing monadic functions, and this could be interesting.
 
-* it gives you the possibility to extend the very meaning of Function Application. You will soon see that with Monads you will need a special `apply` implementation that is able to apply functions to incompatible value types.
+* it gives you the possibility to extend the very meaning of Function Application. You will soon see that with monadic function you will need a special `apply` implementation that is able to apply functions to incompatible (monadic) value types.
 
+Do you start to see a pattern? Monads are all about separating some *effects* in a type, and then handling them during function application and function composition.  
+Keep going: we are almost there.
 
 ### Function Application of multi-parameter functions
 
@@ -102,7 +102,7 @@ int F(string s, string z) => s.Length + z.Length;
 apply(F, "foo", "bar");
 ```
 
-It turns out that it is always possible to reduce multi-parameter functions to single-parameter ones, with a technique called *currying*. We will see this later.
+It turns out that it is always possible to reduce multi-parameter functions to single-parameter ones, with a technique called *currying*. Don't despair, we will see this later.
 
 ## Function Composition
 The second fundamental notion we are interested to re-implement is Function Composition.  
@@ -178,24 +178,17 @@ In Haskell, `Compose` is written as `.` at [its implementation][haskell-composit
 It's essentially the same, besides the parameters being swapped in their positions.
 
 ### What we got
-As it happened with `Apply`, with the formula `Compose(f, g) => a => f(g(a))` we have just reinvented the weel.  
+As for `Apply`, with the formula `Compose(f, g) => a => f(g(a))` we have just reinvented the weel.  
 And yet, our little `Compose` implementation is not for nothing:
 
 * It is slightly more more powerful than the native C# feature.  
 C# does not exacly implement function composition. `f(g(a))` composes 2 functions and then also *applies* the resulting function to a value. Our `Compose()` function is more humble and interesting: it is a High Order Function that composes 2 generic, single-parameter functions, returning back a new function, *without* applying it.
 
-* As for `Apply()`, the manually implemented `Compose()` gives us the opportunity to do *something else* in addition to composing functions.
+* As for `Apply()`, the manually implemented `Compose()` gives us the opportunity to do *something else* in addition to composing functions. And you know that the *something else* is what constitute the monadic part.
 
 * Finally, as for `Apply()`, `Compose()` gives us the chance to redefine the very meaning of Function Composition.  
 For example, we could work it out to compose functions with not exactly compatible signatures.  
 And this turns out to be exactly the key for implementing and undestanding Monads.
 
-# References
+You should be ready to come back to the IO monadic function and make it finally work.
 
-* [Mike Vanier][yet-another-tutorial]
-* [Implementation of ($) in Haskell][haskell-apply-implementation]
-* [Implementation of (.) in Haskell][haskell-composition-implementation]
-
-[yet-another-tutorial]: https://mvanier.livejournal.com/3917.html
-[haskell-composition-implementation]: https://hackage.haskell.org/package/base-4.18.1.0/docs/src/GHC.Base.html#.
-[haskell-apply-implementation]: https://hackage.haskell.org/package/base-4.18.1.0/docs/src/GHC.Base.html#%24

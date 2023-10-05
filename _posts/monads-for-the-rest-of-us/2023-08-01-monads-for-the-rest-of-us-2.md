@@ -7,10 +7,10 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
-So, we learnt that monadic functions are a way to model side effects without loosing the benefits of being pure.
+So, we learnt that monadic functions are a way to model side effects without loosing the benefits of pure functions.  
+Let's start from the hardest problem: making an impure function &mdash; with IO side effects&mdash; pure.
 
-Let's start from the hardest problem: making an impure function &mdash; with IO side effects&mdash; pure.  
-This is a function than, other than calculating the length of a string, also writes to a file:
+Here's a function than, other than calculating the length of a string, also writes to a file:
 
 ```csharp
 int CalculateWithSideEffect(string s)
@@ -25,7 +25,7 @@ Assert.Equal(3, length);
 Assert.Equal("I'm a side effect!", File.ReadAllText("output.txt"));
 ```
 
-Its type is `string -> int`, which does not reflect the fact it is performing an IO. Let's start from applying the idea of modeling this into a type, making its type `string -> IO<int>`.
+Its type is `string -> int`, which does not reflect the fact it is performing an IO. Let's start from applying the idea of type modeling the IO side effect, making its type `string -> IO<int>`.
 
 ```csharp
 IO<int> CalculateWithSideEffect(string s)
@@ -35,10 +35,10 @@ IO<int> CalculateWithSideEffect(string s)
 ```
 
 With the signature, we are good to go.  
-Let's turn our attention to the body. Let's give us the following goals:
+Time to turn our attention to the body. Let's give us the following goals:
 
 * to keep the function pure
-* to keep pure computation and side effect separate
+* to keep the pure computation and the side effect separate
 
 ```csharp
 IO<int> CalculateWithSideEffect(string s)
@@ -50,8 +50,7 @@ IO<int> CalculateWithSideEffect(string s)
 }
 ```
 
-
-In the end, we need to return an instance of `IO`. And so far it seems we are free to define the type `IO` as we wish. It makes a sense to proceed with:
+How to proceed? In the end, we need to return an instance of `IO`. We are free to define the type `IO` as we wish, so it makes a sense to proceed with:
 
 ```csharp
 IO<int> CalculateWithSideEffect(string s)
@@ -59,7 +58,7 @@ IO<int> CalculateWithSideEffect(string s)
     Action sideEffect = () => File.WriteAllText("output.txt", "I'm a side effect!");
     int PureComputation(string s) => s.Length;
 
-    var pureComputationResult = PureComputation(s);
+    int pureComputationResult = PureComputation(s);
     return new IO<int>(pureComputationResult, sideEffect);
 }
 ```
@@ -67,15 +66,13 @@ IO<int> CalculateWithSideEffect(string s)
 or more concisely:
 
 ```chsarp
-IO<int> CalculateWithSideEffect(string s)
-{
-    return new IO<int>(
+IO<int> CalculateWithSideEffect(string s) =>
+    new IO<int>(
         s.Length,
         () => File.WriteAllText("output.txt", "I'm a side effect!"));
-}
 ```
 
-As for `IO`, let's implement the minimum that makes sense not to loose the information we as passing it:
+As for the type `IO`, let's implement the minimum necessary not to loose information:
 
 ```csharp
 record IO<T>(T value, Action action);
@@ -97,17 +94,15 @@ class IO<T>
 }
 ```
 
-We ended up with
+Wrapping it up, that's the result
 
 ```csharp
 record IO<T>(T value, Action action);
     
-IO<int> CalculateWithSideEffect(string s)
-{
-    return new IO<int>(
+IO<int> CalculateWithSideEffect(string s) =>
+    new IO<int>(
         s.Length,
         () => File.WriteAllText("output.txt", "I'm a side effect!"));
-}
 
 IO<int> length = CalculateWithSideEffect("foo");
 
@@ -115,7 +110,7 @@ Assert.Equal(3, length);
 Assert.Equal("I'm a side effect!", File.ReadAllText("output.txt"));
 ```
 
-`CalculateWithSideEffect()` is pure. Of course: we are cheating! The side effect hasn't been executed at all. The last `Assert` would fail.  
+Something is not quite correct. Sure, `CalculateWithSideEffect()` is pure, but only because we are cheating. The side effect hasn't been executed at all. Indded, the last `Assert` fails.  
 Even worse: this code won't even compile. See the problem? The result we get from `CalculateWithSideEffect()` is not an `int` anymore, so it cannot be compared with `3`.
 
 Addding insult to injury, our freshely brewed `CalculateWithSideEffect` does not compose.  
@@ -136,7 +131,7 @@ void composition_of_pure_functions()
     int Double(int i) => i * 2;
 
     //                    string -> int -> int
-    var doubleTheLength = Double(CalculateWithSideEffect("foo"));
+    int doubleTheLength = Double(CalculateWithSideEffect("foo"));
         
     Assert.Equal(6, doubleTheLength);
 }
