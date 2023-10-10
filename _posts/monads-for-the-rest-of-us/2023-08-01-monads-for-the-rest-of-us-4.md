@@ -145,12 +145,136 @@ IEnumerable<int> result =
 You see the pattern? The specific *effect* does not affect the shape of your code; you can focus on the pure computations and let the type system model and deal with any extra side effect.  
 That's the gist of monads.
 
-# A working IO monad
+# A working Apply for the IO monad
+We are finally ready to write the monadic version of `Apply`.  
+If `Apply` for ordinary functions has the signature:
+
+```haskell
+Apply :: (A -> B) -> A -> B
+```
+
+the IO monadic version would be
+
+
+```haskell
+Apply :: (A -> IO<B>) -> IO<A> -> IO<B>
+```
+
+Interpret is as:
+
+* given a monadic function from `A` to `IO<B>`
+* we don't have a value of type `A` to feed it with
+* instead, we have a monadic value of type `IO<A>`, returned by a previously executed function
+* we apply the monadic function `A -> IO<B>` to the monadic value `IO<A>`
+* so we get the new monadic value `IO<B>`
+
+Its implementation is actually trivial:
+
+```csharp
+IO<B> Apply<A, B>(Func<A, IO<B>> f, IO<A> a) => 
+    new IO<B>(() =>
+    {
+        A aResult = a.Run();
+        IO<B> bResult = f(aResult);
+        return bResult.Run();
+    });
+```
+
+It works as follows:
+
+* `Apply` returns a new instance of `IO<B>`. The `IO` constructor takes a lambda: this means that the code we are passing to it is not going to be executed just yet. Any side effect will be deferred
+* This allows us to run `IO<A> a`. As per its nature, this
+  * will produce some side effects
+  * will return back the value (of type `A`) of the pure computation
+* A value of type `A` is compatible with the signature of `f`: it's easy to apply `f` to it, with the native C# function application
+* `f` is a monadic function, so what we get back it an IO monad
+* 
+
+
+Here's a complete use case in which there are 2 monadic functions:
+
+```haskell
+LengthWithSideEffect :: string -> IO<int>
+DoubleWithSideEffect :: int -> IO<double>
+```
+
+As stated by their signature, each function performs some IO side effects, other than performing a pure calculation.
+
+If the functions were pure, we could directly combine them as follows:
+
+
+```csharp
+// Length :: string -> int
+// Double :: int -> double
+
+var doubleTheLength = Double(Length("foo"));
+
+Assert(6, doubleTheLength);
+```
+
+or, with our custom `Apply`:
+
+```csharp
+var doubleTheLength = Apply(Double, Apply(Length, "foo"));
+
+Assert(6, doubleTheLength);
+```
+
+With the monadic case, `LengthWithSideEffect` returns an `IO<int>`, which is not directly compatible with the type `DoubleWithSideEffect` wants.
+
+The monadic version of `Apply` we just wrote takes care of *binding* the 2 monadic functions:
+
+```csharp
+IO<int> LengthWithSideEffect(string s) =>
+    new IO<int>(
+        () =>
+        {
+            File.WriteAllText("output.txt", "I'm a side effect!");
+            return s.Length;
+        });
+
+IO<double> (int n) =>
+    new IO<double>(
+        () =>
+        {
+            File.AppendAllText("output.txt", "I'm another side effect!");
+            return n * 2;
+        });
+
+
+IO<B> Apply<A, B>(Func<A, IO<B>> f, IO<A> a) => new(() =>
+{
+    A aResult = a.Run();
+    IO<B> bResult = f(aResult);
+    return bResult.Run();
+});
+
+IO<string> Return(string s) => new(() => s);
+
+var apply = Apply(LengthWithSideEffect, Return("foo"));
+
+IO<double> monadicResult = Apply(DoubleWithSideEffect, apply);
+
+// Indeed, no file has been created yet
+Assert.False(File.Exists("output.txt"));
+
+var result = monadicResult.Run();
+
+Assert.Equal(3*2, result);
+Assert.Equal("I'm a side effect!I'm another side effect!", File.ReadAllText("output.txt"));
+```
+
+Have you noticed that I used the expression "*binding 2 monadic functions*"?  
+The choice of the word *binding* was not random. Indeed, `Apply` in Haskell is implemented with the [`>>=` operator][haskell-bind], which reads exactly as *bind*.
+
+
 
 
 # References
 * [language-ext][language-ext]
 * [Eric Normand - Grokking Simplicity][grokking-simplicity]
+* [Bind in Haskell][haskell-bind]
 
 [language-ext]: https://github.com/louthy/language-ext
 [grokking-simplicity]: https://grokkingsimplicity.com/
+[haskell-bind]: https://hackage.haskell.org/package/base-4.19.0.0/docs/Prelude.html#v:-62--62--61-

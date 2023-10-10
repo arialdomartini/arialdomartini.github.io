@@ -35,61 +35,41 @@ IO<int> CalculateWithSideEffect(string s)
 ```
 
 With the signature, we are good to go.  
-Time to turn our attention to the body. Let's give us the following goals:
+Time to turn our attention to the body. If we want to keep the function pure, it seems there are only 2 options available:
 
-* to keep the function pure
-* to keep the pure computation and the side effect separate
+1. to keep the pure computation and the side effect completely separate, so the pure computation can be safely executed without side effects
+2. to defer the whole execution, so neither the pure computation nor the side effect are actually executed
 
-```csharp
-IO<int> CalculateWithSideEffect(string s)
-{
-    Action sideEffect = () => File.WriteAllText("output.txt", "I'm a side effect!");
-    int PureComputation(string s) => s.Length;
-            
-    ...
-}
-```
 
-How to proceed? In the end, we need to return an instance of `IO`. We are free to define the type `IO` as we wish, so it makes a sense to proceed with:
+1 is a bit impractical, because side effects and pure computations are often interconnected and interleaved.  
+2 is basically about deferring a computation with a lambda, like in a promise.
+
+So it makes a sense to proceed with:
 
 ```csharp
-IO<int> CalculateWithSideEffect(string s)
-{
-    Action sideEffect = () => File.WriteAllText("output.txt", "I'm a side effect!");
-    int PureComputation(string s) => s.Length;
-
-    int pureComputationResult = PureComputation(s);
-    return new IO<int>(pureComputationResult, sideEffect);
-}
-```
-
-or more concisely:
-
-```chsarp
 IO<int> CalculateWithSideEffect(string s) =>
-    new IO<int>(
-        s.Length,
-        () => File.WriteAllText("output.txt", "I'm a side effect!"));
+    new IO<int>(() => {
+         File.WriteAllText("output.txt", "I'm a side effect!");
+         return s.Length;
+    });
 ```
 
 As for the type `IO`, let's implement the minimum necessary not to loose information:
 
 ```csharp
-record IO<B>(B value, Action action);
+record IO<B>(Func<B> f);
 ```
 
 which is equivalent to the more verbose
 
 ```csharp
-class IO<T>
+class IO<B>
 {
-    private readonly T _value;
-    private readonly Action _action;
+    private readonly Func<B> _f;
 
-    internal IO(T value, Action action)
+    internal IO(Func<B> f)
     {
-        _value = value;
-        _action = action;
+        _f = f;
     }
 }
 ```
@@ -97,12 +77,13 @@ class IO<T>
 Wrapping it up, that's the result
 
 ```csharp
-record IO<B>(B value, Action action);
+record IO<B>(Func<B> f);
     
 IO<int> CalculateWithSideEffect(string s) =>
-    new IO<int>(
-        s.Length,
-        () => File.WriteAllText("output.txt", "I'm a side effect!"));
+    new IO<int>(() => {
+         File.WriteAllText("output.txt", "I'm a side effect!");
+         return s.Length;
+    });
 
 IO<int> length = CalculateWithSideEffect("foo");
 
