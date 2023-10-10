@@ -249,11 +249,9 @@ IO<B> Apply<A, B>(Func<A, IO<B>> f, IO<A> a) => new(() =>
     return bResult.Run();
 });
 
-IO<string> Return(string s) => new(() => s);
+IO<int> monadicLength = LengthWithSideEffect("foo");
 
-var apply = Apply(LengthWithSideEffect, Return("foo"));
-
-IO<double> monadicResult = Apply(DoubleWithSideEffect, apply);
+IO<double> monadicResult = Apply(DoubleWithSideEffect, monadicLength);
 
 // Indeed, no file has been created yet
 Assert.False(File.Exists("output.txt"));
@@ -268,6 +266,56 @@ Have you noticed that I used the expression "*binding 2 monadic functions*"?
 The choice of the word *binding* was not random. Indeed, `Apply` in Haskell is implemented with the [`>>=` operator][haskell-bind], which reads exactly as *bind*.
 
 
+
+
+# Compose for the IO monad
+Let's compose 2 monadic functions together:
+```haskell
+f :: A -> IO<B>
+g :: B -> IO<C>
+
+Compose(g, f) :: A -> IO<C>
+```
+
+The implementation of `Compose` can be based on `Apply`:
+
+```csharp
+Func<A, IO<C>> Compose<A, B, C>(Func<B, IO<C>> g, Func<A, IO<B>> f)
+{
+    return new Func<A, IO<C>>(a =>
+    {
+        IO<B> aa = f(a);
+        IO<C> io = Apply(g, aa);
+        return io;
+    });
+}
+
+var composed = Compose<string, int, double>(DoubleWithSideEffect, LengthWithSideEffect);
+
+IO<double> monadicResult = composed("foo");
+
+var result = monadicResult.Run();
+
+Assert.Equal(3*2, result);
+Assert.Equal("I'm a side effect!I'm another side effect!", File.ReadAllText("output.txt"));
+```
+
+# Linq to the resque
+If you think that using `Apply` and `Compose` does not look very practical, it is because it is not!  
+C# is particularly verbose, especially when it comes to defining high order functions type signatures.
+
+Remember when I showed you some code snippets based on [language-ext][language-ext]? They looked as Linq expressions. In fact, there is a way to teach Linq to work with any custom defined monads, just if they were ordinary `IEnumerable`s.  
+We will see how later. For now, it suffices to know that, once some extension methods are defined, dealing with side-effects will be a matter of composing functions in Linq expressions. The code above could be invoked as:
+
+```csharp
+IO<double> monadicResult =
+    from l in LengthWithSideEffect("foo")
+    from d in DoubleWithSideEffect(l)
+    select d;
+```
+
+# What about the other monads?
+What you have obtained with the IO monad can be easily done with other kinds of side-effect. Let's see some examples.
 
 
 # References
