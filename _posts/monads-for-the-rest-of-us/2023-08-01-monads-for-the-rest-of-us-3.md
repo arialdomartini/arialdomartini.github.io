@@ -147,9 +147,9 @@ Let's write a function that, given a `string -> int` function such as `length` a
 Func<string, int> length = s => s.Length;
 Func<int, decimal> halfOf = n => (decimal)n / 2;
 
-Func<string, decimal> compose(Func<string, int> length, Func<int, decimal> halfOf) => s => halfOf(length(s));
+Func<string, decimal> compose(Func<int, decimal> halfOf, Func<string, int> length) => s => halfOf(length(s));
         
-var halfOfLength = compose(length, halfOf);
+var halfOfLength = compose(halfOf, length);
 var halfTheLength = halfOfLength("foo");
 
 Assert.Equal(1.5M, halfTheLength);
@@ -158,14 +158,14 @@ Assert.Equal(1.5M, halfTheLength);
 Of course, this works with any `f :: string -> int` and `g :: int -> decimal` functions, so we can safely rename `halfOf` and `length` to something more generic:
 
 ```csharp
-Func<string, decimal> Compose(Func<string, int> f, Func<int, decimal> g) => a => g(f(a));
+Func<string, decimal> Compose(Func<int, decimal> g, Func<string, int> f) => a => g(f(a));
 ```
 
 Talking about being generic, we can in fact make this function generic on its types, so that given two functions `f :: a -> b` and `g :: b -> c` it composes them into a `gComposedWithf :: a -> c` composite function:
 
 ```csharp
-// compose :: (a -> b) -> (b -> c) -> (a -> c)
-Func<A, C> Compose<A, B, C>(Func<A, B> f, Func<B, C> g) => a => g(f(a));
+// compose :: (b -> c) -> (a -> b) -> (a -> c)
+Func<A, C> Compose<A, B, C>(Func<B, C> g, Func<A, B> f) => a => g(f(a));
 ```
 
 In Haskell, `Compose` is written as `.` at [its implementation][haskell-composition-implementation] is:
@@ -175,7 +175,7 @@ In Haskell, `Compose` is written as `.` at [its implementation][haskell-composit
 (.) f g = \x -> f (g x)
 ```
 
-It's essentially the same, besides the parameters being swapped in their positions.
+It's essentially the same.
 
 ### What we got
 As for `Apply`, with the formula `Compose(f, g) => a => f(g(a))` we have just reinvented the weel.  
@@ -192,3 +192,79 @@ And this turns out to be exactly the key for implementing and undestanding Monad
 
 You should be ready to come back to the IO monadic function and make it finally work.
 
+
+
+# Apply as the main building block of function composition
+Don't think to `Apply` merely as the way to pass an argument to a function. Go beyond that and consider how it is the fundamental way to link functions together: you use `Apply` to pass to a function the result of the application of a previous function. Basically, it links type-compatible functions in a chain.
+
+Consider the following: 
+
+```haskell
+Length :: string -> int
+Double :: int -> double
+```
+
+You want to apply `Double` to the result of `Length`.  
+In C#:
+
+```csharp
+B Apply<A, B>(Func<A, B> f, A a) => f(a);
+
+int Length(string s) => s.Length;
+double Double(int i) => i * 2;
+
+string a = "foo";
+
+double doubleTheLength = Apply(Double, Apply(Length, "foo"));
+
+Assert.Equal(6, doubleTheLength);
+```
+
+The Haskell notation here is much clearer:
+
+```haskell
+doubleTheLength = double $ length $ foo
+```
+
+which is pretty much the same of the native C# function application:
+
+```csharp
+double doubleTheLength = Double(Length("foo"));
+```
+
+The result we get is the same we could get from a a single function composing `Length` and `Double:
+
+```haskell
+Length :: string -> int
+Double :: int -> double
+
+Chain :: string -> double
+```
+
+with `Chain = Compose(Double, Length)`.
+
+In that sense, `Apply` is the cornestone of functional programming. It is such a basic building block that `Compose` can be easily defined in terms of it:
+
+```csharp
+B Apply<A, B>(Func<A, B> f, A a) => f(a);
+        
+Func<A, C> Compose<A, B, C>(Func<B, C> g, Func<A, B> f) => (A a) => Apply(g, Apply(f, a));
+        
+int Length(string s) => s.Length;
+double Double(int i) => i * 2;
+
+Func<string, double> composed = Compose<string, int, double>(Double, Length);
+        
+var doubleTheLength = composed("foo");
+        
+Assert.Equal(6, doubleTheLength);
+```
+
+The gist of this is:
+
+- if `Apply` links type-compatible functions in a chain
+- but we extended the notion of pure-computations with functions returning extended types
+- so that `Apply` does not work anymore,
+- maybe the key to Monads is about extending `Apply` to work on those type-incompatible functions. 
+
+Then, once you have `Apply`, you can easily get `Compose` too, and nothing can hold you back.

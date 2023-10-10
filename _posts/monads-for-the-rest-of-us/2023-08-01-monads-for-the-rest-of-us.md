@@ -15,12 +15,12 @@ I challenged myself to write a post that:
 - prioritizes code over storytelling
 - uses no metaphors (no boxes, no burritos)
 - does not require Category Theory
-- is concise
-- jumps past some of the trivial introductory topics (e.g., defining what a pure function is)
+- tries not to be verbose
+- jumps past some of the trivial introductory topics, such as defining what a pure function is
 - does not follow the classical Functors -> Monads narrative
 - is tailored for C# developers
 <!--more-->
-**Disclaimer**: here and there I use a bit of Haskell-like notation; I capitalize type names, I keep method names in lowercase, and I translate function signatures like `Func<string, int, double>` as `f :: String -> Int -> Double`.  
+**Disclaimer**: here and there I use a bit of Haskell-like notation, translating function signatures like `Func<string, int, double>` as `f :: String -> Int -> Double`.  
 Forgive me.
 
 # The Goal
@@ -86,7 +86,12 @@ C# is not a pure-functional language and its functions, other than mapping an in
 * raise exceptions
 * depend on a global or a local shared state
 
-This extra behavior is generally not reflected in the signature. In [Functional Programming in C#][buonanno-honest] Enrico Buonanno distinguishes between *honest* functions, the ones that honor their signatures, and and *dishonest* functions, the ones that, besides performing their mapping also do something else.
+Think about how you usually deal with these alternative notions of computation in a non-pure programming language such as C#. Computations that do I/O? No problem! Just do that. How about reading and writing shared state? C# won't prevent you from using a global variable. What about raising exceptions? That's natively supported by a special language keyword.
+
+The important thing to note is, in each case, we are no longer dealing with the traditional notion of function, because of this "something else" happening along with the usual simple mapping a single input to a single output.
+
+Interestingly, althought there are multiple kinds of this "something else", C# is not doing anything to capture and model that. We just don't care, until we need to troubleshoot that because of some unexpected behavior not captured by the compiler.  
+This would not happen if only this extra behavior would be somehow reflected in the signature. In [Functional Programming in C#][buonanno-honest] Enrico Buonanno distinguishes between *honest* functions, the ones that honor their signatures, and and *dishonest* functions, the ones that, besides performing their mapping also do something else.
 
 In the followig listing, `closure(1)` returns different values depending on the value of a shared state `b`:
 
@@ -258,8 +263,13 @@ So, the monadic functions we mentioned before could have types similar to:
 | A function returning a value and also writing a double somewhere else | `string -> Writer<double, int>`   |
 | A function which depends and updates a shared state                   | `string -> State<MyState, int`    |
 
-In the next part we will implement some of them.  
-In defining those types, we will make sure of 3 important traits:
+
+What does "f :: A -> SomeMonad<B>" really mean?  
+It means that `f` is a regular, pure function taking a value of type `A` and returning a monadic output value, that is a `B` value enriched by a special type `SomeMonad` modeling some specific extra behavior. We will soon find out that this minor change throws a monkey wrench into the works of traditional function application and composition.
+
+
+In the next part we will implement some of those type.  
+In defining them, we will make sure of 3 important traits:
 
 * that the result will be about *pure functions*, so we will get the benefits of both pure functions, and controlled side effects
 * that the pure calculation and the extra-behavior are not mixed together, so we can tackle them separately
