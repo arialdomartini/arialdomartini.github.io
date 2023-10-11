@@ -43,7 +43,7 @@ var length = mylength("foo");
 Assert.Equal(3, length);
 ```
 Manually re-implementing the native C# Function Application might sound as a silly exercise, but it will be useful to learn how we can possibly extend it. Indeed, our implementation will be the basis for the future *Monadic* Function Application, which is not natively supported by C#.  
-Let's then write a High Order Function (HOF) that taken a function `f :: String -> Int` and a `String` value `a` applies `f` to `a` returning an `Int` result:
+Let's then write a High Order Function (HOF) that taken a function `f :: string -> int` and a `string` value `a` applies `f` to `a` returning an `int` result:
 
 ```csharp
 Func<string, int> myLength = s => s.Length;
@@ -51,16 +51,31 @@ string s = "foo";
 
 int Apply(Func<string, int> f, string a) => f(a);
 
-var length = apply(myLength, s);
+var length = Apply(myLength, s);
 
 Assert.Equal(3, length);
 ```
 
-It's easy to make it generic, so it works with any function `f :: a -> b` whatever the types `a` and `b` are:
+The syntax can be improved defining `Apply` as an extension method:
+
+```csharp
+static class FunctionExtensions
+{
+    internal static int Apply(this Func<string, int> f, string s) => f(s);
+}
+
+Func<string, int> myLength = s => s.Length;
+
+var length = myLength.Apply("foo");
+
+Assert.Equal(3, length);
+```
+
+It's easy to make `Apply` generic, so it works with any function `f :: A -> B` whatever the types `A` and `B` are:
 
 ```csharp
 // apply :: (A -> B) -> A -> B
-B Apply<A, B>(Func<A, B> f, A a) => f(a);
+B Apply<A, B>(this Func<A, B> f, A a) => f(a);
 ```
 
 Take a few seconds to meditate on what we just wrote. Not surprisingly, we have discovered that Function Application is implemented as `f(a)`.  
