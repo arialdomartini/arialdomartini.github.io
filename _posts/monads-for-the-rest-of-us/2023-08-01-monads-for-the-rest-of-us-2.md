@@ -48,7 +48,8 @@ So it makes a sense to proceed with:
 
 ```csharp
 IO<int> LengthWithSideEffects(string s) =>
-    new IO<int>(() => {
+    new IO<int>(() => 
+    {
          File.WriteAllText("output.txt", "I'm a side effect!");
          return s.Length;
     });
@@ -60,7 +61,7 @@ As for the type `IO`, let's implement the minimum necessary to make the compiler
 record IO<B>(Func<B> f);
 ```
 
-which is equivalent to the more verbose
+which is equivalent to the more verbose:
 
 ```csharp
 class IO<B>
@@ -74,13 +75,14 @@ class IO<B>
 }
 ```
 
-Wrapping it up, that's the result
+Wrapping it up, that's the result:
 
 ```csharp
 record IO<B>(Func<B> f);
     
 IO<int> LengthWithSideEffects(string s) =>
-    new IO<int>(() => {
+    new IO<int>(() =>
+    {
          File.WriteAllText("output.txt", "I'm a side effect!");
          return s.Length;
     });
@@ -92,7 +94,8 @@ Assert.Equal("I'm a side effect!", File.ReadAllText("output.txt"));
 ```
 
 ## It does not work!
-Something is not quite correct. The last `Assert` is doomed to fail. Of course: `LengthWithSideEffects()` is pure, but only because we have cheated; the side effect is not executed at all.  
+Something is not quite correct.  
+The last `Assert` is doomed to fail. Of course: `LengthWithSideEffects()` is pure, but only because we have cheated; the side effect is not executed at all.  
 Even worse: this code won't even compile. See the problem? The result we get from `LengthWithSideEffects()` is not an `int` anymore, so it cannot be compared with `3`.
 
 Addding insult to injury, our freshely brewed `LengthWithSideEffects` does not compose.  
