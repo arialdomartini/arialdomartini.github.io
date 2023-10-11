@@ -87,9 +87,9 @@ In Haskell, `Apply` is written as `$` at its (slightly simplified) [implementati
 ```
 
 ### What we got
-The implementation of `Apply` might seems a useless redundant piece of code, but it's not:
+The implementation of `Apply` might seem of no use, but it's not:
 
-* it can be extended, giving you the opportunity to do *something else* while applying a function to a value. For example, you can decorate the invocation surrounding it with some logging calls:
+* It can be extended, giving you the opportunity to do *something else* while applying a function to a value. For example, you can decorate the invocation surrounding it with some logging calls:
 
 
 ```csharp
@@ -104,19 +104,19 @@ B Apply<A, B>(Func<A, B> f, A a)
 
 The *something else* we are interested to do might be related to extra-computation characterizing monadic functions, and this could be interesting.
 
-* it gives you the possibility to extend the very meaning of Function Application. You will soon see that with monadic function you will need a special `apply` implementation that is able to apply functions to incompatible (monadic) value types.
+* It gives you the possibility to extend the very meaning of Function Application. You will soon see that with monadic function you will need a special `Apply` implementation that is able to apply functions to incompatible (monadic) value types.
 
 Do you start to see a pattern? Monads are all about separating some *effects* in a type, and then handling them during function application and function composition.  
 Keep going: we are almost there.
 
 ### Function Application of multi-parameter functions
 
-The version of `apply` we got only works with 1-parameter functions. The following code does not even compile:
+The version of `Apply` we got only works with 1-parameter functions. The following code does not even compile:
 
 ```csharp
-int F(string s, string z) => s.Length + z.Length;
+Func<string, string, int> f = (s, z) => s.Length + z.Length;
 
-apply(F, "foo", "bar");
+f.Apply("foo", "bar");
 ```
 
 It turns out that it is always possible to reduce multi-parameter functions to single-parameter ones, with a technique called *currying*. Don't despair, we will see this later.
@@ -158,31 +158,38 @@ halfOf           :: int    -> decimal
 lengthThenHalfOf :: string -> decimal
 ```
 
-Let's write a function that, given a `string -> int` function such as `length` and a `int -> decimal` such as `halfOf` *composes* the two in a `string -> decimal` function:
+Function Composition is about generating that `lengthThenHalfOf` automatically, as a combination of the 2 basic functions, without the need of writing a specific implementation for it. Even better, it's about generating a combination of any 2 functions.  
+So, let's write a function that, given any `string -> int` function such as `length` and a `int -> decimal` such as `halfOf` *composes* the two in a `string -> decimal` function:
 
 ```csharp
 Func<string, int> length = s => s.Length;
 Func<int, decimal> halfOf = n => (decimal)n / 2;
 
-Func<string, decimal> compose(Func<int, decimal> halfOf, Func<string, int> length) => s => halfOf(length(s));
+Func<string, decimal> Compose(Func<int, decimal> g, Func<string, int> f) => s => g(f(s));
         
-var halfOfLength = compose(halfOf, length);
-var halfTheLength = halfOfLength("foo");
+Func<string, decimal> halfOfLength = Compose(halfOf, length);
 
-Assert.Equal(1.5M, halfTheLength);
+Assert.Equal(1.5M, halfOfLength("foo"));
 ```
 
-Of course, this works with any `f :: string -> int` and `g :: int -> decimal` functions, so we can safely rename `halfOf` and `length` to something more generic:
+It's easy to make this function generic on its types, so that given two functions `f :: A -> B` and `g :: B -> C` it composes them into `gComposedWithf :: A -> C`:
 
 ```csharp
-Func<string, decimal> Compose(Func<int, decimal> g, Func<string, int> f) => a => g(f(a));
-```
-
-Talking about being generic, we can in fact make this function generic on its types, so that given two functions `f :: a -> b` and `g :: b -> c` it composes them into a `gComposedWithf :: a -> c` composite function:
-
-```csharp
-// compose :: (b -> c) -> (a -> b) -> (a -> c)
+// Compose :: (B -> C) -> (A -> B) -> (A -> C)
 Func<A, C> Compose<A, B, C>(Func<B, C> g, Func<A, B> f) => a => g(f(a));
+```
+
+Again, using an extension method slightly improves the syntax:
+
+```csharp
+static class FunctionExtensions
+{
+    internal static Func<A, C> ComposedWith<A, B, C>(this Func<B, C> g, Func<A, B> f) => a => g(f(a));
+}
+
+Func<string, decimal> halfOfLength = halfOf.ComposedWith(length);
+
+Assert.Equal(1.5M, halfOfLength.Apply("foo"));
 ```
 
 In Haskell, `Compose` is written as `.` at [its implementation][haskell-composition-implementation] is:
