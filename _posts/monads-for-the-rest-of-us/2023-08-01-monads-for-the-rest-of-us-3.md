@@ -158,7 +158,7 @@ halfOf           :: int    -> decimal
 lengthThenHalfOf :: string -> decimal
 ```
 
-Function Composition is about generating that `lengthThenHalfOf` automatically, as a combination of the 2 basic functions, without the need of writing a specific implementation for it. Even better, it's about generating a combination of any 2 functions.  
+Function Composition is about generating `lengthThenHalfOf` automatically, as a combination of `length` and `halfOf`, without writing its implementation by hand. Even better, it's about generating a combination of *any* 2 functions, no matter their implementation and type signature, as long as the output of the one is type-compatible with the input of the other .  
 So, let's write a function that, given any `string -> int` function such as `length` and a `int -> decimal` such as `halfOf` *composes* the two in a `string -> decimal` function:
 
 ```csharp
@@ -199,7 +199,7 @@ In Haskell, `Compose` is written as `.` at [its implementation][haskell-composit
 (.) f g = \x -> f (g x)
 ```
 
-It's essentially the same.
+It's essentially the same that we found.
 
 ### What we got
 As for `Apply`, with the formula `Compose(f, g) => a => f(g(a))` we have just reinvented the weel.  
@@ -214,32 +214,27 @@ C# does not exacly implement function composition. `f(g(a))` composes 2 function
 For example, we could work it out to compose functions with not exactly compatible signatures.  
 And this turns out to be exactly the key for implementing and undestanding Monads.
 
-You should be ready to come back to the IO monadic function and make it finally work.
-
-
 
 # Apply as the main building block of function composition
-Don't think to `Apply` merely as the way to pass an argument to a function. Go beyond that and consider how it is the fundamental way to link functions together: you use `Apply` to pass to a function the result of the application of a previous function. Basically, it links type-compatible functions in a chain.
+Don't think to `Apply` merely as the way to pass an argument to a function. Go beyond that and consider how it is the fundamental way to *link* functions together: you use `Apply` to pass to a function the result of (the application of) a previous function. Basically, it *binds* type-compatible functions in a chain. No surprises that, in the context of monadic functions, `Apply` is called "bind".
 
 Consider the following: 
 
 ```haskell
-Length :: string -> int
-Double :: int -> double
+length :: string -> int
+double :: int -> double
 ```
 
-You want to apply `Double` to the result of `Length`.  
+You want to apply `double` to the result of `length`.  
 In C#:
 
 ```csharp
-B Apply<A, B>(Func<A, B> f, A a) => f(a);
-
-int Length(string s) => s.Length;
-double Double(int i) => i * 2;
+Func<string, int> length = s => s.Length;
+Func<int, double> double = i => i * 2;
 
 string a = "foo";
 
-double doubleTheLength = Apply(Double, Apply(Length, "foo"));
+double doubleTheLength = double.Apply(length.Apply("foo"));
 
 Assert.Equal(6, doubleTheLength);
 ```
@@ -247,25 +242,29 @@ Assert.Equal(6, doubleTheLength);
 The Haskell notation here is much clearer:
 
 ```haskell
-doubleTheLength = double $ length $ foo
+doubleTheLength = double $ length $ "foo"
 ```
 
 which is pretty much the same of the native C# function application:
 
 ```csharp
-double doubleTheLength = Double(Length("foo"));
+double doubleTheLength = double(length("foo"));
 ```
 
-The result we get is the same we could get from a a single function composing `Length` and `Double:
+The result we get is the same we could get from a a single function composing `length` and `double`:
 
 ```haskell
-Length :: string -> int
-Double :: int -> double
+length :: string -> int
+double :: int -> double
 
-Chain :: string -> double
+chain :: string -> double
 ```
 
-with `Chain = Compose(Double, Length)`.
+with :
+
+```csharp
+chain = double.ComposedWith(length)
+```
 
 In that sense, `Apply` is the cornestone of functional programming. It is such a basic building block that `Compose` can be easily defined in terms of it:
 
@@ -286,13 +285,13 @@ Assert.Equal(6, doubleTheLength);
 
 The gist of this is:
 
-- if `Apply` links type-compatible functions in a chain
+- if `Apply` binds type-compatible functions in a chain
 - but we extended the notion of pure-computations with functions returning extended types
 - so that `Apply` does not work anymore,
 - maybe the key to Monads is about extending `Apply` to work on those type-incompatible functions. 
 
-Then, once you have `Apply`, you can easily get `Compose` too, and nothing can hold you back.
-
+Then, once you have `Apply`, you can easily get `Compose` too, and nothing can hold you back.  
+We are ready to come back to the IO monadic function and make it finally work.
 
 # References
 
