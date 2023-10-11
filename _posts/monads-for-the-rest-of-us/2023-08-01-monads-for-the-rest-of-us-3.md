@@ -8,10 +8,10 @@ tags:
 include_in_index: false
 ---
 # Function Application and Function Composition
-We learnt that the key of Monads is to use the type system to separate out side-effecting computations from pure computations, so that they do not interfere with each other.
+We learnt that the key of Monads is to use the type system to separate out side-effecting computations from pure computations, so that they do not interfere with each other.  
+We also found out that all revolves around being able to apply and compose monadic functions, which is not directly supported by C#.
 
-We also found out that all revolves about being able to apply and compose monadic functions.  
-So, let's get started characterizing those notions more in detail. It turns Function Application and Function Composition is all you need to re-implement to get Monads.
+The goal of this 3rd installment is to manually re-implement the native C# function application and function composition, so that we learn how to extend them to work with monadic functions.
 
 ## Function Application
 Consider the method:
@@ -32,17 +32,17 @@ Func<string, int> myLength = s => s.Length;
 This makes it a bit clearer that its type signature is:
 
 ```haskell
-myLength :: String -> Int
+myLength :: string -> int
 ```
 
-We want to apply `myLength` to a value of type `String` to get back an `Int`.  
+We want to apply `myLength` to a value of type `string` to get back an `int`.  
 In C# that's a trivial exercise, as Function Application is natively supported by the language:
 
 ```csharp
-var length = MyLength("foo");
+var length = mylength("foo");
 Assert.Equal(3, length);
 ```
-Manually re-implement the native C# Function Application might sound as a silly exercise, but it will be useful to learn how we can possibly extend it. Indeed, our implementation will be the basis for the future *Monadic* Function Application, which is not natively supported by C#.  
+Manually re-implementing the native C# Function Application might sound as a silly exercise, but it will be useful to learn how we can possibly extend it. Indeed, our implementation will be the basis for the future *Monadic* Function Application, which is not natively supported by C#.  
 Let's then write a High Order Function (HOF) that taken a function `f :: String -> Int` and a `String` value `a` applies `f` to `a` returning an `Int` result:
 
 ```csharp
