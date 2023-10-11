@@ -9,34 +9,30 @@ include_in_index: false
 ---
 Let's summarize our understanding of an IO monadic function:
 
-* instead of executing the IO side effect, it returns a monadic value that models it. Basically, the IO side effect passed as a lambda, so its execution is deferred
-* 2 IO monadic functions cannot be applied and composed using the ordinary `Apply` and `Compose`, because their types are not directly compatible: we need to write a monadic version of `Apply` and `Compose`
+* instead of executing the IO side effect, it returns a monadic value that models it. Basically, the IO side effect is passed as a lambda, so its execution is deferred
+* 2 IO monadic functions cannot be applied and composed using the ordinary `Apply` and `Compose` C# features, because their types are not directly compatible: we need to write a monadic version of `Apply` and `Compose`
 * writing `Apply` is enough: `Compose` can be defined in terms of `Apply`
 
 # Running an IO monadic function
-The very last ingredient we need is:
+The very last ingredient we need is: nothing prevents us from defining a function that *executes* the IO monad. We are deferring the execution of the IO side effect, but eventually, at the end of the chain, we need to run it.
 
-* nothing prevents us from defining a function that *executes* the IO monad. We are deferring the execution of the IO side effect, but eventually, at the end of the chain, we need to run it.
-
-In a sense: an IO monadic function is a way to defer the execution of an IO side effect and to manipulate and combine functions as pure entities, running its unpure behavior only at the edge of the application.
+In a sense: an IO monadic function is a way to delay the execution of side effects and to manipulate functions as pure entities, running their unpure behavior only at the edge of the application.
 
 Let's extend `IO<B>` with a method `Run`, which finally executes the side effect:
-So, we left with:
+
 
 ```csharp
-record IO<B>(B value, Action action)
+record IO<B>(Func<B> f)
 {
-    internal B Run()
-    {
-        action.Invoke();
-        return value;
-    }
+    internal B Run() => f.Invoke();
 }
 
 IO<int> CalculateWithSideEffect(string s) =>
-    new IO<int>(
-        s.Length,
-        () => File.WriteAllText("output.txt", "I'm a side effect!"));
+    new IO<int>(() => 
+    {
+        File.WriteAllText("output.txt", "I'm a side effect!"));		
+		return s.Length;
+    }
 
 // This is still a pure function
 IO<int> monadicValue = CalculateWithSideEffect("foo");
@@ -82,11 +78,11 @@ But there is another important aspect I haven't mentioned yet. You remember how 
 | A function which depends and updates a shared state                   | `string -> State<MyState, int`    |
 
 
-For each of those monadic types, `Reader`, `Writer`, `NonDeterministic` etc, we will need to define a specific implementation of `Apply`.  
+For each of those monadic types, `Reader`, `Writer`, `NonDeterministic` etc, we will end up defining a specific implementation of `Apply`.  
 Think about it like this: all those kinds of impurity will be abstracted away behind the very same interface; you will be able to manipulate all of them, as pure functions, using the very same `Apply` and `Compose`, regardless which specific impurity they deal with.  
 This is in fact the key to segregate your pure domain logic from whatever source of impurity your application will need to deal with. It's about pushing impurity outside your code, while aknowledging it *does exist* and it must be handled with great gravity.
 
-Look, this listing &mdash; based on [language-ext][language-ext] &mdash; performs some pure calculations with functions also performing synchronous IO side effects:
+Look, this listing. It is based on [language-ext][language-ext] and it uses Linq expressions as the main costructs. It combines 3 functions whose type signature signal they are performing synchronous IO side effects:
 
 ```csharp
 Eff<int> Computation1() => ...
@@ -100,7 +96,7 @@ Eff<int> result =
     select value2;
 ```
 
-The following, instead, performs the same calculations, but each function might not return any result at all:
+In the following, instead, each function might not return any result at all:
 
 ```csharp
 Option<int> Computation1() => ...
@@ -128,7 +124,7 @@ Either<Error, int> result =
     select value2;
 ```
 
-Here, each function is non-deterministic in nature, and it returns more than one value. The calculation will be performed on all the possible combinations:
+Here, each function is non-deterministic and it returns more than one value. The computation will be performed on all the possible combinations:
 
 ```csharp
 IEnumerable<int> Computation1() => ...
@@ -142,7 +138,7 @@ IEnumerable<int> result =
     select value2;
 ```
 
-You see the pattern? The specific *effect* does not affect the shape of your code; you can focus on the pure computations and let the type system model and deal with any extra side effect.  
+You see the pattern? The specific *effect* does not affect the shape of your code; you can focus on the pure computation and let the type system model and deal with any extra side effect.  
 That's the gist of monads.
 
 # A working Apply for the IO monad
@@ -164,14 +160,14 @@ Interpret is as:
 
 * given a monadic function from `A` to `IO<B>`
 * we don't have a value of type `A` to feed it with
-* instead, we have a monadic value of type `IO<A>`, returned by a previously executed function
+* instead, we have a monadic value of type `IO<A>`, most likely returned by a previously executed function
 * we apply the monadic function `A -> IO<B>` to the monadic value `IO<A>`
 * so we get the new monadic value `IO<B>`
 
 Its implementation is actually trivial:
 
 ```csharp
-IO<B> Apply<A, B>(Func<A, IO<B>> f, IO<A> a) => 
+IO<B> Apply<A, B>(this Func<A, IO<B>> f, IO<A> a) => 
     new IO<B>(() =>
     {
         A aResult = a.Run();
@@ -188,26 +184,24 @@ It works as follows:
   * will return back the value (of type `A`) of the pure computation
 * A value of type `A` is compatible with the signature of `f`: it's easy to apply `f` to it, with the native C# function application
 * `f` is a monadic function, so what we get back it an IO monad
-* 
+* This is run, so its side effect is executed and the pure computation value is returned. 
 
 
 Here's a complete use case in which there are 2 monadic functions:
 
 ```haskell
-LengthWithSideEffect :: string -> IO<int>
-DoubleWithSideEffect :: int -> IO<double>
+length :: string -> IO<int>
+double :: int -> IO<double>
 ```
-
-As stated by their signature, each function performs some IO side effects, other than performing a pure calculation.
 
 If the functions were pure, we could directly combine them as follows:
 
 
 ```csharp
-// Length :: string -> int
-// Double :: int -> double
+// length :: string -> int
+// double :: int -> double
 
-var doubleTheLength = Double(Length("foo"));
+var doubleTheLength = double(length("foo"));
 
 Assert(6, doubleTheLength);
 ```
@@ -215,43 +209,43 @@ Assert(6, doubleTheLength);
 or, with our custom `Apply`:
 
 ```csharp
-var doubleTheLength = Apply(Double, Apply(Length, "foo"));
+var doubleTheLength = double.Apply(length.Apply("foo"));
 
 Assert(6, doubleTheLength);
 ```
 
-With the monadic case, `LengthWithSideEffect` returns an `IO<int>`, which is not directly compatible with the type `DoubleWithSideEffect` wants.
+With the monadic case, `length` returns an `IO<int>`, which is not directly compatible with the type `double` wants.
 
 The monadic version of `Apply` we just wrote takes care of *binding* the 2 monadic functions:
 
 ```csharp
-IO<int> LengthWithSideEffect(string s) =>
-    new IO<int>(
-        () =>
-        {
-            File.WriteAllText("output.txt", "I'm a side effect!");
-            return s.Length;
-        });
+Func<string, IO<int>> length = s =>
+    new IO<int>(() =>
+    {
+        File.WriteAllText("output.txt", "I'm a side effect!");
+        return s.Length;
+    });
 
-IO<double> (int n) =>
-    new IO<double>(
-        () =>
-        {
-            File.AppendAllText("output.txt", "I'm another side effect!");
-            return n * 2;
-        });
+Func<int, IO<double>> double = n =>
+    new IO<double>(() =>
+    {
+        File.AppendAllText("output.txt", "I'm another side effect!");
+        return n * 2;
+    });
 
 
-IO<B> Apply<A, B>(Func<A, IO<B>> f, IO<A> a) => new(() =>
+static class FunctionExtensions
 {
-    A aResult = a.Run();
-    IO<B> bResult = f(aResult);
-    return bResult.Run();
-});
+    internal static IO<B> Apply<A, B>(this Func<A, IO<B>> f, IO<A> a) => new(() =>
+    {
+        A aResult = a.Run();
+        IO<B> bResult = f(aResult);
+        return bResult.Run();
+    });
+}
 
-IO<int> monadicLength = LengthWithSideEffect("foo");
-
-IO<double> monadicResult = Apply(DoubleWithSideEffect, monadicLength);
+IO<int> monadicLength = length("foo");
+IO<double> monadicResult = double.Apply(monadicLength);
 
 // Indeed, no file has been created yet
 Assert.False(File.Exists("output.txt"));
@@ -265,58 +259,53 @@ Assert.Equal("I'm a side effect!I'm another side effect!", File.ReadAllText("out
 Have you noticed that I used the expression "*binding 2 monadic functions*"?  
 The choice of the word *binding* was not random. Indeed, `Apply` in Haskell is implemented with the [`>>=` operator][haskell-bind], which reads exactly as *bind*.
 
+The code above in Haskell would be:
 
-
-
-# Compose for the IO monad
-Let's compose 2 monadic functions together:
 ```haskell
-f :: A -> IO<B>
-g :: B -> IO<C>
-
-Compose(g, f) :: A -> IO<C>
+(length "foo") >>= double 
 ```
 
-The implementation of `Compose` can be based on `Apply`:
+or equivalently:
 
-```csharp
-Func<A, IO<C>> Compose<A, B, C>(Func<B, IO<C>> g, Func<A, IO<B>> f)
-{
-    return new Func<A, IO<C>>(a =>
-    {
-        IO<B> aa = f(a);
-        IO<C> io = Apply(g, aa);
-        return io;
-    });
-}
-
-var composed = Compose<string, int, double>(DoubleWithSideEffect, LengthWithSideEffect);
-
-IO<double> monadicResult = composed("foo");
-
-var result = monadicResult.Run();
-
-Assert.Equal(3*2, result);
-Assert.Equal("I'm a side effect!I'm another side effect!", File.ReadAllText("output.txt"));
+```haskell
+do
+  len <- length "foo"
+  double len
 ```
 
-# Linq to the resque
-If you think that using `Apply` and `Compose` does not look very practical, it is because it is not!  
-C# is particularly verbose, especially when it comes to defining high order functions type signatures.
-
-Remember when I showed you some code snippets based on [language-ext][language-ext]? They looked as Linq expressions. In fact, there is a way to teach Linq to work with any custom defined monads, just if they were ordinary `IEnumerable`s.  
-We will see how later. For now, it suffices to know that, once some extension methods are defined, dealing with side-effects will be a matter of composing functions in Linq expressions. The code above could be invoked as:
+You will soon find out that Linq implements `>>=` calling it `SelectMany`, and that this is the secret ingredient that allows you to rewrite the code above as:
 
 ```csharp
-IO<double> monadicResult =
-    from l in LengthWithSideEffect("foo")
-    from d in DoubleWithSideEffect(l)
+Eff<int> monadicResult =
+    from len in length("foo")
+    from d in double(len)
     select d;
 ```
 
-# What about the other monads?
-What you have obtained with the IO monad can be easily done with other kinds of side-effect. Let's see some examples.
+Don't try this just yet: you need to define a couple of Extension Methods for Linq to learn how to deal with your custom monads. We will see this later.  
+Instead, take a minute to ruminate on client code you got:
 
+```csharp
+IO<double> result = double.Apply(length("foo"));
+```
+
+* It is almost identical to:
+
+```csharp
+double result = double(length("foo"));
+```
+
+or to the one using the pure `Apply` we defined in [Part 3](monads-for-the-rest-of-us-3):
+
+```csharp
+double result = double.Apply(length("foo"));
+```
+
+* It deals with strictly pure functions only.
+* The evidence that it peforms IO is explicit in the type signature, so the compiler can make it sure it is taken into consideration.
+
+Not a bad result, indeed!  
+Go and have an icecream, you deserved it!
 
 # References
 * [language-ext][language-ext]

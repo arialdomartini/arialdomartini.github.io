@@ -209,7 +209,7 @@ So far, we fantasized about a different notion of functions, replacing the arrow
 ```
 string --[reads an extra string]--> int
 decimal -> decimal --[might raise an exception]--> decimal
-[string] --[also writes to Console]--> int
+string[] --[also writes to Console]--> int
 ```
 
 Let`s do a little step forward, replacing the comments in the arrows with some hypothetical &mdash; but legit &mdash; types:
@@ -219,7 +219,7 @@ Let`s do a little step forward, replacing the comments in the arrows with some h
 |-----------------------------------------------------------|-------------------------------------------|
 | A function that depends (reads) an extra string parameter | `string --[Reader<String>]--> int`        |
 | A function that might raise an exception                  | `decimal -> decimal --[Error]--> decimal` |
-| A function that also writes to the Console                | `[string] --[IO]--> int`                  |
+| A function that also writes to the Console                | `string[] --[IO]--> int`                  |
 
 We could think to other types representing arbitrary extra behaviors for functions:
 
@@ -256,7 +256,7 @@ So, the monadic functions we mentioned before could have types similar to:
 |-----------------------------------------------------------------------|-----------------------------------|
 | A function that depends (reads) an extra string parameter             | `string -> Reader<String, int>`   |
 | A function that might raise an exception                              | `decimal -> Error<decimal>`       |
-| A function that also writes to the Console                            | `[string] -> IO<int>`             |
+| A function that also writes to the Console                            | `string[] -> IO<int>`             |
 | A function that could fail to return a value                          | `string -> Maybe<int>`            |
 | A function returning non-deterministic values                         | `string -> NonDeterministic<int>` |
 | A function returning a value and also writing a double somewhere else | `string -> Writer<double, int>`   |
