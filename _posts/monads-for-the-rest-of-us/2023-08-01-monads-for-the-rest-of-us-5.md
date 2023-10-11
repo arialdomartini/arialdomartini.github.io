@@ -8,7 +8,7 @@ tags:
 include_in_index: false
 ---
 I hope you enjoyed your icecream.  
-We once stated that composing monadic functions can be built on top of `Apply` / `bind` / `SelectMany`. Time to put that in practice.
+We once stated that composing monadic functions can be built on top of `Apply` (`bind`, `>>=` or `SelectMany`: call it as you like). Time to put that in practice.
 
 # Compose for the IO monad
 Let's compose 2 monadic functions together:
@@ -19,23 +19,28 @@ g :: B -> IO<C>
 Compose(g, f) :: A -> IO<C>
 ```
 
-The implementation of `Compose` can be based on `Apply`:
+The implementation of `ComposedWith` can be based on `Apply`:
 
 ```csharp
-Func<A, IO<C>> Compose<A, B, C>(Func<B, IO<C>> g, Func<A, IO<B>> f)
+static class FunctionExtensions
 {
-    return new Func<A, IO<C>>(a =>
+    internal static B Apply<A, B>(this Func<A, IO<B>> f, IO<A> a) => 
+        f(a.Run()).Run();
+
+    internal static Func<A, IO<C>> ComposedWith<A, B, C>(this Func<B, IO<C>> g, Func<A, IO<B>> f)
     {
-        IO<B> aa = f(a);
-        IO<C> io = Apply(g, aa);
-        return io;
-    });
+        return a =>
+        {
+            IO<B> b = f(a);
+            C c = g.Apply(b);
+            return new IO<C>(() => c);
+        };
+    }
 }
 
-var composed = Compose<string, int, double>(DoubleWithSideEffect, LengthWithSideEffect);
+var composed = double.ComposedWith(length);
 
 IO<double> monadicResult = composed("foo");
-
 var result = monadicResult.Run();
 
 Assert.Equal(3*2, result);
