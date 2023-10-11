@@ -8,8 +8,8 @@ tags:
 include_in_index: false
 ---
 # Function Application and Function Composition
-We learnt that the key of Monads is to use the type system to separate out side-effecting computations from pure computations, so that they do not interfere with each other.  
-We also found out that all revolves around being able to apply and compose monadic functions, which is not directly supported by C#.
+We learnt that Monads revolve around using the type system to separate out side-effecting computations from pure computations, so that they do not interfere with each other.  
+We also found out that we need to apply and compose monadic functions, and that this is not directly supported by C#.
 
 The goal of this 3rd installment is to manually re-implement the native C# function application and function composition, so that we learn how to extend them to work with monadic functions.
 
@@ -74,12 +74,12 @@ Assert.Equal(3, length);
 It's easy to make `Apply` generic, so it works with any function `f :: A -> B` whatever the types `A` and `B` are:
 
 ```csharp
-// apply :: (A -> B) -> A -> B
+// Apply :: (A -> B) -> A -> B
 B Apply<A, B>(this Func<A, B> f, A a) => f(a);
 ```
 
 Take a few seconds to meditate on what we just wrote. Not surprisingly, we have discovered that Function Application is implemented as `f(a)`.  
-In Haskell, `apply` is written as `$` at its (slightly simplified) [implementation][haskell-apply-implementation] is:
+In Haskell, `Apply` is written as `$` at its (slightly simplified) [implementation][haskell-apply-implementation] is:
 
 ```haskell
 ($) :: (a -> b) -> a -> b
@@ -87,10 +87,11 @@ In Haskell, `apply` is written as `$` at its (slightly simplified) [implementati
 ```
 
 ### What we got
-`apply` might seems a useless redundant function, but it's not:
+The implementation of `Apply` might seems a useless redundant piece of code, but it's not:
 
-* it can be extended, giving you the opportunity to do *something else* while applying a function to a value. For example, you can decorate the invocation surrounding it with some logging calls:   
-<br/>
+* it can be extended, giving you the opportunity to do *something else* while applying a function to a value. For example, you can decorate the invocation surrounding it with some logging calls:
+
+
 ```csharp
 B Apply<A, B>(Func<A, B> f, A a)
 {
@@ -99,7 +100,8 @@ B Apply<A, B>(Func<A, B> f, A a)
     Log.Information("Returning a value {B}", b);
     return b;
 }
-```  
+```
+
 The *something else* we are interested to do might be related to extra-computation characterizing monadic functions, and this could be interesting.
 
 * it gives you the possibility to extend the very meaning of Function Application. You will soon see that with monadic function you will need a special `apply` implementation that is able to apply functions to incompatible (monadic) value types.
@@ -283,3 +285,12 @@ The gist of this is:
 - maybe the key to Monads is about extending `Apply` to work on those type-incompatible functions. 
 
 Then, once you have `Apply`, you can easily get `Compose` too, and nothing can hold you back.
+
+
+# References
+
+* [Function Application in Haskell][haskell-apply-implementation]
+* [Function Composition in Haskell][haskell-composition-implementation]
+
+[haskell-apply-implementation]: https://hackage.haskell.org/package/base-4.19.0.0/docs/Prelude.html#v:-36-
+[haskell-composition-implementation]: https://hackage.haskell.org/package/base-4.19.0.0/docs/Prelude.html#v:.
