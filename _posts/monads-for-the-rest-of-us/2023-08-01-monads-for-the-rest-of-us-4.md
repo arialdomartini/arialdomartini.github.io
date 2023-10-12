@@ -30,8 +30,8 @@ record IO<B>(Func<B> f)
 IO<int> CalculateWithSideEffect(string s) =>
     new IO<int>(() => 
     {
-        File.WriteAllText("output.txt", "I'm a side effect!"));		
-		return s.Length;
+        File.WriteAllText("output.txt", "I'm a side effect!"));
+        return s.Length;
     }
 
 // This is still a pure function
@@ -304,8 +304,93 @@ double result = double.Apply(length("foo"));
 * It deals with strictly pure functions only.
 * The evidence that it peforms IO is explicit in the type signature, so the compiler can make it sure it is taken into consideration.
 
-Not a bad result, indeed!  
-Go and have an icecream, you deserved it!
+Not a bad result, indeed!
+
+# Compose for the IO monad
+A last effort. To compose 2 monadic functions together:
+
+```haskell
+f :: A -> IO<B>
+g :: B -> IO<C>
+
+Compose(g, f) :: A -> IO<C>
+```
+
+we can think of an implementation like the following:
+
+```csharp
+static class FunctionExtensions
+{
+    internal static Func<A, IO<C>> ComposedWith<A, B, C>(this Func<B, IO<C>> g, Func<A, IO<B>> f)
+    {
+        return a =>
+        {
+            IO<B> ioB = f(a);
+            B b = ioB.Run();
+            IO<C> c = g(b);
+            return c;
+        };
+    }
+
+}
+
+var composed = double.ComposedWith(length);
+
+IO<double> monadicResult = composed("foo");
+var result = monadicResult.Run();
+
+Assert.Equal(3*2, result);
+Assert.Equal("I'm a side effect!I'm another side effect!", File.ReadAllText("output.txt"));
+```
+
+It should not be too hard to grasp:
+
+* First of all, notice from the signature and the `return a =>` that we are returning a new function
+* Inside the function's body, you first apply `f(a)`. `f` is a monadic function, so you get back an IO monad
+* Run it, so you execute the side effects and you get back a `B` value
+* It's easy to pass the `B` vale to `g`
+* `g` gets you back an `IO<C>`. But that's fine: this is already compatible with the expected type
+
+
+As we said, `ComposedWith` can easily be implemented using `Apply`:
+
+```csharp
+IO<B> Apply<A, B>(this Func<A, IO<B>> f, IO<A> a)
+{
+    A run = a.Run();
+    IO<B> apply = f(run);
+    return apply;
+}
+
+
+Func<A, IO<C>> ComposedWith<A, B, C>(this Func<B, IO<C>> g, Func<A, IO<B>> f)
+{
+    return a =>
+    {
+        IO<B> ioB = f(a);
+        var ioC = g.Apply(ioB);
+        return ioC;
+    };
+}
+```
+
+Inline all the variables and you will get to:
+
+```csharp
+IO<B> Apply<A, B>(this Func<A, IO<B>> f, IO<A> a) 
+    => new(() => f(a.Run()).Run());
+
+Func<A, IO<C>> ComposedWith<A, B, C>(this Func<B, IO<C>> g, Func<A, IO<B>> f) =>
+    a => g.Apply(f(a));
+```
+
+That`s a typical outcome in the Functional Programming world: pages and pages of deep contemplation and deconstruction of a topic, only to end up with a single-line code implementation.
+
+# You made it!
+That was an IO monad. There are of course a bunch of details we passed over (the monad laws, the `return` operation, the relation between monads, functors and applicatives, and the like), but I hope you found that less intimidating than you expected.
+
+Good job! Ready for the next round?  
+But first, go and have an icecream: you deserved it!
 
 # References
 * [language-ext][language-ext]
