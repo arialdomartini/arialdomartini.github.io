@@ -16,7 +16,7 @@ Let's summarize our understanding of an IO monadic function:
 # Running an IO monadic function
 Here's the very last ingredient we need: nothing prevents us from defining a function that *executes* the IO monad. Sure: we are deferring the execution of the IO side effect; but, eventually, at the end of the chain, we need to run it.
 
-In a sense: an IO monadic function is a way to delay the execution of side effects and to manipulate functions as pure entities as long as it it useful, and to finally run their unpure behavior at the edge of the application.
+In a sense: IO monads are a way to delay the execution of side effects as long as we wish to manipulate the functions as pure entities, and to finally run their unpure behavior when we are done, at the edge of the application.
 
 Let's extend `IO<B>` with a method `Run`, which finally executes the side effect:
 
@@ -40,6 +40,7 @@ IO<int> monadicValue = CalculateWithSideEffect("foo");
 // Indeed, no file has been created yet
 Assert.False(File.Exists("output.txt"));
 
+// Finally, the IO monadic value is run
 var result = monadicValue.Run();
 
 Assert.Equal(3, result);
@@ -62,10 +63,10 @@ Not at all! Stealing words from Eric Normand's [Grokking Simplicity][grokking-si
 > that make them easier to use.
 
 # Abstracting side effects away
-So, what's the benefit of an IO monadic function? Are we just deferring the execution of side effects?  
-In the case of IO, yes: basically, that's the trick.
+So, what's the benefit of monadic functions? Are we just deferring the execution of side effects?  
+In the case of IO, es: basically, that's the trick.
 
-But there is another important aspect I haven't mentioned yet. You remember how we fantasized with the possibility of defining other kinds of impurity:
+But there is another important aspect I haven't mentioned yet. You remember how we fantasized about the possibility of defining other kinds of impurity:
 
 | Case                                                                  | Example of type                   |
 |-----------------------------------------------------------------------|-----------------------------------|
@@ -80,7 +81,7 @@ But there is another important aspect I haven't mentioned yet. You remember how 
 
 For each of those monadic types, `Reader`, `Writer`, `NonDeterministic` etc, we will end up defining a specific implementation of `Apply`.  
 Think about it like this: all those kinds of impurity will be abstracted away behind the very same interface; you will be able to manipulate all of them, as pure functions, using the very same `Apply` and `Compose`, regardless which specific impurity they deal with.  
-This is in fact the key to segregate your pure domain logic from whatever source of impurity your application will need to deal with. It's about pushing impurity outside your code, while aknowledging it *does exist* and it must be handled with great gravity.
+This is in fact the key to segregate your pure domain logic from whatever source of impurity your application needs to deal with. It's about pushing impurity outside your code, while aknowledging it *does exist* and it must be handled with great gravity.
 
 Look, this listing. It is based on [language-ext][language-ext] and it uses Linq expressions as the main costructs. It combines 3 functions whose type signature signal they are performing synchronous IO side effects:
 
@@ -142,7 +143,7 @@ You see the pattern? The specific *effect* does not affect the shape of your cod
 That's the gist of monads.
 
 # A working Apply for the IO monad
-We are finally ready to write the monadic version of `Apply`.  
+We are finally ready to write the monadic version of `Apply` / `Bind`.  
 If `Apply` for ordinary functions has the signature:
 
 ```haskell
@@ -160,11 +161,16 @@ Interpret is as:
 
 * given a monadic function from `A` to `IO<B>`
 * we don't have a value of type `A` to feed it with
-* instead, we have a monadic value of type `IO<A>`, most likely returned by a previously executed function
+* instead, we have a monadic value of type `IO<A>`, most likely returned by the previously executed function
 * we apply the monadic function `A -> IO<B>` to the monadic value `IO<A>`
 * so we get the new monadic value `IO<B>`
 
-Its implementation is actually trivial:
+Notice: very importantly, the function is not returning a `B`, but still a `IO<B>`. Why is that?  
+Because we are still refraining from executing the side effect until `Run` is intentionally invoked.  
+For the same reason, although the monadic function type signature `A -> IO<B>` signals that it expects a simple `A` value, `Apply` feeds it with an `IO<A>`: this is because this value is the result of the previously executed monadic function.  
+It's monads all the way down.
+
+The implementatio of `Apply` is only apparently intimidating:
 
 ```csharp
 IO<B> Apply<A, B>(this Func<A, IO<B>> f, IO<A> a) => 
@@ -179,12 +185,12 @@ IO<B> Apply<A, B>(this Func<A, IO<B>> f, IO<A> a) =>
 It works as follows:
 
 * `Apply` returns a new instance of `IO<B>`. The `IO` constructor takes a lambda: this means that the code we are passing to it is not going to be executed just yet. Any side effect will be deferred
-* This allows us to run `IO<A> a`. As per its nature, this
+* This allows us to safely run `IO<A> a`. As per its nature, this
   * will produce some side effects
-  * will return back the value (of type `A`) of the pure computation
+  * will return back the `A` value of the pure computation
 * A value of type `A` is compatible with the signature of `f`: it's easy to apply `f` to it, with the native C# function application
-* `f` is a monadic function, so what we get back it an IO monad
-* This is run, so its side effect is executed and the pure computation value is returned. 
+* `f` is a monadic function, so what we get back is an IO monad
+* This is run too, so its side effect is executed and the pure computation value is finally returned. 
 
 
 Here's a complete use case in which there are 2 monadic functions:
@@ -214,9 +220,7 @@ var doubleTheLength = double.Apply(length.Apply("foo"));
 Assert(6, doubleTheLength);
 ```
 
-With the monadic case, `length` returns an `IO<int>`, which is not directly compatible with the type `double` wants.
-
-The monadic version of `Apply` we just wrote takes care of *binding* the 2 monadic functions:
+In the monadic case, the version of `Apply` we just wrote takes care of *binding* the 2 monadic functions:
 
 ```csharp
 Func<string, IO<int>> length = s =>
@@ -256,8 +260,7 @@ Assert.Equal(3*2, result);
 Assert.Equal("I'm a side effect!I'm another side effect!", File.ReadAllText("output.txt"));
 ```
 
-Have you noticed that I used the expression "*binding 2 monadic functions*"?  
-The choice of the word *binding* was not random. Indeed, `Apply` in Haskell is implemented with the [`>>=` operator][haskell-bind], which reads exactly as *bind*.
+`Apply` in Haskell is implemented with the [`>>=` operator][haskell-bind], which not surprisingly reads as *bind*.
 
 The code above in Haskell would be:
 
@@ -283,37 +286,43 @@ Eff<int> monadicResult =
 ```
 
 Don't try this just yet: you need to define a couple of Extension Methods for Linq to learn how to deal with your custom monads. We will see this later.  
-Instead, take a minute to ruminate on client code you got:
+Instead, take a minute to ruminate on the code you obtained:
 
 ```csharp
 IO<double> result = double.Apply(length("foo"));
 ```
 
-* It is almost identical to:
+It is similar to:
 
 ```csharp
 double result = double(length("foo"));
 ```
 
-or to the one using the pure `Apply` we defined in [Part 3](monads-for-the-rest-of-us-3):
+and just identical to the one using the pure `Apply` we defined in [Part 3](monads-for-the-rest-of-us-3):
 
 ```csharp
 double result = double.Apply(length("foo"));
 ```
 
+with the only difference it returns `IO<double>` instead of `double`.
+
+So:
+
 * It deals with strictly pure functions only.
 * The evidence that it peforms IO is explicit in the type signature, so the compiler can make it sure it is taken into consideration.
+* It still allows you to combine and manipulate functions the way you were used to do.
 
+You liberated your C# code from IO effects, abstracting them away, not swepting the problem under the rug.  
 Not a bad result, indeed!
 
 # Compose for the IO monad
-A last effort. To compose 2 monadic functions together:
+A last effort to complete the journey. To compose 2 monadic functions together:
 
 ```haskell
 f :: A -> IO<B>
 g :: B -> IO<C>
 
-Compose(g, f) :: A -> IO<C>
+Compose(f, g) :: A -> IO<C>
 ```
 
 we can think of an implementation like the following:
@@ -346,10 +355,10 @@ Assert.Equal("I'm a side effect!I'm another side effect!", File.ReadAllText("out
 It should not be too hard to grasp:
 
 * First of all, notice from the signature and the `return a =>` that we are returning a new function
-* Inside the function's body, you first apply `f(a)`. `f` is a monadic function, so you get back an IO monad
+* Inside the new function's body, you first apply `f(a)`. `f` is a monadic function, so you get back an IO monad
 * Run it, so you execute the side effects and you get back a `B` value
-* It's easy to pass the `B` vale to `g`
-* `g` gets you back an `IO<C>`. But that's fine: this is already compatible with the expected type
+* It's easy to pass the `B` value to `g`
+* `g` gets you back an `IO<C>`. That's fine: this is already compatible with the expected returned type.
 
 
 As we said, `ComposedWith` can easily be implemented using `Apply`:
@@ -374,7 +383,8 @@ Func<A, IO<C>> ComposedWith<A, B, C>(this Func<B, IO<C>> g, Func<A, IO<B>> f)
 }
 ```
 
-Inline all the variables and you will get to:
+That's a little harder reason about. Follow the types, that should help.   
+When you are done, inline all the variables and you will get to:
 
 ```csharp
 IO<B> Apply<A, B>(this Func<A, IO<B>> f, IO<A> a) 
@@ -387,7 +397,7 @@ Func<A, IO<C>> ComposedWith<A, B, C>(this Func<B, IO<C>> g, Func<A, IO<B>> f) =>
 That`s a typical outcome in the Functional Programming world: pages and pages of deep contemplation and deconstruction of a topic, only to end up with a single-line code implementation.
 
 # You made it!
-That was an IO monad. There are of course a bunch of details we passed over (the monad laws, the `return` operation, the relation between monads, functors and applicatives, and the like), but I hope you found that less intimidating than you expected.
+That was an IO monad. There are of course a bunch of details we passed over &mdash; the monad laws, the `return` operation, the relation between monads, functors and applicatives, and the like &mdash; but I hope you found that less intimidating than you expected.
 
 Good job! Ready for the next round?  
 But first, go and have an icecream: you deserved it!

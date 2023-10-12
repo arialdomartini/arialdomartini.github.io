@@ -40,6 +40,7 @@ In C# that's a trivial exercise, as Function Application is natively supported b
 
 ```csharp
 var length = mylength("foo");
+
 Assert.Equal(3, length);
 ```
 Manually re-implementing the native C# Function Application might sound as a silly exercise, but it will be useful to learn how we can possibly extend it. Indeed, our implementation will be the basis for the future *Monadic* Function Application, which is not natively supported by C#.  
@@ -71,7 +72,27 @@ var length = myLength.Apply("foo");
 Assert.Equal(3, length);
 ```
 
-It's easy to make `Apply` generic, so it works with any function `f :: A -> B` whatever the types `A` and `B` are:
+So, instead of:
+
+```csharp
+myLength("foo");
+```
+
+we ended up with
+
+
+```csharp
+myLength.Apply("foo");
+```
+
+Just slighly more verbose. By the way: C# implements this style of calling a function with the method `Invoke`:
+
+```csharp
+myLength.Invoke("foo");
+```
+
+We really didn't invent anything new.  
+It's easy to make `Apply` generic, so it works with any function `f :: A -> B` whatever the types:
 
 ```csharp
 // Apply :: (A -> B) -> A -> B
@@ -102,9 +123,9 @@ B Apply<A, B>(Func<A, B> f, A a)
 }
 ```
 
-The *something else* we are interested to do might be related to extra-computation characterizing monadic functions, and this could be interesting.
+The *something else* we are interested to do might be related to the extra-computation characterizing monadic functions, and this could be interesting.
 
-* It gives you the possibility to extend the very meaning of Function Application. You will soon see that with monadic function you will need a special `Apply` implementation that is able to apply functions to incompatible (monadic) value types.
+* It gives you the possibility to extend the very meaning of Function Application. You will soon see that with monadic function you will need an `Apply` implementation able to work with type-incompatible functions.
 
 Do you start to see a pattern? Monads are all about separating some *effects* in a type, and then handling them during function application and function composition.  
 Keep going: we are almost there.
@@ -119,7 +140,17 @@ Func<string, string, int> f = (s, z) => s.Length + z.Length;
 f.Apply("foo", "bar");
 ```
 
-It turns out that it is always possible to reduce multi-parameter functions to single-parameter ones, with a technique called *currying*. Don't despair, we will see this later.
+That's sounds like a discouraging constraint.  
+It turns out, though, that it is always possible to reduce multi-parameter functions to single-parameter ones, with a technique called *currying*.  
+Basically, it's a way to automatically convert the previous function to:
+
+```csharp
+Func<string, Func<string, int>> f = s => z => s.Length + z.Length;
+
+f.Apply("foo")("bar");
+```
+
+Don't despair, we will see this later.
 
 ## Function Composition
 The second fundamental notion we are interested to re-implement is Function Composition.  
@@ -165,7 +196,8 @@ So, let's write a function that, given any `string -> int` function such as `len
 Func<string, int> length = s => s.Length;
 Func<int, decimal> halfOf = n => (decimal)n / 2;
 
-Func<string, decimal> Compose(Func<int, decimal> g, Func<string, int> f) => s => g(f(s));
+// (int -> decimal) -> (string -> int) -> (string -> decimal)
+Func<string, decimal> Compose(Func<int, decimal> f, Func<string, int> g) => s => f(g(s));
         
 Func<string, decimal> halfOfLength = Compose(halfOf, length);
 
@@ -206,17 +238,17 @@ As for `Apply`, with the formula `Compose(f, g) => a => f(g(a))` we have just re
 And yet, our little `Compose` implementation is not for nothing:
 
 * It is slightly more more powerful than the native C# feature.  
-C# does not exacly implement function composition. `f(g(a))` composes 2 functions and then also *applies* the resulting function to a value. Our `Compose()` function is more humble and interesting: it is a High Order Function that composes 2 generic, single-parameter functions, returning back a new function, *without* applying it.
+C# does not exacly implement function composition. `f(g(a))` composes 2 functions and then also *applies* the resulting function to a value. Our `Compose` function is more humble and interesting: it is a High Order Function that composes 2 generic, single-parameter functions, returning back a new function, *without* applying it.
 
-* As for `Apply()`, the manually implemented `Compose()` gives us the opportunity to do *something else* in addition to composing functions. And you know that the *something else* is what constitute the monadic part.
+* As for `Apply`, the manually implemented `Compose` gives us the opportunity to do *something else* in addition to composing functions. And you know that the *something else* is what constitute the monadic part.
 
-* Finally, as for `Apply()`, `Compose()` gives us the chance to redefine the very meaning of Function Composition.  
-For example, we could work it out to compose functions with not exactly compatible signatures.  
+* Finally, as for `Apply`, `Compose` gives us the chance to redefine the very meaning of Function Composition.  
+For example, we could find a way to compose functions with not exactly compatible signatures.  
 And this turns out to be exactly the key for implementing and undestanding Monads.
 
 
 # Apply as the main building block of function composition
-Don't think to `Apply` merely as the way to pass an argument to a function. Go beyond that and consider how it is the fundamental way to *link* functions together: you use `Apply` to pass to a function the result of (the application of) a previous function. Basically, it *binds* type-compatible functions in a chain. No surprises that, in the context of monadic functions, `Apply` is called "bind".
+Don't think to `Apply` merely as the way to pass an argument to a function. Go beyond that and consider how it is the fundamental way to *link* functions together: you use `Apply` to pass the result of the application of a previous function to the next one. Basically, it *binds* type-compatible functions in a chain. No surprises that, in the context of monadic functions, `Apply` is called `bind`.
 
 Consider the following: 
 
@@ -266,31 +298,24 @@ with :
 chain = double.ComposedWith(length)
 ```
 
-In that sense, `Apply` is the cornestone of functional programming. It is such a basic building block that `Compose` can be easily defined in terms of it:
+This equivalence is not a coincidence. `Apply` is such a basic building block that `Compose` can be easily defined in terms of it:
 
 ```csharp
-B Apply<A, B>(Func<A, B> f, A a) => f(a);
-        
-Func<A, C> Compose<A, B, C>(Func<B, C> g, Func<A, B> f) => (A a) => Apply(g, Apply(f, a));
-        
-int Length(string s) => s.Length;
-double Double(int i) => i * 2;
-
-Func<string, double> composed = Compose<string, int, double>(Double, Length);
-        
-var doubleTheLength = composed("foo");
-        
-Assert.Equal(6, doubleTheLength);
+Func<A, C> Compose<A, B, C>(Func<B, C> f, Func<A, B> g) => 
+    a => 
+        f.Apply(g.Apply(a));
 ```
 
 The gist of this is:
 
 - if `Apply` binds type-compatible functions in a chain
 - but we extended the notion of pure-computations with functions returning extended types
-- so that `Apply` does not work anymore,
-- maybe the key to Monads is about extending `Apply` to work on those type-incompatible functions. 
+- so that the ordinary `Apply` does not work anymore,
+- the key to Monads must be about extending `Apply` to work with those type-incompatible functions. 
 
-Then, once you have `Apply`, you can easily get `Compose` too, and nothing can hold you back.  
+Indeed, you can find several tutorials stating that monads are those classes that implement `bind` (as we know, a synomym of `Apply`). Actually, they also need a method for lifting ordinary values to their monadic equivalent, but that's a detail we will cover later.
+
+Anyway: once you have `Apply`, you can easily get `Compose` too, and nothing can hold you back.  
 We are ready to come back to the IO monadic function and make it finally work.
 
 # References

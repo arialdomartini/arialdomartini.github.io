@@ -66,7 +66,7 @@ Dictionary<int, int> Codomain = new Dictionary<int, int>
 }
 ```
 
-The Notice how the Dictionary's type arguments match the function ones:
+ Notice how the dictionary's type arguments match the function ones:
 
 ```csharp
 Double :: Func<int, int>
@@ -92,7 +92,7 @@ In the followig listing, `Closure("foo")` returns different values depending on 
 ```csharp
 var b = string.Empty;
 
-// `String -> Int`
+// `string -> int`
 int Closure(string a) => a.Length + b.Length;
 
 Assert.Equal(3, Closure("foo"));
@@ -101,7 +101,7 @@ b = "wat?";
 Assert.Equal(7, Closure("foo"));
 ```
 
-The signature of `Closure` declares that it only depends on an `string`. But this tells half of the story: in fact, there is a dependency from a second `string` which does not emerge at all from the signature.
+The signature of `Closure` declares that it only depends on an `string`. But this tells half of the story: in fact, there is an implicit dependency from a second `string` which does not emerge at all from the signature.
 
 A function that possibly raises an exception is clearly dishonest:
 
@@ -114,7 +114,9 @@ Assert.Equal(4.5M, Divide(9M, 2M));
 Assert.Throws<DivideByZeroException>(() => Divide(9M, 0M));
 ```
 
-Here's a first approximation: Monads are about making dishonest functions honest. So, let's see what being honest means.
+Here's a first approximation: Monads are about making dishonest functions honest.
+
+So, let's see what being honest means.
 
 ## Honest Functions
 It would be interesting if `Divide`'s signature could somehow indicate that it can return either a `decimal` *or* throw `DivideByZeroException`, with something like:
@@ -192,13 +194,13 @@ static int Main(string[] args)
 instead of having the type:
 
 ```haskell
-[String] -> Int
+[string] -> int
 ```
 
 would be better characterized as:
 
 ```
-[String] --[also writes to Console]--> Int
+[string] --[also writes to Console]--> int
 ```
 
 Here's a third approximation: Monads are a way to extend the notion of functions &mdash; and their signature &mdash; to model their possible extra behavior.
@@ -269,13 +271,13 @@ It means that `f` is a regular, pure function taking a value of type `A` and ret
 
 We will soon find out that this minor change throws a monkey wrench into the works of traditional function application and composition.
 
-In the next part we will implement some of those type. In defining them, we will make sure of ensuring 3 important traits:
+In the next part we will implement some of those type. In defining them, we will make sure of ensuring 2 important traits:
 
 1. that the result will be about *pure functions*, so we will get the benefits of both pure functions and controlled side effects
-2. that the pure calculation and the extra-behavior are not mixed together, so we can tackle them separately
+2. that the extra-behavior is not accidentally executed while the pure functions are being manipulated
 3. that a version of Function Application and Function Composition exist for them, so we can use them in real scenarios.
 
-Here's the last approximation for this first article: Monads are not an intuitive concept. Monadic Functions are. Monads are just how functional languages have chosen to represent the output of Monadic Functions.
+Here's the last approximation for this first article: Monads are not an intuitive concept. Monadic Functions are. Monads are just how functional languages have conventionally chosen to represent the output of Monadic Functions.
 
 Grab your keyboard. It's time to give birth to your first monad.
 
