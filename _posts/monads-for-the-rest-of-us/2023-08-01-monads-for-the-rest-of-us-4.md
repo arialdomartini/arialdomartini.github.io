@@ -14,9 +14,9 @@ Let's summarize our understanding of an IO monadic function:
 * writing `Apply` is enough: `Compose` can be defined in terms of `Apply`
 
 # Running an IO monadic function
-The very last ingredient we need is: nothing prevents us from defining a function that *executes* the IO monad. We are deferring the execution of the IO side effect, but eventually, at the end of the chain, we need to run it.
+Here's the very last ingredient we need: nothing prevents us from defining a function that *executes* the IO monad. Sure: we are deferring the execution of the IO side effect; but, eventually, at the end of the chain, we need to run it.
 
-In a sense: an IO monadic function is a way to delay the execution of side effects and to manipulate functions as pure entities, running their unpure behavior only at the edge of the application.
+In a sense: an IO monadic function is a way to delay the execution of side effects and to manipulate functions as pure entities as long as it it useful, and to finally run their unpure behavior at the edge of the application.
 
 Let's extend `IO<B>` with a method `Run`, which finally executes the side effect:
 
@@ -24,7 +24,7 @@ Let's extend `IO<B>` with a method `Run`, which finally executes the side effect
 ```csharp
 record IO<B>(Func<B> f)
 {
-    internal B Run() => f.Invoke();
+    internal B Run() => f();
 }
 
 IO<int> CalculateWithSideEffect(string s) =>
