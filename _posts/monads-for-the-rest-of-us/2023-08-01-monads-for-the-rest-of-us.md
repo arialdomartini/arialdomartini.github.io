@@ -228,7 +228,7 @@ We could think to other types representing arbitrary extra behaviors for functio
 | Case                                                                  | Example of type                      |
 |-----------------------------------------------------------------------|--------------------------------------|
 | A function that could fail to return a value                          | `string --[Maybe]--> int`            |
-| A function returning nondeterministic values                          | `string --[NonDeterministic]--> int` |
+| A function returning nondeterministic values                          | `string --[Nondeterministic]--> int` |
 | A function returning a value and also writing a double somewhere else | `string --[Writer<double>] --> int`  |
 | A function which depends and updates a shared state                   | `string --[State<MyState>]--> int`   |
 
@@ -260,7 +260,7 @@ So, the monadic functions we mentioned before could have types similar to:
 | A function that might raise an exception                              | `decimal -> Error<decimal>`       |
 | A function that also writes to the Console                            | `string[] -> IO<int>`             |
 | A function that could fail to return a value                          | `string -> Maybe<int>`            |
-| A function returning nondeterministic values                          | `string -> NonDeterministic<int>` |
+| A function returning nondeterministic values                          | `string -> Nondeterministic<int>` |
 | A function returning a value and also writing a double somewhere else | `string -> Writer<double, int>`   |
 | A function which depends and updates a shared state                   | `string -> State<MyState, int`    |
 

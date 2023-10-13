@@ -74,12 +74,12 @@ But there is another important aspect I haven't mentioned yet. You remember how 
 | A function that might raise an exception                              | `decimal -> Error<decimal>`       |
 | A function that also writes to the Console                            | `[string] -> IO<int>`             |
 | A function that could fail to return a value                          | `string -> Maybe<int>`            |
-| A function returning non-deterministic values                         | `string -> NonDeterministic<int>` |
+| A function returning non-deterministic values                         | `string -> Nondeterministic<int>` |
 | A function returning a value and also writing a double somewhere else | `string -> Writer<double, int>`   |
 | A function which depends and updates a shared state                   | `string -> State<MyState, int`    |
 
 
-For each of those monadic types, `Reader`, `Writer`, `NonDeterministic` etc, we will end up defining a specific implementation of `Apply`.  
+For each of those monadic types, `Reader`, `Writer`, `Nondeterministic` etc, we will end up defining a specific implementation of `Apply`.  
 Think about it like this: all those kinds of impurity will be abstracted away behind the very same interface; you will be able to manipulate all of them, as pure functions, using the very same `Apply` and `Compose`, regardless which specific impurity they deal with.  
 This is in fact the key to segregate your pure domain logic from whatever source of impurity your application needs to deal with. It's about pushing impurity outside your code, while aknowledging it *does exist* and it must be handled with great gravity.
 
