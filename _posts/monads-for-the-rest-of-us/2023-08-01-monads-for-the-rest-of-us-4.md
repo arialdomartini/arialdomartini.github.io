@@ -397,10 +397,20 @@ Func<A, IO<C>> ComposedWith<A, B, C>(this Func<B, IO<C>> g, Func<A, IO<B>> f) =>
 That`s a typical outcome in the Functional Programming world: pages and pages of deep contemplation and deconstruction of a topic, only to end up with a single-line code implementation.
 
 # You made it!
-That was an IO monad. There are of course a bunch of details we passed over &mdash; the monad laws, the `return` operation, the relation between monads, functors and applicatives, and the like &mdash; but I hope you found that less intimidating than you expected.
+That was an IO monad. There are of course a bunch of details we passed over &mdash; the monad laws, the `return` operation, the relation between monads, functors and applicatives, and the like &mdash; but I hope you found the topic less intimidating than you expected.
 
 Good job! Ready for the next round?  
-But first, go and have an icecream: you deserved it!
+The next topics are:
+
+* What about the different kinds of unpurity?
+* Besides monads, what are Functors?
+
+Observing other Monads will unlock a multitude of possibilities for expressiveness, and will hopefully introduce you to a new programming style. You are warned, though: I'll only take you to the rabbit hole's entrance, it's very, very deep &mdash; but filled with rewards.  
+Learning Functors, on the other hand, will be relaxing and reassuring. They are very easy, have a wide range of applications and, best of all, you probably already know most of the topic intuitivelly.  
+Finally, Functors will allow you to visually grasp some concepts that might currently appear a bit vague.
+
+
+But before proceeding, go and have an icecream: you deserved it!
 
 # References
 * [language-ext][language-ext]
