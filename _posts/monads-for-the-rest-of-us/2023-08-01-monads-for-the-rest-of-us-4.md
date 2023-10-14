@@ -372,12 +372,12 @@ IO<B> Apply<A, B>(this Func<A, IO<B>> f, IO<A> a)
 }
 
 
-Func<A, IO<C>> ComposedWith<A, B, C>(this Func<B, IO<C>> g, Func<A, IO<B>> f)
+Func<A, IO<C>> ComposedWith<A, B, C>(this Func<B, IO<C>> f, Func<A, IO<B>> g)
 {
     return a =>
     {
-        IO<B> ioB = f(a);
-        var ioC = g.Apply(ioB);
+        IO<B> ioB = g(a);
+        IO<C> ioC = f.Apply(ioB);
         return ioC;
     };
 }
@@ -390,8 +390,8 @@ When you are done, inline all the variables and you will get to:
 IO<B> Apply<A, B>(this Func<A, IO<B>> f, IO<A> a) 
     => new(() => f(a.Run()).Run());
 
-Func<A, IO<C>> ComposedWith<A, B, C>(this Func<B, IO<C>> g, Func<A, IO<B>> f) =>
-    a => g.Apply(f(a));
+Func<A, IO<C>> ComposedWith<A, B, C>(this Func<B, IO<C>> f, Func<A, IO<B>> g) =>
+    a => f.Apply(g(a));
 ```
 
 That`s a typical outcome in the Functional Programming world: pages and pages of deep contemplation and deconstruction of a topic, only to end up with a single-line code implementation.

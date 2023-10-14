@@ -371,7 +371,71 @@ Assert.Equal(new[] { (1,'a'), (1, 'b'), (2, 'a'), (2, 'b') }, combinations);
 ```
 
 
+
+## Compose
+Deriving the Function composition from `Bind` reserves a nice suprise.  
+The logic is:
+
+* we need to generate a new function `A -> C`, therefore we return a lambda `(A a) => ...`
+* `a` can be directly fed to the innermost function, `g`
+* this gives us back a nondeterministic value of `B`
+* that cannot be directly used to feed `f`: we need to use `Bind` for this
+* `Bind` returns a nondeterministic `C`, which is the final value
+
+```csharp
+Func<A, Nond<C>> Compose<A, B, C>(Func<B, Nond<C>> f, Func<A, Nond<B>> g)
+{
+    return a =>
+    {
+        Nond<B> nondB = g(a);
+        Nond<C> nondC = f.Bind(nondB);
+        return nondC;
+    };
+}
+
+
+Func<Position,Nond<Position>> composed = Compose(move, move);
+
+Position start = (5, 5);
+IEnumerable<Position> allPossiblePositions = composed(start).Run();
+
+Assert.Equal(64, allPossiblePositions.Length());
+```
+
+Reminds you of anything? Compare it with the `Compose` we distilled for the IO Monad in [part 4](monads-for-the-rest-of-us-4#compose-for-the-io-monad):
+
+```csharp
+Func<A, IO<C>> Compose<A, B, C>(this Func<B, IO<C>> f, Func<A, IO<B>> g)
+{
+    return a =>
+    {
+        IO<B> ioB = f(a);
+        IO<C> ioC = g.Bind(ioB);
+        return ioC;
+    };
+}
+```
+
+Besides the types, they are exactly the same! Inline each intermediate variable and you would get for both
+
+```csharp
+Func<A, Monad<C>> Compose<A, B, C>(Func<B, Monad<C>> f, Func<A, Monad<B>> g) => 
+    a => f.Bind(g(a));
+````
+
+Seems like we discovered a genral rule which is presumibly valid for all the possible monads.  
+Indeed, in Haskell [the monadic function composition (slighly simplified) implementation][haskell-kleisli-composition] is:
+
+```haskell
+(<=<) :: (b -> m c) -> (a -> m b) -> (a -> m c)
+g <=< f = \a -> g a >>= f
+
+```
+
+
 # References
 * [Why does a monad use "return" or "unit" rather than "lift"?][return-name]
+* [Haskell composition of Kleisli arrows. (>=>), with flipped arguments][haskell-kleisli-composition]
 
 [return-name]: https://softwareengineering.stackexchange.com/questions/231136/why-does-a-monad-use-return-or-unit-rather-than-lift
+[haskell-kleisli-composition]: https://hackage.haskell.org/package/base-4.19.0.0/docs/Control-Monad.html#v:-60--61--60-
