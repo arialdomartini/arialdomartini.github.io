@@ -16,7 +16,7 @@ Let's summarize our understanding of an IO monadic function:
 # Running an IO monadic function
 Here's the very last ingredient we need: nothing prevents us from defining a function that *executes* the IO monad. Sure: we are deferring the execution of the IO side effect; but, eventually, at the end of the chain, we need to run it.
 
-In a sense: IO monads are a way to delay the execution of side effects as long as we wish to manipulate the functions as pure entities, and to finally run their unpure behavior when we are done, at the edge of the application.
+In a sense: IO monads are a way to delay the execution of side effects as long as we wish to manipulate the functions as pure entities, and to finally run their impure behavior when we are done, at the edge of the application.
 
 Let's extend `IO<B>` with a method `Run`, which finally executes the side effect:
 
@@ -402,7 +402,7 @@ That was an IO monad. There are of course a bunch of details we passed over &mda
 Good job! Ready for the next round?  
 The next topics are:
 
-* What about the different kinds of unpurity?
+* What about the different kinds of inpurity?
 * Besides monads, what are Functors?
 
 Observing other Monads will unlock a multitude of possibilities for expressiveness, and will hopefully introduce you to a new programming style. You are warned, though: I'll only take you to the rabbit hole's entrance, it's very, very deep &mdash; but filled with rewards.  

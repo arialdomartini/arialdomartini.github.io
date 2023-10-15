@@ -74,7 +74,7 @@ moveKnight :: Position -> Nond<Position>
 
 ## The List monad is just a simplification
 What does `Nond<Position>` mean?  
-It models the fact that `moveKnight` is undecided which `Position` the algorithm should select. It treats this undecision as a source of unpurity: therefore, it returns a monadic value. Doing so, the problem of enumerating all the possibilities is deferred. When the monad is eventually run, the enumeration will be unrolled.  
+It models the fact that `moveKnight` is undecided which `Position` the algorithm should select. It treats this undecision as a source of impurity: therefore, it returns a monadic value. Doing so, the problem of enumerating all the possibilities is deferred. When the monad is eventually run, the enumeration will be unrolled.  
 Until then, all that the `Nond<Position>` monad does is to provide the programmer with a way to compose and bind other similarly nondeterministic functions, via the classsical and standardized interface of a monad, without loosing information about the source of nondeterminism.
 
 Now, how to structure `Nond<A>`? It's only natural to model the multiple possible values as a collection of values of type `A`.  
@@ -423,15 +423,19 @@ Func<A, Monad<C>> Compose<A, B, C>(Func<B, Monad<C>> f, Func<A, Monad<B>> g) =>
     a => f.Bind(g(a));
 ````
 
-Seems like we discovered a genral rule which is presumibly valid for all the possible monads.  
+Seems like we discovered a general rule which is presumibly valid for all the possible monads.  
 Indeed, in Haskell [the monadic function composition (slighly simplified) implementation][haskell-kleisli-composition] is:
 
 ```haskell
 (<=<) :: (b -> m c) -> (a -> m b) -> (a -> m c)
 g <=< f = \a -> g a >>= f
-
 ```
 
+This is an incredibly remarkable result: not only did we provide the same interface `Bind` + `Return` to all the monads, no matter which kind of inpurity they model; but now we are even discovering some universal laws and combinators, that are also indipendent from the side effects.  
+Isn't this astonishing? You don't yet know the specific domain monad you'll need to design in the next years, and yet you can already rely on the formula for deriving their Compose combinator.
+
+Let me invite you to workout with a last monadic function example: functions that might not fail returning a value.  
+Next and finally, it will be time for playing with Functors. This understanding will enable you to connect the dots and ultimately achieve a unified intuition.
 
 # References
 * [Why does a monad use "return" or "unit" rather than "lift"?][return-name]
