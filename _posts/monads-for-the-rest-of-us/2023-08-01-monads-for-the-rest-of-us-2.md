@@ -7,6 +7,8 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
+**In which you understand that it's all about function composition**
+
 So, we learnt that monadic functions are a way to model side effects without loosing the benefits of pure functions.  
 Let's start from the hardest problem: making an impure function &dash; with IO side effects&dash; pure.
 

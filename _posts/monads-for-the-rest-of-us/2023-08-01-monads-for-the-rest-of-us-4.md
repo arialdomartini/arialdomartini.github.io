@@ -7,6 +7,8 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
+**In which you liberate C# from IO side effects**
+
 Let's summarize our understanding of an IO monadic function:
 
 * instead of executing the IO side effect, it returns a monadic value that models it. Basically, the IO side effect is passed as a lambda, so its execution is deferred

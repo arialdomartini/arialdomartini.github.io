@@ -7,6 +7,8 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
+**In which you reimplement &mdash; and finally understand! &mdash; C#**
+
 # Function Application and Function Composition
 We learnt that Monads revolve around using the type system to separate out side-effecting computations from pure computations, so that they do not interfere with each other.  
 We also found out that we need to apply and compose monadic functions, and that this is not directly supported by C#.
