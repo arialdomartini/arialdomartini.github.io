@@ -291,7 +291,7 @@ In other words, `return` is the elevator to the monadic world.
 Yes, I agree with you: `return` is a horrible and misleading name. As mentioned in [Why does a monad use "return" or "unit" rather than "lift"?][return-name] it's called like this only for historical reasons.  
 Not my fault, I swear.
 
-### A tale of 2 words
+### A tale of 2 worlds
 Let me offer you a different prespective on `Return`.  
 In [Part 1][monads-for-the-rest-of-us] I mentioned the distinction between *honest* and *dishonest* functions; we saw how monadic functions &mdash; returning their output together with a dedicated type representing a specific kind of impurity &mdash; allow us to deal with impurity while in fact continue combining pure functions.
 
