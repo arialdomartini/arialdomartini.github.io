@@ -468,10 +468,25 @@ g <=< f = \a -> g a >>= f
 ```
 
 This is an incredibly remarkable result: not only did we provide the same interface `Bind` + `Return` to all the monads, no matter which kind of inpurity they model; but now we are even discovering some universal laws and combinators, that are also indipendent from the side effects.  
-Isn't this astonishing? You don't yet know the specific domain monad you'll need to design in the next years, and yet you can already rely on the formula for deriving their Compose combinator.
+Isn't this astonishing? You still have to invent and implement the monads you will use in your future code: and you already know the formula for deriving their Compose combinator will perfectly work with them.
 
-Let me invite you to workout with a last monadic function example: functions that might not fail returning a value.  
-Next and finally, it will be time for playing with Functors. This understanding will enable you to connect the dots and ultimately achieve a unified intuition.
+# Wrapping up
+
+Here's what we found out:
+
+* All the monadic types share the same interface: `Bind` and `Return`.
+* `Return` lifts values in the monadic world.
+* There also must be a way to discend back to the non-monadic world: `Run`.
+* Each monad has got its peculiar implementation of `Bind`, `Return` and `Run`.
+* It seems that other functionalities are derived from `Bind`, `Return` and `Run`. They are likely to be universal.
+* A graphical representation of the non-monadic and the monadic world could help us develop a useful intuition.
+
+There are few other topics I would like now to tackle:
+
+* A last monadic function example: functions that might fail returning a value. I hope this will persuade you that crafting new monads for your future requirements isn't too challenging.
+* A short detour on Functors. This will enable you to connect the dots and to ultimately achieve a unified understanding.
+* A more comprehensive representation of the functional combinators, using the just introduced graphical notation.
+* A little experiment in which we replace `Nond<A>` with `IEnumerable<A>`. This will give you an unexpected revelation: C# natively supports monads.
 
 # References
 * [Why does a monad use "return" or "unit" rather than "lift"?][return-name]
