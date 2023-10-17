@@ -105,5 +105,15 @@ lifting their input types so that they can be *bound* and composed together:
 
 ![a monadic function f from Monad<A> to Monad<B>](static/img/nond-for-the-rest-of-us/monadic-functions-series-of-bound-functions.png)
 
-In other words. There are benefits in working in the elevated world of the monadic functions. `bind` takes those function that are still with one of their legs in the ordinary world, and elevate them.
+In other words. There are benefits in working in the monadic world. `bind` takes those function that are still with one of their legs in the ordinary world, and elevate them.
 
+Completing this with `Return` and `Run`, it's intuitive to think that the core pattern adopted in programming functionally with monads is the following:
+
+![return + bound functions + run](static/img/nond-for-the-rest-of-us/functional-programming-with-monads.png)
+
+* You start by elevating your input value to the monadic world with `Return`
+* You process it with a series of monadic functions, bound with `Bind`
+* And finally, at the edge of your application, you descend down to the world of ordinary functions and values, with `Run`
+
+
+You are ready to understand Functors.
