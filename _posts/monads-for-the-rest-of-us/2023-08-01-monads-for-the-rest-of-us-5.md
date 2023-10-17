@@ -490,6 +490,8 @@ There are few other topics I would like now to tackle:
 * A more comprehensive representation of the functional combinators, using the just introduced graphical notation.
 * A little experiment in which we replace `Nond<A>` with `IEnumerable<A>`. This will give you an unexpected revelation: C# natively supports monads.
 
+Go to [Chapter 6](monads-for-the-rest-of-us-6);
+
 # References
 * [Why does a monad use "return" or "unit" rather than "lift"?][return-name]
 * [Haskell composition of Kleisli arrows. (>=>), with flipped arguments][haskell-kleisli-composition]

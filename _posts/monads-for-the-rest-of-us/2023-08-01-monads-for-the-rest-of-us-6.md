@@ -217,6 +217,7 @@ Func<Maybe<A>, Maybe<B>> Map<A, B>(Func<A, B> f) =>
 Oh, wait: I guess we have to introduce Functors first, right?  
 Take some dried fruit and enjoy the journey.
 
+Jump to [Chapter 7](monads-for-the-rest-of-us-7).
 
 # References
 * [Discriminated Union Type - Wikipedia][discriminated-union-type]

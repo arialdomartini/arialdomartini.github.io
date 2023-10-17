@@ -21,6 +21,17 @@ I challenged myself to write a post that:
 - does not follow the classical Functors -> Monads narrative
 - is tailored for C# developers
 <!--more-->
+Table of chapters:
+
+* Chapter 1: In which you realize that Monads are not things
+* [Chapter 2](monads-for-the-rest-of-us-2): In which you understand that it's all about function composition
+* [Chapter 3](monads-for-the-rest-of-us-3): In which you reimplement &mdash; and finally understand! &mdash; C#'s function application
+* [Chapter 4](monads-for-the-rest-of-us-4): In which you liberate C# from IO side effects
+* [Chapter 5](monads-for-the-rest-of-us-5): In which you make C# nondeterministic
+* [Chapter 6](monads-for-the-rest-of-us-6): In which you kill null
+* [Chapter 7](monads-for-the-rest-of-us-7): In which you realize that Bind is a combinator
+* [Chapter 8](monads-for-the-rest-of-us-8): In which you realize that Functors are not boxes
+
 # The Goal
 I don't want to waste your time repeating what you already know about the virtue of pure functions. It should suffice starting from 2 assumptions:
 
@@ -281,7 +292,7 @@ In the next part we will implement some of those type. In defining them, we will
 
 Here's the last approximation for this first article: Monads are not an intuitive concept. Monadic Functions are. Monads are just how functional languages have conventionally chosen to represent the output of Monadic Functions.
 
-Grab your keyboard. It's time to give birth to your first monad.
+Grab your keyboard. It's time to give birth to your first monad. Jump to [Chapter 2](monads-for-the-rest-of-us-2).
 
 # References
 

@@ -130,3 +130,5 @@ We got to the point where we need to rethink the way we apply and compose functi
 We'd better take a quick detour on ordinary function application and composition: we will easily learn how to extend them to monadic functions.
 
 Here's the gist of this second article: monadic functions, as a notion of computation richer than standard functions, come together with a way to generalize Function Application and Function Composition so that they work with not-directly-compatible types.
+
+Go to [Chapter 3](monads-for-the-rest-of-us-3).

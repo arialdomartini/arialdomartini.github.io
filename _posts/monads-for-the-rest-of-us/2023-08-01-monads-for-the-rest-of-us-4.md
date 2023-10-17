@@ -411,8 +411,9 @@ Observing other Monads will unlock a multitude of possibilities for expressivene
 Learning Functors, on the other hand, will be relaxing and reassuring. They are very easy, have a wide range of applications and, best of all, you probably already know most of the topic intuitivelly.  
 Finally, Functors will allow you to visually grasp some concepts that might currently appear a bit vague.
 
-
 But before proceeding, go and have an icecream: you deserved it!
+
+Geto to [Chapter 5](monads-for-the-rest-of-us-5).
 
 # References
 * [language-ext][language-ext]
