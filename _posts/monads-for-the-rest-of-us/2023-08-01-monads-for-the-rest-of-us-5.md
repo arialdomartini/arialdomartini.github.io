@@ -111,7 +111,7 @@ For the sake of simplicity:
 So we can be prosaic and opt for a simple `IEnumerable` of `(int, int)`.  
 Considering how a knight moves:
 
-![A chess board with a knight and an indication of the possible destination positions](static/img/monads-for-the-rest-of-us/Chessboard480.svg.webp)
+![A chess board with a knight and an indication of the possible destination positions](static/img/monads-for-the-rest-of-us/knight-moves.png)
 
 this is a possible implementation for `move`:
 
@@ -299,15 +299,15 @@ In [Part 1][monads-for-the-rest-of-us] I mentioned the distinction between *hone
 
 For the case of nondeterministic functions, it is only fair to group functions in 2 separate worlds: one populated by the ordinary functions and values, and one where functions and values, handled via the `Nond` monadic type, convey the notion of nondeterminism:
 
-![return for nondeterministic functions](static/img/monads-for-the-rest-of-us/2-worlds.png)
+![a representation of the world of ordinary functions and the nondeterministic functions](static/img/monads-for-the-rest-of-us/2-worlds.png){: height="300px" }
 
 With this perspective in mind, `Return` can be interpreted as the function that lifts a value to the world of nondeterministic functions:
 
-![return for nondeterministic functions](static/img/monads-for-the-rest-of-us/nond-return.png)
+![return for nondeterministic functions](static/img/monads-for-the-rest-of-us/nond-return.png){: height="300px" }
 
 `Run` does the opposite: given a value in the world of nondeterministic functions, it projects the undeterminism down, returning back all the possible combinations expressed as an ordinary, non-monadic type.
 
-![return for nondeterministic functions](static/img/monads-for-the-rest-of-us/nond-run.png)
+![run for nondeterministic functions](static/img/monads-for-the-rest-of-us/nond-run.png){: height="300px" }
 
  Notice that `Return` and `Run` are not perfectly symmetric: `Run` does not return back a single `Position`, but a collection.
  
@@ -318,13 +318,13 @@ The notion of binding and combining monadic functions aligns to the idea of:
 * operating in that world, using `Bind` and `Compose` (and other functions we will soon discover)
 * and finally descending back to the world of ordinary functions with `Run`
 
-![return for nondeterministic functions](static/img/monads-for-the-rest-of-us/nond-return-bind-run.png)
+![return+bind+run for nondeterministic functions](static/img/monads-for-the-rest-of-us/nond-return-bind-run.png){: height="300px" }
 
 Nothing prevents us from extending this visualization to other monadic function types. In the general case:
 
-![return for nondeterministic functions](static/img/monads-for-the-rest-of-us/monad-return.png)
-![return for nondeterministic functions](static/img/monads-for-the-rest-of-us/monad-return-run.png)
-![return for nondeterministic functions](static/img/monads-for-the-rest-of-us/monad-return-bind-run.png)
+![return for monadic functions](static/img/monads-for-the-rest-of-us/monad-return.png){: height="300px" }
+![run for monadic functions](static/img/monads-for-the-rest-of-us/monad-run.png){: height="300px" }
+![return+bind+run for monadic functions](static/img/monads-for-the-rest-of-us/monad-return-bind-run.png){: height="300px" }
 
 Notice, again, that descending from a `Monad<A>` with `Run` to the world of ordinary functions and values not necessarily returns an `A`.
 

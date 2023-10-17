@@ -10,11 +10,11 @@ include_in_index: false
 **in which you achieve true enlightenment seeing that Functors are not boxes**
 You just discovered that `Bind` takes crippled functions, with a leg still clinging to the old world, and fix them elevating them so they are fully immersed in the realm of monads:
 
-![a monadic function f from A to Monad<B>](static/img/nond-for-the-rest-of-us/monadic-functions-before-bind.png)
+![a monadic function f from A to Monad B](static/img/nond-for-the-rest-of-us/monadic-functions-before-bind.png){: height="300px" }
 
 What about even more stubborn functions that have both input and output in the non-monadic world?
 
-![an ordinary function from A to B](static/img/nond-for-the-rest-of-us/functors-before-map.png)
+![an ordinary function from A to B](static/img/nond-for-the-rest-of-us/functors-before-map.png){: height="300px" }
 
 How can we fix them elevating to the monadic world?
 
@@ -35,7 +35,7 @@ f :: Monad<A> -> Monad<B>
 
 is called `Map`:
 
-![an ordinary function mapped to be from Monad<A> to Monad<B>](static/img/nond-for-the-rest-of-us/functors-after-map.png)
+![an ordinary function mapped to be from Monad A to Monad B](static/img/nond-for-the-rest-of-us/functors-after-map.png){: height="300px" }
 
 `Map` is a notion related to Functors.
 
@@ -43,9 +43,9 @@ Let me tell you what a Functor is, using a bit of Category Theory.
 I promised that this series did not require any knowledge of Category Theory, and I won't go back on my word. I swear that it will be super easy.
 
 # Functors
-I love this image by Bartosz Milewski, from the chapter [Functors][bartosz-functors] of his book [Category Theory for Programmers]:
+I love this image by Bartosz Milewski, from the chapter [Functors][bartosz-functors] of his book [Category Theory for Programmers][bartosz]:
 
-![a functor as described in Category Theory](static/img/nond-for-the-rest-of-us/bartosz-functor.png)
+![a functor as described in Category Theory](static/img/monads-for-the-rest-of-us/bartosz-functor.png){: height="300px" }
 
 I slightly modified it adding a missing arrow.  
 Interpret it as follows:
@@ -116,7 +116,7 @@ The implementation is not essential, but it is interesting to notice how it ofte
 
 The most popular way to visualize functors is using boxes, as in [Functors, Applicatives, And Monads In Pictures][functors-as-boxes]:
 
-![Functors as boxes](static/img/nond-for-the-rest-of-us/functors-as-boxes.png)
+![Functors as boxes](static/img/monads-for-the-rest-of-us/functors-as-boxes.png){: height="300px" }
 
 This is all good. But I recommend: don't forget that these are only approximations and visualization stratagems.  
 The box metaphor holds true in many scenarios, but easily falls short in others, leading to situations that can be quite perplexing.
@@ -131,7 +131,7 @@ Func<string, int> length = s => s.Length;
 ```
 
 
-![length function from string to int](static/img/nond-for-the-rest-of-us/functors-length.png)
+![length function from string to int](static/img/monads-for-the-rest-of-us/functors-length.png){: height="300px" }
 
 
 We want to map it work with `IEnumerables`, and make its signature
@@ -142,7 +142,7 @@ IEnumerable<string> -> IEnumerable<int>
 
 That is, awe want to elevate it to the world inhabitated by types modeled by the `IEnumerable` monad:
 
-![length function from string to int](static/img/nond-for-the-rest-of-us/functors-functorial-length.png)
+![length function from string to int](static/img/monads-for-the-rest-of-us/functors-functorial-length.png){: height="300px" }
 
 Do you see how this type-signature transformation perfectly match the goal of `Map`?
 

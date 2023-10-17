@@ -97,7 +97,7 @@ abstract record Maybe<A>
 ## Return
 We surely need a `Return` function to lift an `A` value in the realm of the undecided functions:
 
-![return for nondeterministic functions](static/img/monads-for-the-rest-of-us/maybe-return.png)
+![return for the maybe monad](static/img/monads-for-the-rest-of-us/maybe-return.png){: height="300px" }
 
 Given an `A` value, the most natural way to elevate it in the real of the optionally-returning functions is to use the `Just` constructor:
 
@@ -124,7 +124,7 @@ but those are implementation details that don't alter the essence.
 That's a very intersting challenge.  
 One could think that `Run`is the inverse of `Return`, and that given a `Monad<A>` gives back an instance of `A`. You might remember that I mentioned in [Part 5](monads-for-the-rest-of-us-5#a_tale_of_2_worlds) that `Return` and `Run` needn't be symmetric. This was apparent for the nondeterministic functions, where running `Nond<Position>` returned back an `IEnumerable<Position>`:
 
-![return for nondeterministic functions](static/img/nond-for-the-rest-of-us/nond-return-bind-run.png)
+![return+bind+run for maybe monad](static/img/monads-for-the-rest-of-us/nond-return-bind-run.png){: height="300px" }
 
 If you think about it, we should expect that `Return` and `Run` cannot be symmetric: the reason we transitioned to the elevated realm of monads in the beginning was to deal with *something else* within our functions. Monads enable us to defer these extra actions, but when we return to the realm of the ordinary functions and values, with `Run`, these postponed side effects must eventually occcur. And this reflects in either more than one value being produced, or something arbitrarily complex, including values of different types.
 
@@ -144,7 +144,7 @@ A Run(Maybe<A> maybe) =>
 A more reasonable approach is to provide `Run` with 2 functions, one for each possibility. To keep this approach flexible, the functions return a type different from `A`:
 
 
-![return for nondeterministic functions](static/img/nond-for-the-rest-of-us/maybe-run.png)
+![run for the maybe monad](static/img/monads-for-the-rest-of-us/maybe-run.png){: height="300px" }
 
 ```csharp
 abstract record Maybe<A>
@@ -222,4 +222,4 @@ Jump to [Chapter 7](monads-for-the-rest-of-us-7).
 # References
 * [Discriminated Union Type - Wikipedia][discriminated-union-type]
 
-* [discriminated-union-type]: https://en.wikipedia.org/wiki/Tagged_union
+[discriminated-union-type]: https://en.wikipedia.org/wiki/Tagged_union

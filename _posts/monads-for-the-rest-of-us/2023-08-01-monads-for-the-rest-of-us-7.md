@@ -20,14 +20,14 @@ f :: A -> B
 g :: B -> C
 ```
 
-![2 type-compatible ordinary functions](static/img/nond-for-the-rest-of-us/ordinary-functions-2-functions.png)
+![2 type-compatible ordinary functions](static/img/monads-for-the-rest-of-us/ordinary-functions-2-functions.png){: height="300px" }
 
 You know that they are type-compatible: the output of `f` has the same type of the input of `g`. So you can both:
 
 * *apply* `f` to the output of `g`
 * *compose* `f` and `g` and build a new function `g . f`
 
-![2 type-compatible ordinary functions composed](static/img/nond-for-the-rest-of-us/ordinary-functions-2-functions-composed.png)
+![2 type-compatible ordinary functions composed](static/img/monads-for-the-rest-of-us/ordinary-functions-2-functions-composed.png){: height="300px" }
 
 Ok, we are done with the roots. I promised it would be fast.
 
@@ -38,11 +38,11 @@ f :: A -> Monad<B>
 g :: B -> Monad<C>
 ```
 
-![2 monadic functions](static/img/nond-for-the-rest-of-us/monadic-functions-2-functions.png)
+![2 monadic functions](static/img/monads-for-the-rest-of-us/monadic-functions-2-functions.png){: height="300px" }
 
 They are not type-compatible: the output of `f` has a different type than the type requested by `g`. You cannot just feed `g` with the output of `f`:
 
-![2 monadic functions cannot be directly bound](static/img/nond-for-the-rest-of-us/monadic-functions-2-functions-cannot-be-bound.png)
+![2 monadic functions cannot be directly bound](static/img/monads-for-the-rest-of-us/monadic-functions-2-functions-cannot-be-bound.png){: height="300px" }
 
 Your problem is: you would like to feed `f` with a value of `A`, but you don't have it; instead, you have a value of `Monad<A>`.  
 
@@ -81,9 +81,8 @@ f' :: Monad<A> -> Monad<B>
 
 You like `f'` a lot! Remember your problem?
 
-| You would like to feed `f` with a value of `A`
-| but you don't have it; 
-| instead, you have a value of `Monad<A>`.
+> You would like to feed `f` with a value of `A` but you don't have it;   
+> instead, you have a value of `Monad<A>`.
 
 That's perfect: the function `bind` gave you back wants a `Monad<A>` as input. `bind` solved your problem.
 
@@ -91,25 +90,25 @@ Graphically:
 
 you start from a monadic function `f`:
 
-![a monadic function f from A to Monad<B>](static/img/nond-for-the-rest-of-us/monadic-functions-before-bind.png)
+![a monadic function from A to Monad B](static/img/monads-for-the-rest-of-us/monadic-functions-before-bind.png){: height="300px" }
 
 and this is what you get applying `bind`:
 
-![a monadic function f from Monad<A> to Monad<B>](static/img/nond-for-the-rest-of-us/monadic-functions-after-bind.png)
+![a monadic function f from Monad A to Monad B](static/img/monads-for-the-rest-of-us/monadic-functions-after-bind.png){: height="300px" }
 
 Here's the gist. `bind` transforms a series of not type-compatible monadic functions:
 
-![a monadic function f from Monad<A> to Monad<B>](static/img/nond-for-the-rest-of-us/monadic-functions-series-of-functions.png)
+![a series of monadic functions](static/img/monads-for-the-rest-of-us/monadic-functions-series-of-functions.png){: height="300px" }
 
 lifting their input types so that they can be *bound* and composed together:
 
-![a monadic function f from Monad<A> to Monad<B>](static/img/nond-for-the-rest-of-us/monadic-functions-series-of-bound-functions.png)
+![a series of monadic functions with bind applied](static/img/monads-for-the-rest-of-us/monadic-functions-series-of-bound-functions.png){: height="300px" }
 
 In other words. There are benefits in working in the monadic world. `bind` takes those function that are still with one of their legs in the ordinary world, and elevate them.
 
 Completing this with `Return` and `Run`, it's intuitive to think that the core pattern adopted in programming functionally with monads is the following:
 
-![return + bound functions + run](static/img/nond-for-the-rest-of-us/functional-programming-with-monads.png)
+![return + bound functions + run](static/img/monads-for-the-rest-of-us/functional-programming-with-monads.png){: height="300px" }
 
 * You start by elevating your input value to the monadic world with `Return`
 * You process it with a series of monadic functions, bound with `Bind`
