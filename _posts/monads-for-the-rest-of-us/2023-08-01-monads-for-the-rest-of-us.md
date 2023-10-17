@@ -19,7 +19,7 @@ I challenged myself to write a post that:
 - does not follow the classical Functors -> Monads narrative
 - is tailored for C# developers
 <!--more-->
-Table of chapters:
+# Table of chapters
 
 * [Chapter 1](monads-for-the-rest-of-us-1): in which you realize that Monads are not things
 * [Chapter 2](monads-for-the-rest-of-us-2): in which you understand that it's all about function composition
