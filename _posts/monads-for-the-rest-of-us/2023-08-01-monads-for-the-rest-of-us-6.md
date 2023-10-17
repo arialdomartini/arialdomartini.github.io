@@ -126,7 +126,9 @@ One could think that `Run`is the inverse of `Return`, and that given a `Monad<A>
 
 ![return for nondeterministic functions](static/img/nond-for-the-rest-of-us/nond-return-bind-run.png)
 
-The same must happen for `Maybe<A>`: we don't even know if there is an `A` to return! The instance of `Maybe<A>` may easily represent the absence of a value: how can we possibly generate it from the thin air?
+If you think about it, we should expect that `Return` and `Run` cannot be symmetric: the reason we transitioned to the elevated realm of monads in the beginning was to deal with *something else* within our functions. Monads enable us to defer these extra actions, but when we return to the realm of the ordinary functions and values, with `Run`, these postponed side effects must eventually occcur. And this reflects in either more than one value being produced, or something arbitrarily complex, including values of different types.
+
+The same must happen to the `run` function for `Maybe<A>`. It's hard to imagine it returns an instance of `A`: we don't even know if there is a value! We used `Maybe<A>` exactly to possibly represent the absence of a value: how can we generate it from the thin air?
 
 
 ```csharp
