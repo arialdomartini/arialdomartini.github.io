@@ -7,7 +7,7 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
-**In which you realize that Bind is a combinator**
+**In which you discover that Bind is a combinator and you feel illuminated**
 
 # Bind as a combinator
 If you want to understand Functors, it help to develop a little different intuition on Monads. And in order to do so, it helps to go back to the roots.  

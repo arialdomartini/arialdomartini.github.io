@@ -27,8 +27,8 @@ Table of chapters:
 * [Chapter 4](monads-for-the-rest-of-us-4): in which you liberate C# from IO side effects
 * [Chapter 5](monads-for-the-rest-of-us-5): in which you make C# nondeterministic
 * [Chapter 6](monads-for-the-rest-of-us-6): in which you kill null
-* [Chapter 7](monads-for-the-rest-of-us-7): in which you realize that Bind is a combinator
-* [Chapter 8](monads-for-the-rest-of-us-8): in which you realize that Functors are not boxes
+* [Chapter 7](monads-for-the-rest-of-us-7): in which you discover that Bind is a combinator and you feel illuminated
+* [Chapter 8](monads-for-the-rest-of-us-8): in which you achieve true enlightenment seeing that Functors are not boxes
 
 # References
 
