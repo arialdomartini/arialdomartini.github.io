@@ -1,15 +1,14 @@
 ---
 layout: post
-title: "Monads for the rest of us, in C# - Part 6"
+title: "Monads for the rest of us, in C# - Part 7"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - C#
 - Functional Programming
 include_in_index: false
 ---
-**In which you discover that Bind is a combinator and you feel illuminated**
+## In which you discover that Bind is a combinator<br/> and you feel illuminated
 
-# Bind as a combinator
 If you want to understand Functors, it help to develop a little different intuition on Monads. And in order to do so, it helps to go back to the roots.  
 Don't worry, it will take only few seconds.
 

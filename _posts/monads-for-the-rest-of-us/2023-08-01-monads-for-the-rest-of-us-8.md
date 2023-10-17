@@ -1,13 +1,14 @@
 ---
 layout: post
-title: "Monads for the rest of us, in C# - Part 6"
+title: "Monads for the rest of us, in C# - Part 8"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - C#
 - Functional Programming
 include_in_index: false
 ---
-**in which you achieve true enlightenment seeing that Functors are not boxes**
+## In which you achieve true enlightenment<br/>seeing that Functors are not boxes
+
 You just discovered that `Bind` takes crippled functions, with a leg still clinging to the old world, and fix them elevating them so they are fully immersed in the realm of monads:
 
 ![a monadic function f from A to Monad B](static/img/nond-for-the-rest-of-us/monadic-functions-before-bind.png){: height="300px" }

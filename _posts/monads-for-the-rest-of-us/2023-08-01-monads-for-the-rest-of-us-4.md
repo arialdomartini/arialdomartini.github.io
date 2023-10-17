@@ -7,7 +7,7 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
-**In which you liberate C# from IO side effects**
+## In which you liberate C# from IO side effects
 
 Let's summarize our understanding of an IO monadic function:
 

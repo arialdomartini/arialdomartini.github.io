@@ -7,7 +7,7 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
-**In which you make C# nondeterministic**
+## In which you make C# nondeterministic
 
 I hope you enjoyed your icecream.  
 Without much ado, let's get our hands dirty  with a new use case for monads. That could sound puzzling, at first, but I swear that it is simple: nondeterministic functions.

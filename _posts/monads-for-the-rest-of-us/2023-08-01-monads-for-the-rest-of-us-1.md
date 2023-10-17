@@ -7,9 +7,8 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
-**In which you realize that Monads are not things**
+## In which you realize that Monads are not things
 
-# The Goal
 I don't want to waste your time repeating what you already know about the virtue of pure functions. It should suffice starting from 2 assumptions:
 
 - We want to use pure functions as much as possible

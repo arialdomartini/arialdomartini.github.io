@@ -22,7 +22,7 @@ I challenged myself to write a post that:
 # Table of chapters
 
 * [Chapter 1](monads-for-the-rest-of-us-1): in which you realize that Monads are not things
-* [Chapter 2](monads-for-the-rest-of-us-2): in which you understand that it's all about function composition
+* [Chapter 2](monads-for-the-rest-of-us-2): in which you sense that it's all about function composition
 * [Chapter 3](monads-for-the-rest-of-us-3): in which you reimplement &mdash; and finally understand! &mdash; C#'s function application
 * [Chapter 4](monads-for-the-rest-of-us-4): in which you liberate C# from IO side effects
 * [Chapter 5](monads-for-the-rest-of-us-5): in which you make C# nondeterministic

@@ -7,15 +7,15 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
-**In which you reimplement &mdash; and finally understand! &mdash; C#'s function application**
+## In which you reimplement &mdash; and finally understand! &mdash; C#'s function application
 
-# Function Application and Function Composition
+
 We learnt that Monads revolve around using the type system to separate out side-effecting computations from pure computations, so that they do not interfere with each other.  
 We also found out that we need to apply and compose monadic functions, and that this is not directly supported by C#.
 
 The goal of this 3rd installment is to manually re-implement the native C# function application and function composition, so that we learn how to extend them to work with monadic functions.
 
-## Function Application
+# Function Application
 Consider the method:
 
 ```csharp
@@ -109,7 +109,7 @@ In Haskell, `Apply` is written as `$` at its (slightly simplified) [implementati
 ($) f a =  f a
 ```
 
-### What we got
+## What we got
 The implementation of `Apply` might seem of no use, but it's not:
 
 * It can be extended, giving you the opportunity to do *something else* while applying a function to a value. For example, you can decorate the invocation surrounding it with some logging calls:
@@ -132,7 +132,7 @@ The *something else* we are interested to do might be related to the extra-compu
 Do you start to see a pattern? Monads are all about separating some *effects* in a type, and then handling them during function application and function composition.  
 Keep going: we are almost there.
 
-### Function Application of multi-parameter functions
+## Function Application of multi-parameter functions
 
 The version of `Apply` we got only works with 1-parameter functions. The following code does not even compile:
 
@@ -154,7 +154,7 @@ f.Apply("foo")("bar");
 
 Don't despair, we will see this later.
 
-## Function Composition
+# Function Composition
 The second fundamental notion we are interested to re-implement is Function Composition.  
 Consider the following:
 
@@ -235,7 +235,7 @@ In Haskell, `Compose` is written as `.` at [its implementation][haskell-composit
 
 It's essentially the same that we found.
 
-### What we got
+## What we got
 As for `Apply`, with the formula `Compose(f, g) => a => f(g(a))` we have just reinvented the weel.  
 And yet, our little `Compose` implementation is not for nothing:
 

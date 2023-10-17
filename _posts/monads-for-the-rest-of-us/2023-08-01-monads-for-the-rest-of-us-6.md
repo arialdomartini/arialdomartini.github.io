@@ -7,7 +7,7 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
-**In which you kill null**
+## In which you kill null
 
 So you want to model functions that might fail to return a value.  
 Over time, developers have invented several approaches to model :
