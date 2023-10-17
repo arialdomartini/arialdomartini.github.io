@@ -7,7 +7,7 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
-** In which you realize that Functors are not containers **
+**In which you realize that Bind is a combinator**
 
 # Bind as a combinator
 If you want to understand Functors, it help to develop a little different intuition on Monads. And in order to do so, it helps to go back to the roots.  
@@ -107,4 +107,3 @@ lifting their input types so that they can be *bound* and composed together:
 
 In other words. There are benefits in working in the elevated world of the monadic functions. `bind` takes those function that are still with one of their legs in the ordinary world, and elevate them.
 
-# Functors
