@@ -117,3 +117,7 @@ Completing this with `Return` and `Run`, it's intuitive to think that the core p
 You are ready to understand Functors.
 
 Proceed to [Chapter 8](monads-for-the-rest-of-us-8).
+
+
+# Comments
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/26)

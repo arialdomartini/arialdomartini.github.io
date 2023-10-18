@@ -498,3 +498,6 @@ Go to [Chapter 6](monads-for-the-rest-of-us-6);
 
 [return-name]: https://softwareengineering.stackexchange.com/questions/231136/why-does-a-monad-use-return-or-unit-rather-than-lift
 [haskell-kleisli-composition]: https://hackage.haskell.org/package/base-4.19.0.0/docs/Control-Monad.html#v:-60--61--60-
+
+# Comments
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/26)

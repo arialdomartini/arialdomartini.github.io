@@ -317,3 +317,6 @@ You can interpret `Select` as the function that maps `length` to the content of 
 [language-ext]: https://github.com/louthy/language-ext/blob/main/LanguageExt.Core/Type%20Classes/Functor/Functor.cs
 [scala-cats-functor]: https://github.com/typelevel/cats/blob/main/core/src/main/scala/cats/Functor.scala#L31-L228
 [functors-as-boxes]: https://www.adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html
+
+# Comments
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/26)

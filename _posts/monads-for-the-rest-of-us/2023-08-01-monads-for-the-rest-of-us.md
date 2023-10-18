@@ -35,3 +35,7 @@ I challenged myself to write a post that:
 [Mike Vanier - Yet Another Monad Tutorial][yet-another-tutorial]
 
 [yet-another-tutorial]: https://mvanier.livejournal.com/3917.html
+
+
+# Comments
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/26)

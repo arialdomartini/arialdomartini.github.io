@@ -277,3 +277,6 @@ Grab your keyboard. It's time to give birth to your first monad. Jump to [Chapte
 
 [buonanno-honest]: https://livebook.manning.com/book/functional-programming-in-c-sharp/chapter-3/78
 [yet-another-tutorial]: https://mvanier.livejournal.com/3917.html
+
+# Comments
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/26)

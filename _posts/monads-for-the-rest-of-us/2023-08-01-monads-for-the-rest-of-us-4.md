@@ -423,3 +423,6 @@ Geto to [Chapter 5](monads-for-the-rest-of-us-5).
 [language-ext]: https://github.com/louthy/language-ext
 [grokking-simplicity]: https://grokkingsimplicity.com/
 [haskell-bind]: https://hackage.haskell.org/package/base-4.19.0.0/docs/Prelude.html#v:-62--62--61-
+
+# Comments
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/26)

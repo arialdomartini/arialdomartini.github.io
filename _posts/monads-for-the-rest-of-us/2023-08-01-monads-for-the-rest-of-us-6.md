@@ -223,3 +223,6 @@ Jump to [Chapter 7](monads-for-the-rest-of-us-7).
 * [Discriminated Union Type - Wikipedia][discriminated-union-type]
 
 [discriminated-union-type]: https://en.wikipedia.org/wiki/Tagged_union
+
+# Comments
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/26)
