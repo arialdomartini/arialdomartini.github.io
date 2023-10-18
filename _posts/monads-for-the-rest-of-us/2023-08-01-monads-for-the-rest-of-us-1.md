@@ -272,8 +272,8 @@ Grab your keyboard. It's time to give birth to your first monad. Jump to [Chapte
 
 # References
 
-[Writing "honest" functions - Enrico Buonanno - Functional Programming in C#][buonanno-honest]
-[Mike Vanier - Yet Another Monad Tutorial][yet-another-tutorial]
+* [Writing "honest" functions - Enrico Buonanno - Functional Programming in C#][buonanno-honest]
+* [Mike Vanier - Yet Another Monad Tutorial][yet-another-tutorial]
 
 [buonanno-honest]: https://livebook.manning.com/book/functional-programming-in-c-sharp/chapter-3/78
 [yet-another-tutorial]: https://mvanier.livejournal.com/3917.html
