@@ -34,7 +34,7 @@ As long as a function is pure, its signature exactly reflects the mapping it per
 Ideally a pure function can be replaced with a dictionary whose keys are all the possible inputs, and whose values are the corresponding returned results.
 
 ```csharp
-// Double :: string -> int
+// Double :: int -> int
 int Double(int i) => i * 2;
 ```
 
