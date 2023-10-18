@@ -17,7 +17,7 @@ I challenged myself to write a post that:
 - does not require Category Theory
 - jumps past some of the trivial introductory topics, such as defining what a pure function is
 - does not follow the classical Functors -> Monads narrative
-- is tailored for C# developers
+- is tailored for C# developers and digestible by Java ones
 <!--more-->
 # Table of chapters
 
