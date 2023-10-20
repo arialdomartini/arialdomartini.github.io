@@ -32,9 +32,9 @@ record IO<B>(Func<B> f)
 IO<int> CalculateWithSideEffect(string s) =>
     new IO<int>(() => 
     {
-        File.WriteAllText("output.txt", "I'm a side effect!"));
+        File.WriteAllText("output.txt", "I'm a side effect!");
         return s.Length;
-    }
+    });
 
 // This is still a pure function
 IO<int> monadicValue = CalculateWithSideEffect("foo");
@@ -209,7 +209,7 @@ If the functions were pure, we could directly combine them as follows:
 // length :: string -> int
 // double :: int -> double
 
-var doubleTheLength = double(length("foo"));
+var doubleTheLength = @double(length("foo"));
 
 Assert(6, doubleTheLength);
 ```
@@ -219,7 +219,7 @@ or, with our custom `Apply`:
 ```csharp
 var doubleTheLength = double.Apply(length.Apply("foo"));
 
-Assert(6, doubleTheLength);
+Assert.Equal(6, doubleTheLength);
 ```
 
 In the monadic case, the version of `Apply` we just wrote takes care of *binding* the 2 monadic functions:
@@ -232,7 +232,7 @@ Func<string, IO<int>> length = s =>
         return s.Length;
     });
 
-Func<int, IO<double>> double = n =>
+Func<int, IO<double>> @double = n =>
     new IO<double>(() =>
     {
         File.AppendAllText("output.txt", "I'm another side effect!");
@@ -251,7 +251,7 @@ static class FunctionExtensions
 }
 
 IO<int> monadicLength = length("foo");
-IO<double> monadicResult = double.Apply(monadicLength);
+IO<double> monadicResult = @double.Apply(monadicLength);
 
 // Indeed, no file has been created yet
 Assert.False(File.Exists("output.txt"));
@@ -342,10 +342,9 @@ static class FunctionExtensions
             return c;
         };
     }
-
 }
 
-var composed = double.ComposedWith(length);
+var composed = @double.ComposedWith(length);
 
 IO<double> monadicResult = composed("foo");
 var result = monadicResult.Run();
@@ -385,7 +384,7 @@ Func<A, IO<C>> ComposedWith<A, B, C>(this Func<B, IO<C>> f, Func<A, IO<B>> g)
 }
 ```
 
-That's a little harder reason about. Follow the types, that should help.   
+This is a bit more challenging to understand. Follow the types, that should help.   
 When you are done, inline all the variables and you will get to:
 
 ```csharp

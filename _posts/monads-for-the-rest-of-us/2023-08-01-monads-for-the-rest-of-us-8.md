@@ -15,7 +15,7 @@ You just discovered that `Bind` takes crippled functions, with a leg still cling
 
 What about even more stubborn functions that have both input and output in the non-monadic world?
 
-![an ordinary function from A to B](static/img/nond-for-the-rest-of-us/functors-before-map.png){: height="300px" }
+![an ordinary function from A to B](static/img/monads-for-the-rest-of-us/functors-before-map.png){: height="300px" }
 
 How can we fix them elevating to the monadic world?
 
@@ -36,7 +36,7 @@ f :: Monad<A> -> Monad<B>
 
 is called `Map`:
 
-![an ordinary function mapped to be from Monad A to Monad B](static/img/nond-for-the-rest-of-us/functors-after-map.png){: height="300px" }
+![an ordinary function mapped to be from Monad A to Monad B](static/img/monads-for-the-rest-of-us/functors-after-map.png){: height="300px" }
 
 `Map` is a notion related to Functors.
 

@@ -41,18 +41,18 @@ int Double(int i) => i * 2;
 is fully described and replaced by the (very large) dictionary:
 
 ```csharp
-int Double(int i) => Codomain[i];
-
 Dictionary<int, int> Codomain = new Dictionary<int, int>
 {
     ...
-    [-1] = -2
+    [-1] = -2,
     [0] = 0,
     [1] = 2,
     [2] = 4,
     [3] = 6,
     ...
 }
+
+int Double(int i) => Codomain[i];
 ```
 
  Notice how the dictionary's type arguments match the function ones:

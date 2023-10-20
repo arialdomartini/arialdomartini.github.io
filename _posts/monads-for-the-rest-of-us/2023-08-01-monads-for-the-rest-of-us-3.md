@@ -41,7 +41,7 @@ We want to apply `myLength` to a value of type `string` to get back an `int`.
 In C# that's a trivial exercise, as Function Application is natively supported by the language:
 
 ```csharp
-var length = mylength("foo");
+var length = myLength("foo");
 
 Assert.Equal(3, length);
 ```
@@ -50,11 +50,9 @@ Let's then write a High Order Function (HOF) that taken a function `f :: string 
 
 ```csharp
 Func<string, int> myLength = s => s.Length;
-string s = "foo";
-
 int Apply(Func<string, int> f, string a) => f(a);
 
-var length = Apply(myLength, s);
+var length = Apply(myLength, "foo");
 
 Assert.Equal(3, length);
 ```
