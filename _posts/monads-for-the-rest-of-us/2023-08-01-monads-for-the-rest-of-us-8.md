@@ -131,17 +131,13 @@ Take a simple function `string -> int`:
 Func<string, int> length = s => s.Length;
 ```
 
-
-![length function from string to int](static/img/monads-for-the-rest-of-us/functors-length.png){: height="300px" }
-
-
 We want to map it work with `IEnumerables`, and make its signature
 
 ```haskell
 IEnumerable<string> -> IEnumerable<int>
 ```
 
-That is, awe want to elevate it to the world inhabitated by types modeled by the `IEnumerable` monad:
+That is, we want to elevate it to the world inhabitated by types modeled by the `IEnumerable` monad:
 
 ![length function from string to int](static/img/monads-for-the-rest-of-us/functors-functorial-length.png){: height="300px" }
 
