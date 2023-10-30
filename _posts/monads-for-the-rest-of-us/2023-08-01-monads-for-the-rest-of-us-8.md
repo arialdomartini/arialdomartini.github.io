@@ -297,6 +297,15 @@ var lengths = values.Select(length);
 
 You can interpret `Select` as the function that maps `length` to the content of `values`, where values, an `IEnumerable<string>` is seen as a container of `string` values.
 
+# What's next?
+There are some topics I didn't get around to covering.
+
+* How to deal with multi-parameter functions, with currying and partial application.
+* How we did not need to implement the `Nondeterministic` monad: it's already natively implemented by LINQ.
+* How to use LINQ to bind any custom monadic functions in a fluent way
+* Implementation of more monads, such as Either, State, Reader and Writer.
+
+I promise I will follow up with a new series.
 
 
 # Resources
