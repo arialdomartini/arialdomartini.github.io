@@ -46,7 +46,7 @@ var length = myLength("foo");
 Assert.Equal(3, length);
 ```
 Manually re-implementing the native C# Function Application might sound as a silly exercise, but it will be useful to learn how we can possibly extend it. Indeed, our implementation will be the basis for the future *Monadic* Function Application, which is not natively supported by C#.  
-Let's then write a High Order Function (HOF) that taken a function `f :: string -> int` and a `string` value `a` applies `f` to `a` returning an `int` result:
+Let's then write a [High-Order Function][hof] (HOF) that taken a function `f :: string -> int` and a `string` value `a` applies `f` to `a` returning an `int` result:
 
 ```csharp
 Func<string, int> myLength = s => s.Length;
@@ -147,7 +147,7 @@ Basically, it's a way to automatically convert the previous function to:
 ```csharp
 Func<string, Func<string, int>> f = s => z => s.Length + z.Length;
 
-f.Apply("foo")("bar");
+f.Apply("foo").Apply("bar");
 ```
 
 Don't despair, we will see this later.
@@ -324,9 +324,11 @@ Proceed to [Chapter 4](monads-for-the-rest-of-us-4).
 
 * [Function Application in Haskell][haskell-apply-implementation]
 * [Function Composition in Haskell][haskell-composition-implementation]
+* [High-order Function][hof]
 
 [haskell-apply-implementation]: https://hackage.haskell.org/package/base-4.19.0.0/docs/Prelude.html#v:-36-
 [haskell-composition-implementation]: https://hackage.haskell.org/package/base-4.19.0.0/docs/Prelude.html#v:.
+[hof]: https://en.wikipedia.org/wiki/Higher-order_function
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/26)
