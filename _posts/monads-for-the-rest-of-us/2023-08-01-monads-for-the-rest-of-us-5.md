@@ -9,7 +9,7 @@ include_in_index: false
 ---
 ## In which you make C# nondeterministic
 
-I hope you enjoyed your icecream.  
+I hope you enjoyed your ice-cream.  
 Without much ado, let's get our hands dirty  with a new use case for monads. That could sound puzzling, at first, but I swear that it is simple: nondeterministic functions.
 
 # Nondeterministic functions
@@ -35,7 +35,7 @@ either paths are legit.
 I'm not going to take a decision on a specific path.
 ```
 
-Or think to a function describing the probability distribution of a stocastic process.
+Or think to a function describing the probability distribution of a stocastic process, such as the fluctuation of stock prices: the function might model a Gaussian bell shaped curve and even if it does not return a single value you still want to compose it with other similar functions.
 
 Unsurprisingly, nondeterministic functions are typically leveraged to explore combinatory problems, such as the evaluation of the possible moves in a chess match.  
 And that's exactly the use case we will develop (although in an extremely simplified implementation).
@@ -68,7 +68,7 @@ Of course, nondeterminism on integers is different from nondeterminism on `Posit
 moveKnight :: Position -> Nondeterministic<Position>
 ```
 
-Allow me please to shorten hereinafter `Nondeterministic` to `Nond`:
+Finally, let me please shorten hereinafter `Nondeterministic` with `Nond`:
 
 ```csharp
 moveKnight :: Position -> Nond<Position>
@@ -80,22 +80,22 @@ It models the fact that `moveKnight` is undecided which `Position` the algorithm
 Until then, all that the `Nond<Position>` monad does is to provide the programmer with a way to compose and bind other similarly nondeterministic functions, via the classsical and standardized interface of a monad, without loosing information about the source of nondeterminism.
 
 Now, how to structure `Nond<A>`? It's only natural to model the multiple possible values as a collection of values of type `A`.  
-Indeed, "*a list is a monad representing nondeterministic computations*" is a classical. But it does not tell the whole story: lists are only one of the many ways to model nondeterminism.
+In fact, you could have just used a list for representing nondeterministic computations. It's indeed a classical approach. But it does not tell the whole story: lists are only one of the many ways to model nondeterminism.
 
 A `decimal -> Nond<decimal>` representing the forecast price of a stock is likely to return values following a Gaussian distribution. From this perspective, `IEnumerable<decimal>` would be a broken model, because it corresponds to a distrubution of equally probable prices, and this poorly model the reality.
 
-In implementing `Nond<decimal>`, you could easily decide to store the mean and the variance, rather than a collection of possible prices. What is important, for your implementation, is that given 2 functions built around the notion of a Gaussian distribution, their combination is done in a way that preserves some specific statistical rules.
+In implementing `Nond<decimal>`, you could easily decide to store the mean and the variance, rather than a collection of possible prices. The `Nond` monad is all about *abstracting* the nondeterministic effect away, so that your code can be made independent from it. What is important, for your implementation, is that given 2 functions built around the notion of a Gaussian distribution (or whatever else notion of nondeterminism), their combination is done in a way that preserves some specific statistical rules.
 
 The take aways are:
 
-* the articles and tutorials stating that "*List is a monad for modeling non-deterministic computations*" are surely right, but they tell half the story. By no means this implies that Lists are the only way for modeling nondeterminism.
+* the articles and tutorials stating that "*List is a monad for modeling nondeterministic computations*" are surely right, but they tell half the story. By no means this implies that Lists are the only way for modeling nondeterminism.
 
 * If your `Nond<decimal>` must implement some logic about the Gaussian distribution, this means that Monads aren't just a mechanical stratagem for combining type-uncompatible functions ; they are in fact a *design tool* for type-modeling the business domain. They do implement domain logic.
 
 If you are going to embrace Functional Programming, you are going to invent a lot of new monads.
 
 
-# Implementing the List monad
+# Implementing the Nond monad
 We left with:
 
 ```csharp
@@ -178,30 +178,14 @@ Just like with the IO Monad, our client code *knows* from the type-system that t
 ## Implementing the monad
 We will implement the `Nondeterministic` monad in 5 simple steps:
 
-* the skeleton of the `Nondeterministic` type, for holding the needed information 
-* a new function `Return`, as a way to lift values to the nondeterministic realm
-* `Run`, to unroll all the possible combinations
-* `Bind`, to link functions
-* `Compose`, which we assume will be based on `Bind`
+* The skeleton of the `Nondeterministic` type, for holding the needed information.
+* A new function `Return`, as a way to lift values to the nondeterministic realm.
+* `Run`, to unroll all the possible combinations.
+* `Bind`, to link functions.
+* `Compose`, which we assume will be based on `Bind`.
 
 ## Type skeleton
-What's the minimum of `Nondeterministic` to make the compiler happy? Our function returns:
-
-```csharp
-Func<Position, Nond<Position>> move = currentPosition =>
-{
-    var (x, y) = currentPosition;
-	
-    return new Nond<Position>(new[]
-    {
-        (x + 1, y + 2),
-        ...
-        (x - 2, y - 1)
-    });
-};
-```
-
-For this, the following is enough:
+Here's the minimum of `Nond` to make the compiler happy:
 
 ```csharp
 record Nond<T>(IEnumerable<T> Items)
@@ -266,17 +250,17 @@ Position Identity(Position p) =>
     p;
 ```
 
-* Feed `Identity` with a position, and it will give it you back, unmodified. `Identity` is a pure, honest, deterministic function.
-* Feed `BuildMonad` with a position and it will give it you back, unmodified, but together with a monadic structure. This makes `BuildMonad` a nondeterministic function.
+* Feed `Identity` with a position and it will give it you back, unmodified. `Identity` is a pure, honest, deterministic function.
+* Feed `BuildMonad` with a position and it will give it you back, unmodified, but together with a monadic structure. This makes `BuildMonad` a nondeterministic function. But pretty similar to `Identity`.
 
-That's a funny function, if you think about it! Its signature claims it is nondeterministic: it should be undecided which position to return. But in fact, it is not! It returns only one position. 
+That's a funny function, if you think about it. Its signature claims it is nondeterministic: it should be undecided which position to return. But in fact, it is not: it returns only one position. 
 
 You can think of it as the simplest possible case for a nondeterministic function. As a matter of facts, it is deterministic but its type signature lets it operate  in a `Bind` chain, in an nondeterministic context. It is a deterministic function acting like it was nondeterministic.
 
 Here's the takeaways:
 
-* It is the monadic version of the identity function.
-* It is traditionally called `return`
+* `Return` is the monadic version of the `Identity` function.
+* It is traditionally called `return`.
 * By definition, `bind` and `return` are the minimal implementation of *any* monads.
 
 
@@ -287,6 +271,7 @@ IO<T> return(T value) =>
     new IO(() => value);
 ```
 
+In OOP languages like C#, `return` is typically just the constructor of the monad class. Just as simple.  
 In the case of the Error monad, which models a context where functions can generally fail returning errors, it would lift a value in a function just not failing at all.
 
 In other words, `return` is the elevator to the monadic world.  
@@ -294,29 +279,29 @@ Yes, I agree with you: `return` is a horrible and misleading name. As mentioned 
 Not my fault, I swear.
 
 ### A tale of 2 worlds
-Let me offer you a different prespective on `Return`.  
-In [Part 1][monads-for-the-rest-of-us] I mentioned the distinction between *honest* and *dishonest* functions; we saw how monadic functions &mdash; returning their output together with a dedicated type representing a specific kind of impurity &mdash; allow us to deal with impurity while in fact continue combining pure functions.
+Let me offer you a different prespective on `return`.  
+In [Part 1](monads-for-the-rest-of-us-1) I mentioned the distinction between *honest* and *dishonest* functions; we saw how monadic functions &mdash; returning their output together with a dedicated type representing a specific kind of impurity &mdash; allow us to deal with impurity with pure functions.
 
 For the case of nondeterministic functions, it is only fair to group functions in 2 separate worlds: one populated by the ordinary functions and values, and one where functions and values, handled via the `Nond` monadic type, convey the notion of nondeterminism:
 
 ![a representation of the world of ordinary functions and the nondeterministic functions](static/img/monads-for-the-rest-of-us/2-worlds.png){: height="300px" }
 
-With this perspective in mind, `Return` can be interpreted as the function that lifts a value to the world of nondeterministic functions:
+With this perspective in mind, `return` can be interpreted as the function that lifts a value to the world of nondeterministic functions:
 
 ![return for nondeterministic functions](static/img/monads-for-the-rest-of-us/nond-return.png){: height="300px" }
 
-`Run` does the opposite: given a value in the world of nondeterministic functions, it projects the undeterminism down, returning back all the possible combinations expressed as an ordinary, non-monadic type.
+`run` does the opposite: given a value in the world of nondeterministic functions, it projects the undeterminism down, returning back all the possible combinations expressed as an ordinary, non-monadic type.
 
 ![run for nondeterministic functions](static/img/monads-for-the-rest-of-us/nond-run.png){: height="300px" }
 
- Notice that `Return` and `Run` are not perfectly symmetric: `Run` does not return back a single `Position`, but a collection.
+ Notice that `return` and `run` are not perfectly symmetric: `run` does not return back a single `Position`, but a collection.
  
 The notion of binding and combining monadic functions aligns to the idea of:
 
 * starting from the world of the ordinary functions
 * lifting to the elevated world of the nondeterministic functions
 * operating in that world, using `Bind` and `Compose` (and other functions we will soon discover)
-* and finally descending back to the world of ordinary functions with `Run`
+* and finally descending back to the world of ordinary functions with `run`
 
 ![return+bind+run for nondeterministic functions](static/img/monads-for-the-rest-of-us/nond-return-bind-run.png){: height="300px" }
 
@@ -326,12 +311,12 @@ Nothing prevents us from extending this visualization to other monadic function 
 ![run for monadic functions](static/img/monads-for-the-rest-of-us/monad-run.png){: height="300px" }
 ![return+bind+run for monadic functions](static/img/monads-for-the-rest-of-us/monad-return-bind-run.png){: height="300px" }
 
-Notice, again, that descending from a `Monad<A>` with `Run` to the world of ordinary functions and values not necessarily returns an `A`.
+Notice, again, that descending from a `Monad<A>` with `run` to the world of ordinary functions and values not necessarily returns an `A`.
 
 It turns out that this interpretation is also of great help to understand `Bind` and the other functional combinators we are going to introduce. Stay tuned: we'll come back to this in a couple of pages.
 
 ## Run
-Implementing `Run` for the `Nondeterministic` monad should be easy. Given the skeleton we built:
+Implementing `run` for the `Nondeterministic` monad should be easy. Given the skeleton we built:
 
 ```csharp
 record Nond<T>(IEnumerable<T> Items)
@@ -414,11 +399,11 @@ Assert.Equal(new[] { (1,'a'), (1, 'b'), (2, 'a'), (2, 'b') }, combinations);
 Deriving the Function composition from `Bind` reserves a nice suprise.  
 The logic is:
 
-* we need to generate a new function `A -> C`, therefore we return a lambda `(A a) => ...`
-* `a` can be directly fed to the innermost function, `g`
-* this gives us back a nondeterministic value of `B`
-* that cannot be directly used to feed `f`: we need to use `Bind` for this
-* `Bind` returns a nondeterministic `C`, which is the final value
+* We need to generate a new function `A -> C`, therefore we return a lambda `(A a) => ...`.
+* `a` can be directly fed to the innermost function, `g`.
+* This gives us back a nondeterministic value of `B`.
+* That cannot be directly used to feed `f`: we need to use `Bind` for this.
+* `Bind` returns a nondeterministic `C`, which is the final value.
 
 ```csharp
 Func<A, Nond<C>> Compose<A, B, C>(Func<B, Nond<C>> f, Func<A, Nond<B>> g)
@@ -461,7 +446,7 @@ Func<A, Monad<C>> Compose<A, B, C>(Func<B, Monad<C>> f, Func<A, Monad<B>> g) =>
     a => f.Bind(g(a));
 ````
 
-Seems like we discovered a general rule which is presumibly valid for all the possible monads.  
+Seems like we discovered a universal law, a general rule which is presumibly valid for all the possible monads.  
 Indeed, in Haskell [the monadic function composition (slighly simplified) implementation][haskell-kleisli-composition] is:
 
 ```haskell
@@ -470,7 +455,7 @@ g <=< f = \a -> g a >>= f
 ```
 
 This is an incredibly remarkable result: not only did we provide the same interface `Bind` + `Return` to all the monads, no matter which kind of inpurity they model; but now we are even discovering some universal laws and combinators, that are also indipendent from the side effects.  
-Isn't this astonishing? You still have to invent and implement the monads you will use in your future code: and you already know the formula for deriving their Compose combinator will perfectly work with them.
+Isn't this astonishing? You still have to invent and implement the monads you will use in your future code and you already know the formula for deriving their `Compose` combinator, knowing it will perfectly work with them.
 
 # Wrapping up
 

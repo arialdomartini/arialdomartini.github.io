@@ -11,14 +11,14 @@ include_in_index: false
 
 Let's summarize our understanding of an IO monadic function:
 
-* instead of executing the IO side effect, it returns a monadic value that models it. Basically, the IO side effect is passed as a lambda, so its execution is deferred
-* 2 IO monadic functions cannot be applied and composed using the ordinary `Apply` and `Compose` C# features, because their types are not directly compatible: we need to write a monadic version of `Apply` and `Compose`
-* writing `Apply` is enough: `Compose` can be defined in terms of `Apply`
+* Instead of executing the IO side effect, it returns a monadic value that models it. Basically, the IO side effect is passed as a lambda, so its execution is deferred.
+* 2 IO monadic functions cannot be applied and composed using the ordinary `Apply` and `Compose` C# features, because their types are not directly compatible: we need to write a monadic version of `Apply` and `Compose`.
+* Writing `Apply` is enough: `Compose` can be defined in terms of `Apply`.
 
 # Running an IO monadic function
-Here's the very last ingredient we need: nothing prevents us from defining a function that *executes* the IO monad. Sure: we are deferring the execution of the IO side effect; but, eventually, at the end of the chain, we need to run it.
+Here's the very last ingredient we need: nothing prevents us from defining a function that *executes* the IO monad. Sure: we are deferring the execution of the IO side effect; but, eventually, at the end of the chain, we need to run it, don't we?
 
-In a sense: IO monads are a way to delay the execution of side effects as long as we wish to manipulate the functions as pure entities, and to finally run their impure behavior when we are done, at the edge of the application.
+Here's (yet) another intuition: IO monads are a way to delay the execution of side effects as long as we wish to manipulate the functions as pure entities, and to finally run their impure behavior when we are done, at the edge of the application.
 
 Let's extend `IO<B>` with a method `Run`, which finally executes the side effect:
 
@@ -49,7 +49,6 @@ Assert.Equal(3, result);
 Assert.Equal("I'm a side effect!", File.ReadAllText("output.txt"));
 ```
 
-
 # Functional Programming is all about side effects
 Wait a minute: wasn't Functional Programming about *not* having side effects?  
 Not at all! Stealing words from Eric Normand's [Grokking Simplicity][grokking-simplicity]:
@@ -66,7 +65,7 @@ Not at all! Stealing words from Eric Normand's [Grokking Simplicity][grokking-si
 
 # Abstracting side effects away
 So, what's the benefit of monadic functions? Are we just deferring the execution of side effects?  
-In the case of IO, es: basically, that's the trick.
+In the case of IO, yes: basically, that's the trick.
 
 But there is another important aspect I haven't mentioned yet. You remember how we fantasized about the possibility of defining other kinds of impurity:
 
@@ -145,7 +144,7 @@ You see the pattern? The specific *effect* does not affect the shape of your cod
 That's the gist of monads.
 
 # A working Apply for the IO monad
-We are finally ready to write the monadic version of `Apply` / `Bind`.  
+You managed to obtain a way to defer the IO side-effects (the constructor of the IO Monad) and a way to finally execute them, `Run`. Now you just need a way to manipulate the IO monadic functions as pure functions in between. Let's then write the monadic version of `Apply` / `Bind`.  
 If `Apply` for ordinary functions has the signature:
 
 ```haskell
@@ -161,9 +160,9 @@ Apply :: (A -> IO<B>) -> IO<A> -> IO<B>
 
 Interpret is as:
 
-* given a monadic function from `A` to `IO<B>`
+* Given a monadic function from `A` to `IO<B>`
 * we don't have a value of type `A` to feed it with
-* instead, we have a monadic value of type `IO<A>`, most likely returned by the previously executed function
+* instead, we have a monadic value of type `IO<A>`, most likely returned by a previously executed monadic function
 * we apply the monadic function `A -> IO<B>` to the monadic value `IO<A>`
 * so we get the new monadic value `IO<B>`
 
@@ -172,7 +171,7 @@ Because we are still refraining from executing the side effect until `Run` is in
 For the same reason, although the monadic function type signature `A -> IO<B>` signals that it expects a simple `A` value, `Apply` feeds it with an `IO<A>`: this is because this value is the result of the previously executed monadic function.  
 It's monads all the way down.
 
-The implementatio of `Apply` is only apparently intimidating:
+The implementation of `Apply` is only apparently intimidating:
 
 ```csharp
 IO<B> Apply<A, B>(this Func<A, IO<B>> f, IO<A> a) => 
@@ -186,12 +185,12 @@ IO<B> Apply<A, B>(this Func<A, IO<B>> f, IO<A> a) =>
 
 It works as follows:
 
-* `Apply` returns a new instance of `IO<B>`. The `IO` constructor takes a lambda: this means that the code we are passing to it is not going to be executed just yet. Any side effect will be deferred
+* `Apply` returns a new instance of `IO<B>`. The `IO` constructor takes a lambda: this means that the code we are passing to it is not going to be executed just yet. Any side effect will be deferred.
 * This allows us to safely run `IO<A> a`. As per its nature, this
   * will produce some side effects
   * will return back the `A` value of the pure computation
-* A value of type `A` is compatible with the signature of `f`: it's easy to apply `f` to it, with the native C# function application
-* `f` is a monadic function, so what we get back is an IO monad
+* A value of type `A` is compatible with the signature of `f`: it's easy to apply `f` to it, with the native C# function application.
+* `f` is a monadic function, so what we get back is an IO monad.
 * This is run too, so its side effect is executed and the pure computation value is finally returned. 
 
 
@@ -262,8 +261,7 @@ Assert.Equal(3*2, result);
 Assert.Equal("I'm a side effect!I'm another side effect!", File.ReadAllText("output.txt"));
 ```
 
-`Apply` in Haskell is implemented with the [`>>=` operator][haskell-bind], which not surprisingly reads as *bind*.
-
+`Apply` in Haskell is implemented with the [`>>=` operator][haskell-bind], which not surprisingly reads as *bind*.  
 The code above in Haskell would be:
 
 ```haskell
@@ -355,10 +353,10 @@ Assert.Equal("I'm a side effect!I'm another side effect!", File.ReadAllText("out
 
 It should not be too hard to grasp:
 
-* First of all, notice from the signature and the `return a =>` that we are returning a new function
-* Inside the new function's body, you first apply `f(a)`. `f` is a monadic function, so you get back an IO monad
-* Run it, so you execute the side effects and you get back a `B` value
-* It's easy to pass the `B` value to `g`
+* First of all, notice from the signature and the `return a =>` that we are returning a new function.
+* Inside the new function's body, you first apply `f(a)`. `f` is a monadic function, so you get back an IO monad.
+* Run it, so you execute the side effects and you get back a `B` value.
+* It's easy to pass the `B` value to `g`.
 * `g` gets you back an `IO<C>`. That's fine: this is already compatible with the expected returned type.
 
 
@@ -395,7 +393,7 @@ Func<A, IO<C>> ComposedWith<A, B, C>(this Func<B, IO<C>> f, Func<A, IO<B>> g) =>
     a => f.Apply(g(a));
 ```
 
-That`s a typical outcome in the Functional Programming world: pages and pages of deep contemplation and deconstruction of a topic, only to end up with a single-line code implementation.
+That's a typical outcome in the Functional Programming world: pages and pages of deep contemplation and deconstruction of a topic, only to end up with a single-line code formula.
 
 # You made it!
 That was an IO monad. There are of course a bunch of details we passed over &mdash; the monad laws, the `return` operation, the relation between monads, functors and applicatives, and the like &mdash; but I hope you found the topic less intimidating than you expected.
@@ -410,7 +408,7 @@ Observing other Monads will unlock a multitude of possibilities for expressivene
 Learning Functors, on the other hand, will be relaxing and reassuring. They are very easy, have a wide range of applications and, best of all, you probably already know most of the topic intuitivelly.  
 Finally, Functors will allow you to visually grasp some concepts that might currently appear a bit vague.
 
-But before proceeding, go and have an icecream: you deserved it!
+But before proceeding, go and have an ice-cream: you deserved it!
 
 Geto to [Chapter 5](monads-for-the-rest-of-us-5).
 

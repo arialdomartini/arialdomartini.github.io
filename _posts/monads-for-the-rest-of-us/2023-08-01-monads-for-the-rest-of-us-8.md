@@ -9,18 +9,19 @@ include_in_index: false
 ---
 ## In which you achieve true enlightenment<br/>seeing that Functors are not boxes
 
-You just discovered that `Bind` takes crippled functions, with a leg still clinging to the old world, and fix them elevating them so they are fully immersed in the realm of monads:
+You just discovered that `Bind` takes crippled functions, with a leg still clinging to the old world, and fixes them elevating them so they are fully immersed in the realm of monads:
 
-![a monadic function f from A to Monad B](static/img/nond-for-the-rest-of-us/monadic-functions-before-bind.png){: height="300px" }
+![a monadic function f from A to Monad B](static/img/monads-for-the-rest-of-us/monadic-functions-before-bind.png){: height="300px" }
 
 What about even more stubborn functions that have both input and output in the non-monadic world?
 
 ![an ordinary function from A to B](static/img/monads-for-the-rest-of-us/functors-before-map.png){: height="300px" }
 
-How can we fix them elevating to the monadic world?
+How can we fix them elevating to the monadic world?  
+Wait a sec! Why should we even fix them? We never thought that this was a problem. We always said that pure, ordinary functions are the ideal ones to deal with, the building blocks of Functional Programming.  
+And that's true: by no means the desire to elevate them to the monadic realm implies they are problematic. See this differently: how to write simple, pure functions, and then have a magic way to elevate them so they can work on monadic values, no matter the side-effects?
 
-We never thought that this was a problem. We always said that pure, ordinary functions are the ideal ones to deal with, the building blocks of Functional Programming.  
-And that's true: by no means the desire to elevate them to the monadic realm implies they are problematic.
+This is the first intuition: a Functor is a way to teletransport your pure functions in a monadic world, where some side-effects are in place.
 
 The function that takes:
 
@@ -34,16 +35,15 @@ and lifts it to:
 f :: Monad<A> -> Monad<B>
 ```
 
-is called `Map`:
+is called `map`:
 
 ![an ordinary function mapped to be from Monad A to Monad B](static/img/monads-for-the-rest-of-us/functors-after-map.png){: height="300px" }
 
-`Map` is a notion related to Functors.
 
+# Functors
 Let me tell you what a Functor is, using a bit of Category Theory.  
 I promised that this series did not require any knowledge of Category Theory, and I won't go back on my word. I swear that it will be super easy.
 
-# Functors
 I love this image by Bartosz Milewski, from the chapter [Functors][bartosz-functors] of his book [Category Theory for Programmers][bartosz]:
 
 ![a functor as described in Category Theory](static/img/monads-for-the-rest-of-us/bartosz-functor.png){: height="300px" }
@@ -64,9 +64,8 @@ In [Category Theory for Computing Science][barr-wells], Michael Barr and Charles
 * mapping the types of `C` to the types of `D`
 * and the functions of `C` to the functions of `D`
 
-while preserving some rules, that I'm omitting for simplicity.
-
-Let me stress again: a functor is *a pair of functions*. A functor is not a thing: it's two.
+while preserving some rules, that I'm omitting for simplicity.  
+Let me stress again: a functor is *a pair of functions*. A functor is not a thing: it's two. It's the mapping that teletransports your types *and* your functions to the monadic world.
 
 Of course, this is the mathematical definition. Projected to the programming language world, you need some way to implement this idea. No surprises that you can find a wide variety of implementations, from  classes implementing a `Functor` interface, like in [language-ext][language-ext]:
 
@@ -89,12 +88,10 @@ or a type classe called `Functor`, like in Haskell:
 
 ```haskell
 class Functor f where
-    fmap        :: (a -> b) -> f a -> f b
+    fmap :: (a -> b) -> f a -> f b
 ```
 
-(which captures both the mapping of functions, with `fmap` and the mapping of values, with `f`)
-
-or traits, like in [Scala Cats][scala-cats-functor]:
+which captures both the mapping of functions, with `fmap` and the mapping of values, with `f`, or traits, like in [Scala Cats][scala-cats-functor]:
 
 ```scala
 trait Functor[F[_]] extends Invariant[F] { self =>
@@ -141,8 +138,7 @@ That is, we want to elevate it to the world inhabitated by types modeled by the 
 
 ![length function from string to int](static/img/monads-for-the-rest-of-us/functors-functorial-length.png){: height="300px" }
 
-Do you see how this type-signature transformation perfectly match the goal of `Map`?
-
+Do you see how this type-signature transformation perfectly match the goal of `Map`?  
 Let's implement it:
 
 ```csharp
