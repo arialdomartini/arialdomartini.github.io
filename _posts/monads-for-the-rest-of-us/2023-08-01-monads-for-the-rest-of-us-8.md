@@ -157,11 +157,18 @@ internal static class FunctorExtensions
         return values => ApplyFunctionToAllItems(values);
     }        
 }
+```
 
-string s = "foo";
+Given a function `string -> int`:
 
+```csharp
+Func<string, int> length = s => s.Length;
+```
+
+`Map` transforms it to a function `IEnumerable<string> -> IEnumerable<int>`:
+
+```csharp
 Func<IEnumerable<string>, IEnumerable<int>> functorialLength = length.Map();
-
 
 IEnumerable<string> values = new[] { "foo", "barbaz", "" };
 IEnumerable<int> lengths = functorialLength(values);
@@ -170,7 +177,8 @@ Assert.Equal(new[] { 3, 6, 0 }, lengths);
 ```
 
 # Functor as a box
-Bear with me: we are going to perform a series of refactoring moves. At the end we will get to an implementation of a Functor seen as a box. The reason why I want to get there via refactoring is to stress that the 2 points of view are alternative, 2 faces of the same coin.
+Before developing `Map` for the 3 monads we defined, `IO`, `Nond` and `Maybe`, it might be interesting to see why Functors are often described using the metaphor of a box. Bear with me: we are going to perform a series of refactoring moves. At the end we will get to an implementation of a Functor seen as a way to *map* a function to the content of a container.  
+The reason why I want to get there via refactoring is to stress that the 2 points of view are 2 faces of the same coin.
 
 With Rider / ReSharper, move your cursor on `yield` and apply  "*To collection return*":
 
