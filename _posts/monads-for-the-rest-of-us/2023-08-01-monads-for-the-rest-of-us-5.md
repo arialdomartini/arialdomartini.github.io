@@ -149,7 +149,7 @@ Nond<Position> step2 = move.Bind(step1);
 Nond<Position> step3 = move.Bind(step2);
 ```
 
-Using Linq (we will learn this soon!) we can write the code as:
+Using LINQ (we will learn this soon!) we can write the code as:
 
 ```csharp
 from s1 in move(start)

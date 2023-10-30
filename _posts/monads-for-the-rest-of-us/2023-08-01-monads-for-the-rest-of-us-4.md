@@ -85,7 +85,7 @@ For each of those monadic types, `Reader`, `Writer`, `Nondeterministic` etc, we 
 Think about it like this: all those kinds of impurity will be abstracted away behind the very same interface; you will be able to manipulate all of them, as pure functions, using the very same `Apply` and `Compose`, regardless which specific impurity they deal with.  
 This is in fact the key to segregate your pure domain logic from whatever source of impurity your application needs to deal with. It's about pushing impurity outside your code, while aknowledging it *does exist* and it must be handled with great gravity.
 
-Look, this listing. It is based on [language-ext][language-ext] and it uses Linq expressions as the main costructs. It combines 3 functions whose type signature signal they are performing synchronous IO side effects:
+Look, this listing. It is based on [language-ext][language-ext] and it uses LINQ expressions as the main costructs. It combines 3 functions whose type signature signal they are performing synchronous IO side effects:
 
 ```csharp
 Eff<int> Computation1() => ...
@@ -278,7 +278,7 @@ do
   double len
 ```
 
-You will soon find out that Linq implements `>>=` calling it `SelectMany`, and that this is the secret ingredient that allows you to rewrite the code above as:
+You will soon find out that LINQ implements `>>=` calling it `SelectMany`, and that this is the secret ingredient that allows you to rewrite the code above as:
 
 ```csharp
 Eff<int> monadicResult =
@@ -287,7 +287,7 @@ Eff<int> monadicResult =
     select d;
 ```
 
-Don't try this just yet: you need to define a couple of Extension Methods for Linq to learn how to deal with your custom monads. We will see this later.  
+Don't try this just yet: you need to define a couple of Extension Methods for LINQ to learn how to deal with your custom monads. We will see this later.  
 Instead, take a minute to ruminate on the code you obtained:
 
 ```csharp

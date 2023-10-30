@@ -262,7 +262,7 @@ Func<IEnumerable<A>, IEnumerable<B>> Map<A, B>(Func<A, B> f) => aa =>
     aa.Select(f);
 ```
 
-That's interesting! We just discovered that `Map` is natively implemented by Linq's `Select`.  
+That's interesting! We just discovered that `Map` is natively implemented by LINQ's `Select`.  
 To see this clearly, in the calling site:
 
 ```csharp
