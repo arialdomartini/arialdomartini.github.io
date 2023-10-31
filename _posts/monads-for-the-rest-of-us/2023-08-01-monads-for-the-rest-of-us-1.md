@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Monads for the rest of us, in C#"
+title: "Monads for the rest of us - Part 1"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - C#
