@@ -95,7 +95,7 @@ Eff<int> result =
     from value1 in Computation1()
     from value2 in Computation2(value1)
     from value3 in Computation3(value2, value1)
-    select value2;
+    select value3;
 ```
 
 In the following, instead, each function might not return any result at all:
@@ -109,7 +109,7 @@ Option<int> result =
     from value1 in Computation1()
     from value2 in Computation2(value1)
     from value3 in Computation3(value2, value1)
-    select value2;
+    select value3;
 ```
 
 Here, each function might fail raising an instance of `Error`:
@@ -123,7 +123,7 @@ Either<Error, int> result =
     from value1 in Computation1()
     from value2 in Computation2(value1)
     from value3 in Computation3(value2, value1)
-    select value2;
+    select value3;
 ```
 
 Here, each function is non-deterministic and it returns more than one value. The computation will be performed on all the possible combinations:
@@ -137,7 +137,7 @@ IEnumerable<int> result =
     from value1 in Computation1()
     from value2 in Computation2(value1)
     from value3 in Computation3(value2, value1)
-    select value2;
+    select value3;
 ```
 
 You see the pattern? The specific *effect* does not affect the shape of your code; you can focus on the pure computation and let the type system model and deal with any extra side effect.  
