@@ -259,6 +259,12 @@ This is equivalent of using LINQ as the following:
 IO<int> l = io.Select(length); 
 ```
 
+
+# That's it
+Wow, you did it!  
+Those 9 chapters were quite a mouthful, right? Now that you've dined on monads, reward yourself with a slice of meringue pie!  
+You've really earned it!
+
 # What's next?
 There are some topics I didn't get around to covering.
 
@@ -266,4 +272,5 @@ There are some topics I didn't get around to covering.
 * How to use LINQ to bind any custom monadic functions in a fluent way
 * Implementation of more monads, such as `Either`, `State`, `Reader` and `Writer`.
 
-I promise I will follow up with a new series.
+I promise I will follow up with a new series.  
+Cheers!
