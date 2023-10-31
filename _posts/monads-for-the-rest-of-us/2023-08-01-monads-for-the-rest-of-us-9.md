@@ -85,7 +85,6 @@ Func<Maybe<A>, Maybe<B>> Map<A, B>(this Func<A, B> f) =>
 And that's it.  
 It works as follows:
 
-
 ```csharp
 // given a value that may or may not contain a string
 Maybe<string> maybeAString = new Just<string>("foo");
@@ -104,9 +103,44 @@ Assert.IsType<Just<int>>(maybeLength);
 Assert.Equal(3, ((Just<int>) maybeLength).Value);
 ```
 
+The Maybe Monad is one of those that lends itself very well to being interpreted with the metaphor of the box. You can imagine it as a box either empty (in the case of `Nothing<A>`) or containing a value (in the case of `Just<A>`).  
+You can make this apparent defining an extension method on it:
 
+```csharp
+Maybe<B> Map<A, B>(this Maybe<A> maybeA, Func<A, B> f) =>
+    f.Map()(maybeA);
+```
+
+which lets you use `Maybe` as follows:
+
+```csharp
+Maybe<string> maybeAString = new Just<string>("foo");
+
+Func<string, int> length = s => s.Length;
+
+
+var maybeLength = maybeAString.Map(length);
+
+Assert.IsType<Just<int>>(maybeLength);
+Assert.Equal(3, ((Just<int>) maybeLength).Value);
+```
+
+I guess you can see how:
+
+```csharp
+maybeAString.Map(length)
+```
+
+resembles the LINQ's expression:
+
+```
+maybeAString.Select(length)
+```
+
+In fact, LINQ's `Select` *is* the implementation of `Map` for the functor `IEnumerable`.
 
 # IO Functor
+Let's distill `Map` for `IO`. The approach is the same: start from the signature, and try to follow how it leads you.  
 Given a function:
 
 ```haskell
@@ -159,22 +193,24 @@ Assert.Equal(3, result);
 Assert.Equal("I'm a side effect", File.ReadAllText("output.txt"));
 ```
 
-The IO Monad is one of those that lends itself well to being interpreted with the metaphor of the box. If define an extension method that takes the IO Monad as the first parameter:
+I'm not particularly fond of the box metaphor, but if you really want to see IO trough that lens, sqeeze your eyes and imagine it as a box containing the value it will eventually generate when run (together with side-effects).  
+It helps to to define an extension method that takes the IO Monad as the first parameter:
 
 ```csharp
 static IO<B> Map<A, B>(this IO<A> ioa, Func<A, B> f) =>
     f.Map()(ioa);
 ```
 
-then its use becomes:
+Then, you use it as follows:
 
 ```csharp
 IO<int> l = io.Map(length);
 ```
+
 Read `io.Map(length)` as:
 
 * map the function `length : string -> int`
-* to the content of the box `io`, which contains a `string`
+* to the content of the box `io`, which contains / will eventually produce a `string`
 * preserving the side effects
 
 This is equivalent of using LINQ as the following:
@@ -182,7 +218,6 @@ This is equivalent of using LINQ as the following:
 ```csharp
 IO<int> l = io.Select(length); 
 ```
-
 
 # What's next?
 There are some topics I didn't get around to covering.
