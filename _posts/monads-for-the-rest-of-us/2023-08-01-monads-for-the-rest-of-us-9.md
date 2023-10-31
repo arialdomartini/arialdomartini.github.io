@@ -274,3 +274,7 @@ There are some topics I didn't get around to covering.
 
 I promise I will follow up with a new series.  
 Cheers!
+
+
+# Comments
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/26)
