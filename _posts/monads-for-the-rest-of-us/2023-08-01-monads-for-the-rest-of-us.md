@@ -29,6 +29,7 @@ I challenged myself to write a post that:
 * [Chapter 6](monads-for-the-rest-of-us-6): in which you kill null
 * [Chapter 7](monads-for-the-rest-of-us-7): in which you discover that Bind is a combinator and you feel illuminated
 * [Chapter 8](monads-for-the-rest-of-us-8): in which you achieve true enlightenment seeing that Functors are not boxes
+* [Chapter 9](monads-for-the-rest-of-us-9): In which you see how easy functors are, and you find inner peace
 
 # References
 

@@ -9,18 +9,19 @@ include_in_index: false
 ---
 ## In which you achieve true enlightenment<br/>seeing that Functors are not boxes
 
-You just discovered that `Bind` takes crippled functions, with a leg still clinging to the old world, and fix them elevating them so they are fully immersed in the realm of monads:
+You just discovered that `Bind` takes crippled functions, with a leg still clinging to the old world, and fixes them elevating them so they are fully immersed in the realm of monads:
 
-![a monadic function f from A to Monad B](static/img/nond-for-the-rest-of-us/monadic-functions-before-bind.png){: height="300px" }
+![a monadic function f from A to Monad B](static/img/monads-for-the-rest-of-us/monadic-functions-before-bind.png){: height="300px" }
 
 What about even more stubborn functions that have both input and output in the non-monadic world?
 
 ![an ordinary function from A to B](static/img/monads-for-the-rest-of-us/functors-before-map.png){: height="300px" }
 
-How can we fix them elevating to the monadic world?
+How can we fix them elevating to the monadic world?  
+Wait a sec! Why should we even fix them? We never thought that this was a problem. We always said that pure, ordinary functions are the ideal ones to deal with, the building blocks of Functional Programming.  
+And that's true: by no means the desire to elevate them to the monadic realm implies they are problematic. See this differently: how to write simple, pure functions, and then have a magic way to elevate them so they can work on monadic values, no matter the side-effects?
 
-We never thought that this was a problem. We always said that pure, ordinary functions are the ideal ones to deal with, the building blocks of Functional Programming.  
-And that's true: by no means the desire to elevate them to the monadic realm implies they are problematic.
+This is the first intuition: a Functor is a way to teletransport your pure functions in a monadic world, where some side-effects are in place.
 
 The function that takes:
 
@@ -34,16 +35,15 @@ and lifts it to:
 f :: Monad<A> -> Monad<B>
 ```
 
-is called `Map`:
+is called `map`:
 
 ![an ordinary function mapped to be from Monad A to Monad B](static/img/monads-for-the-rest-of-us/functors-after-map.png){: height="300px" }
 
-`Map` is a notion related to Functors.
 
+# Functors
 Let me tell you what a Functor is, using a bit of Category Theory.  
 I promised that this series did not require any knowledge of Category Theory, and I won't go back on my word. I swear that it will be super easy.
 
-# Functors
 I love this image by Bartosz Milewski, from the chapter [Functors][bartosz-functors] of his book [Category Theory for Programmers][bartosz]:
 
 ![a functor as described in Category Theory](static/img/monads-for-the-rest-of-us/bartosz-functor.png){: height="300px" }
@@ -64,9 +64,8 @@ In [Category Theory for Computing Science][barr-wells], Michael Barr and Charles
 * mapping the types of `C` to the types of `D`
 * and the functions of `C` to the functions of `D`
 
-while preserving some rules, that I'm omitting for simplicity.
-
-Let me stress again: a functor is *a pair of functions*. A functor is not a thing: it's two.
+while preserving some rules, that I'm omitting for simplicity.  
+Let me stress again: a functor is *a pair of functions*. A functor is not a thing: it's two. It's the mapping that teletransports your types *and* your functions to the monadic world.
 
 Of course, this is the mathematical definition. Projected to the programming language world, you need some way to implement this idea. No surprises that you can find a wide variety of implementations, from  classes implementing a `Functor` interface, like in [language-ext][language-ext]:
 
@@ -89,12 +88,10 @@ or a type classe called `Functor`, like in Haskell:
 
 ```haskell
 class Functor f where
-    fmap        :: (a -> b) -> f a -> f b
+    fmap :: (a -> b) -> f a -> f b
 ```
 
-(which captures both the mapping of functions, with `fmap` and the mapping of values, with `f`)
-
-or traits, like in [Scala Cats][scala-cats-functor]:
+which captures both the mapping of functions, with `fmap` and the mapping of values, with `f`, or traits, like in [Scala Cats][scala-cats-functor]:
 
 ```scala
 trait Functor[F[_]] extends Invariant[F] { self =>
@@ -122,7 +119,7 @@ The most popular way to visualize functors is using boxes, as in [Functors, Appl
 This is all good. But I recommend: don't forget that these are only approximations and visualization stratagems.  
 The box metaphor holds true in many scenarios, but easily falls short in others, leading to situations that can be quite perplexing.
 
-Before implementing functors for our IO, Undetemined and Maybe cases, let's see with some code those 2 different perspectives on Functors.
+Before implementing functors for our `IO`, `Undetemined` and `Maybe` cases, let's see with some code those 2 different perspectives on Functors.
 
 ## Functor as a mapper
 Take a simple function `string -> int`:
@@ -131,22 +128,17 @@ Take a simple function `string -> int`:
 Func<string, int> length = s => s.Length;
 ```
 
-
-![length function from string to int](static/img/monads-for-the-rest-of-us/functors-length.png){: height="300px" }
-
-
 We want to map it work with `IEnumerables`, and make its signature
 
 ```haskell
 IEnumerable<string> -> IEnumerable<int>
 ```
 
-That is, awe want to elevate it to the world inhabitated by types modeled by the `IEnumerable` monad:
+That is, we want to elevate it to the world inhabitated by types modeled by the `IEnumerable` monad:
 
 ![length function from string to int](static/img/monads-for-the-rest-of-us/functors-functorial-length.png){: height="300px" }
 
-Do you see how this type-signature transformation perfectly match the goal of `Map`?
-
+Do you see how this type-signature transformation perfectly match the goal of `Map`?  
 Let's implement it:
 
 ```csharp
@@ -165,11 +157,18 @@ internal static class FunctorExtensions
         return values => ApplyFunctionToAllItems(values);
     }        
 }
+```
 
-string s = "foo";
+Given a function `string -> int`:
 
+```csharp
+Func<string, int> length = s => s.Length;
+```
+
+`Map` transforms it to a function `IEnumerable<string> -> IEnumerable<int>`:
+
+```csharp
 Func<IEnumerable<string>, IEnumerable<int>> functorialLength = length.Map();
-
 
 IEnumerable<string> values = new[] { "foo", "barbaz", "" };
 IEnumerable<int> lengths = functorialLength(values);
@@ -178,7 +177,8 @@ Assert.Equal(new[] { 3, 6, 0 }, lengths);
 ```
 
 # Functor as a box
-Bear with me: we are going to perform a series of refactoring moves. At the end we will get to an implementation of a Functor seen as a box. The reason why I want to get there via refactoring is to stress that the 2 points of view are alternative, 2 faces of the same coin.
+Before developing `Map` for the 3 monads we defined, `IO`, `Nond` and `Maybe`, it might be interesting to see why Functors are often described using the metaphor of a box. Bear with me: we are going to perform a series of refactoring moves. At the end we will get to an implementation of a Functor seen as a way to *map* a function to the content of a container.  
+The reason why I want to get there via refactoring is to stress that the 2 points of view are 2 faces of the same coin.
 
 With Rider / ReSharper, move your cursor on `yield` and apply  "*To collection return*":
 
@@ -266,7 +266,7 @@ Func<IEnumerable<A>, IEnumerable<B>> Map<A, B>(Func<A, B> f) => aa =>
     aa.Select(f);
 ```
 
-That's interesting! We just discovered that `Map` is natively implemented by Linq's `Select`.  
+That's interesting! We just discovered that `Map` is natively implemented by LINQ's `Select`.  
 To see this clearly, in the calling site:
 
 ```csharp
@@ -299,8 +299,9 @@ Inline `Func` and, voilà:
 var lengths = values.Select(length);
 ```
 
-You can interpret `Select` as the function that maps `length` to the content of `values`, where values, an `IEnumerable<string>` is seen as a container of `string` values.
+You can interpret `Select` as the function that maps `length` to the content of `values`, an `IEnumerable<string>` seen as a container of `string` values.
 
+In the [Chapter 9](monads-for-the-rest-of-us-9) we will finally implement `map` for `IO`, `Nond` and `Maybe`.
 
 
 # Resources

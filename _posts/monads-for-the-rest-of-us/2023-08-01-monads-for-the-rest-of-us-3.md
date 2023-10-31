@@ -46,7 +46,7 @@ var length = myLength("foo");
 Assert.Equal(3, length);
 ```
 Manually re-implementing the native C# Function Application might sound as a silly exercise, but it will be useful to learn how we can possibly extend it. Indeed, our implementation will be the basis for the future *Monadic* Function Application, which is not natively supported by C#.  
-Let's then write a High Order Function (HOF) that taken a function `f :: string -> int` and a `string` value `a` applies `f` to `a` returning an `int` result:
+Let's then write a [High-Order Function][hof] (HOF) that taken a function `f :: string -> int` and a `string` value `a` applies `f` to `a` returning an `int` result:
 
 ```csharp
 Func<string, int> myLength = s => s.Length;
@@ -127,7 +127,7 @@ The *something else* we are interested to do might be related to the extra-compu
 
 * It gives you the possibility to extend the very meaning of Function Application. You will soon see that with monadic function you will need an `Apply` implementation able to work with type-incompatible functions.
 
-Do you start to see a pattern? Monads are all about separating some *effects* in a type, and then handling them during function application and function composition.  
+Do you see where's we are heading? Monads are all about separating some *effects* in a type, and then handling them during function application and function composition.  
 Keep going: we are almost there.
 
 ## Function Application of multi-parameter functions
@@ -147,7 +147,7 @@ Basically, it's a way to automatically convert the previous function to:
 ```csharp
 Func<string, Func<string, int>> f = s => z => s.Length + z.Length;
 
-f.Apply("foo")("bar");
+f.Apply("foo").Apply("bar");
 ```
 
 Don't despair, we will see this later.
@@ -190,7 +190,7 @@ lengthThenHalfOf :: string -> decimal
 ```
 
 Function Composition is about generating `lengthThenHalfOf` automatically, as a combination of `length` and `halfOf`, without writing its implementation by hand. Even better, it's about generating a combination of *any* 2 functions, no matter their implementation and type signature, as long as the output of the one is type-compatible with the input of the other .  
-So, let's write a function that, given any `string -> int` function such as `length` and a `int -> decimal` such as `halfOf` *composes* the two in a `string -> decimal` function:
+So, let's write a function that, given any `string -> int` function such as `length` and a `int -> decimal` such as `halfOf` *composes* the two generating a `string -> decimal` function:
 
 ```csharp
 Func<string, int> length = s => s.Length;
@@ -208,7 +208,7 @@ It's easy to make this function generic on its types, so that given two function
 
 ```csharp
 // Compose :: (B -> C) -> (A -> B) -> (A -> C)
-Func<A, C> Compose<A, B, C>(Func<B, C> g, Func<A, B> f) => a => g(f(a));
+Func<A, C> Compose<A, B, C>(Func<B, C> f, Func<A, B> g) => a => f(g(a));
 ```
 
 Again, using an extension method slightly improves the syntax:
@@ -216,7 +216,7 @@ Again, using an extension method slightly improves the syntax:
 ```csharp
 static class FunctionExtensions
 {
-    internal static Func<A, C> ComposedWith<A, B, C>(this Func<B, C> g, Func<A, B> f) => a => g(f(a));
+    internal static Func<A, C> ComposedWith<A, B, C>(this Func<B, C> f, Func<A, B> g) => a => g(f(a));
 }
 
 Func<string, decimal> halfOfLength = halfOf.ComposedWith(length);
@@ -234,11 +234,11 @@ In Haskell, `Compose` is written as `.` at [its implementation][haskell-composit
 It's essentially the same that we found.
 
 ## What we got
-As for `Apply`, with the formula `Compose(f, g) => a => f(g(a))` we have just reinvented the weel.  
+As for `Apply`, with the formula `Compose(f, g) => a => f(g(a))` we have just reinvented the wheel.  
 And yet, our little `Compose` implementation is not for nothing:
 
 * It is slightly more more powerful than the native C# feature.  
-C# does not exacly implement function composition. `f(g(a))` composes 2 functions and then also *applies* the resulting function to a value. Our `Compose` function is more humble and interesting: it is a High Order Function that composes 2 generic, single-parameter functions, returning back a new function, *without* applying it.
+C# does not exacly implement function composition. `f(g(a))` composes 2 functions and then also *applies* the resulting function to a value. Our `Compose` function is more humble and interesting: it is a High-order Function that composes 2 generic, single-parameter functions, returning back a new function, *without* applying it.
 
 * As for `Apply`, the manually implemented `Compose` gives us the opportunity to do *something else* in addition to composing functions. And you know that the *something else* is what constitute the monadic part.
 
@@ -248,7 +248,7 @@ And this turns out to be exactly the key for implementing and undestanding Monad
 
 
 # Apply as the main building block of function composition
-Don't think to `Apply` merely as the way to pass an argument to a function. Go beyond that and consider how it is the fundamental way to *link* functions together: you use `Apply` to pass the result of the application of a previous function to the next one. Basically, it *binds* type-compatible functions in a chain. No surprises that, in the context of monadic functions, `Apply` is called `bind`.
+Now an important gist. Don't think to `Apply` merely as the way to pass an argument to a function. Go beyond that and consider how it is the fundamental way to *link* functions together: you use `Apply` to pass the result of the application of a previous function to the next one. Basically, it *binds* type-compatible functions in a chain. No surprises that, in the context of monadic functions, `Apply` is called `bind`.
 
 Consider the following: 
 
@@ -257,7 +257,7 @@ length :: string -> int
 double :: int -> double
 ```
 
-You want to apply `double` to the result of `length`.  
+You want to apply / bind `double` to the result of `length`.  
 In C#:
 
 ```csharp
@@ -313,10 +313,13 @@ The gist of this is:
 - so that the ordinary `Apply` does not work anymore,
 - the key to Monads must be about extending `Apply` to work with those type-incompatible functions. 
 
-Indeed, you can find several tutorials stating that monads are those classes that implement `bind` (as we know, a synomym of `Apply`). Actually, they also need a method for lifting ordinary values to their monadic equivalent, but that's a detail we will cover later.
+Indeed, you can find several tutorials stating that monads are those classes that implement `bind` (as we know, a synomym of `Apply`). In fact, they also need 
 
-Anyway: once you have `Apply`, you can easily get `Compose` too, and nothing can hold you back.  
-We are ready to come back to the IO monadic function and make it finally work.
+* a method for lifting ordinary values to their monadic equivalent, a detail we will cover later.
+* to satisfy the so called *Monadic Laws*. We'll be passing over this specific topic.
+
+In conclusion: once you have `Apply`, you can easily get `Compose` too, and nothing can hold you back.  
+You are ready to come back to the IO monadic function and make it finally work.
 
 Proceed to [Chapter 4](monads-for-the-rest-of-us-4).
 
@@ -324,9 +327,11 @@ Proceed to [Chapter 4](monads-for-the-rest-of-us-4).
 
 * [Function Application in Haskell][haskell-apply-implementation]
 * [Function Composition in Haskell][haskell-composition-implementation]
+* [High-order Function][hof]
 
 [haskell-apply-implementation]: https://hackage.haskell.org/package/base-4.19.0.0/docs/Prelude.html#v:-36-
 [haskell-composition-implementation]: https://hackage.haskell.org/package/base-4.19.0.0/docs/Prelude.html#v:.
+[hof]: https://en.wikipedia.org/wiki/Higher-order_function
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/26)

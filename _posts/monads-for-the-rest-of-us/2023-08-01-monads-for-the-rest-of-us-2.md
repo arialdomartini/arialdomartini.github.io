@@ -10,9 +10,9 @@ include_in_index: false
 ## In which you sense that it's all about function composition
 
 So, we learnt that monadic functions are a way to model side effects without loosing the benefits of pure functions.  
-Let's start from the hardest problem: making an impure function &dash; with IO side effects&dash; pure.
+Let's start from the hardest problem: making an impure function &mdash; with IO side effects&mdash; pure.
 
-Here's a function than, other than calculating the length of a string, also writes to a file:
+Here's a function that, other than calculating the length of a string, also writes to a file:
 
 ```csharp
 int LengthWithSideEffects(string s)
@@ -39,8 +39,8 @@ IO<int> LengthWithSideEffects(string s)
 With the signature, we are good to go.  
 Time to turn our attention to the body. If we want to keep the function pure, it seems there are only 2 options available:
 
-1. to keep the pure computation and the side effect completely separate, so the pure computation can be safely executed without side effects, and the side effect deferred
-2. to defer the whole execution, so neither the pure computation nor the side effect are actually executed just yet
+1. to keep the pure computation and the side effect completely separate, so the pure computation can be safely executed without side effects, and the side effect deferred.
+2. to defer the whole execution, so neither the pure computation nor the side effect are actually executed just yet.
 
 
 1 is a bit impractical, because side effects and pure computations are often interleaved.  
@@ -97,11 +97,10 @@ Assert.Equal("I'm a side effect!", File.ReadAllText("output.txt"));
 
 ## It does not work!
 Something is not quite correct.  
-The last `Assert` is doomed to fail. Of course: `LengthWithSideEffects()` is pure, but only because we have cheated; the side effect is not executed at all.  
-Even worse: this code won't even compile. See the problem? The result we get from `LengthWithSideEffects()` is not an `int` anymore, so it cannot be compared with `3`.
+The last `Assert` is doomed to fail. Of course: `LengthWithSideEffects` is pure, but only because we have cheated; the side effect is not executed at all.  
+Even worse: this code won't even compile. See the problem? The result we get from `LengthWithSideEffects` is not an `int` anymore, so it cannot be compared with `3`.
 
-Addding insult to injury, our freshely brewed `LengthWithSideEffects` does not compose.  
-Before we turned it into a monadic function, we could easily execute it and pass the result to another type-compatible function:
+Addding insult to injury, our freshely brewed `LengthWithSideEffects` does not compose. Before we turned it into a monadic function, we could easily execute it and pass the result to another type-compatible function:
 
 ```csharp
 // string -> int

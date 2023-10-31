@@ -521,7 +521,7 @@ We wish we could write a second test elaborating the random existing accounts:
             .ComposedWith(HavingAtLeast3DisabledAccounts());
 ```
 
-It's unlikley that such a generic `ComposedWith()` method could be defined. Maybe it could for collections, using Linq: but extending this idea to any possible type would be a tough challenge.
+It's unlikley that such a generic `ComposedWith()` method could be defined. Maybe it could for collections, using LINQ: but extending this idea to any possible type would be a tough challenge.
 
 The problem is that our generator functions immediately return values. Once we have values, it's too late to modify the rules for generating further ones.<br/>
 If instead they returned *structures capable of eventually emitting values*, such as wrappers of functions, you would still be in time to alter the domain rules before finally generating values.<br/>

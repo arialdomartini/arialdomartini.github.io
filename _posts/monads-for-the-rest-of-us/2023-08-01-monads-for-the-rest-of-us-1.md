@@ -52,14 +52,16 @@ Dictionary<int, int> Codomain = new Dictionary<int, int>
     ...
 }
 
-int Double(int i) => Codomain[i];
+Assert.Equal(Double(2),  Codomain[2]);
+Assert.Equal(Double(3),  Codomain[3]);
+Assert.Equal(Double(-1), Codomain[-1]);
 ```
 
- Notice how the dictionary's type arguments match the function ones:
+Notice how the dictionary's type arguments match the function ones:
 
 ```csharp
 Double :: Func<int, int>
-Codomain:: Dictionary<int, int>
+Codomain :: Dictionary<int, int>
 ```
 
 ## Extra computations
@@ -69,7 +71,7 @@ C# is not a pure-functional language and its functions, other than mapping an in
 * raise exceptions
 * depend on a global or a local shared state
 
-Think about how you usually deal with these alternative notions of computation in a non-pure programming language such as C#. Computations that do I/O? No problem! Just do that. How about reading and writing shared state? C# won't prevent you from using a global variable. What about raising exceptions? That's natively supported by the `throw` keyword.
+Think about how you usually deal with these alternative notions of computation in non-pure programming languages. Computations that do I/O? No problem! Just do that. How about reading and writing shared state? C# won't prevent you from using a global variable. What about raising exceptions? That's natively supported by the `throw` keyword.
 
 The important thing to note is, in each case, we are no longer dealing with the traditional notion of function, because of this "*something else*" happening along with the usual simple mapping.  
 Interestingly, althought there are multiple kinds of this *something else*, C# is not doing anything to capture and model that. We just don't care, until we need to troubleshoot that because of some unexpected behavior not captured by the compiler.
@@ -103,8 +105,7 @@ Assert.Equal(4.5M, Divide(9M, 2M));
 Assert.Throws<DivideByZeroException>(() => Divide(9M, 0M));
 ```
 
-Here's a first approximation: Monads are about making dishonest functions honest.
-
+Here's a first approximation: Monads are about making dishonest functions honest.  
 So, let's see what being honest means.
 
 ## Honest Functions
@@ -260,7 +261,7 @@ It means that `f` is a regular, pure function taking a value of type `A` and ret
 
 We will soon find out that this minor change throws a monkey wrench into the works of traditional function application and composition.
 
-In the next part we will implement some of those type. In defining them, we will make sure of ensuring 2 important traits:
+In the next part we will implement some of those type. In defining them, we will make sure of ensuring 3 important traits:
 
 1. that the result will be about *pure functions*, so we will get the benefits of both pure functions and controlled side effects
 2. that the extra-behavior is not accidentally executed while the pure functions are being manipulated
