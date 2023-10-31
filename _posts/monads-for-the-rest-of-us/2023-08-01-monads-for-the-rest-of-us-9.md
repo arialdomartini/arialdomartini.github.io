@@ -139,8 +139,48 @@ maybeAString.Select(length)
 
 In fact, LINQ's `Select` *is* the implementation of `Map` for the functor `IEnumerable`.
 
+
+# Nond, as a Functor
+For `Nond`, let's start from a test:
+
+```csharp
+var nondeterministicString = new Nond<string>(new[]
+    { "foo", "bar", "barbaz" });
+
+Func<string, int> length = s => s.Length;
+
+Func<Nond<string>, Nond<int>> lengthM = length.Map();
+
+var results = lengthM(nondeterministicString).Run();
+
+Assert.Equal(new []{3, 3, 6}, results);
+```
+
+Try to implement `Map`. You should get something like:
+
+```csharp
+Func<Nond<A>, Nond<B>> Map<A, B>(this Func<A, B> f) => nondA =>
+{
+    var values = nondA.Run();
+    IEnumerable<B> enumerable = values.Select(f);
+    return new Nond<B>(enumerable);
+};
+```
+
+which is simply equivalent to:
+
+```csharp
+Func<Nond<A>, Nond<B>> Map<A, B>(this Func<A, B> f) => nondA =>
+    new Nond<B>(nondA.Items.Select(f));
+```
+
+Actually, it is easy to convince oneself that the `Nond` class is redundant, and that `IEnumerable` can be directly used as the nondeterministic Monad and Function, thanks to the native LINQ support.
+
+LINQ's `Select` is the most glaring example of the boring box metaphor. It's very easy to see `IEnumerable` as a box containing an arbitrary number of values, and `Select` as a way to apply a function to them from outside the container.
+
+
 # IO Functor
-Let's distill `Map` for `IO`. The approach is the same: start from the signature, and try to follow how it leads you.  
+And finally, let's distill `Map` for `IO`. The approach is the same: start from the signature, and try to follow how it leads you.  
 Given a function:
 
 ```haskell
@@ -223,8 +263,7 @@ IO<int> l = io.Select(length);
 There are some topics I didn't get around to covering.
 
 * How to deal with multi-parameter functions, with currying and partial application.
-* How we did not need to implement the `Nondeterministic` monad: it's already natively implemented by LINQ.
 * How to use LINQ to bind any custom monadic functions in a fluent way
-* Implementation of more monads, such as Either, State, Reader and Writer.
+* Implementation of more monads, such as `Either`, `State`, `Reader` and `Writer`.
 
 I promise I will follow up with a new series.
