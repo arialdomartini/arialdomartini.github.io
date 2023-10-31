@@ -8,8 +8,103 @@ tags:
 include_in_index: false
 ---
 ## In which you see how easy functors are, and you find inner peace
-Implementing `map` for a specific functor is often easy if you reason about the type signature.  
+Implementing `map` for a specific functor is often easy if you reason about the type signature. Try writing it and the rest should fall into place.  
 Let's do that for `IO`, `Nond` and `Maybe`. You will see that it's an easy exercise.
+
+# Maybe, as a Functor
+Tutorials often start with the maybe functor because it's, objectively, the simplest one. I will do the same.
+
+Given a function:
+
+```haskell
+f :: a -> b
+```
+
+it should return
+
+```haskell
+map(f) :: Maybe<A> -> Maybe<B>
+```
+
+Try yourself to complete the implementation:
+
+```csharp
+Func<Maybe<A>, Maybe<B>> Map<A, B>(this Func<A, B> f) => ...
+```
+
+It must return a function `Maybe<A> -> Maybe<B>`. Therefore:
+
+```csharp
+Func<Maybe<A>, Maybe<B>> Map<A, B>(this Func<A, B> f) =>
+        (Maybe<A> maybeA) => ...
+```
+
+What to do with `maybeA`? Well, we could easily pattern match on it and take 2 different paths based on whether it contains a value or not:
+
+```csharp
+Func<Maybe<A>, Maybe<B>> Map<A, B>(this Func<A, B> f) =>
+    (Maybe<A> maybeA) => maybeA switch
+    {
+        Just<A> a => ...
+        Nothing<A> => ...
+    };
+```
+
+If there is no value, it makes sense to propagate the absence of a value, returning a `Nothing<B>`
+
+```csharp
+Func<Maybe<A>, Maybe<B>> Map<A, B>(this Func<A, B> f) =>
+    (Maybe<A> maybeA) => maybeA switch
+    {
+        Just<A> a => ...
+        Nothing<A> => new Nothing<B>()
+    };
+```
+
+If there is a value, we can apply `f` to it to get a `B` value. Since the function is supposed to return a `Maybe<B>`, we elevate the `B` value as a `Just<B>`:
+
+```csharp
+Func<Maybe<A>, Maybe<B>> Map<A, B>(this Func<A, B> f) =>
+    (Maybe<A> maybeA) => maybeA switch
+    {
+        Just<A> a => new Just<B>(f(a.Value)),
+        Nothing<A> => new Nothing<B>()
+    };
+```
+
+We could have used the implementation of `Run`:
+
+```csharp
+Func<Maybe<A>, Maybe<B>> Map<A, B>(this Func<A, B> f) =>
+    maybeA =>
+        maybeA.Run<Maybe<B>>(
+            just: a => new Just<B>(f(a)),
+            nothing: () => new Nothing<B>());
+```
+
+And that's it.  
+It works as follows:
+
+
+```csharp
+// given a value that may or may not contain a string
+Maybe<string> maybeAString = new Just<string>("foo");
+
+// and a function to calculate the length of a string
+Func<string, int> length = s => s.Length;
+
+// Map elevates length to work on Maybe values
+Func<Maybe<string>,Maybe<int>> lengthF = length.Map();
+
+// So we can calculate the length of a Maybe<string>.
+// if the value does not exist, we will get a Nothing<int>
+var maybeLength = lengthF(maybeAString);
+
+Assert.IsType<Just<int>>(maybeLength);
+Assert.Equal(3, ((Just<int>) maybeLength).Value);
+```
+
+
 
 # IO Functor
 Given a function:
