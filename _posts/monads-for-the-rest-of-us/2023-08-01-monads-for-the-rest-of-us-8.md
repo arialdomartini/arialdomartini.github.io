@@ -119,7 +119,7 @@ The most popular way to visualize functors is using boxes, as in [Functors, Appl
 This is all good. But I recommend: don't forget that these are only approximations and visualization stratagems.  
 The box metaphor holds true in many scenarios, but easily falls short in others, leading to situations that can be quite perplexing.
 
-Before implementing functors for our IO, Undetemined and Maybe cases, let's see with some code those 2 different perspectives on Functors.
+Before implementing functors for our `IO`, `Undetemined` and `Maybe` cases, let's see with some code those 2 different perspectives on Functors.
 
 ## Functor as a mapper
 Take a simple function `string -> int`:
@@ -299,17 +299,9 @@ Inline `Func` and, voilà:
 var lengths = values.Select(length);
 ```
 
-You can interpret `Select` as the function that maps `length` to the content of `values`, where values, an `IEnumerable<string>` is seen as a container of `string` values.
+You can interpret `Select` as the function that maps `length` to the content of `values`, an `IEnumerable<string>` seen as a container of `string` values.
 
-# What's next?
-There are some topics I didn't get around to covering.
-
-* How to deal with multi-parameter functions, with currying and partial application.
-* How we did not need to implement the `Nondeterministic` monad: it's already natively implemented by LINQ.
-* How to use LINQ to bind any custom monadic functions in a fluent way
-* Implementation of more monads, such as Either, State, Reader and Writer.
-
-I promise I will follow up with a new series.
+In the [Chapter 9](monads-for-the-rest-of-us-9) we will finally implement `map` for `IO`, `Nond` and `Maybe`.
 
 
 # Resources
