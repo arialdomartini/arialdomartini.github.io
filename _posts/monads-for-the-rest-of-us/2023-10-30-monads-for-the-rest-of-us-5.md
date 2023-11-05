@@ -172,7 +172,7 @@ Assert.Equal(1_073_741_824, steps.Length());
 Assert.Equal(741, steps.Distinct().Length());
 ```
 
-Just like with the IO Monad, our client code *knows* from the type-system that there is a side effect, but *does nothing* in particular to deal with it other than using the monadic `Bind`.
+Just like with the IO Monad, our client code *knows* from the type-system that there is an extra-computation, but *does nothing* in particular to deal with it other than using the monadic `Bind`.
 
 
 ## Implementing the monad
@@ -454,7 +454,7 @@ Indeed, in Haskell [the monadic function composition (slighly simplified) implem
 g <=< f = \a -> g a >>= f
 ```
 
-This is an incredibly remarkable result: not only did we provide the same interface `Bind` + `Return` to all the monads, no matter which kind of inpurity they model; but now we are even discovering some universal laws and combinators, that are also indipendent from the side effects.  
+This is an incredibly remarkable result: not only did we provide the same interface `Bind` + `Return` to all the monads, no matter which kind of inpurity they model; but now we are even discovering some universal laws and combinators, that are also indipendent from the extra-computation.  
 Isn't this astonishing? You still have to invent and implement the monads you will use in your future code and you already know the formula for deriving their `Compose` combinator, knowing it will perfectly work with them.
 
 # Wrapping up
