@@ -15,7 +15,7 @@ I challenged myself to write a post that:
 - prioritizes code over storytelling
 - uses no metaphors (no boxes, no burritos)
 - does not require Category Theory
-- jumps past some of the trivial introductory topics, such as defining what a pure function is
+- jumps past the discussion why Functional Programming is valuable
 - does not follow the classical Functors -> Monads narrative
 - is tailored for C# developers and digestible by Java ones
 <!--more-->
