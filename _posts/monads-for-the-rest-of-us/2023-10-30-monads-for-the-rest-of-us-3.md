@@ -254,40 +254,40 @@ Consider the following:
 
 ```haskell
 length :: string -> int
-double :: int -> double
+twice :: int -> double
 ```
 
-You want to apply / bind `double` to the result of `length`.  
+You want to apply / bind `twice` to the result of `length`.  
 In C#:
 
 ```csharp
 Func<string, int> length = s => s.Length;
-Func<int, double> double = i => i * 2;
+Func<int, double> twice = i => i * 2;
 
 string a = "foo";
 
-double doubleTheLength = double.Apply(length.Apply("foo"));
+double twiceTheLength = twice.Apply(length.Apply("foo"));
 
-Assert.Equal(6, doubleTheLength);
+Assert.Equal(6, twiceTheLength);
 ```
 
 The Haskell notation here is much clearer:
 
 ```haskell
-doubleTheLength = double $ length $ "foo"
+twiceTheLength = twice $ length $ "foo"
 ```
 
 which is pretty much the same of the native C# function application:
 
 ```csharp
-double doubleTheLength = double(length("foo"));
+double twiceTheLength = twice(length("foo"));
 ```
 
-The result we get is the same we could get from a a single function composing `length` and `double`:
+The result we get is the same we could get from a a single function composing `length` and `twice`:
 
 ```haskell
 length :: string -> int
-double :: int -> double
+twice :: int -> double
 
 chain :: string -> double
 ```
@@ -295,7 +295,7 @@ chain :: string -> double
 with :
 
 ```csharp
-chain = double.ComposedWith(length)
+chain = twice.ComposedWith(length)
 ```
 
 This equivalence is not a coincidence. `Apply` is such a basic building block that `Compose` can be easily defined in terms of it:

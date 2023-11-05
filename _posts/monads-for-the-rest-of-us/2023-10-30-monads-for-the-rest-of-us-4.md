@@ -198,7 +198,7 @@ Here's a complete use case in which there are 2 monadic functions:
 
 ```haskell
 length :: string -> IO<int>
-double :: int -> IO<double>
+twice :: int -> IO<double>
 ```
 
 If the functions were pure, we could directly combine them as follows:
@@ -206,19 +206,19 @@ If the functions were pure, we could directly combine them as follows:
 
 ```csharp
 // length :: string -> int
-// double :: int -> double
+// twice :: int -> double
 
-var doubleTheLength = @double(length("foo"));
+var twiceTheLength = twice(length("foo"));
 
-Assert(6, doubleTheLength);
+Assert(6, twiceTheLength);
 ```
 
 or, with our custom `Apply`:
 
 ```csharp
-var doubleTheLength = double.Apply(length.Apply("foo"));
+var twiceTheLength = twice.Apply(length.Apply("foo"));
 
-Assert.Equal(6, doubleTheLength);
+Assert.Equal(6, twiceTheLength);
 ```
 
 In the monadic case, the version of `Apply` we just wrote takes care of *binding* the 2 monadic functions:
@@ -231,7 +231,7 @@ Func<string, IO<int>> length = s =>
         return s.Length;
     });
 
-Func<int, IO<double>> @double = n =>
+Func<int, IO<double>> twice = n =>
     new IO<double>(() =>
     {
         File.AppendAllText("output.txt", "I'm another side effect!");
@@ -250,7 +250,7 @@ static class FunctionExtensions
 }
 
 IO<int> monadicLength = length("foo");
-IO<double> monadicResult = @double.Apply(monadicLength);
+IO<double> monadicResult = twice.Apply(monadicLength);
 
 // Indeed, no file has been created yet
 Assert.False(File.Exists("output.txt"));
@@ -265,7 +265,7 @@ Assert.Equal("I'm a side effect!I'm another side effect!", File.ReadAllText("out
 The code above in Haskell would be:
 
 ```haskell
-(length "foo") >>= double 
+(length "foo") >>= twice 
 ```
 
 or equivalently:
@@ -273,7 +273,7 @@ or equivalently:
 ```haskell
 do
   len <- length "foo"
-  double len
+  twice len
 ```
 
 You will soon find out that LINQ implements `>>=` calling it `SelectMany`, and that this is the secret ingredient that allows you to rewrite the code above as:
@@ -281,7 +281,7 @@ You will soon find out that LINQ implements `>>=` calling it `SelectMany`, and t
 ```csharp
 Eff<int> monadicResult =
     from len in length("foo")
-    from d in double(len)
+    from d in twice(len)
     select d;
 ```
 
@@ -289,19 +289,19 @@ Don't try this just yet: you need to define a couple of Extension Methods for LI
 Instead, take a minute to ruminate on the code you obtained:
 
 ```csharp
-IO<double> result = double.Apply(length("foo"));
+IO<double> result = twice.Apply(length("foo"));
 ```
 
 It is similar to:
 
 ```csharp
-double result = double(length("foo"));
+double result = twice(length("foo"));
 ```
 
 and just identical to the one using the pure `Apply` we defined in [Part 3](monads-for-the-rest-of-us-3):
 
 ```csharp
-double result = double.Apply(length("foo"));
+double result = twice.Apply(length("foo"));
 ```
 
 with the only difference it returns `IO<double>` instead of `double`.
@@ -342,7 +342,7 @@ static class FunctionExtensions
     }
 }
 
-var composed = @double.ComposedWith(length);
+var composed = twice.ComposedWith(length);
 
 IO<double> monadicResult = composed("foo");
 var result = monadicResult.Run();

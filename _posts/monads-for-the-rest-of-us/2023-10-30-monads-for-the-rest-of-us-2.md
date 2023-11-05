@@ -111,12 +111,12 @@ int LengthWithSideEffects(string s)
 }
 
 // int -> double
-double Double(int i) => i * 2;
+double Twice(int i) => i * 2;
 
 // string -> int -> double
-double doubleTheLength = Double(LengthWithSideEffects("foo"));
+double twiceTheLength = Twice(LengthWithSideEffects("foo"));
         
-Assert.Equal(6, doubleTheLength);
+Assert.Equal(6, twiceTheLength);
 ```
 
 Try to do the same with the monadic version and the compiler will refuse to proceed, complaining that:

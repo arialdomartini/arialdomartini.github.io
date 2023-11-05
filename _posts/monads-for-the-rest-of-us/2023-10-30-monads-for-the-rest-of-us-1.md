@@ -34,8 +34,8 @@ As long as a function is pure, its signature exactly reflects the mapping it per
 Ideally a pure function can be replaced with a dictionary whose keys are all the possible inputs, and whose values are the corresponding returned results.
 
 ```csharp
-// Double :: int -> int
-int Double(int i) => i * 2;
+// Twice :: int -> int
+int Twice(int i) => i * 2;
 ```
 
 is fully described and replaced by the (very large) dictionary:
@@ -52,15 +52,15 @@ Dictionary<int, int> Codomain = new Dictionary<int, int>
     ...
 }
 
-Assert.Equal(Double(2),  Codomain[2]);
-Assert.Equal(Double(3),  Codomain[3]);
-Assert.Equal(Double(-1), Codomain[-1]);
+Assert.Equal(Twice(2),  Codomain[2]);
+Assert.Equal(Twice(3),  Codomain[3]);
+Assert.Equal(Twice(-1), Codomain[-1]);
 ```
 
 Notice how the dictionary's type arguments match the function ones:
 
 ```csharp
-Double :: Func<int, int>
+Twice :: Func<int, int>
 Codomain :: Dictionary<int, int>
 ```
 
