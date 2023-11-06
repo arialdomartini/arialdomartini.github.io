@@ -18,7 +18,7 @@ Let's summarize our understanding of an IO monadic function:
 # Running an IO monadic function
 Here's the very last ingredient we need: nothing prevents us from defining a function that *executes* the IO monad. Sure: we are deferring the execution of the IO side effect; but, eventually, at the end of the chain, we need to run it, don't we?
 
-Here's (yet) another intuition: IO monads are a way to delay the execution of side effects as long as we wish to manipulate the functions as pure entities, and to finally run their impure behavior when we are done, at the edge of the application.
+Here's (yet) another intuition: IO monads are a way to delay the execution of extra-computations (effects) as long as we wish to manipulate the functions as pure entities, and to finally run their impure behavior when we are done, at the edge of the application.
 
 Let's extend `IO<B>` with a method `Run`, which finally executes the side effect:
 

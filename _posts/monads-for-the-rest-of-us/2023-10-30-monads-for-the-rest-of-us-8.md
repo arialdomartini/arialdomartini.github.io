@@ -19,9 +19,9 @@ What about even more stubborn functions that have both input and output in the n
 
 How can we fix them elevating to the monadic world?  
 Wait a sec! Why should we even fix them? We never thought that this was a problem. We always said that pure, ordinary functions are the ideal ones to deal with, the building blocks of Functional Programming.  
-And that's true: by no means the desire to elevate them to the monadic realm implies they are problematic. See this differently: how to write simple, pure functions, and then have a magic way to elevate them so they can work on monadic values, no matter the side-effects?
+And that's true: by no means the desire to elevate them to the monadic realm implies they are problematic. See this differently: how to write simple, pure functions, and then have a magic way to elevate them so they can work on monadic values, no matter the effects?
 
-This is the first intuition: a Functor is a way to teletransport your pure functions in a monadic world, where some side-effects are in place.
+This is the first intuition: a Functor is a way to teletransport your pure functions in a monadic world, where some effects are in place.
 
 The function that takes:
 

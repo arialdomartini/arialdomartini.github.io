@@ -16,7 +16,7 @@ I don't want to waste your time repeating what you already know about the virtue
 
 Only at a first glance are those 2 assumptions contradictory. In fact, they translate to:
 
-- How can we *model* side effects without giving up on function purity?
+- How can we *model* side .effects without giving up on function purity?
 
 One of the approaches to solving this challenge is of course Monads.
 
@@ -263,7 +263,7 @@ We will soon find out that this minor change throws a monkey wrench into the wor
 
 In the next part we will implement some of those type. In defining them, we will make sure of ensuring 3 important traits:
 
-1. that the result will be about *pure functions*, so we will get the benefits of both pure functions and controlled side effects
+1. that the result will be about *pure functions*, so we will get the benefits of both pure functions and controlled effects
 2. that the extra-behavior is not accidentally executed while the pure functions are being manipulated
 3. that a version of Function Application and Function Composition exist for them, so we can use them in real scenarios.
 

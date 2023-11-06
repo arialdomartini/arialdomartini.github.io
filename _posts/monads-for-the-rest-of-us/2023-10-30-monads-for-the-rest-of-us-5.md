@@ -56,7 +56,7 @@ moveKnight :: Position -> IEnumerable<Position>
 That's absolutely correct, and you will find many tutorials implementing nondeterminism with Monads this way.  
 Yet, I think this is a missed opportunity to understand some small &mdash; yet important &mdash; minutiae. Allow me then to proceed differently.
 
-Following our initial idea to devote a dedicated monadic type to each specific source of side-effect / extra-behavior, let's imagine to have a `Nondeterministic` type:
+Following our initial idea to devote a dedicated monadic type to each specific source of effects / extra-behavior, let's imagine to have a `Nondeterministic` type:
 
 ```csharp
 moveKnight :: Position -> Nondeterministic
