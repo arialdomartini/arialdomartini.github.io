@@ -57,7 +57,7 @@ Assert.Equal(Twice(3),  Codomain[3]);
 Assert.Equal(Twice(-1), Codomain[-1]);
 ```
 
-Notice how the dictionary's type arguments match the function ones:
+The quality that enables a function to be completely and safely replaced with its value is called Referential Transparency. That's a foundamental trait, but here I would like to stress more on signatures. Indeed, notice how the dictionary's type arguments match the function ones:
 
 ```csharp
 Twice :: Func<int, int>
