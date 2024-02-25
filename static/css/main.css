@@ -288,3 +288,7 @@ hr {
 summary:hover {
   cursor: pointer;
 }
+
+.blog-post table {
+    margin-bottom: 1em;
+}
