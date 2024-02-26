@@ -57,7 +57,7 @@ There are 3 functionalities that I like to have enabled for specific kinds of fi
 | Minor mode                                       | Feature                                                         | Where it makes sense to me |
 |--------------------------------------------------|-----------------------------------------------------------------|----------------------------|
 | [olivetti-mode][olivetti-mode]                   | Enhances the appearance of prose documents                      | Markdown, Org              |
-| [toggle-truncate-lines][toggle-truncate-lines]   | When it is on, long lines are not wrapped at the windows's edge | All files                  |
+| [toggle-truncate-lines][toggle-truncate-lines]   | When it is on, long lines are not wrapped at the window's edge | All files                  |
 | [aggressive-indent-mode][aggressive-indent-mode] | Format Lisp code in real time as you type                       | Emacs Lisp files           |
 
 Your mileage may be different.
@@ -454,6 +454,6 @@ is for example a snippet from `dired-internal-noselect`:
 
 [aggressive-indent-mode]: https://github.com/Malabarba/aggressive-indent-mode
 [olivetti-mode]: https://github.com/rnkn/olivetti
-[helpful]: https://github.com/Wilfred/helpful)
+[helpful]: https://github.com/Wilfred/helpful
 [prot]: https://protesilaos.com/coach/
 [toggle-truncate-lines]: https://emacsdocs.org/docs/emacs/Line-Truncation
