@@ -256,7 +256,7 @@ activates the mark. Here it is why `C-SPC` is the conventional way to
 start defining a region. And this is also why, if your goal is only to
 set a value for mark, without activating it, you press `C-SPC` twice:
 
-- The first time it sets the mark, enabling it.
+- The first time it sets the mark, activating it.
 - The second time, it disables it. 
 
 Try yourself, keeping an eye on the messages in the echo area.
@@ -333,6 +333,8 @@ yourself that the pasted text is in fact surrounded by a region either:
   the region, making it visible.
 - by performing any operation on the region, such as `M-x center-region`.
 - jumping to the beginning of the pasted text, with `C-u C-SPC`.
+- run `M-x indent-rigidly` (`C-x C-i`) and then use your arrows to
+  move the pasted section left and right.
 
 ### Fixing the second problem
 Enough with wandering around. Let's go back to our code. By now, it
