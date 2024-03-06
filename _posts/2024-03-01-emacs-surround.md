@@ -48,8 +48,7 @@ The idea is to write an interactive function that:
   region, and the other right after the end.
 - Moves the point back where it was.
 
-# Implementation with Hard-coded delimiters
-## Prepending a surround prefix
+# Prepending a surround prefix
 Let's build this incrementally, starting from a trivial function that
 inserts a hard-coded opening delimiter right before the region starts:
 
@@ -87,7 +86,7 @@ provides a more solid approach.
 Test them selecting a region and invoking `M-x
 prepend-string-to-region`.
 
-### Improving the code
+## Improving the code
 There are 2 problems with both functions:
 
 1. They don't retain the cursor position.
@@ -129,8 +128,8 @@ current region by replacing the whole region"
 
 As for the second problem, instead, it makes sense to have little explaination.
 
-### Region, mark and point
-#### Point
+## Region, mark and point
+### Point
 When you move your cursor in a buffer, you are modifying the value of
 the so called *point*. The point is just simply the location where
 editing operations take place, so the position of the cursor.
@@ -150,7 +149,7 @@ and change its value with:
 (Yes, `(goto-char (point))` is an obnoxious way to consume energy for
 getting absolutely no result).
 
-#### Mark
+### Mark
 In Emacs there exist several *ring* variables. They are circular
 buffers for storing a sequence of elements, and they are used for
 various purposes: the `kill-ring` supports the idea of a
@@ -204,7 +203,7 @@ Region][mark-and-region] on https://emacsdocs.org/.
 For our case, we just need some details. So, allow me to take a little
 detour. Let's talk about the region.
 
-#### Region
+### Region
 The region is just the fraction of the buffer between the current
 `point` and the current `mark`.
 
@@ -229,7 +228,7 @@ visible.
 This bears the question: how does it come that some times the region
 is visible, some time it is not?
 
-#### Activating the mark / the region
+### Activating the mark / the region
 It is all about the notion of *active* or *not active* mark (or
 *active* or *not active* region: I think the 2 are equivalent).
 
@@ -263,7 +262,7 @@ Try yourself, keeping an eye on the messages in the echo area.
 
 Unusual, when compared with other editors. But also linear and consistent, isn't it?
 
-#### A neat trick
+### A neat trick
 Before I mentioned that the mark can be either set intentionally by
 the user, or set automatically by Emacs under certain circumstances.
 
@@ -336,7 +335,7 @@ yourself that the pasted text is in fact surrounded by a region either:
 - run `M-x indent-rigidly` (`C-x C-i`) and then use your arrows to
   move the pasted section left and right.
 
-### Fixing the second problem
+## Fixing the second problem
 Enough with wandering around. Let's go back to our code. By now, it
 should be clear that our second unsolved problem, rather than:
 
@@ -379,7 +378,7 @@ active region by replacing the whole region"
         (insert prefixed-content)))))
 ```
 
-## Appending a surrounding suffix
+# Appending a surrounding suffix
 Cool. Let's complete the function adding the closing delimiter. Writing
 the implementation is really trivial:
 
@@ -435,7 +434,7 @@ setting the mark after "dog" and then moving the point before "The"
 &mdash; brings the desired result.  
 Why does this happen?
 
-### It is all about the mark
+## It is all about the mark
 If you are confused, so was I initially. I had a doubt: is it possible
 that `insert` alters the current region, therefore making the
 subsequent use of `region-beginning` and `region-end` unreliable? Even
@@ -609,7 +608,7 @@ region and replacing it with a surrounded content:
 
 
 
-## Keybinding
+# Keybinding
 Before extending the function to make it more flexible and useful,
 let's learn how to invoke it with a keybinding. The trivial way is to
 use `global-set-key`:
