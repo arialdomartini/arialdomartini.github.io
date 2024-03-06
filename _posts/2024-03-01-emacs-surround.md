@@ -22,22 +22,22 @@ My goal is to extend Emacs so that the following will be possible:
 - To select a text region in a buffer.
 - To invoke a function &mdash; possibly through a keybinding.
 - To see Emacs displaying a well-formatted list of possible
-  surrounding delimiters (such as `(` &mdash; `)`, ```` ```haskell ```` &mdash;
+  surrounding delimiters (such as `(` &mdash; `)` or  ```` ```haskell ```` &mdash;
   ```` ``` ````).
 - To select one.
 - To have Emacs surround the region with the selected closing
   delimiters.
 
-A further goal would be to implement a [DWIM][dwim] behavior and let
+A further goal would be to implement a [DWIM][dwim] behavior and to let
 Emacs guess the extent of the text to surround. This will be the topic
 for a future post.
 
-I'm sure thta any programmer fluent in Emacs Lisp would be able to
+I'm sure that any programmer fluent in Emacs Lisp would be able to
 develop this functionality in few minutes. I'm no expert, so I had to
 learn. This post documents what I discovered in the several detours I
 took during the journey.  
 As often happens, the goal has been more an excuse to explore topics
-than an objective by itself.
+than an objective in itself.
 
 # The idea
 The idea is to write an interactive function that:
