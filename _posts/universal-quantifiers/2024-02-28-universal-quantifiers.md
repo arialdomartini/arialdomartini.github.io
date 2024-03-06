@@ -407,7 +407,7 @@ arise:
 
 * Can we actually provide type-level parameters, when invoking
   functions?<br/>(Spoiler: yes!)
-* If so, can we partially apply a function, only providing some of the
+* If so, can we partially apply a function providing only some of the
   type-level parameters?<br/>(Spoiler: amazingly, yes! yes! yes!)
 
 Before discovering how, let's take a little detour. Let's build a bit
