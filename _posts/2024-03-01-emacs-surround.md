@@ -22,8 +22,8 @@ My goal is to extend Emacs so that the following will be possible:
 - To select a text region in a buffer.
 - To invoke a function &mdash; possibly through a keybinding.
 - To see Emacs displaying a well-formatted list of possible
-  surrounding delimiters (such as `(` and `)`, `\`\`\`haskell` and
-  `\`\`\``).
+  surrounding delimiters (such as `(` &mdash; `)`, ```` ```haskell ```` &mdash;
+  ```` ``` ````).
 - To select one.
 - To have Emacs surround the region with the selected closing
   delimiters.
