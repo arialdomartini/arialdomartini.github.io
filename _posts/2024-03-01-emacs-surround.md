@@ -54,8 +54,7 @@ inserts a hard-coded opening delimiter right before the region starts:
 
 ```emacs-lisp
 (defun prepend-string-to-region ()
-  "Insert a hard-coded string right before the beginning of the
-current region"
+  "Insert a hard-coded string right before the beginning of the current region"
   (interactive)
   (goto-char (region-beginning))
   (insert "<<<"))
@@ -81,7 +80,7 @@ current region by replacing the whole region"
 
 Although the second function seems a bit aggressive, let's take both
 solutions in mind: eventually we will need to figure out which one
-provides a more solid approach.
+provides the most solid approach.
 
 Test them selecting a region and invoking `M-x
 prepend-string-to-region`.
@@ -101,8 +100,7 @@ Exactly what we need. So, we can change both the functions as follows:
 
 ```emacs-lisp
 (defun prepend-string-to-region ()
-  "Insert a hard-coded string right before the beginning of the
-current region"
+  "Insert a hard-coded string right before the beginning of the current region"
   (interactive)
   (save-excursion
     (goto-char (region-beginning))
@@ -152,10 +150,11 @@ getting absolutely no result).
 ### Mark
 In Emacs there exist several *ring* variables. They are circular
 buffers for storing a sequence of elements, and they are used for
-various purposes: the `kill-ring` supports the idea of a
-multi-clipboard; `kmacro-ring` stores the history of the keyboard
-macros, `eshell-history-ring` remembers the executed shell commands,
-etc.
+various purposes. For example:
+
+* `kill-ring` supports the idea of a multi-clipboard.
+* `kmacro-ring` stores the history of the keyboard macros.
+* `eshell-history-ring` remembers the executed shell commands.
 
 One could think that Emacs also dedicates a ring to store a history of
 the point positions. After all, after a movement, it is possible to
@@ -179,7 +178,7 @@ beging with, if `C-SPC` pushes the mark in the `mark-ring` and then
 copies `point` onto `mark`, one may wonder if there is a way to do the
 opposite. And in fact, there is! Just passing an argument to
 `set-mark-command` &mdash; that is, interactively pressing `C-u
-C-SPC`) &mdash; inverts the operation. As the documentation states:
+C-SPC` &mdash; inverts the operation. As the documentation states:
 
 > With prefix argument (e.g., C-u C-SPC), jump to the mark, and set
 > the mark from position popped off the local mark ring (this does not
@@ -193,24 +192,23 @@ In other words:
   why you need to hit this twice).
 - When you want to jump back to those positions, hit `C-u C-SPC`.
 - Otherwise, you can also use the beautiful `consult-mark` which lets
-you browse the `mark-ring` interactively and even perform a real-time
+you browse the `mark-ring` interactively and even perform real-time
 searches.
 
 Why are we talking about the `mark`? Because it has a lot to do with
 the region, which is central to our use case. Mark and region form a
 broad topic in Emacs. You can read about them in [The Mark and the
-Region][mark-and-region] on https://emacsdocs.org/.  
-For our case, we just need some details. So, allow me to take a little
-detour. Let's talk about the region.
+Region][mark-and-region] on [https://emacsdocs.org](https://emacsdocs.org)  
+For our case, we just need some details. So, let's talk about the region.
 
 ### Region
 The region is just the fraction of the buffer between the current
 `point` and the current `mark`.
 
-This is a subtle topic. With other editors, we are used to think to the
-"region" or the "selection" as that part of text which is *highlighted*
-after the user selected it with the mouse (urgh!) or by pressing Shift
-and moving the cursor.
+This is a subtle notion. With other editors, we are used to think to
+the "region" or the "selection" as that part of text which is
+*highlighted* after the user selected it either with the mouse (urgh!)
+or by pressing Shift and moving the cursor.
 
 In Emacs things are way more flexible. To begin with, a region does
 exist even if no text is highlighted. Now that you know that the
@@ -226,7 +224,7 @@ not too weird. To verify this, do the following experiment:
 Surprise surprise (or not): you killed a selection, even if no one was
 visible.  
 This bears the question: how does it come that some times the region
-is visible, some time it is not?
+is visible, some times it is not?
 
 ### Activating the mark / the region
 It is all about the notion of *active* or *not active* mark (or
@@ -246,14 +244,15 @@ region appear.
 When the region is active, the text is highlighted by
 `transient-mark-mode`. If this mode is disabled, then an active region
 will keep being invisible. This might be very puzzling, especially if
-one does not know how the mechanism under the hood works with points and marks. There are good reasons why `transient-mark-mode` is enabled
+one does not know how the mechanism under the hood works with points
+and marks. There are good reasons why `transient-mark-mode` is enabled
 by default.
 
 The reason why we can usually ignore these nuances is because, very
 conveniently, when `set-mark` (`C-SPC`) is invoked, it *also*
 activates the mark. Here it is why `C-SPC` is the conventional way to
-start defining a region. And this is also why, if your goal is only to
-set a value for mark, without activating it, you press `C-SPC` twice:
+start selecting text. And this is also why, if your goal is only to
+set a value for mark without activating it, you press `C-SPC` twice:
 
 - The first time it sets the mark, activating it.
 - The second time, it disables it. 
@@ -564,9 +563,29 @@ Even if we saved the original value of `(region-end)` in the variable
 `end`, this value does not reflect anymore the right position in the
 buffer: in fact, new characters (`<<<`) have been inserted, and the
 buffer content was right shifted by 3 characters.  
-I don't want to fix this doing arithmetic. Although it would be a
+~~I don't want to fix this doing arithmetic. Although it would be a
 simple calculation, most likely the resulting code would be opaque and
-brittle.
+brittle~~.  
+As [nv-elisp](https://www.reddit.com/user/nv-elisp/) suggests [on
+Reddit][nv-eslip], that would not be so difficult:
+
+```emacs-lisp
+(defun surround-region-with-hard-coded-strings ()
+  "Surround the active region with hard-coded strings"
+  (interactive)
+  (when (region-active-p)
+    (save-excursion
+      (let ((beginning (region-beginning))
+            (end (region-end))
+	    (opening-delimiter "<<<")
+	    (closing-delimiter ">>>"))
+
+        (goto-char beginning)
+        (insert opening-delimiter)
+
+        (goto-char (+ end (length closing-delimiter)))
+	(insert closing-delimiter)))))
+```
 
 A possible alternative solution is to *first* insert the closing
 surrounding delimiter, *then* the opening one:
@@ -587,10 +606,10 @@ surrounding delimiter, *then* the opening one:
         (insert "<<<")))))
 ```
 
-This works, but honestly with a stilll fragile approach: it risks to
+This works, but honestly it is a fragile approach: it risks to
 fail again if only the order of few commands is changed.  
-We could instead reconsider the approach of deleting the whole
-region and replacing it with a surrounded content:
+A last option is to reconsider deleting the whole region and replacing
+it with a surrounded content:
 
 ```emacs-lisp
 (defun surround-region-with-hard-coded-strings ()
@@ -605,7 +624,6 @@ region and replacing it with a surrounded content:
       (goto-char (region-beginning))
       (insert prefixed-content))))
 ```
-
 
 
 # Keybinding
@@ -678,3 +696,4 @@ These are topics for the next installments.
 [mark-and-region]: https://emacsdocs.org/docs/emacs/Mark
 [dwim]: https://www.emacswiki.org/emacs/DoWhatIMean
 [poem]: https://protesilaos.com/poems/2024-02-06-song-of-seas/
+[nv-eslip]: https://www.reddit.com/r/emacs/comments/1b7yhep/comment/ktmndif/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
