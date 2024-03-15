@@ -566,12 +566,12 @@ Have fun. Happy coding.
 * [Enum - Hackage][enum]
 * [Strict Total Order - Wikipedia][strict-total-order]
 * [Well Order - Wikipedia][well-order]
-* [On Understanding Types, Data Abstraction, and Polymorphism Luca Cardelli, Peter Wegner][on-undertanding-types]
+* [On Understanding Types, Data Abstraction, and Polymorphism - Luca Cardelli, Peter Wegner][on-undertanding-types]
 * [Hoogle][hoogle]
 * [Betteridge's law of headlines][betteridge]
 * [TypeLevel Typescript][type-level-ts]
   * [Intersections of objects and unions of keys][intersection-union]
-[Property Testing For The Rest of Us](/property-testing)
+* [Property Testing For The Rest of Us](/property-testing)
 * [Mnemonics: Law of Demeter - Arialdo Martini][demeter]
 
 
