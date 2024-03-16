@@ -8,9 +8,30 @@ tags:
 - Haskell
 - C#
 ---
+I refuse to see the tension between theory and practice.  
+I love the sentence:
+
+> In theory there is no difference between theory and practice
+> in practice there is
+
+It is very funny, I love to cite it when I can. But I cannot help but
+think it is false &mdash; I will write about this, some time.
+
+Let's talk about mathematical notions. I heard way too many times
+
+
+> Yes, hey are universal and profound. But *practically* useless".
+
+I hate this.
+
+With this post I challenge myself to debunk this notion. I challenge
+myself to find pragmatic uses of the abstract concept of *cardinality of types* in everyday programmer's life.
+
+<!--more--> 
+# Types as Set
 Types can be modelled as sets. This enables us to use to our advantage
 many of the results of Set Theory.
-<!--more--> 
+
 In Set Theory, sets are associated to a Cardinality, a measure of
 set's size. While the cardinality of a finite set is just the number
 of its elements, it is also possible to extend this notion to infinite
@@ -267,6 +288,9 @@ gives me the chance to introduce an often negletted code smell and a
 resolution that goes in direction of type-modelling: Boolean Blindness.
 
 This deserves a post on its on. I promise I'm publishing it soon.
+
+(If you are even lightly curious to read the next post, I reached my
+goal: theory is a way to improve practice).
 
 # References
 * [Sandy Maguire - Thinking With Types][thinking-with-types]
