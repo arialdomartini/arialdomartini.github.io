@@ -160,13 +160,26 @@ actual implementation.
 I like to see TDD as is an extension of static typing: it amplifies
 the compilation phase filtering out some of the wrong implementation
 that would be otherwise accepted by the compiler, just like your type
-system does. As you can read in [Property Testing For The Rest of
-Us](/property-testing), also being generic in tests, instead of
-relying on specific examples, helps implementing correct code with
-great specificity.
+system does. 
 
-Tests aside, seeking genericity is often a matter of designing the
-proper types and interfaces.
+The term Generic Programming was coined by Musser and Stepanov. In
+their paper [Generic Programming][generic-programming] they introduce
+the idea that algorithms can be defined by capturing their fundamental
+requirements, their essence, and by abstracting away from concrete
+examples.
+
+> [..] one must create the appropriate abstract concepts in terms of
+> which one can effectively express and reason about the behavior of
+> an algorithm.
+
+I find this illuminating, because it is exactly the same idea of
+Property-Based Testing: capturing the essence of requirements and
+expressing them without relying on specific examples. You can read
+more about this approach in [Property Testing For The Rest of
+Us](/property-testing).
+
+Generic Programming is all about designing the proper types and
+interfaces. Let's see how.
 
 ## It's all about using (small, smaller) interfaces
 The OOP literature offers very compelling reasons to program to
@@ -573,7 +586,8 @@ Have fun. Happy coding.
   * [Intersections of objects and unions of keys][intersection-union]
 * [Property Testing For The Rest of Us](/property-testing)
 * [Mnemonics: Law of Demeter - Arialdo Martini][demeter]
-
+* [Musser, David R.; Stepanov, Alexander
+A., Generic Programming][generic-programming]
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/28)
@@ -593,3 +607,4 @@ Have fun. Happy coding.
 [type-level-ts]: https://type-level-typescript.com/objects-and-records
 [intersection-union]: https://type-level-typescript.com/objects-and-records#intersections-of-objects-and-unions-of-keys
 [demeter]: https://github.com/arialdomartini/mnemonics/blob/law-of-demeter/README.md
+[generic-programming]: http://stepanovpapers.com/genprog.pdf
