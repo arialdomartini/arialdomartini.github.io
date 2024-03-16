@@ -262,13 +262,18 @@ When this happens, we write:
 
 $$Bool \cong Actor$$
 
-How is this useful?
+How can this possibly be useful? Let me use a specific example, which
+gives me the chance to introduce an often negletted code smell and a
+resolution that goes in direction of type-modelling: Boolean Blindness.
+
+This deserves a post on its on. I promise I'm publishing it soon.
 
 # References
 * [Sandy Maguire - Thinking With Types][thinking-with-types]
 * [Phantom Type - Haskell Wiki][phantom-type]
 * [Fixed-length vectors in Haskell, Part 1: Using GADTs][fixed-length-vectors]
-* [How do I check that a switch block is exhaustive in TypeScript?][exhaustive-pattern-matching]
+* [How do I check that a switch block is exhaustive in
+  TypeScript?][exhaustive-pattern-matching]
   
 [thinking-with-types]: https://leanpub.com/thinking-with-types
 [phantom-type]: https://wiki.haskell.org/Phantom_type
