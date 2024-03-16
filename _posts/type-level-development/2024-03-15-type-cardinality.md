@@ -11,21 +11,25 @@ tags:
 I refuse to see the tension between theory and practice.  
 I love the sentence:
 
-> In theory there is no difference between theory and practice
-> in practice there is
+> In theory there is no difference between theory and practice.  
+> In practice there is
 
-It is very funny, I love to cite it when I can. But I cannot help but
-think it is false &mdash; I will write about this, some time.
+It is very, very funny, I love to cite it when I can. But I cannot
+help but think it is false &mdash; I will write about this, some time.
 
-Let's talk about mathematical notions. I heard way too many times
+Let's talk about mathematical notions. I hear way too many times
 
 
-> Yes, hey are universal and profound. But *practically* useless".
+> Yes, hey are universal and profound. But *practically* useless.
 
 I hate this.
 
-With this post I challenge myself to debunk this notion. I challenge
-myself to find pragmatic uses of the abstract concept of *cardinality of types* in everyday programmer's life.
+With this post I challenge myself to debunk this notion. I chose a
+very abstract notion &mdash; the concept of *cardinality
+of types* &mdash; and challanged myself to find pragmatic uses of it
+in the everyday programmer's life.
+
+Can there be a more useless and theoretical notion that *cardinality*?
 
 <!--more--> 
 # Types as Set
