@@ -289,9 +289,7 @@ $$Bool \cong Actor$$
 
 How can this possibly be useful? Let me use a specific example, which
 gives me the chance to introduce an often negletted code smell and a
-resolution that goes in direction of type-modelling: Boolean Blindness.
-
-This deserves a post on its on. I promise I'm publishing it soon.
+resolution that goes in direction of type-modelling: [Boolean Blindness](/boolean-blindness).
 
 (If you are even lightly curious to read the next post, I reached my
 goal: theory is a way to improve practice).
