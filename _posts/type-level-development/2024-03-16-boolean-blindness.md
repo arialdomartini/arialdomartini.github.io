@@ -139,7 +139,7 @@ Name][uncommunicative-name] and [Magic Number][magic-number], which
 are about naming things.
 
 Yet, resolving Boolean Blindness at type level ensures an enforcement
-by the compiler which in general is preferrable than relying solely on
+by the compiler which is in general preferrable than relying solely on
 discipline. My take on this is that with statically and strongly typed
 languages, the more we leverage the compiler, the greater the benefit
 we obtain in the long run.
@@ -151,12 +151,12 @@ isomorphisms mapping one type onto the other.
 This means that, ideally, we should be able to use `Keep | Drop`
 wherever we used to have `bool`.
 
-This is in general true, with a little caveat.  Most of the languages
-treat boolean in a special way, reserving `if/then/else` keywords to
-it. `bool` is priviledged, if compare with any custom type you want to
-introduce. That's an unfair perk.  
+This is generally true, although with a little caveat: most of the
+languages treat booleans in a special way, reserving `if/then/else`
+keywords to it. `bool` is priviledged if compared with any custom type
+you wish to introduce. That's an unfair perk.  
 But not everything is lost. Pattern matching is the the way to go. You
-can always build a mapping to `bool` with:
+can always build a mapping from your custom types to `bool` with:
 
 ```csharp
 var keepIt = predicate(element) switch
@@ -178,7 +178,7 @@ class FiltersOut : IFiltersOut
 }
 ```
 
-This approach is more scalable, more flexible and more expressive,
+This approach is more scalable, more flexible and more expressive
 than just using booleans: it is always possible to add additional
 cases and have the compiler supervising the usage and its consistency
 everywhere, for free.
@@ -192,10 +192,10 @@ In my experience, the domain experts:
 
 * speak about *adults* and *underages*, not `true`
 and `false` in the context of *checking age*;
-* they refer to *enabled feature* not `false` in the context of
+* they refer to *enabled feature* not to `false` in the context of
 reading a configuration file;
-* they talk about active, non-active and not yet confirmed accounts,
-not `bool?`.
+* they talk about *active*, *non-active* and *not yet confirmed*
+accounts, not about `bool?`.
 
 Therefore, it's just a matter of acklowleging this and writing down:
 
@@ -209,10 +209,11 @@ Having a type-level domain language always pays off. DDD *aficionados*
 would call this *Ubiquitous Language*. I call it *Type-Driven
 Domain-Modelling*. Each to their own.
 
-Should I ever manage to design my personal language, I would surely
-*not* include any `if` statement. Instead, I would make my best to
-have a pattern matching machinery as convenient as `if`. But don't
-hold your breath: I cannot even write a proper parser yet.
+Should I ever manage to design my personal programming language, I
+would surely *not* include any `if` statement. Instead, I would make
+my best to have a pattern matching machinery as convenient as
+`if`. But don't hold your breath: I cannot even write a proper parser
+yet. ArialdoLang is unlikely to see the light anytime soon.
 
 # Mathematical treatment
 If you are intollerant to hair-splitting posts, you can safely stop
