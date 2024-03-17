@@ -220,10 +220,11 @@ If you are intollerant to hair-splitting posts, you can safely stop
 here. Instead, if you want to be inspired by mathematical and
 phylosophical arguments, go read [Boolean Blindness][robert-harper] by
 Robert Harper.  
-Amongst the interesting arguments he brings there is the following: booleans are oftern confused with logical propositions, but this is an
-error. Propositions express assertions, make claims; booleans do not.
+Amongst the interesting arguments he brings there is the following: booleans are ofter confused with logical propositions, but this is an
+error. Propositions express assertions, they make claims; booleans do
+not, they just are. The former are computed, the latter are not.
 
-An interring argument Robert Harper brings is: the innocent `equals`
+An intriguing argument Robert Harper brings is: the innocent `equals`
 function:
 
 ```
@@ -235,18 +236,19 @@ opens a Pandora box with very profound (philosophical) consequences.
 Here's the catch: are you ready to bet that if 2 things are marked as
 *not equal* by that function are in fact *not equal*?
 
-The problem arises from the following observation: provided that 2
-*functions* (propositions) are equal, in many programming languages it
-is way tougher to prove that, compared to how easy it is to prove that
-two *values* are equal. Take the following:
+The problem arises from the following observation. Compared to
+equality of values, equality of functions is way more
+complicated. Provided that 2 *functions* (2 propositions) are equal,
+in many programming languages it is almost impossible to prove that
+they are equal. Take the following:
 
 ```csharp
 bool Or1(bool a, bool b) => a || b;
 bool Or2(bool a, bool b) => b || a;
 ```
 
-`equals` fails to prove they are equal, but in fact they are. The same
-would happen for logic statements such as:
+`equals` fails to prove they express the same. The same would happen
+for logic statements such as:
 
 ```
 Proposition 1: "All humans are mortal."
@@ -268,14 +270,16 @@ As Rober Harper notices:
 > (assertion), whereas the latter is a Boolean (data value); 
 > they are of different type.
 
-But this is, really, philosophy.  
+But this is, in fact, (beautiful) philosophy.
+
 If you want to keep your feet on the ground, please: next time you
 happen to be in front of a yes/no, true/false, here/there, this/that
 situation, try to model it with a type.
 
-Feel free to insult me via email if this does not work: I will not
+Feel free to [insult me](/about) if this does not work: I will not
 complain.
 
+Happy programming!
 
 # References
 * [Dan Licata][dan-licata]
