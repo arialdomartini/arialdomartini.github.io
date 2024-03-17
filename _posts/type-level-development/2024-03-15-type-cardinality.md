@@ -12,7 +12,7 @@ I refuse to see the tension between theory and practice.
 I love the sentence:
 
 > In theory there is no difference between theory and practice.  
-> In practice there is
+> In practice there is.
 
 It is very, very funny, I love to cite it when I can. But I cannot
 help but think it is false &mdash; I will write about this, some time.
