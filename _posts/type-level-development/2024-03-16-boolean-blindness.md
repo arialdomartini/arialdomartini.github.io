@@ -15,7 +15,9 @@ Or: booleans can be very ambiguous without context, as in:
 >
 > and the Prolog programmer says: "Yes". 
 
-<!--more-->
+<!--more--> (if you like this kind of jokes, follow [Raphael Borun Das
+Gupta](https://chaos.social/@das_g/112111361550080644)'s suggestion
+and check Sydney Padua's [Mr. Boole Comes to Tea][mr-boole] out!)
 ## Booleans carry no information beyond their value
 Consider this C# function:
 
@@ -280,9 +282,11 @@ complain.
 * [Luzkan - Uncommunicative Name][uncommunicative-name]
 * [Luzkan - Magic Number][magic-number]
 * [Robert Harper - Boolean Blindness][robert-harper]
+* [Sydney Padua - Mr. Boole Comes To Tea][mr-boole]
 
 [luzkan]: https://luzkan.github.io/smells/boolean-blindness
 [uncommunicative-name]: https://luzkan.github.io/smells/uncommunicative-name
 [magic-number]: https://luzkan.github.io/smells/magic-number
 [robert-harper]: https://existentialtype.wordpress.com/2011/03/15/boolean-blindness/
 [dan-licata]: https://dlicata.wescreates.wesleyan.edu/
+[mr-boole]: https://sydneypadua.com/2dgoggles/uncategorized/happy-200th-birthday-george-boole/
