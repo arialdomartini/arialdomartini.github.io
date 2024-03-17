@@ -109,8 +109,8 @@ decimal CalculateTotal(
 Which meaning those `bool` values have is absolutely arbitrary, at the
 complete discretion of the implementor, and totally opaque to its
 clients. There is no *good* or *bad* choice. It is just an ambiguity,
-often clarified with comments, conventions or conventional variable
-names. Or left there to our damage.
+often clarified with comments, conventions or diligently selected
+variable names. Or left there to our damage.
 
 Here are the same signatures, with an attempt to clarify the ambiguity
 at the type level:
