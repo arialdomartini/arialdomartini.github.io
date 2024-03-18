@@ -1,4 +1,3 @@
-# top level stuff you probably don't need to touch
 highlighter: rouge
 permalink: /:title.html
 paginate: 5
@@ -8,7 +7,6 @@ safe: true
 
 excerpt_separator: <!--more-->
 
-# edit here to achieve your personal greatness
 url: http://arialdomartini.github.io/
 baseurl: /
 title: Arialdo on Code
@@ -20,7 +18,7 @@ github: arialdomartini
 mastodon: https://mastodon.online/@arialdo
 linkedin: https://it.linkedin.com/in/arialdomartini
 stackoverflow: /users/202443/arialdo-martini
-#Comment out if you don't want disqus 
+
 #disqus: arialdomartini-github-io
 analytics:
   provider: "google-gtag"
