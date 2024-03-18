@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Emacs: Let's surround! - Promtp the user for inputs"
+title: "Emacs: Let's surround! - Prompt the user for inputs"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - Emacs
@@ -9,7 +9,9 @@ tags:
 In the [previous installment](emacs-surround) we learnt how to
 surround a region with hard-coded `<<<` and `>>>`. Let's learn now how
 to interactively ask arguments to the user and to go beyond hard-coded
-delimiters.  <!--more-->
+delimiters.
+
+<!--more-->
 
 Here's the last version we got:
 
