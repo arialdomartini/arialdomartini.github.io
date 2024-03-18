@@ -682,7 +682,10 @@ more interesting, steps:
   let Emacs guess it?
   
 
-These are topics for the next installments.
+These are topics I would like to eventually cover in the future.
+
+Jump to [Emacs: Let's surround! - Beyond Hard-coded
+Values](/emacs-surround-2).
 
 # References
 
