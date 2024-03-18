@@ -1,12 +1,16 @@
 ---
 layout: post
-title: "Emacs: Let's surround! - Beyond Hard-coded Values"
+title: "Emacs: Let's surround! - Promtp the user for inputs"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
-include_in_index: false
 tags:
 - Emacs
 - Lisp
 ---
+In the [previous installment](emacs-surround) we learnt how to
+surround a region with hard-coded `<<<` and `>>>`. Let's learn now how
+to interactively ask arguments to the user and to go beyond hard-coded
+delimiters.  <!--more-->
+
 Here's the last version we got:
 
 ```emacs-lisp
@@ -27,9 +31,15 @@ Here's the last version we got:
 	(insert closing-delimiter)))))
 ```
 
-Making the delimiters parametric is a matter of extracting a function.
-That it, to promote the `opening-delimiter` and `closing-delimiter`
-let binding to lambda or function paramters:
+As you see, the 2 delimiters are already variables. Making our
+function parametric is a matter of promoting `opening-delimiter` and
+`closing-delimiter` from let binding to function paramters. Let's
+split the function in 2:
+
+* an lower-level function, receiving `opening-delimiter` and
+`closing-delimiter` as parameters.
+* an entry point that, for now, will continue using the hard-coded
+  "<<<" and ">>>".
 
 ```emacs-lisp
 (defun surround-region--surround (opening-delimiter closing-delimiter)
@@ -52,32 +62,36 @@ let binding to lambda or function paramters:
   (surround-region--surround "<<<" ">>>"))
 ```
 
-Now we can focus on removing the hard-coded values from
+`surround-region--surround` could easily be a nested lambda. Notice
+the double `--`: by convention, it means the function should be
+considered private.
+
+We can finally focus on removing the hard-coded values from
 `surround-region-with-hard-coded-strings`.
 
 # Asking interactively to the user
-There are several ways to ask inputs to a user, interactively. The
+There are several ways to ask input to the user, interactively. The
 conventional way revolves around using `(interactive)`.
 
 You have surely notice that `interactive` is invoked at the very
-beginning of our function. As a matter of facts, it must be called to
-specify that the function can be called interactively, either via
-`M-x` or via a keybinding (in Emacs lingo: that it is a command, not
-will not be able to find `surround-region-with-hard-coded-strings`
-just a function). Try yourself to remove the call to `interactive`: you
-will not ble able anymore to find the function from`M-x`. You will still be able to
-invoke it from Lisp, though.
+beginning of our function. It is called to specify that the function
+can be invoked interactively, either via `M-x` or via a keybinding. In
+Emacs lingo, we say that it is a *command*. Try yourself to remove the
+call to `interactive`: you will not ble able anymore to find the
+function in the completion command list displayed with `M-x`. You will
+still be able to invoke it from Lisp, of course.
 
 Also notice that `surround-region--surround` is not defined as
 interactive: since it is invoked from
 `surround-region-with-hard-coded-strings`, which is interactive, Emacs
 will not complain. It's like interactivity is propagated in a call
-chain: commands can always invoke functions.
+chain: indeed, commands can always invoke functions.
 
+## Passing `interactive` a string
 What is of particular interest for our case is how `interactive` can
 be used to ask the user for some inputs, interactively. You can learn
-how reading the the chapter [using `interactive`][interactive] in the
-manual.
+how reading the chapter [using `interactive`][interactive] of the
+Emacs manual. Here I am providing just the basic.
 
 If a command has no parameters, just invoke `interactive`:
 
@@ -88,12 +102,12 @@ If a command has no parameters, just invoke `interactive`:
 ```
 
 If a command takes a parameter, you have to inform `interactive` so
-that it will take care of getting it from the user and pass it to the
-command. `interactive` takes a string with 2 elements:
+that it will take care of getting the argument from the user and pass
+it to the command. `interactive` takes a string with 2 elements:
 
-* A code, specifying the type of expected parameter (a string, a
+* A code, specifying the type of expected parameter (e.g., a string, a
   number, a buffer, a file name).
-* A string prompt to be interactively shown to the user.
+* A string prompt to be displayed to the user.
 
 As for the code, there are many, documented in the chapter
 [interactive codes][interactive-codes]. Let's make an example using
@@ -115,7 +129,22 @@ Try it. The value will be passed as the `name` argument.
 
 If your command has multiple parameters, you will need to provide a
 multiline string argument to `interactive`, one line per each
-parameter, using `\\n` as a separator.
+parameter, using `\n` as a separator. Here's an example:
+
+```emacs-lisp
+(defun repeat-sentence (sentence n)
+  (interactive "MSentence: \nnNumber: ")
+  (dotimes (_ n)
+    (insert sentence)))
+```
+
+By the way: if you want to insert a newline while interactively
+inputing a value, type `C-q C-j`:
+
+* `C-q (quoted-insert)` reads the next input character and inserts it.
+* `C-j (electric-newline-and-maybe-indent)` which has the same effect
+  of a newline.
+
 
 There are several other parameter types supported out-of-the-box. For
 example, the following (useless and redundant) command lets you switch
@@ -149,21 +178,22 @@ The last point is important. Let's investigate on the source code of
           (unless switch-to-buffer-obey-display-actions
              [...]
      (list (read-buffer-to-switch "Switch to buffer: ") nil force-same-window)))
-
+```
 
 There are 2 very interesting things to notice.  
 First, when the function is invoked from Lisp, provided
 with the needed parameters, the `interactive` part is not invoked.
-This makes sense, otherwise we could not invoke a command from another
-command.
+This makes sense, otherwise nested interactive questions would be very
+unconvenient. So, a command can be invoked as a function.
 
-Second, and more imporant: you probably noticed that `interactive` in
-`switch-to-buffer` is not getting a multiline string but a list.  
+Second, and more imporant for our case: you probably noticed that
+`interactive` in `switch-to-buffer` is not getting a multiline string,
+as we described before, but a list.  
 Indeed, this is another, and more powerful, way to define interactive
 aguments. Let's explore this.
 
 ## Passing `interactive` a list
-Read the following and try to guess what it returns:
+Read the following and try to guess which values will be used as arguments::
 
 ```emacs-lisp
 (defun a-2-parameter-command (name second-name)
@@ -178,8 +208,8 @@ the user.
 How can this be possibly useful?
 
 The fact is, the list can be the result of another, arbitrary
-function, including an arbitrary  interactive command. Try this, for
-example:
+function, including an interactive command. Enter a new command:
+`completing-read`. Try the following:
 
 ```emacs-lisp
 (completing-read
@@ -205,7 +235,7 @@ value pairs such as:
    ("Generation Alpha" "hey, alpha!")))
 ```
 
-Unfortunately, this still returns the string, not the number.
+Unfortunately, this still returns the key, not the value.
 Here's a modified version doing the trick:
 
 ```emacs-lisp
@@ -323,11 +353,13 @@ There is so much more to do:
 * The list could propose the last used choice by default.
 * Or even better, we could like to have a history and to persist it.
 * The suggested delimiters could be context dependent (e.g., it does not make sense to suggest a markdown delimiter when working in Python).
+* Do we really need to develop this from the scratch? Of course no!
+  There are off-the-shelf packages doing this (and much more). But
+  learning is fun, isn't it?
 
-So far so good. We will see this one of the next days.
-
-
-
+So far so good. We will keep exploring this topic one of the next
+days.  
+Bye!
 
 # References
 * Emacs manual
