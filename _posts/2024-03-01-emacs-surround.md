@@ -3,8 +3,8 @@ layout: post
 title: "Emacs: Let's surround!"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
-- Emacs
-- Lisp
+- emacs
+- lisp
 ---
 1. Select a region.
 2. Let Emacs surround it with custom delimiters.

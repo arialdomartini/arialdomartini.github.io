@@ -2,7 +2,7 @@
   <div class="container">
     <div class="navbar-header">
       <a class="navbar-brand" href="/"><i class="fa fa-home"></i></a>
-      <a class="navbar-brand" href="/atom"><i class="fa fa-rss"></i></a>
+      <a class="navbar-brand" href="/feed.xml"><i class="fa fa-rss"></i></a>
     </div>
     <div id="navbar">
       <ul class="nav navbar-nav navbar-right">
@@ -12,7 +12,4 @@
       </ul>
     </div>
   </div>
-  {% if site.tags != "" %}
-     {% include collect-tags.html %}
-  {% endif %}
 </nav>

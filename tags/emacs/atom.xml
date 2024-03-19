@@ -1,6 +1,0 @@
----
-layout: atom
----
-{% for post in site.tags["Emacs"] %}
-  {% include feed-detail.xml %}
-{% endfor %}

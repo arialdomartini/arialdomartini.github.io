@@ -3,8 +3,8 @@ layout: post
 title: "Emacs: Let's surround! - Prompt the user for inputs"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
-- Emacs
-- Lisp
+- emacs
+- lisp
 ---
 In the [previous installment](emacs-surround) we learnt how to
 surround a region with hard-coded `<<<` and `>>>`. Let's learn now how

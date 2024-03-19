@@ -1,9 +1,14 @@
 highlighter: rouge
 permalink: /:title.html
 paginate: 5
-gems: [jekyll-paginate]
+plugins:
+  - jekyll-paginate
+  - jekyll-feed
 port: 4000
 safe: true
+
+feed:
+  tags: true
 
 excerpt_separator: <!--more-->
 
@@ -19,7 +24,6 @@ mastodon: https://mastodon.online/@arialdo
 linkedin: https://it.linkedin.com/in/arialdomartini
 stackoverflow: /users/202443/arialdo-martini
 
-#disqus: arialdomartini-github-io
 analytics:
   provider: "google-gtag"
   google:

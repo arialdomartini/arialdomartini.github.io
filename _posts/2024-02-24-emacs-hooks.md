@@ -3,8 +3,8 @@ layout: post
 title: "Emacs: how to activate the functionality X for all files of type Y?"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
-- Emacs
-- Lisp
+- emacs
+- lisp
 ---
 -   When a file of type Y is opened, Emacs sets a specific major mode.
 -   Each major mode is equipped with a hook, a variable holding a list of functions.
