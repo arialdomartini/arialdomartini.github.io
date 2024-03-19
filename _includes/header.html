@@ -12,4 +12,7 @@
       </ul>
     </div>
   </div>
+  {% if site.tags != "" %}
+     {% include collect-tags.html %}
+  {% endif %}
 </nav>
