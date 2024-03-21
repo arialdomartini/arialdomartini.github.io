@@ -7,16 +7,16 @@ tags:
 - emacs
 - lisp
 ---
-<!--more--> Rings &mdash; fixed sized variables acting as a circular
-buffers &mdash; are a beautiful idea: one day I would like to write
+<!--more--> Rings &mdash; fixed sized variables acting as circular
+buffers &mdash; are a beautiful idea: one day I will eventually write
 something about how undoing changes is handled in Emacs with the
 [undo-ring][undo]. I find outrageous that other editors have not
-follow the same idea.
+followed the same idea.
 
 The mark ring it self is an amazingly simple idea: it is just a
-variable storing positions. Around it there are of course functions
-for pushing and pulling data, for browsing the stored positions, and
-whole packages. But the foundation is just that: a variable.  
+variable storing positions. Around it, there are of course functions
+for pushing and pulling data, functions for browsing the stored
+positions, packages for making all of this even more convenient and the like. But the foundation is just that: a variable.  
 While I'm writing this post, the content of my `mark-ring` is:
 
 ```emacs-lisp
@@ -42,29 +42,26 @@ M-x describe-variable <RET> mark-ring <RET>
  #<marker at 904 in 2024-03-17-emacs-navigate-back.md>)
 ```
 
-As you see, it is just a list of positions, together with a reference
-to the buffer name.  
+As you see, it is just a list of objects referencing a buffer and
+a position.  
 The mark ring is used as a storage for the historical values of
 marks. Marks, on their side, are positions that you intentionally
-asked Emacs to keep a memory of, or that Emacs, before some
-operations, decided to mark.  
-There is always a *current* mark, which you can inspect evaluating
+asked Emacs to keep a memory of &mdash; or that Emacs, before some
+operations, decided to mark on its initiative.  
+There is a notion of the *current* mark, which you can inspect evaluating
 `(mark)`. Whenever the mark changes, its old value is pushed in the
-mark ring.
+mark ring.  
+If your head already spins, don't despair. It's easier than it
+seems. Think of Git.
 
 ## Like Git
 I find the relation between the cursor, the mark and the mark ring
 similar to what happens with Git with the worktree, the index and the
-repository, and which is wonderfully represented in this interactive
-[Git Cheatsheet][git-cheatsheet]. For Emacs we have:
+repository. This is wonderfully represented in this interactive
+[Git Cheatsheet][git-cheatsheet]. For Emacs we have something similar
+(and way simpler):
 
-
-(point)      <-  (mark)    <-     mark-ring
-where your     position     historical collection
-cursor it     you marked     of previous versions
-
-
-![Change me](static/img/mark-ring.svg "No title")
+![Change me](static/img/emacs/mark-ring/mark-ring.svg "No title")
 
 
 ## Just Going Back
@@ -86,12 +83,14 @@ Here is the basic usage:
   previous a value in the mark ring, in fact creating a history of
   positions.
 * If `C-SPC` saves a position, it should not come as a surprise that
-  prefixing it with `C-u` reverses the behavior. That's a common
-  pattern in Emacs.
+  prefixing it with `C-u` reverses the behavior. After all, that's a
+  common pattern in Emacs.
 * Indeed: whenever you want to move back to the previous position,
   hit `C-u C-SPC`. Your cursor will be moved where the mark is, and
   the previous position will be popped out from the mark ring. In
   other words, with `C-u C-SPC` you will be consuming the position history.
+
+Follow the diagram. It's really easier done than said.
 
 `C-u C-SPC` acts like VisualStudio's and IntelliJ's `Ctrl -` with a
 big difference: with VS and Idea, it is not that clear *when* new
@@ -119,7 +118,7 @@ of the content you would jump to.
 Do this experiment:
 
 - Open a large file.
-- Move around, and from time to time hit `C-<SPC> C-<SPC>` wherever
+- Move around, and from time to time hit `C-SPC C-SPC` wherever
   you want to leave a breadcrumb.
 - When you have enough of this, run `M-x consult-mark`.
 - Try to move up and down, back and forth the history.
@@ -144,21 +143,12 @@ interesting things you can do.
 End your multi-cursors session with `C-g`.
 
 
-## It's a ring
-If you are more curious about how things *work* than about how to
-*use* them (and it's likely, if you spend time tinkering with Emacs)
-you might wonder: what does happen to the `mark-ring` variable when a
-value is pulled out of it? Is the `mark-ring` like a stack, that is
-progressively consumed as values are popped-out of it?
-
-Let's discover:
-
-## Region
-So, `set-mark-command (C-SPC)` is the way to save a position. Is that
-all?  
+## Setting the mark elsewhere
+So, `set-mark-command (C-SPC)` is the way to manually set a mark
+exactly where the cursor is. Is that all?  
 Of course not. There are many other functions that help setting the
-mark to specific positions, for example after a word, at the end of
-the page or at the end of a function.
+mark to other specific positions, for example after a word, at the end
+of the page or at the end of a function.
 
 In most of the applications, though, the mark is set for other reasons
 than just keeping a history of positions. In fact, in Emacs the mark
@@ -166,26 +156,30 @@ is the foundation for defining a region, that is, for selecting
 text. In a sense, this ability to move back to previous positions is a
 byproduct of handling the region.
 
-In the majority of editors, the *region*, or the *selection*, is a
+## The Region
+In the majority of editors, the *region*, or the *selection*, is the
 part of text that is temporarily highlighted, usually by the means of
 the mouse or using the arrows plus the Shift key.  
-In Emacs the region is way more powerfull. As it often happens, this
-greater powerfulness comes from simpler foundations: the region is
-just the part of buffer between the mark and the cursor.
+In Emacs the region is way more powerful. As it often happens, this
+greater powers come from simpler foundations. Indeed, in Emacs the
+region is a trivial notion: it is just the part of buffer between the
+mark and the cursor.
 
-Why do I say this is more powerful? Think how to do the following with
-an editor other than Emacs or Vim. Start selecting and then:
+Why do I say this is more powerful? Think how to do the following
+tasks with an editor other than Emacs or Vim. Start selecting some
+text, then:
 
 * Use any of the editor's search capabilities to find where to end the
   selection.
 * Consult another file while you are selecting.
-* Move the focus to another application and expect to find the selection
-  where you left it when you are back.
+* Move the focus to another application, get back to your editor and
+  expect to find the selection where you left it.
 * Complete the selection. Then, change idea where the selection
-  starts.
+  should start.
 
-If the other editors had to copy *one* functionality from Emacs, this
-should be it, hands down.
+Those are all trivial tasks with Emacs. Possibly, just no possible
+with other editrs. If the other editors had to copy *one*
+functionality from Emacs, it should be this, hands down.
 
 Getting back to those commands that somehow save a position in the
 mark: given what we said about the region, it should come with no
@@ -197,73 +191,25 @@ You can find a more complete list in the chapter [Marking
 Objects][marking-objects].
 
 Knowing that *selecting* is about setting the the mark &mdash; so also
-about pushing a the current value in the history &mdash; gives you the
+about pushing the current value in the history &mdash; gives you the
 opportunity to perform some smart moves. For example:
 
 * Select the current function / paragraph with `mark-defun (C-M-h)`.
 * Notice that the cursor ended up being at the beginning of the
   function. The selection ends where the function ends.
 * Use `C-u C-SPC` to move to the function end.
+* Press `C-x C-x` multiple times: you will keep jumping between the
+  beginning and the end of the function.
+  
+If you're not lacking creativity, you'll eventually come up with a thousand clever uses for this feature.
 
-## Mark is set by Emacs
-The functions for [Marking Objects][marking-objects] have the main
-goal of selecting text. One may wonder if there are similar functions
-that only move the cursor and keep a breacrumb in the mark ring,
-*without* activating the region. And in fact there are.
-
-Indeed, some functions that move the cursor also push the previous
-cursor position in the mark ring, so you can either
-
-* Jump back to the previous position.
-* Operate on the freshly defined region.
-
-The first is straighforward to understand. If those functions store in
-the history, if can move back. That's only logic.  
-Do this little experiment. Imagine you have some text:
-
-```haskell
-module HelloWorld
-
-*POINT*
-
--- Haskell is too hard for me.
--- I'm copy-pasting even the Hello World.
-```
-
-Do paste some text:
-
-```haskell
-module HelloWorld
-
-*MARK*
-
-main :: IO ()
-main = putStrLn "Hello, World!"
-
-*POINT*
-
--- Haskell is too hard for me.
--- I'm copy-pasting even the Hello World.
-```
-
-Notice that after pasting the code, the cursor moved forward (of
-course!) while the previous position of the cursor has been
-marked. That's convenience for free: it gives you the possibility to
-press `C-u C-SPC` to move back.
-
-Another little experiment: paste again some text, then  press `C-x
-C-x`. `C-x C-x` runs the command `exchange-point-and-mark`: `*POINT*`
-and `*MARK*` will be swapped. You will notice that doing this *also
-activates the region*: that is, the text you just pasted will be
-selected.
-
-### Invisible Region
+## Invisible Region
 It might not be immediately clear, but when you pasted the text, it
 was *already* selected, although the selection was not
 highlighted. Emacs has got a very peculiar way of managing the
 selected text (the *region*): no matter if highlighted and visible,
-the region is always there. It is the part of text between the current
-cursor position and the most recent mark.
+the region is always there. As we said, it is the part of text between
+the current cursor position and the most recent mark.
 
 This allows you to do tricks such as the following. Imagine you have
 the point here:
@@ -312,29 +258,32 @@ more details there.
 Here are some questions you might legimately ask yourself:
 
 * Can I mark a position in a dired buffer? 
-* Can I mark a commit in the Git tree with Magit?
-* A position in vterm while in vterm-copy-mode?
+* Can I mark a commit in the Magit's Git log buffer?
+* What about marking a position in vterm while in vterm-copy-mode?
 * Emacs can open PDF and PNG files: can I mark them?
 
-Guess what? It's a full house of "yes". Of course you can! Everything
-in Emacs is a text, everything lives a buffer. Why wouldn't you be
-able to?
+Guess what? It's a full house of "yes! yes! yes!". Of course you can!
+Everything in Emacs is a text, everything lives a buffer. Why wouldn't
+you be able to?
 
 This is, to me, the beauty of Emacs. It's not the amount of plugins
-([VS Code has 57202 extensions][vscode], So what?). It's not its
-alleged Operating System nature.  
-To me, the reason why Emacs stands out as an engineering product is
-that it is built on top of *few* core building blocks, just a handful
-of *simple* notions that marvelously build upon each other
-consistently, seemlessly, elegantly, creating a cohesive structure.
+([VS Code has 57202 extensions][vscode], so what?). It's not its
+alleged Operating System nature. To me, the reason why Emacs stands
+out as an engineering product is that it is built on top of *few* core
+building blocks, just a handful of *simple* notions that marvelously
+build upon each other consistently, seemlessly, elegantly, creating a
+cohesive structure.
+
+
+### Note to myself: good things in life are temporary
 
 Here's a last question.
 
-* What if I mark a position and then I kill the buffer? Will Emacs
-  resurrect it when jumping back?
+* What if I mark a position and then I kill the buffer? Will Emacs resurrect it when jumping back?
 
 And here, for once, the answer is "no". Marks are really meant to be
-volatile. But don't despair: there are other means to do this.
+volatile.  
+But don't despair: there are other means to do this.
 
 
 ### Other Cases
@@ -361,15 +310,18 @@ source code:
   "The list of former marks of the current buffer, most recent first.")
 ```
 
-By default, it keeps the last `16` positions. But you can customize
-this setting `mark-ring-max`.
+By default, `mark-ring` keeps the last `16` positions. But you can
+customize this setting `mark-ring-max`.
 
 As we just mentioned, there is also a global mark ring version, not
 surprisingly called `global-mark-ring`. Its maximum size is defined,
 guess what?, with `global-mark-ring-max`.
 
-A legit question is: how to feed this global mark ring? When a mark is
-pushed locally, is this also reflected in the global mark ring?
+A couple of legit questions are:
+
+* Is it possible to feed this global mark ring? 
+* When a mark is pushed locally, is this also reflected in the global
+mark ring?
 
 The answer is [jein][jein]! As usual, the manual is exhaustive:
 
@@ -380,15 +332,44 @@ The answer is [jein][jein]! As usual, the manual is exhaustive:
 > Hence, the global mark ring records a sequence of buffers that you
 > have been in, and, for each buffer, a place where you set the mark
 
-To make it simple: as a modern Hansel, Emacs keeps dropping off
-a breadcrumb every time you ask it so; and every time you happen to be
-on a different path, if you mark the new trail, it will lay done a
-white stone, a special mark you can follow to see track down your
-journey from a higher level.
+To make it simple: as a modern Hansel & Gretel, Emacs keeps
+dropping off a breadcrumb every time you ask it so; and every time you
+happen to be on a different path, if you mark the new trail, it will
+lay done a white stone, a special mark you can follow to track down
+your journey from a bird's-eye perspective:
 
 | global marks | ⏺       |   |   | ⏺       |   |   |   | ⏺       |   |   |
 | local marks  | ○       | ○ | ○ | ○       | ○ | ○ | ○ | ○       | ○ | ○ |
 | buffer       | **`A`** |   |   | **`B`** |   |   |   | **`C`** |   |   |
+
+## A bit of Lisp
+If you are curious about how things *work* more than about how to
+*use* them (and it's likely, if you spend time tinkering with Emacs)
+you might wonder: what does happen to the `mark-ring` variable when a
+value is pulled out of it? Is the `mark-ring` like a stack, that is
+progressively consumed as values are popped-out of it? 
+
+You could display the point, the mark and the mark ring value with something like:
+
+```emacs-lisp
+(defun display-mark ()
+  (interactive)
+  (message "%s -> %s -> %s" (point) (mark) (mark-ring-positions)))
+
+(defun mark-ring-positions ()
+  (mapcar
+   (lambda (item)
+     (marker-position item))
+   mark-ring))
+   
+(keymap-set global-map "C-c c" 'display-mark)
+```
+
+Just hit `C-c c`. You will find that the mark ring is really a
+circular structure. When you pop a value out of it, you are not really
+consuming it: the ring will rotate so, as long as you don't exceed
+`mark-ring-max` values, you will never loose information.
+
 
 ## What's next?
 Fantasizing how to improve the mark and its rings one could dream of
@@ -401,7 +382,9 @@ some extra-functionalities:
 * Now I come to think of it: *everything* is a text in Emacs? Why not
   to store keyboard macros in a history?
 
-Wouldn't be nice to have all of this? Enter Registers!
+Wouldn't it be cool to have all of these features?  
+Enter Registers!
+
 
 # References
 * [consult.el][consult]
