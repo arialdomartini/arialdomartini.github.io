@@ -66,7 +66,8 @@ repository. This is wonderfully represented in this interactive
 
 
 ## Just Going Back
-So you have a history of marked position. The basic idea is: 
+So you have variable to store a history of marked position. The basic
+idea is:
 
 * You store a position for future use.
 * You move around.
