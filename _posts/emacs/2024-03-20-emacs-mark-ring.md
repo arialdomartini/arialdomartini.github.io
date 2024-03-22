@@ -2,16 +2,16 @@
 layout: post
 title: "Emacs: Mark Ring"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
-include_in_index: false
 tags:
 - emacs
 - lisp
 ---
-<!--more--> Rings &mdash; fixed sized variables acting as circular
+Rings &mdash; fixed sized variables acting as circular
 buffers &mdash; are a beautiful idea: one day I will eventually write
 something about how undoing changes is handled in Emacs with the
 [undo-ring][undo]. I find outrageous that other editors have not
 followed the same idea.
+<!--more-->
 
 The mark ring itself is an amazingly simple idea: it is just a
 variable storing buffer positions. Around it, there are of course
@@ -389,6 +389,7 @@ some extra-functionalities:
 Wouldn't it be cool to have all of these features?  
 Enter Registers!
 
+(Thanks to [Protesilaos][prot] for the kind review).
 
 # References
 * [consult.el][consult]
@@ -401,6 +402,8 @@ Enter Registers!
 * [Daniel Mendler - GitHub][minad]
 * [German with Nicole - Jein][jein]
 * [Visual Studio Marketplace - Extensions for Visual Studio Code][vscode]
+* [Protesilaos Stavrou][prot]
+
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/29)
@@ -417,3 +420,4 @@ Enter Registers!
 [minad]: https://github.com/minad
 [jein]: https://www.germanwithnicole.com/blog/36225-jein-ja-nein
 [vscode]: https://marketplace.visualstudio.com/search?target=VSCode&category=All%20categories&sortBy=Installs
+[prot]: https://protesilaos.com/coach/
