@@ -13,10 +13,11 @@ something about how undoing changes is handled in Emacs with the
 [undo-ring][undo]. I find outrageous that other editors have not
 followed the same idea.
 
-The mark ring it self is an amazingly simple idea: it is just a
-variable storing positions. Around it, there are of course functions
-for pushing and pulling data, functions for browsing the stored
-positions, packages for making all of this even more convenient and the like. But the foundation is just that: a variable.  
+The mark ring itself is an amazingly simple idea: it is just a
+variable storing buffer positions. Around it, there are of course
+functions for pushing and pulling data, functions for browsing the
+stored positions, packages for making all of this even more convenient
+and the like. But the foundation is just that: a variable.  
 While I'm writing this post, the content of my `mark-ring` is:
 
 ```emacs-lisp
@@ -83,8 +84,11 @@ Here is the basic usage:
   previous a value in the mark ring, in fact creating a history of
   positions.
 * If `C-SPC` saves a position, it should not come as a surprise that
-  prefixing it with `C-u` reverses the behavior. After all, that's a
-  common pattern in Emacs.
+  prefixing it with `C-u` reverses the behavior. That's a common
+  pattern in Emacs: in general, `C-u (universal-argument)` is a way
+  for starting inputing a numeric argument to a function; for many
+  commands, as for `C-SPC`, it serves as a flag to deviate from the
+  default behaviour.
 * Indeed: whenever you want to move back to the previous position,
   hit `C-u C-SPC`. Your cursor will be moved where the mark is, and
   the previous position will be popped out from the mark ring. In
@@ -397,6 +401,10 @@ Enter Registers!
 * [Daniel Mendler - GitHub][minad]
 * [German with Nicole - Jein][jein]
 * [Visual Studio Marketplace - Extensions for Visual Studio Code][vscode]
+
+# Comments
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/29)
+
 
 [z]: https://github.com/rupa/z
 [autojump]: https://github.com/wting/autojump

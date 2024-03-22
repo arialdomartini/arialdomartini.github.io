@@ -36,7 +36,7 @@ As far as I know, Emacs offers 3 tools:
 
 | Tool      | Main characteristics                                           | When it is the best fit     |
 | **mark ring** | - buffer local and global<br/>- unnamed<br/>- both manual and automated<br/>- volatile<br/>- It's related to the region | - Quick, impromptu navigation |
-| **registers** | - global<br/>- short-named<br/>- manual<br/>- usually volatile (but can be persistent) | - Within a working session<br/>- Can store more than positions   |
+| **registers** | - global<br/>- short-named<br/>- manual<br/>- not persistent by default | - Within a working session<br/>- Can store more than positions  |
 | **bookmarks** | - named<br/>- manual<br/>- persisted                                   | - The longterm cornerstones for organizing your work environment<br/>- Can store more than positions        |
 
 In this series, we will explorer them all!
@@ -53,5 +53,4 @@ In this series, we will explorer them all!
 [z]: https://github.com/rupa/z
 [autojump]: https://github.com/wting/autojump
 [zoxide]: https://github.com/ajeetdsouza/zoxide
-
 
