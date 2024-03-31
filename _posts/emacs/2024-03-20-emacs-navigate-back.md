@@ -43,7 +43,7 @@ In this series, we will explorer them all!
 
 # Table of Contents
 * [Mark Ring](/emacs-mark-ring)
-* Registers
+* [Registers](/emacs-registers)
 * Bookmarks
 
 # References
