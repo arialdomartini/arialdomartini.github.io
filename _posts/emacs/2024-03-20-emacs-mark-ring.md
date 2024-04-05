@@ -12,6 +12,11 @@ something about how undoing changes is handled in Emacs with the
 [undo-ring][undo]. I find outrageous that other editors have not
 followed the same idea.
 <!--more-->
+# Table of Contents
+* Mark Ring
+* [Registers](/emacs-registers)
+* Bookmarks
+
 
 The mark ring itself is an amazingly simple idea: it is just a
 variable storing buffer positions. Around it, there are of course
@@ -388,9 +393,10 @@ some extra-functionalities:
   to store keyboard macros in a history?
 
 Wouldn't it be cool to have all of these features?  
-Enter Registers!
+Enter [Registers](/emacs-registers)!
 
 (Thanks to [Protesilaos][prot] for the kind review).
+
 
 # References
 * [consult.el][consult]
