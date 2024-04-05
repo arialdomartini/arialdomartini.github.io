@@ -371,7 +371,7 @@ The short, canonical answer to saving registers is to add
 you want to be persisted from one session to another:
 
 ```emacs-lisp
-(cl-pushnew 'register-alist savehist-additional-variables)
+(add-to-list 'register-alist savehist-additional-variables)
 ```
 
 Then, enable `savehist-mode` executing `(savehist-mode)`. Your
