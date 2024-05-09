@@ -7,10 +7,10 @@ tags:
 - lisp
 - fsharp
 ---
-So you want to program in F# with Emacs? I can relate, I also love
-both. Oh dear, if I love them!
+So you want to code in F# with Emacs?  
+I can relate, I also love both. Oh dear, if I love them!
 
-So, hey, presto! Let's make Emacs your next F# IDE!  <!--more-->
+So, presto! Let's make Emacs your next F# IDE!  <!--more-->
 # TD;DR
 * Install [Eglot][eglot], [fsharp-mode][fsharp-mode-melpa] and [eglot-fsharp][eglot-fsharp-melpa].
 * That's it. It is really that simple.
@@ -18,19 +18,20 @@ So, hey, presto! Let's make Emacs your next F# IDE!  <!--more-->
 ## Summary
 You need 3 components:
 
-| Package        | Purpose                                                                                        |
-|----------------|------------------------------------------------------------------------------------------------|
-| `eglot`        | The Language Server Protocol client                                                            |
-| `eglot-fsharp` | Integrates Eglot with `fsharp-mode`.<br/>It provides completion, syntax checking and the like. |
-| `fsharp-mode`  | The major mode responsible for syntax highlighting and indentation                             |
+| Package                            | Purpose                                                                                        |
+|------------------------------------|------------------------------------------------------------------------------------------------|
+| [Eglot][eglot]                     | The Language Server Protocol client                                                            |
+| [eglot-fsharp][eglot-fsharp-melpa] | Integrates Eglot with `fsharp-mode`.<br/>It provides completion, syntax checking and the like. |
+| [fsharp-mode][fsharp-mode]         | The major mode responsible for syntax highlighting and indentation                             |
 
-Optionally, you might also like:
-| Package    | Purpose                               |
-|------------|---------------------------------------|
-| `corfu.el` | It provides a pop-up for IntelliSense |
+Optionally, you might also want to have:
+
+| Package           | Purpose                               |
+|-------------------|---------------------------------------|
+| [corfu.el][corfu] | It provides a pop-up for IntelliSense |
 
 # Steps
-1. Install Eglot
+## 1. Install Eglot
 
 ```emacs-lisp
 (use-package eglot
@@ -44,6 +45,8 @@ It is not the only LSP client available. You might prefer using
 interested in an lsp-mode version, drop me a message, I will find the
 time to extend the post.
 
+### Notes
+
 An LSP client is that piece of software that communicates with the
 underlying Language Server to provide features like auto-completion
 ("IntelliSense" in the Microsoft lingo), go-to-definition,
@@ -51,21 +54,20 @@ find-references, and the like.
 
 As a client, Eglot is server agnostic, but you will need a specific
 package for glueing it with `fsharp-mode`. The integration is provided
-by `eglot-fsharp`, a separate package. We will see this in the next
+by [eglot-fsharp][eglot-fsharp-melpa], a separate package. We will see this in the next
 step.
 
-As you have imagined, LSP is based on a client-server
+As you have imagined, LSP is based on the client-server
 architecture. Therefore, an LSP client needs a corresponding running
-server.  
-As a matter of fact, a server covers one single language, so you will
-need an LSP server for F#, one for Haskell and so on.  
+server. As a matter of fact, a server covers one single language, so
+you will need an LSP server for F#, one for Haskell and so on.  
 The LSP server for F# is called [FsAutoComplete][fsautocomplete],
 which is part of the [Ionide][ionide] tool family.
 
 You can install it via `dotnet tool` or let `eglot-fsharp` do this for
 you. I will cover both approaches.
 
-2. Install `fsharp-mode`
+## 2. Install fsharp-mode
 ```emacs-lisp
 (use-package fsharp-mode
   :defer t
@@ -73,13 +75,12 @@ you. I will cover both approaches.
 ```
 `:defer t` enhances the startup speed by delaying the loading of the package until it is actually needed.
  
-`:ensure t`, instead, will conveniently download the package from the
-internet.
+`:ensure t` conveniently downloads the package from the internet.
 
 Once `fsharp-mode` is installed, you should see F# files properly
 syntax-highlighted. Indentation will also work.
 
-3. Install `eglot-fsharp`:
+## 3. Install eglot-fsharp:
 Let's connect Eglot with `fsharp-mode`:
 
 ```emacs-lisp
@@ -94,24 +95,28 @@ The hook makes sure that when `fsharp-mode` is activated, Eglot is
 also loaded.
 
 
-4. Let `eglot-fsharp `install `fsautocomplete`
+## 4. Let eglot-fsharp install fsautocomplete
 Now, you just need to install the F# Language Server.  
-Here is how you can let `eglot-fsharp` perform the installation:
+There are 2 ways to do this:
 
-* Open an F# file.
-* You will get an error: `fsautocomplete` is not installed yet, so
-  `eglot-fsharp` will complain. Ignore it for a while.
+1. Use `dotnet`.
+2. Let `eglot-fsharp` perform the installation.
+
+For the latter:
+
 * Execute `M-x eglot`.
+* When asked, select `fsharp-mode`.
 * Wait for `eglot-fsharp` to download `fsautocomplete`.
 
-`fsautocomplete` will be copied in `~/.config/emacs/FsAutoComplete/netcore`.
+`fsautocomplete` will be downloaded and saved in `~/.config/emacs/FsAutoComplete/netcore`.
 
+### Notes
 Although this is the standard procedure, I'm not super happy with it
 and I prefer a different approach. Read about it in [fsautocomplete
 installed via dotnet](#fsautocomplete-installed-via-dotnet).
 
 
-5. Optionally, enable `corfu` for enabling the IntelliSense pop-up:
+## 5. Enable the IntelliSense pop-up with corfu.el
 
 ```emacs-lisp
 (use-package corfu
@@ -139,7 +144,7 @@ installed via dotnet](#fsautocomplete-installed-via-dotnet).
     (add-to-list 'savehist-additional-variables 'corfu-history)) )
 ```
 
-6. Optionally, make corfu.el beautiful with [nerd-icons.el][nerd-icons]:
+## 6. Optionally, make corfu.el beautiful with nerd-icons
 
 ```emacs-lisp
 ;; Icons
@@ -161,12 +166,11 @@ installed via dotnet](#fsautocomplete-installed-via-dotnet).
 ```
 
 
-# fsautocomplete installed via dotnet
+# Alternative: install fsautocomplete via dotnet
 What I don't like of `eglot-fsharp` installing `fsautocomplete` is the
 following:
 
-* It requires to manually run `eglot` the first time and to ignore an
-  error. Maybe I'm pedantic, but this looks clumsy to me.
+* It requires to manually run `eglot` the first time.
 * `fsautocomplete` will not be available from the terminal.
 * Installing `fsautocomplete` with `dotnet` would download a second
   copy.
@@ -179,14 +183,15 @@ dotnet tool install --global fsautocomplete
 ```
 
 This stores `fsautocomplete.exe` in `.dotnet/tools`, which is nothing
-specific to Emacs.  
+specific to Emacs.
+
 Now, it's just a matter of instructing `eglot-fsharp` where to find
 `fsautocomplete`. Ideally, this is obtained by setting the variable
 `eglot-fsharp-server-install-dir` to
 `"~/.dotnet/tools/"`. Unfortunately, this does not work as expected,
-because of https://github.com/fsharp/emacs-fsharp-mode/issues/341.
+because of [https://github.com/fsharp/emacs-fsharp-mode/issues/341][341].
 
-A workaround [Prot][prot] helped me find is to configure
+A workaround [Protesilaos][prot] helped me find is to configure
 `eglot-fsharp` to overwrite the function
 `eglot-fsharp--path-to-server` where the path for `fsautocomplete` is
 defined:
@@ -211,13 +216,15 @@ That should make the trick.
 
 # Now what?
 Now profit!  
-I will cover in one of the next posts which functionalities are
-enabled with these packages. I also have to learn! Stay tuned!
+I will cover which functionalities are enabled with these packages in
+one of the next posts. I also have to learn!  
+Stay tuned! Happy coding.
 
 
 # References
 * [fsharp-mode][fsharp-mode]
   * [fsharp-mode-melpa][fsharp-mode-melpa]
+  * [https://github.com/fsharp/emacs-fsharp-mode/issues/341][341]
 * [eglot][eglot]
 * [][eglot-fsharp-melpa]
 * [lsp-mode][lsp-mode]
@@ -236,7 +243,8 @@ enabled with these packages. I also have to learn! Stay tuned!
 [fsharp-mode-melpa]: https://melpa.org/#/fsharp-mode
 [lsp-mode]: https://emacs-lsp.github.io/lsp-mode/
 [corfu]: https://github.com/minad/corfu
-[nerd-icons.el]: https://github.com/rainstormstudio/nerd-icons.el
+[nerd-icons]: https://github.com/rainstormstudio/nerd-icons.el
 [fsautocomplete]: https://github.com/ionide/fsautocomplete
 [fsautocomplete-nuget]: https://www.nuget.org/packages/fsautocomplete
 [ionide]: https://github.com/ionide
+[341]: https://github.com/fsharp/emacs-fsharp-mode/issues/341
