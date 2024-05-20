@@ -261,7 +261,7 @@ It means that `f` is a regular, pure function taking a value of type `A` and ret
 
 We will soon find out that this minor change throws a monkey wrench into the works of traditional function application and composition.
 
-In the next part we will implement some of those type. In defining them, we will make sure of ensuring 3 important traits:
+In the next part we will implement some of those types. In defining them, we will make sure of ensuring 3 important traits:
 
 1. that the result will be about *pure functions*, so we will get the benefits of both pure functions and controlled effects
 2. that the extra-behavior is not accidentally executed while the pure functions are being manipulated
