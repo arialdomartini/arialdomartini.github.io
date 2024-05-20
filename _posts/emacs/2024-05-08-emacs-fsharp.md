@@ -16,13 +16,14 @@ So, presto! Let's make Emacs your next F# IDE!  <!--more-->
 * That's it. It is really that simple.
 
 ## Summary
-You need 3 components:
+You need 4 components:
 
-| Package                            | Purpose                                                                                        |
-|------------------------------------|------------------------------------------------------------------------------------------------|
-| [Eglot][eglot]                     | The Language Server Protocol client                                                            |
-| [eglot-fsharp][eglot-fsharp-melpa] | Integrates Eglot with `fsharp-mode`.<br/>It provides completion, syntax checking and the like. |
-| [fsharp-mode][fsharp-mode]         | The major mode responsible for syntax highlighting and indentation                             |
+| Package                                | Purpose                                                                                        |
+|----------------------------------------|------------------------------------------------------------------------------------------------|
+| [fsautocomplete][fsautocomplete-nuget] | The F# LSP Server                                                                              |
+| [Eglot][eglot]                         | The Language Server Protocol client                                                            |
+| [eglot-fsharp][eglot-fsharp-melpa]     | Integrates Eglot with `fsharp-mode`.<br/>It provides completion, syntax checking and the like. |
+| [fsharp-mode][fsharp-mode]             | The major mode responsible for syntax highlighting and indentation                             |
 
 Optionally, you might also want to have:
 
@@ -185,46 +186,30 @@ dotnet tool install --global fsautocomplete
 This stores `fsautocomplete.exe` in `.dotnet/tools`, which is nothing
 specific to Emacs.
 
-Now, it's just a matter of instructing `eglot-fsharp` where to find
-`fsautocomplete`. Ideally, this is obtained by setting the variable
-`eglot-fsharp-server-install-dir` to
-`"~/.dotnet/tools/"`. Unfortunately, this does not work as expected,
-because of [https://github.com/fsharp/emacs-fsharp-mode/issues/341][341].
-
-A workaround [Protesilaos][prot] helped me find is to configure
-`eglot-fsharp` to overwrite the function
-`eglot-fsharp--path-to-server` where the path for `fsautocomplete` is
-defined:
+Now, it's just a matter letting `eglot-fsharp` know that it needn't
+download its own copy of `fsautocomplete`. This is simply done by
+setting the variable `eglot-fsharp-server-install-dir` to `nil`:
 
 ```emacs-lisp
 (use-package eglot-fsharp
   :ensure t
   :after fsharp-mode
   :config
-  (setq eglot-fsharp-server-install-dir "~/.dotnet/tools/")
-  (add-hook 'fsharp-mode-hook #'eglot-ensure)
-
-  ;; This fixes https://github.com/fsharp/emacs-fsharp-mode/issues/341
-
-  ;; The original function used to prefix "dotnet" to the fsautocomplete path
-  (defun eglot-fsharp--path-to-server ()
-    "Return FsAutoComplete path."
-    (file-truename (concat eglot-fsharp-server-install-dir "fsautocomplete" (if (eq system-type 'windows-nt) ".exe" "")))))
+  (setq eglot-fsharp-server-install-dir nil))
 ```
 
 That should make the trick.
 
 # Now what?
 Now profit!  
-I will cover which functionalities are enabled with these packages in
-one of the next posts. I also have to learn!  
+I will cover which extra functionalities are provided by these
+packages in one of the next posts. I also have to learn!  
 Stay tuned! Happy coding.
 
 
 # References
 * [fsharp-mode][fsharp-mode]
   * [fsharp-mode-melpa][fsharp-mode-melpa]
-  * [https://github.com/fsharp/emacs-fsharp-mode/issues/341][341]
 * [eglot][eglot]
 * [][eglot-fsharp-melpa]
 * [lsp-mode][lsp-mode]
@@ -247,4 +232,3 @@ Stay tuned! Happy coding.
 [fsautocomplete]: https://github.com/ionide/fsautocomplete
 [fsautocomplete-nuget]: https://www.nuget.org/packages/fsautocomplete
 [ionide]: https://github.com/ionide
-[341]: https://github.com/fsharp/emacs-fsharp-mode/issues/341
