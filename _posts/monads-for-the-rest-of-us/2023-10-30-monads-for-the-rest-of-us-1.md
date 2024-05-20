@@ -16,7 +16,7 @@ I don't want to waste your time repeating what you already know about the virtue
 
 Only at a first glance are those 2 assumptions contradictory. In fact, they translate to:
 
-- How can we *model* side .effects without giving up on function purity?
+- How can we *model* side effects without giving up on function purity?
 
 One of the approaches to solving this challenge is of course Monads.
 
