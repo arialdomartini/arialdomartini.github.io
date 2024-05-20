@@ -211,7 +211,7 @@ Stay tuned! Happy coding.
 * [fsharp-mode][fsharp-mode]
   * [fsharp-mode-melpa][fsharp-mode-melpa]
 * [eglot][eglot]
-* [][eglot-fsharp-melpa]
+  * [eglot-fsharp on Melpa][eglot-fsharp-melpa]
 * [lsp-mode][lsp-mode]
 * [corfu.el][corfu]
 * [nerd-icons.el][nerd-icons]
