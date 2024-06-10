@@ -4,7 +4,8 @@ title: "How to stream the cam while recording it with OBS Studio
 (Linux)"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
-- git
+- obs
+- linux
 ---
 You want both:
 
