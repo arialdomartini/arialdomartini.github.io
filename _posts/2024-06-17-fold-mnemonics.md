@@ -97,8 +97,8 @@ I hope they can help you too.
         </p>
         <p>
            <code class="highlighter-rouge">
-               foldr <span class="right">f</span> acc (x:xs) = <br/>
-               &nbsp;&nbsp;&nbsp;&nbsp;<span class="right">f</span> x (foldr f acc xs)
+               foldr <span class="right">f</span> acc (x:xs) = &nbsp;&nbsp;&nbsp;&nbsp;<br/>
+               <span class="right">f</span> x (foldr f acc xs)
           </code>
         </p>
       </td>
