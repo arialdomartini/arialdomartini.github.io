@@ -67,7 +67,7 @@ I hope they can help you too.
       </td>
     </tr>
     <tr>
-      <td>Associatity</td>
+      <td>Associativity</td>
       <td>
           <p><span class="left">Left</span></p>
           <p><tt><span class="left">(</span><span class="left">(</span><span class="left">(</span>initial ● a) ● b) ● c)</tt></p>
