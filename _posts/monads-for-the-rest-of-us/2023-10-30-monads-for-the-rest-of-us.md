@@ -31,12 +31,17 @@ I challenged myself to write a post that:
 * [Chapter 8](monads-for-the-rest-of-us-8): in which you achieve true enlightenment seeing that Functors are not boxes
 * [Chapter 9](monads-for-the-rest-of-us-9): In which you see how easy functors are, and you find inner peace
 
+Find all the code examples in
+[monads-for-the-rest-of-us][source-code].
+
 # References
 
-[Mike Vanier - Yet Another Monad Tutorial][yet-another-tutorial]
+* [Mike Vanier - Yet Another Monad Tutorial][yet-another-tutorial]
+* [Source Code][source-code]
+
 
 [yet-another-tutorial]: https://mvanier.livejournal.com/3917.html
-
+[source-code]: https://github.com/arialdomartini/monads-for-the-rest-of-us
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/26)
