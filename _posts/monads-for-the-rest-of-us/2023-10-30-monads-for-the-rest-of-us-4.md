@@ -7,6 +7,9 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
+Source code for this chapter:
+[github.com/arialdomartini/monads-for-the-rest-of-us](https://github.com/arialdomartini/monads-for-the-rest-of-us/tree/master/src/Monads.Test/Part4).
+
 ## In which you liberate C# from IO side effects
 
 Let's summarize our understanding of an IO monadic function:

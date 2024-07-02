@@ -7,8 +7,11 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
-## In which you reimplement &mdash; and finally understand! &mdash; C#'s function application
+Source code for this chapter:
+[github.com/arialdomartini/monads-for-the-rest-of-us](https://github.com/arialdomartini/monads-for-the-rest-of-us/tree/master/src/Monads.Test/Part3).
 
+
+## In which you reimplement &mdash; and finally understand! &mdash; C#'s function application
 
 We learnt that Monads revolve around using the type system to separate out extra computations (effects) from pure computations, so that they do not interfere with each other.  
 We also found out that we need to apply and compose monadic functions, and that this is not directly supported by C#.

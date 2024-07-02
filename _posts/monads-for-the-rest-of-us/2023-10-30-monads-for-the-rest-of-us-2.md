@@ -7,6 +7,10 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
+Source code for this chapter:
+[github.com/arialdomartini/monads-for-the-rest-of-us](https://github.com/arialdomartini/monads-for-the-rest-of-us/blob/master/src/Monads.Test/Part2/FunctionCompositionTest.cs).
+
+
 ## In which you sense that it's all about function composition
 
 So, we learnt that monadic functions are a way to model side effects without loosing the benefits of pure functions.  
