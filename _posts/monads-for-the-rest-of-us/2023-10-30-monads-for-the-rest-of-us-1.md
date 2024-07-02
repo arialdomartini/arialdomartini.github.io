@@ -7,6 +7,9 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
+Source code for this chapter:
+[github.com/arialdomartini/monads-for-the-rest-of-us](https://github.com/arialdomartini/monads-for-the-rest-of-us/blob/master/src/Monads.Test/Part1/PureFunctions.cs).
+
 ## In which you realize that Monads are not things
 
 I don't want to waste your time repeating what you already know about the virtue of pure functions. It should suffice starting from 2 assumptions:
@@ -56,7 +59,6 @@ Assert.Equal(Twice(2),  Codomain[2]);
 Assert.Equal(Twice(3),  Codomain[3]);
 Assert.Equal(Twice(-1), Codomain[-1]);
 ```
-[source](https://github.com/arialdomartini/monads-for-the-rest-of-us/blob/master/src/Monads.Test/Part1/PureFunctions.cs#L12)
 
 The quality that enables a function to be completely and safely replaced with its value is called Referential Transparency. That's a foundamental trait, but here I would like to stress more on signatures. Indeed, notice how the dictionary's type arguments match the function ones:
 
