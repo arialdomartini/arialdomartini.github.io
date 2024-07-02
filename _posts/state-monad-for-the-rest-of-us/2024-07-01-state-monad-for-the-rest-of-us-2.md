@@ -5,9 +5,9 @@ author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - F#
 - Functional Programming
-most_read: true
+include_in_index: false
 ---
-<!--more-->
+
 
 ```fsharp
 type Tree<'a> =
