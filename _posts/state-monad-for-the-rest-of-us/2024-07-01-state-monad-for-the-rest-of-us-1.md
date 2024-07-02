@@ -125,10 +125,8 @@ numberOfLeaves Node(l, r) = numberOfLeaves l + numberOfLeaves r
 # References
 
 * [State Monad For The Rest Of Us - source code][source-code]
-* [Arialdo Martini - Monads for the Rest of Us][monads-for-the-rest-of-us]
 
 [source-code]: https://github.com/arialdomartini/state-monad-for-the-rest-of-us
-[monads-for-the-rest-of-us]: https://arialdomartini.github.io/monads-for-the-rest-of-us
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/30)

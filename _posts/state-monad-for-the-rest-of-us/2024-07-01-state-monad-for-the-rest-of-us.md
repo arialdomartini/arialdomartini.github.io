@@ -22,6 +22,7 @@ Enjoy the journey!
 
 
 * [Chapter 1](state-monad-for-the-rest-of-us-1): in which you play with recursive types and recursive functions
+* [Chapter 2](state-monad-for-the-rest-of-us-2): in which you invent Functors
 
 # References
 
