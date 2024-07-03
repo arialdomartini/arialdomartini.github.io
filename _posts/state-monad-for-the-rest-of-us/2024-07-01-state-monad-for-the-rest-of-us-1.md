@@ -383,20 +383,21 @@ the parameter `tree` is only used to pattern match. To stress this, F#
 provides an alternative, more concise syntax, where
 
 ```fsharp
- ... tree =
+... tree =
     match tree with
 ```
 
 is replaced by:
 
 ```fsharp
- ... function =
+... function =
 ```
 
 So, our function can be made shorter, as:
 
 ```fsharp
-let rec numberOfLeaves = function
+let rec numberOfLeaves = 
+    function
     | Leaf -> 1
     | Node(l, r) -> numberOfLeaves l + numberOfLeaves r
 ```
