@@ -9,10 +9,6 @@ include_in_index: false
 ---
 Find the complete source code of this series in [github.com/arialdomartini/state-monad-for-the-rest-of-us][source-code].
 
-Notice: this is a very introductory chapter. If you are alredy fluent
-with F#, it is safe to double check that the implementation code makes
-sense to you, and then jump to the [next chapter](state-monad-for-the-rest-of-us-2).
-
 # Binary Trees
 Our journey starts with this problem: we want to count the number of
 leaves of an arbitrary Binary Tree. To keep the problem as simple as
@@ -154,11 +150,11 @@ Types, which include Sum (or Discriminated Union) Types and Product Types.
 
 | Name          | Symbol used | Equivalent technique in OOP |
 |---------------|-------------|-----------------------------|
-| Sum Types     | `|`         | Inheritances                |
+| Sum Types     | `|`         | Inheritance                 |
 | Product Types | `*`         | Multiple fieds in classes   |
 
 
-In C# this would approximately translated to:
+In C# this would approximately translate to:
 
 ```csharp
 abstract record Tree;
@@ -184,7 +180,7 @@ Our 3-leaves tree:
 can be created with:
 
 ```fsharp
-    let treeWith3Leaves = Node(Leaf, Node(Leaf, Leaf))
+let treeWith3Leaves = Node(Leaf, Node(Leaf, Leaf))
 ```
 
 This completes the test implementation:
@@ -208,9 +204,9 @@ It is important to understand that in:
 type Tree = Leaf | Node of (Tree * Tree)
 ```
 
-`Tree` is a type, `Leaf` and `Node` are not:  `Leaf` and `Node` are
+`Tree` is a type, `Leaf` and `Node` are not: `Leaf` and `Node` are
 ways for *creating* an instance of type `Tree`. This is akin to the
-difference between a class and its constructors. In F#, we would
+difference between a class and its constructors. In F#, we would call
 `Tree` and `Leaf` as follows:
 
 | Element                            | Name                     |
@@ -238,7 +234,7 @@ match* on the Case which was used to create the instance. It's like
 the instance *remembers* which constructor was used to create it. You
 can read more about it in [Pattern Matching - Identifier Patterns][pattern-matching].
 
-This give us all the ingredients to develop a function to calculate
+This give you all the ingredients to develop a function to calculate
 the number of leaves.
 
 # Implementation
@@ -251,13 +247,13 @@ let numberOfLeaves tree =
     | Node (l, r) -> ??? 
 ```
 
-Let's read it as a glorified `if/then/else` and asks ourselves:
+Read it as a glorified `if/then/else` and ask yourself:
 
 * If `numberOfLeaves` receives a tree, and that tree is a single
   `Leaf`, how many leaves does that tree have?
   
-Of course, `1`. It means we are calculating the number of leaves of
-this tree:
+Of course, `1`. It means the function is calculating the number of
+leaves of this tree:
 
 ```
    Leaf
@@ -273,8 +269,8 @@ let numberOfLeaves tree =
     | Node (l, r) -> ??? 
 ```
 
-What about if `tree` is a `Node`? We only know that a `Node` contains
-exactly `2` branches. But each branch could be a Leaf, like in:
+What about if `tree` is a `Node`? You only know that a `Node` contains
+exactly `2` branches. Each branch could be a Leaf, like in:
 
 
 ```
@@ -301,7 +297,7 @@ or it could be another arbitrarily deep tree, like in:
       Leaf  Leaf
 ```
 
-In the general cased, we can see the received tree as:
+In the general cased, you can see the received tree as:
 
 ```
      Node
@@ -309,9 +305,9 @@ In the general cased, we can see the received tree as:
   Tree  Tree
 ```
 
-This node contains as many leaves as the leaves in the the
-right branch tree, *plus* the leaves of the left branch tree.
-Literally translating this sentence, we get to:
+This node contains as many leaves as the leaves in the right branch
+tree, *plus* the leaves of the left branch tree. Literally translating
+this sentence gets to:
 
 ```fsharp
 let rec numberOfLeaves tree =
@@ -324,12 +320,12 @@ Notice that we added the keyword `rec` to the function definition, to
 make it clear that the function is recursive.
 
 Does this work? You have a test. Run it.  
-Of course it's green. As it often happens, if it compiles, it works.
-Get use d to this, it will happen over and over.
+Of course it's green. As it often happens, if it compiles it works.
+Get use to this, it will happen over and over.
 
 
 ## Putting all together
-Let's review what we obtained:
+Let's review what you obtained:
 
 ```fsharp
 type Tree =
@@ -367,8 +363,6 @@ is the (double) recursive step.
 Also notice how the results of the 2 recursive calls are *composed*
 with the binary `+` function.
 
-
-
 ## F# <3 concisiness (and Haskell loves it too)
 In:
 
@@ -403,8 +397,9 @@ let rec numberOfLeaves =
 ```
 
 A nice way to interpret this is to squeeze the eyes and imagine it's a
-combination of 2 separate functions, one on `Leaf` and one on `Node(l,
-r)`. Haskell would allow defining those 2 functions as follows:
+combination of 2 separate function definitions, one on `Leaf` and one
+on `Node(l, r)`. Haskell would allow defining those 2 functions as
+follows:
 
 
 ```haskell
@@ -412,9 +407,10 @@ numberOfLeaves Leaf       = 1
 numberOfLeaves Node(l, r) = numberOfLeaves l + numberOfLeaves r
 ```
 
-If you manage to understand this last snippet, give yourself a pat on
-the back, take a little breather, and get prepared to the next
-chapter, in which you will invent ([or discover][propositions-as-types]]) Functors.
+If you manage to understand this last snippet, *bravo*!, give yourself
+a pat on the back, take a little breather, and get prepared to the
+next chapter, in which you will invent ([or
+discover][propositions-as-types]]) Functors.
 
 Jump to [Chapter 2](state-monad-for-the-rest-of-us-2).
 
