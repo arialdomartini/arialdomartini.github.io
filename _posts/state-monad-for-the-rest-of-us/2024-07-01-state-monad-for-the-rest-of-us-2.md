@@ -634,13 +634,13 @@ to which I added a missing arrow. Here's the metaphor:
 
 This is the notion of Functors: something able to move objects and
 functions from one world / category to another &mdash; possibly richer
-&mdash; one. This is not a series on Category Theory, so we will stop
-here on this topic. It should suffice to interpret the result as
-follows:
+&mdash; one.  
+This is not a series on Category Theory, so we will stop here on this
+topic. It should suffice to interpret the result as follows:
 
 * Via the implementation of `map`, you capture the essence of
   traversing a tree and applying a function to its content.
-* This allowed your design to completely separate the domain logic
+* This allows your design to completely separate the domain logic
   (`String.length`, `countVowels`, etc) from the tree-traversing code.
 * The mental model you can use is that `map` lifts ordinary functions
   to tree-operating functions, without forcing you to re-implement the
@@ -650,6 +650,9 @@ Cool. If you managed to read this far, take a break, reward yourself
 with a well deserved delicacy, and get ready to the next chapter. You
 are going to discover the limits of Functors.
 
+Go to [Chapter 3](state-monad-for-the-rest-of-us-3).
+
+# References
 
 * [State Monad For The Rest Of Us - source code][source-code]
 * [github.com/dotnet/runtime - Signature of LINQ Select][select]
