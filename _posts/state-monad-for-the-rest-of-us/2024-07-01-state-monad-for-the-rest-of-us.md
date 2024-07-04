@@ -52,10 +52,17 @@ Here's a summary of what you will find:
 Enjoy the journey!
 
 
-* [Chapter 1](state-monad-for-the-rest-of-us-1): in which you play with recursive types and recursive functions.
-* [Chapter 2](state-monad-for-the-rest-of-us-2): in which you invent Functors.
-* [Chapter 3](state-monad-for-the-rest-of-us-3): in which you hit a brick wall.
-
+* [Chapter 1](state-monad-for-the-rest-of-us-1): in which you play
+  with recursive types and recursive functions.
+* [Chapter 2](state-monad-for-the-rest-of-us-2): in which you invent
+  Functors.
+* [Chapter 3](state-monad-for-the-rest-of-us-3): in which you hit a
+  brick wall.
+* [Chapter 4](state-monad-for-the-rest-of-us-4): in which you find an
+  existential crossroad.
+* [Chapter 5](state-monad-for-the-rest-of-us-5): in which you discover
+  that Procrastination® is The Functional Solution.
+  
 # References
 
 * [State Monad For The Rest Of Us - source code][source-code]
