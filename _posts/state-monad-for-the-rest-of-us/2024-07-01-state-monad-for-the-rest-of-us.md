@@ -44,7 +44,7 @@ Here's a summary of what you will find:
 * You repeat the exercise in a slightly different way and you invent
   Monads. 
 * It's cool, but you are not particularly proud of the syntax. So, you
-  are introduce to the Do Notation / Computation Expressions, and you
+  are introduced to the Do Notation / Computation Expressions, and you
   get the best of 2 worlds: the code is pure, yet it has an imperative
   syntax.
 
@@ -54,6 +54,7 @@ Enjoy the journey!
 
 * [Chapter 1](state-monad-for-the-rest-of-us-1): in which you play with recursive types and recursive functions.
 * [Chapter 2](state-monad-for-the-rest-of-us-2): in which you invent Functors.
+* [Chapter 3](state-monad-for-the-rest-of-us-3): in which you hit a brick wall.
 
 # References
 
