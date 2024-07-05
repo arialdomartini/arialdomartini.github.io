@@ -23,24 +23,17 @@ and builds an intuition on State Monad from the very ground up.
 ## Summary
 Here's a summary of what you will find:
 
-* First, you build a simple recursive algorythm on a
-  recursive data structure modeling a tree.
-* Trying to calculate something different on the same tree,
-  you discover a pattern: the code of the new solution code uses the
-  very same idea of the previos solution. 
-* Easy peasy, but along the way, you discover you have invented
-  Functors.
-* You realize that Functors are not boxes but function lifters, and
-  wrapping your head around them is not hard at all.
-* Armed with your best intentions, you try to solve a seemingly
-  similar problem reusing the idea of Functors, but you hit a brick
-  wall: Functors are stateless, and your problem is inherently
-  stateful.
-* You solve the problem violating Functional Programming, and the
-  result is embarassingly easy.
-* Stubbornly, you want to solve the problem in a purely functional way
-  too. You make it, but the resulting code is convoluted and will not
-  scale.
+* First, you build a simple recursive algorythm on a binary tree.
+* Trying to calculate something different on the same tree, you
+  discover a pattern and, along the way, you invent Functors.
+* You realize that Functors are not boxes but function lifters.
+* You try to solve a seemingly similar problem reusing Functors, but
+  you hit a brick wall: Functors are stateless, while your problem is
+  inherently stateful.
+* You solve the problem imperativly, and the result is embarassingly
+  easy.
+* Stubbornly, you want to solve the problem in a purely functional
+  style. You make it, but the resulting code is convoluted.
 * You try to separate the pure logic from the state management and you
   invent Applicative Functors.
 * You repeat the exercise in a slightly different way and you invent
