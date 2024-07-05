@@ -94,7 +94,6 @@ code:
 * either takes on imperative nature
 * or is set to flourish as functional.
 
-
 So, which options do you have? Try to find them out.
 
 If you want to develop a functional attitude, I recommend you not to
