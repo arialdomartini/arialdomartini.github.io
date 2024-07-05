@@ -7,7 +7,9 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
-# Building same-shape trees
+Source code: [github.com/arialdomartini/state-monad-for-the-rest-of-us][source-code].
+
+## Building same-shape trees
 If you did your homework, in the [chapter 3](state-monad-for-the-rest-of-us-3) 
 you convinced yourself that `map`:
 
@@ -39,7 +41,7 @@ let ``indexes a tree`` () =
     test <@ indexed = Node(Leaf ("one", 1), Node(Leaf ("two", 2), Leaf ("three", 3))) @>
 ```
 
-# With mutation
+## With mutation
 Let's start from the leaf branch, again:
 
 ```fsharp
@@ -78,7 +80,7 @@ let rec index =
 
 Cool. Now, you need to define `count`.
 
-# The Moment of Truth
+## The Moment of Truth
 How to define `count`?
 
 Now, reflect for a while, and ask yourself: where does `count` come
@@ -111,6 +113,5 @@ all the time you need. See you tomorrow in the [chapter 5](state-monad-for-the-r
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/30)
-
 
 [monads-for-the-rest-of-us]: https://arialdomartini.github.io/monads-for-the-rest-of-us

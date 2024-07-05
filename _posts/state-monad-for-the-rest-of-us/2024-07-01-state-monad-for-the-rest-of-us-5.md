@@ -7,6 +7,9 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
+Source code:
+[github.com/arialdomartini/state-monad-for-the-rest-of-us][source-code].
+
 Welcome back! I hope your tea (or your whiskey and cigar) inspired
 you. We left eachother in [chapter
 4](state-monad-for-the-rest-of-us-4) with an existential question: 
@@ -162,7 +165,7 @@ I would like to convince you that the 3rd option is the most
 convenient, because it better exhibit the mental metaphor of monads.
 
 
-# Learn to procrastinate
+## Learn to procrastinate
 In [Monads for the Rest of Us][monads-for-the-rest-of-us] I postulate
 that an intuitive interpretation on (some) monads is that they
 encapsulate the act of postponing an execution of some (side) effects.
@@ -526,8 +529,9 @@ promise that it will be an interesting journey!
 You need a bit of energy. So stretch your fingers, take a little rest,
 have a sorbet and then we will get going!
 
-See you in Chapter 6.
-
+See you in Chapter 6. (Writing it! If you are interested, drop me an
+[email](mailto:arialdo.martini@gmail.com) or write a
+[comment][discussions], I'm eager to hear from you!)
 
 # References
 * [Microsoft - Computation Expressions][computation-expressions]
@@ -535,7 +539,8 @@ See you in Chapter 6.
 [computation-expressions]: https://learn.microsoft.com/en-us/dotnet/fsharp/language-reference/computation-expressions
 
 # Comments
-[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/30)
+[GitHub Discussions][discussions]
 
 
 [monads-for-the-rest-of-us]: https://arialdomartini.github.io/monads-for-the-rest-of-us
+[discussions]: https://github.com/arialdomartini/arialdomartini.github.io/discussions/30

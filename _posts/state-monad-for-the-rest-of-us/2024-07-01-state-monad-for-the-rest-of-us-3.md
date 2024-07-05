@@ -7,7 +7,9 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
-# Building same-shape trees
+Source code:
+[github.com/arialdomartini/state-monad-for-the-rest-of-us][source-code].
+
 In the [previouls chapter](state-monad-for-the-rest-of-us-2) you
 distilled `map`, a function exhibiting 3 powerful features:
 
@@ -26,7 +28,7 @@ have limits to the trasformations they can produce.
 
 Let's put this statement to the test.
 
-# Index a tree
+## Index a tree
 During its execution, `map` traverses the tree. Very well: we want it
 to keep a track of the order with which it visits the leaves. That
 is, if it visits:
@@ -69,7 +71,7 @@ let ``indexes a tree`` () =
     test <@ indexed = Node(Leaf ("one", 1), Node(Leaf ("two", 2), Leaf ("three", 3))) @>
 ```
 
-# Easy peasy, if you are impure!
+## Easy peasy, if you are impure!
 If you come from an imperative language, you didn't have to think
 twice to find the solution:
 
@@ -126,7 +128,7 @@ let ``indexes a tree`` () =
     test <@ indexed = Node(Leaf ("one", 1), Node(Leaf ("two", 2), Leaf ("three", 3))) @>
 ```
 
-# Just impossible if you are not
+## Just impossible if you are not
 Now, give yourself 15 mins for a coding challenge. Try to get to the
 same green test, this time adding only one single extra constraint:
 

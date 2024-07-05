@@ -9,7 +9,7 @@ include_in_index: true
 most_read: true
 ---
 <!--more-->
-# Table of chapters
+## Table of chapters
 If you are completely new to Monads, the ticket to get you in the loop
 could be the gentle introduction of [Monads for the Rest of
 Us][monads-for-the-rest-of-us] which uses C# examples. This series,

@@ -7,7 +7,9 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
-# Building same-shape trees
+Source code: [github.com/arialdomartini/state-monad-for-the-rest-of-us][source-code].
+
+## Building same-shape trees
 In the [previouls chapter](state-monad-for-the-rest-of-us-2) you
 managed to write an algorithm able to traverse an arbitrary binary
 tree and to count the number of its leaves.
@@ -39,7 +41,7 @@ shaped tree, whose Leaves contain the string length:
          Leaf 3    Leaf 5
 ```
 
-# Most likely, same pattern
+## Most likely, same pattern
 You already know how to travese a tree. If you think how you counted
 the leaves, the code for traversing a tree and doing something else
 must have, more or less, the same structure. In pseudo-F#:
@@ -59,7 +61,7 @@ Programming, solving the same problem with the constraint of
 immutability sounds a uphill battle.  
 Let's overcome these fears.
 
-# Test and type
+## Test and type
 First things first, we need a test:
 
 ```fsharp
@@ -107,7 +109,7 @@ convention:
 Haskell does the same, without the prefix.  
 Good. Let's make the test happy.
 
-## Leaf branch
+### Leaf branch
 Let's start from the Leaf case. 
 
 ```fsharp
@@ -169,7 +171,7 @@ let rec lengths =
 Notice that, just like for the leaves count problem, this is the base
 case of the recursion.
 
-## Node branch
+### Node branch
 What to do when `lengths` gets a Tree that is a `Node` of a left and a
 right branch? This is more puzzling.
 
@@ -211,7 +213,7 @@ let rec lengths =
 
 Is the test green? Yes it is!
 
-# It's really the same pattern!
+## It's really the same pattern!
 If the result reminds you of the leaves count case, it's because it
 is almost the same:
 
@@ -280,7 +282,7 @@ tree-traversing code from the performed action.
 
 This is what you are going to do in the next paragraph.
 
-# Generic mapping
+## Generic mapping
 Let's consider back the original function:
 
 ```fsharp
@@ -375,8 +377,8 @@ signature reflects a completely different metaphor: either *Functors
 as boxes* or *Functors are morphisms between categories*.  
 This deserves some considerations, doesn't it?
 
-# A tale of 2 metaphors
-## Opening Boxes
+## A tale of 2 metaphors
+### Opening Boxes
 Let's start from the version where the tree comes first:
 
 ```fsharp
@@ -433,7 +435,7 @@ particularly fond of it, and I think it's based on a poor metaphor.
 Let me show you what a Pandora's box you open just flipping the `f`
 and `tree` parameters.
 
-## Lifting Functions
+### Lifting Functions
 Another metaphor is possible.  
 The signature `(a -> b) -> Tree a -> Tree b` is the one used by
 Haskell (see [`fmap` on Hoogle][fmap]):

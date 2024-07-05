@@ -9,12 +9,12 @@ include_in_index: false
 ---
 Find the complete source code of this series in [github.com/arialdomartini/state-monad-for-the-rest-of-us][source-code].
 
-# Binary Trees
 Our journey starts with this problem: we want to count the number of
 leaves of an arbitrary Binary Tree. To keep the problem as simple as
 possible, we define a Binary Tree as that data structure having Nodes
 and Leaves, and where every Node has exactly two branches.
 
+## Binary Trees
 This is a Tree with 2 Leaves:
 
 ```
@@ -74,7 +74,7 @@ is a legit Tree:
 
 Of course, our code should work with any Tree, no matter how deep.
 
-# Counting Leaves
+## Counting Leaves
 Good. We are diligent developers, so we start from a test. To keep it
 simple, let's count the Leaves of a 3-leaves Tree:
 
@@ -237,7 +237,7 @@ can read more about it in [Pattern Matching - Identifier Patterns][pattern-match
 This give you all the ingredients to develop a function to calculate
 the number of leaves.
 
-# Implementation
+## Implementation
 Pattern matching is easy:
 
 ```fsharp
