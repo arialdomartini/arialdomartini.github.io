@@ -8,6 +8,8 @@ tags:
 include_in_index: true
 most_read: true
 ---
+Distilling the State Monad from the very ground up.  
+In F#, no prior knowledge needed.
 <!--more-->
 ## Table of chapters
 If you are completely new to Monads, the ticket to get you in the loop
