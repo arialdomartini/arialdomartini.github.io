@@ -61,7 +61,7 @@ Enjoy the journey!
 * [Chapter 4](state-monad-for-the-rest-of-us-4): in which you find an
   existential crossroad.
 * [Chapter 5](state-monad-for-the-rest-of-us-5): in which you discover
-  that Procrastination® is The Functional Solution to all problems.
+  that Procrastination&reg; is The Functional Solution to all problems.
   
 # References
 
