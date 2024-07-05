@@ -509,12 +509,22 @@ let rec index =
   tells the compiler to treat the enclosed code as stateful.
 
 That `withCount` is the State Monad (hidden behind a Computation
-Expression).
+Expression).  
+Notice that, although the code *seems* imperative, it is purely
+functional. Even if:
 
-To get there, we have to walk a bit. I promise that it is an
-interesting stroll, but it needs a bit of energy.  
-So, stretch your legs, take a little rest, have a sorbet and then we
-will get going!
+```fsharp
+let! li = index l
+let! ri = index r
+```
+
+seem 2 sequential statements, they are in fact 2 functions bound
+together with the `bind` operator. Puzzling, isn't it? I'm sure you
+understand that, to fully get there, we stilllq have to walk a bit. I
+promise that it will be an interesting journey!
+
+You need a bit of energy. So stretch your fingers, take a little rest,
+have a sorbet and then we will get going!
 
 See you in Chapter 6.
 
