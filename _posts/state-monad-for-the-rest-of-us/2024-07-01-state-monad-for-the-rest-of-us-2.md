@@ -283,8 +283,8 @@ not surprise: after all, both functions have to traverse the tree
 and, apparently, this shape captures the idea of *traversing a tree*.
 
 The implementations are almost a copy/paste. And copy/pasting is the
-root of all evil. It would be cool to abstract and isolate the
-tree-traversing code from the performed action.
+root of all evil. It would be cool to isolate the tree-traversing code
+from the performed action.
 
 This is what you are going to do in the [next chapter](state-monad-for-the-rest-of-us-3).
 

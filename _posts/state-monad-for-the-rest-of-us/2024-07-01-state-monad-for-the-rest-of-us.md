@@ -35,7 +35,7 @@ and builds an intuition on State Monad from the very ground up.
 
 Enjoy the journey!
 
-# References
+## References
 
 * [State Monad For The Rest Of Us - source code][source-code]
 * [Arialdo Martini - Monads for the Rest of Us][monads-for-the-rest-of-us]
@@ -43,5 +43,5 @@ Enjoy the journey!
 [source-code]: https://github.com/arialdomartini/state-monad-for-the-rest-of-us
 [monads-for-the-rest-of-us]: https://arialdomartini.github.io/monads-for-the-rest-of-us
 
-# Comments
+## Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/30)

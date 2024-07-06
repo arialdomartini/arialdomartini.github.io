@@ -15,7 +15,7 @@ ourselves to generalize the 2 almost identical functions. I already
 gave you the spoiler: doing so, you will invent Functors. Let's go
 started.
 
-Let's consider back the original function:
+Let's consider again the original function:
 
 ```fsharp
 // Tree String -> Tree Int
@@ -79,7 +79,7 @@ implementing the Strategy Pattern.
 
 You can introduce `f` as a parameter either before or after `tree`.
 
-After would get to:
+Putting `f` after `tree` would get to:
 
 ```fsharp
 // Tree String -> (String -> Int) -> Tree Int
@@ -89,7 +89,7 @@ let rec lengths tree f =
     | Node(l, r) -> Node(lengths l, lengths r)
 ```
 
-Before would get to:
+Placing `f` before `tree` would get to:
 
 ```fsharp
 // (String -> Int) -> Tree String -> Tree Int
@@ -101,12 +101,12 @@ let rec lengths f tree =
 
 Notice that the implementation is perfectly the same.
 
-You may not have realized it, but you just invented Functors.  
+You may not have realized it, but with the simple act of introducing
+the `f` parameter you made `lengths` a high-order function, and you just invented Functors.  
 While the placement of a parameter might seem a superficial detail, it
-actually reflects two fundamentally different mental models.  
-Depending if you have `f` as the first or as the second parameter, the
-signature reflects a completely different metaphor: either *Functors
-as boxes* or *Functors are morphisms between categories*.  
+actually reflects two fundamentally different mental models. Depending
+if you have `f` as the first or as the second parameter, the signature
+reflects a completely different metaphor: either *Functors as boxes* or *Functors are morphisms between categories*.  
 This deserves some considerations, doesn't it?
 
 ## A tale of 2 metaphors
@@ -129,7 +129,8 @@ It's not hard to realize that the function is now generic. If you ask
 the F# compiler which type it infers, it will answer `Tree a -> (a ->
 b) -> Tree b`:
 
-![Inferred signature for lengths: Tree a -> (a -> b) -> Tree b](static/img/state-monad-for-the-rest-of-us/map-signature.png)
+![Inferred signature for lengths: Tree a -> (a -> b) -> Tree
+b](static/img/state-monad-for-the-rest-of-us/map-signature.png)
 
 To choose a name, consider the mental model you can use to interpret
 this signature:
