@@ -28,7 +28,7 @@ and builds an intuition on State Monad from the very ground up.
   Functors.
 * [Chapter 4](state-monad-for-the-rest-of-us-4): in which you hit a
   brick wall.
-* [Chapter 5](state-monad-for-the-rest-of-us-5): in which you find an
+* [Chapter 5](state-monad-for-the-rest-of-us-5): in which you face an
   existential crossroad.
 * [Chapter 6](state-monad-for-the-rest-of-us-6): in which you discover
   that Procrastination&reg; is The Functional Solution to all problems.
