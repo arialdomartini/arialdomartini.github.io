@@ -1,117 +1,204 @@
 ---
 layout: post
-title: "State Monad For The Rest Of Us - Part 2"
+title: "State Monad For The Rest Of Us - Part 4"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - F#
 - Functional Programming
 include_in_index: false
 ---
-Source code: [github.com/arialdomartini/state-monad-for-the-rest-of-us][source-code].
+Source code:
+[github.com/arialdomartini/state-monad-for-the-rest-of-us][source-code].
 
-## Building same-shape trees
-If you did your homework, in the [chapter 3](state-monad-for-the-rest-of-us-3) 
-you convinced yourself that `map`:
+## Finding the limits of Functors
 
-```fsharp
-let rec map f =
-    function
-    | Leaf v -> Leaf(f v)
-    | Node(l, r) -> Node(map f l, map f r)
+In the [previouls chapter](state-monad-for-the-rest-of-us-3) you
+distilled `map`, a function exhibiting 3 powerful features:
+
+* It is able to transform the leaves content applying an *arbitrary
+  transformation function*.
+* It does that without mutating the original tree, generating instead
+  a brand new tree.
+* And, finally, it strictly preserves the shape of the original tree.
+
+
+It sounds like a mighty function and in fact it is.  
+One may mistake, though, the possibility to pass an *arbitrary
+transformation function* with the ability to *perform any arbitrary
+transformation*. The two are not the same and, unfortunately, Functors
+have limits to the trasformations they can produce.
+
+Let's put this statement to the test.
+
+## Index a tree
+During its execution, `map` traverses the tree. Very well: we want it
+to keep a track of the order with which it visits the leaves. That
+is, if it visits:
+
+1. first `Leaf "one"`
+2. then `Leaf "two"`
+3. and finally `Leaf "three"`
+
+it should transform the tree:
+
+```
+           Node
+          /    \
+  Leaf "one"   Node
+              /   \
+     Leaf "two"   Leaf "three"
 ```
 
-is not as mighty as it needs to index a tree. Nevertheless, it is very
-likely that, whatever function you will end up with, it will need to
-pattern match on leaves and nodes just like `map` does. Let's follow
-this gut feeling, and let's start from this scaffold:
+into:
+
+```
+                Node
+               /    \
+   Leaf ("one", 1)   Node
+                    /    \
+      Leaf ("two", 2)    Leaf ("three", 3)
+```
+
+Let's call this operation *indexing a tree*.
+
+Here is the requirement:
+
+```fsharp
+[<Fact>]
+let ``indexes a tree`` () =
+    let tree = Node(Leaf "one", Node(Leaf "two", Leaf "three"))
+
+    let indexed = map index tree
+
+    test <@ indexed = Node(Leaf ("one", 1), Node(Leaf ("two", 2), Leaf ("three", 3))) @>
+```
+
+## Easy peasy, if you are impure!
+If you come from an imperative language, you didn't have to think
+twice to find the solution:
+
+```fsharp
+let counter = 1
+let index v =
+    let indexedLeaf = (v, counter)
+    counter = counter + 1
+    indexedLeaf
+```
+
+Now, F# is a grumpy functional zealot and will refuse to compile:
+
+```fsharp
+counter = counter + 1
+```
+
+"Variables must be immutable", it will bemoan.  
+Not only does it demand you to explicitly declare `counter` as
+mutable:
+
+```fsharp
+let mutable counter = 1
+```
+
+but it also insists that you to use a special syntax for mutating the
+value:
+
+```fsharp
+counter <- counter + 1
+```
+
+To add insult to injury, Rider will underline all the 4 occurrences of
+`counter` to warn you with alarming voice "Mayday, mayday! A mutable
+variable!". They really go to great lenghts to make it hard to deviate
+from purity, don't they?  
+Anyway, once bow to F#'s will and you run the test, you can finally
+confirm that your impure `index` function *does* work:
 
 
 ```fsharp
-let rec index =
-    function
-    | Leaf v -> failwith "Not yet implemented"
-    | Node(l, r) -> failwith "Not yet implemented"
+let mutable counter = 1
+let impureIndex v =
+    let indexedLeaf = (v, counter)
+    counter <- counter + 1
+    indexedLeaf
 
 [<Fact>]
 let ``indexes a tree`` () =
     let tree = Node(Leaf "one", Node(Leaf "two", Leaf "three"))
 
-    let indexed = index tree
+    let indexed = map impureIndex tree
 
     test <@ indexed = Node(Leaf ("one", 1), Node(Leaf ("two", 2), Leaf ("three", 3))) @>
 ```
 
-## With mutation
-Let's start from the leaf branch, again:
+## Just impossible if you are not
+Now, give yourself 15 mins for a coding challenge. Try to get to the
+same green test, this time adding only one single extra constraint:
+
+* Be pure.
+
+This means:
+
+* Do not mutate any variable.
+* Write `index` so that it is referential transparent.
+
+About the last comment, here's a trick you can use: whatever function
+you write, if it is pure, given the same argument it must always return
+the same value. So, it must be always safe to invoke it twice.  
+So, write your test as follows:
 
 ```fsharp
-let rec index =
-    function
-    | Leaf v -> failwith "Not yet implemented"
-    | Node(l, r) -> failwith "Not yet implemented"
+[<Fact>]
+let ``indexes a tree`` () =
+    let tree = Node(Leaf "one", Node(Leaf "two", Leaf "three"))
+
+    map index tree |> ignore  // intentionally invoked twice
+    let indexed = map index tree
+
+    test <@ indexed = Node(Leaf ("one", 1), Node(Leaf ("two", 2), Leaf ("three", 3))) @>
 ```
 
-It might help to compare this with the word-length-calculation algorithm that you
-developed in [Chapter 2](state-monad-for-the-rest-of-us-2):
+Another option ris to define this function:
+  
+```fsharp
+let invokedTwice f =
+    fun v ->
+        f v |> ignore
+        f v
+```
+
+and then, instead of:
 
 ```fsharp
-let rec lengths =
-    function
-    | Leaf v -> Leaf(String.length v)
-    | Node(l, r) -> Node(lengths l, lengths r)
+let indexed = map index tree
 ```
 
-Let's reason about the signature:
+you can use:
 
 ```fsharp
-lengths :: Tree String -> Tree (Int)
-index   :: Tree String -> Tree (String * Int)
+let indexed = map (index |> invokedTwice) tree
 ```
 
-This should give you a hint. The leaf branch returns a leaf containing
-a tuple with the original value *and* the current counter:
+It will not take much to convince yourself that indexing a tree using
+a pure Functor is just not possible.
 
-```fsharp
-let rec index =
-    function
-    | Leaf v -> Leaf (v, count)
-    ...
-```
+The problem is that, while traversing the tree, your algorithm must
+retain some form of memory, some kind of state.
 
-Cool. Now, you need to define `count`.
+So, you can draw an important conclusion:
 
-## The Moment of Truth
-How to define `count`?
+> Implementing stateful algorithms with pure functions
+> is not possible.
 
-Now, reflect for a while, and ask yourself: where does `count` come
-from? Where to define it?
+Correct?  
+Nothing further from the truth.
 
-You have 2 options.  
-If there is a single takeaway you will ever remember from this series,
-please, let it be this one. Big decisions often come from tiny, at
-first glance harmless decisions. And I can tell you: this one is a
-humongous decions. This is, indeed, the inflection point where your
-code:
+You will prove that statement wrong in the [very next chapter](state-monad-for-the-rest-of-us-5). Then you will build on top of that demonstration discovering Applicative Functors first, and finally the mighty State Monad.
 
-* either takes on imperative nature
-* or is set to flourish as functional.
+Treat yourself with an icecream, and when you feel ready, jump to the [chapter 5](state-monad-for-the-rest-of-us-5).
 
-So, which options do you have? Try to find them out.
 
-If you want to develop a functional attitude, I recommend you not to
-cheat, and to jump to the next chapter only when you have found out 2
-possible options. They don't need to be a complete solution. You just
-have to answer the question:
+[source-code]: https://github.com/arialdomartini/state-monad-for-the-rest-of-us
 
-* where does that `count` value come from?
-
-Have a long hot tea, or a whiskey and a cigar if you prefer, and take
-all the time you need. See you tomorrow in the [chapter 5](state-monad-for-the-rest-of-us-5). Bye!
-
-# References
-* [Arialdo Martini - Monads for the Rest of Us][monads-for-the-rest-of-us]
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/30)
-
-[monads-for-the-rest-of-us]: https://arialdomartini.github.io/monads-for-the-rest-of-us

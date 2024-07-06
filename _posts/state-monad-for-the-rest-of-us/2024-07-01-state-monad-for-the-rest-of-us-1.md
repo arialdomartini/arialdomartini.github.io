@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "State Monad For The Rest Of Us - Chapter 1"
+title: "State Monad For The Rest Of Us - Part 1"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - F#
