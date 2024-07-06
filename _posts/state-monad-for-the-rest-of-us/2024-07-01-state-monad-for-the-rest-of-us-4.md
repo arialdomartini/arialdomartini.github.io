@@ -30,7 +30,7 @@ have limits to the trasformations they can produce.
 
 Let's put this statement to the test.
 
-## Index a tree
+## Indexing trees
 During its execution, `map` traverses the tree. Very well: we want it
 to keep a track of the order with which it visits the leaves. That
 is, if it visits:
@@ -59,8 +59,7 @@ into:
       Leaf ("two", 2)    Leaf ("three", 3)
 ```
 
-Let's call this operation *indexing a tree*.
-
+Let's call this operation *indexing a tree*.  
 Here is the requirement:
 
 ```fsharp
@@ -74,7 +73,7 @@ let ``indexes a tree`` () =
 ```
 
 ## Easy peasy, if you are impure!
-If you come from an imperative language, you didn't have to think
+If you come from an imperative language, you don't have to think
 twice to find the solution:
 
 ```fsharp
@@ -99,7 +98,7 @@ mutable:
 let mutable counter = 1
 ```
 
-but it also insists that you to use a special syntax for mutating the
+but it also insists that you use a special syntax for mutating the
 value:
 
 ```fsharp
@@ -110,7 +109,7 @@ To add insult to injury, Rider will underline all the 4 occurrences of
 `counter` to warn you with alarming voice "Mayday, mayday! A mutable
 variable!". They really go to great lenghts to make it hard to deviate
 from purity, don't they?  
-Anyway, once bow to F#'s will and you run the test, you can finally
+Anyway, once bow to F#'s will and run the test, you can finally
 confirm that your impure `index` function *does* work:
 
 
@@ -138,8 +137,8 @@ same green test, this time adding only one single extra constraint:
 
 This means:
 
-* Do not mutate any variable.
-* Write `index` so that it is referential transparent.
+* You don't mutate any variable.
+* You write `index` so that it is referential transparent.
 
 About the last comment, here's a trick you can use: whatever function
 you write, if it is pure, given the same argument it must always return
@@ -157,7 +156,7 @@ let ``indexes a tree`` () =
     test <@ indexed = Node(Leaf ("one", 1), Node(Leaf ("two", 2), Leaf ("three", 3))) @>
 ```
 
-Another option ris to define this function:
+Another option is to define this function:
   
 ```fsharp
 let invokedTwice f =
@@ -172,7 +171,7 @@ and then, instead of:
 let indexed = map index tree
 ```
 
-you can use:
+to use:
 
 ```fsharp
 let indexed = map (index |> invokedTwice) tree

@@ -11,8 +11,8 @@ Source code: [github.com/arialdomartini/state-monad-for-the-rest-of-us][source-c
 
 ## Generic mapping
 In the [last chapter](state-monad-for-the-rest-of-us-2) we challenged
-ourselves to generalize the 2 almost identical functions. I already
-gave you the spoiler: doing so, you will invent Functors. Let's go
+ourselves to generalize the 2 almost identical functions. I have
+already spoiler it: doing so, you will invent Functors. Let's go
 started.
 
 Let's consider again the original function:
@@ -121,21 +121,20 @@ let rec lengths tree f =
     | Node(l, r) -> Node(lengths l, lengths r)
 ```
 
-Is the `lengths` signature still correct? Is `lengths` as the function
-name name still reflecting the operation being performed?  
+Is the `lengths` signature still correct? Is the name `lengths`  still reflecting the operation being performed?  
 Indeed, there is nothing in the implementation about *calculating
-lengths*. And, to tell the whole truth, it is not even about strings.
-It's not hard to realize that the function is now generic. If you ask
-the F# compiler which type it infers, it will answer `Tree a -> (a ->
-b) -> Tree b`:
+lengths*. And, to tell the whole truth, the function is not even about
+strings anymore.  It's not hard to realize that the function is now
+generic. If you ask the F# compiler which type it infers, it will
+answer `Tree a -> (a -> b) -> Tree b`:
 
 ![Inferred signature for lengths: Tree a -> (a -> b) -> Tree
 b](static/img/state-monad-for-the-rest-of-us/map-signature.png)
 
-To choose a name, consider the mental model you can use to interpret
-this signature:
+`lengths` deserves a new name. To choose one, consider the mental
+model you can use to interpret this signature:
 
-*`Tree a` is a box containing a value of type `a`. 
+* `Tree a` is a box containing a value of type `a`. 
 * You provide `lengths` with such a box, plus a function `f` from `a`
   to `b`, with the goal of applying `f` to the box content.
 * You don't need to open the box: `lengths` will do this for you,
@@ -146,9 +145,9 @@ Here's a classic picture from [Aditya Bhargava's "Functors, Applicatives, And Mo
 
 ![Functors as boxes](static/img/monads-for-the-rest-of-us/functors-as-boxes.png){: height="300px" }
 
-It make sense to rename this function from `lengths` to `transform`.
-LINQ calls it `Select`. Indeed, here's the [signature of
-`Select`][select]:
+It make sense to rename this `transform`.  LINQ calls it
+`Select`. Indeed, here's the official [signature of `Select`][select]
+in the .NET framework:
 
 ```csharp
 public static IEnumerable<TResult> Select<TSource, TResult>(
@@ -157,7 +156,7 @@ public static IEnumerable<TResult> Select<TSource, TResult>(
 
 It matches the model `Box TSource -> (TSource -> TResult) -> Box TResult`.  
 The Scala library Cats calls it `map`. You can verify that it has [the
-same signature][cats-map] you obtained:
+same signature][cats] you obtained:
 
 ```scala
 abstract def map[A, B](fa: F[A])(f: (A) => B): F[B]
@@ -165,11 +164,10 @@ abstract def map[A, B](fa: F[A])(f: (A) => B): F[B]
 
 Although this is a very popular implementation for Functors, I am not
 particularly fond of it, and I think it's based on a poor metaphor.  
-Let me show you what a Pandora's box you open just flipping the `f`
-and `tree` parameters.
+Let me show you a more powerful metaphor, enabled flipping `f` and
+`tree`.
 
 ### Lifting Functions
-Another metaphor is possible.  
 The signature `(a -> b) -> Tree a -> Tree b` is the one used by
 Haskell (see [`fmap` on Hoogle][fmap]):
 
@@ -250,10 +248,10 @@ implicitely applied currying.
 These different perspectives get to two completely different
 interpretations:
 
-| Form                              | Inputs                                     | Output                               | Interpetation                 |
-|-----------------------------------|--------------------------------------------|--------------------------------------|-------------------------------|
-| ` (a -> b) -> Tree a -> Tree b`   | A function: `a -> b` plus a tree: `Tree a` | A tree: `Tree b`                     | Maps a function to a Tree     |
-| ` (a -> b) -> (Tree a -> Tree b)` | A function: `a -> b`                       | Another function: `Tree a -> Tree b` | Transforms / lifts a function |
+| Form                             | Inputs                                         | Output                                    | Interpetation                 |
+|----------------------------------|------------------------------------------------|-------------------------------------------|-------------------------------|
+| `(a -> b) -> Tree a -> Tree b`   | A function:<br/>`a -> b` plus a tree: `Tree a` | A tree:<br/>`Tree b`                      | Maps a function to a Tree     |
+| `(a -> b) -> (Tree a -> Tree b)` | A function:<br/>`a -> b`                       | Another function:<br/> `Tree a -> Tree b` | Transforms / lifts a function |
 
 Read again the curried form of our function:
 
@@ -266,9 +264,9 @@ let rec map f =
     | Node(l, r) -> Node(map l, map r)
 ```
 
-You give `map` a humble function `f: ('a -> 'b)`, which can only
-operate on `'a` values; `map` transforms it into an on-steroids
-function `superF: Tree<'a> -> Tree<'b>`.
+You give `map` a humble function `f: a -> b`, which can only
+operate on `a` values; `map` transforms it into an on-steroids
+function `superF: Tree a -> Tree b`.
 
 To see this in practice, consider again the test method:
 
@@ -288,8 +286,8 @@ map String.length treeOfWords
 
 It's feeding `map` with 2 arguments. But we know that all functions
 are 1-parameter functions. What happens if you pass only 1 argument
-&mdash; that is, if you *partially apply* it?  
-In other words, what's the meaning of:
+&mdash; that is, if you *partially apply* it? In other words, what's
+the meaning of:
 
 ```fsharp
 map String.length
@@ -356,12 +354,12 @@ Programmers][bartosz]:
 
 to which I added a missing arrow. Here's the metaphor:
 
-* There are 2 worlds, `C` and `D`, the lower world of ordinary
-  functions and values, and the upper world of Trees.
+* There are 2 worlds: `C`, the lower world of ordinary functions and
+  values; and `D`, the upper world of Trees.
 * In the lower world of ordinary functions there is a function `f`
   from the type `a` to the type `b`. In our case, `String.length`.
 * In the upper world of Trees, there is an on-steroids function `F f`
-  that does the same of `String.length`, but on Trees of string
+  that does the same of `String.length`, but on Trees of strings
   instead of just strings.
 * `map` / `^` is that function that lifts whatever function `f`,
   operating on simple values, to the on-steroids function `F f`,
