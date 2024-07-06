@@ -55,10 +55,9 @@ let rec traverseTree =
 
 With an imperative language, without the constraint of immutability,
 traversing a tree and changing the elements as they are visited is as
-easy as pie.  
-It is likely that, if you are not familiar with Functional
-Programming, solving the same problem with the constraint of
-immutability sounds a uphill battle.  
+easy as pie. It is likely that, if you are not familiar with
+Functional Programming, solving the same problem with the constraint
+of immutability sounds a uphill battle.  
 Let's overcome these fears.
 
 ## Test and type
@@ -98,8 +97,7 @@ List<T>
 
 is a list generic on the type parameter `T` or a list of `T`, where
 `T` is a concrete type defined somewhere.  
-F# has the good trait of sticking with a more explicit naming
-convention:
+F# is kind enough to stick with a more explicit naming convention:
 
 | Element         | Syntax                        | Example |
 |-----------------|-------------------------------|---------|
@@ -120,8 +118,7 @@ let rec lengths =
 
 If `lengths` receives a `Tree`, and this tree is a `Leaf` containing a
 `string`, what should it return?  
-The rushed developer would imprudently answer: "return the string
-length!"
+The rushed developer would imprudently answer: "the string length!"
 
 ```fsharp
 let rec lengths = 
@@ -142,7 +139,7 @@ let rec lengths =
 
 (Yes, it's horrible that primitive types such as `string` and `int`
 violate the naming convention and are not capitalized. So, from now on
-I'm using the Haskell's more strict convention.)
+I'm using the Haskell's more strict convention).
 
 It is apparent that the `Leaf` case cannot return `String.length v`,
 because `String.length v` is an `int`, not a `Tree<int>`.
@@ -176,7 +173,8 @@ What to do when `lengths` gets a Tree that is a `Node` of a left and a
 right branch? This is more puzzling.
 
 If the Leaf branch was the base case, following the same pattern you
-can assume that in the Node branch there must be 2 recursive calls:
+can assume that in the Node branch there must be 2 recursive calls,
+plus a way to combine the results:
 
 ```fsharp
 let rec lengths = function
@@ -202,7 +200,8 @@ and on the reference sample:
      Leaf "two"   Leaf "three"             Leaf 3    Leaf 5
 ```
 
-You get a Node in, you return a Node. The right implementation must be:
+You get a Node in, you return a Node out. The right implementation
+must be:
 
 ```fsharp
 let rec lengths =
@@ -236,15 +235,22 @@ custom sum-like infix operator `^+`:
 let (^+) l r = Node (l, r)
 ```
 
-With it, building a Node has a syntax aking to summing 2 branches:
+With it, you can build a Node with the very same syntax you used to
+sum 2 integers:
 
 ```fsharp
     | Node(l, r) -> lengths l ^+ lengths r
 ```
 
 You can also stress that the Leaf branches are the base cases of
-recursion. You just need 2 helper functions. Putting all together, you
-get:
+recursion. You just need 2 helper functions. 
+
+```fsharp
+let baseCase _ = 1
+let baseCase' v = Leaf(String.length v)
+```
+
+Putting all together, you get:
 
 ```fsharp
 let baseCase _ = 1
@@ -272,9 +278,9 @@ Now the 2 algorithms are really similar:
 * Finally, in both the actual action (counting / calculating the
   length) is performed in the Leaf branch only.
   
-The fact that the shape of the two algorithms is the very same is not
-surprising: after all, both functions have to traverse the tree and,
-apparently, this shape captures the idea of *traversing a tree*.
+The fact that the shape of the two algorithms is the very same shoud
+not surprise: after all, both functions have to traverse the tree
+and, apparently, this shape captures the idea of *traversing a tree*.
 
 The implementations are almost a copy/paste. And copy/pasting is the
 root of all evil. It would be cool to abstract and isolate the

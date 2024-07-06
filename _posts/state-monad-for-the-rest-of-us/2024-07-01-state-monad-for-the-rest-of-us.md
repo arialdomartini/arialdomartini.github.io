@@ -8,10 +8,9 @@ tags:
 include_in_index: true
 most_read: true
 ---
-Distilling the State Monad from the very ground up.  
-In F#, no prior knowledge needed.
+Distilling the State Monad from the very ground up. In F#, no prior knowledge needed.
 <!--more-->
-## Table of chapters
+
 If you are completely new to Monads, the ticket to get you in the loop
 could be the gentle introduction of [Monads for the Rest of
 Us][monads-for-the-rest-of-us] which uses C# examples. This series,
@@ -20,33 +19,7 @@ Nonetheless, no previous knowledge of F# is needed, neither is
 understanding of monads. In fact, the series starts from the scratch
 and builds an intuition on State Monad from the very ground up.
 
-## Summary
-Here's a summary of what you will find:
-
-* First, you build a simple recursive algorythm on a binary tree.
-* Trying to calculate something different on the same tree, you
-  discover a pattern and, along the way, you invent Functors.
-* You realize that Functors are not boxes but function lifters.
-* You try to solve a seemingly similar problem reusing Functors, but
-  you hit a brick wall: Functors are stateless, while your problem is
-  inherently stateful.
-* You solve the problem imperativly, and the result is embarassingly
-  easy.
-* Stubbornly, you want to solve the problem in a purely functional
-  style. You make it, but the resulting code is convoluted.
-* You try to separate the pure logic from the state management and you
-  invent Applicative Functors.
-* You repeat the exercise in a slightly different way and you invent
-  Monads. 
-* It's cool, but you are not particularly proud of the syntax. So, you
-  are introduced to the Do Notation / Computation Expressions, and you
-  get the best of 2 worlds: the code is pure, yet it has an imperative
-  syntax.
-
-
-Enjoy the journey!
-
-
+## Table of chapters
 * [Chapter 1](state-monad-for-the-rest-of-us-1): in which you play
   with recursive types and recursive functions.
 * [Chapter 2](state-monad-for-the-rest-of-us-2): in which you invent
@@ -57,7 +30,9 @@ Enjoy the journey!
   existential crossroad.
 * [Chapter 5](state-monad-for-the-rest-of-us-5): in which you discover
   that Procrastination&reg; is The Functional Solution to all problems.
-  
+
+Enjoy the journey!
+
 # References
 
 * [State Monad For The Rest Of Us - source code][source-code]

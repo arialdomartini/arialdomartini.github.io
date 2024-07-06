@@ -7,14 +7,15 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
-Find the complete source code of this series in [github.com/arialdomartini/state-monad-for-the-rest-of-us][source-code].
+Source code: [github.com/arialdomartini/state-monad-for-the-rest-of-us][source-code].
+
+## Binary Trees
 
 Our journey starts with this problem: we want to count the number of
 leaves of an arbitrary Binary Tree. To keep the problem as simple as
 possible, we define a Binary Tree as that data structure having Nodes
-and Leaves, and where every Node has exactly two branches.
+and Leaves, and in which every Node has exactly two branches.
 
-## Binary Trees
 This is a Tree with 2 Leaves:
 
 ```
@@ -33,18 +34,14 @@ and here is a Tree with 3 Leaves:
     Leaf   Leaf
 ```
 
-It is legit to ask ourselves:
-
-- is a single Leaf a Tree?
+It is legit to ask ourselves: is a single Leaf a Tree?
 
 ```
    Leaf
 ```
 
-Let's agree that it is.
-
-- Do null Trees &mdash; Trees without Nodes and Leaves &mdash; exist?
-  
+Let's agree that it is.  
+Do null Trees &mdash; Trees without Nodes and Leaves &mdash; exist?  
 Let's do ourselves a favor and agree they don't.
 
 A Node always contains 2 Leaves. What does a Leaf contain? Nothing: it
@@ -100,7 +97,7 @@ Let's fill the gaps. As often happens with Functional Programming, it
 is convenient to start from modeling problems through their types.
 
 ## Sum and Product Types
-How to model a Tree?  
+How to model a Tree?
 That's an easy task in F#: it's a matter of translating literally our
 definition:
 
@@ -111,25 +108,25 @@ definition:
 
 Step by step:
 
-- ""A Tree is" is simply translated to
+- `A Tree is` is simply translated to
 
 ```fsharp
 type Tree =
 ```
 
-- A Tree can be a Leaf:
+- A Tree can `be a Leaf`:
 
 ```fsharp
 type Tree = Leaf
 ```
 
-- *or* a Node. The *or* part is translated with the `|` operator:
+- `or a Node`. The `or` part is translated with the `|` operator:
 
 ```fsharp
 type Tree = Leaf | Node ???
 ```
 
-- The Node contains 2 branches. The *contain* part is translated with
+- The Node `contains` `2` branches. The *contain* part is translated with
   `of`, the multiplicity is translated with `*`:
 
 ```fsharp
@@ -252,15 +249,13 @@ Read it as a glorified `if/then/else` and ask yourself:
 * If `numberOfLeaves` receives a tree, and that tree is a single
   `Leaf`, how many leaves does that tree have?
   
-Of course, `1`. It means the function is calculating the number of
-leaves of this tree:
+It means that the function needs to calculate the number of leaves of
+this tree:
 
 ```
    Leaf
 ```
-
-So:
-
+Of course, it has just `1` leaf! So:
 
 ```fsharp
 let numberOfLeaves tree =
@@ -297,7 +292,7 @@ or it could be another arbitrarily deep tree, like in:
       Leaf  Leaf
 ```
 
-In the general cased, you can see the received tree as:
+In the general case, you can see the received tree as:
 
 ```
      Node
@@ -307,7 +302,7 @@ In the general cased, you can see the received tree as:
 
 This node contains as many leaves as the leaves in the right branch
 tree, *plus* the leaves of the left branch tree. Literally translating
-this sentence gets to:
+this sentence to F# leads us to:
 
 ```fsharp
 let rec numberOfLeaves tree =
@@ -321,7 +316,7 @@ make it clear that the function is recursive.
 
 Does this work? You have a test. Run it.  
 Of course it's green. As it often happens, if it compiles it works.
-Get use to this, it will happen over and over.
+Get used to this, it will happen over and over.
 
 
 ## Putting all together
@@ -358,8 +353,7 @@ branch is the *base case* of recursion, while the:
     | Node(l, r) -> numberOfLeaves l + numberOfLeaves r
 ```
 
-is the (double) recursive step.
-
+is the (double) recursive step.  
 Also notice how the results of the 2 recursive calls are *composed*
 with the binary `+` function.
 
@@ -398,8 +392,7 @@ let rec numberOfLeaves =
 
 A nice way to interpret this is to squeeze the eyes and imagine it's a
 combination of 2 separate function definitions, one on `Leaf` and one
-on `Node(l, r)`. Haskell would allow defining those 2 functions as
-follows:
+on `Node(l, r)`. Haskell would really let you define 2 separate functions:
 
 
 ```haskell
@@ -410,7 +403,7 @@ numberOfLeaves Node(l, r) = numberOfLeaves l + numberOfLeaves r
 If you manage to understand this last snippet, *bravo*!, give yourself
 a pat on the back, take a little breather, and get prepared to the
 next chapter, in which you will invent ([or
-discover][propositions-as-types]]) Functors.
+discover][propositions-as-types]) Functors.
 
 Jump to [Chapter 2](state-monad-for-the-rest-of-us-2).
 
@@ -418,7 +411,7 @@ Jump to [Chapter 2](state-monad-for-the-rest-of-us-2).
 
 * [State Monad For The Rest Of Us - source code][source-code]
 * [Microsoft Learn - Pattern Matching - Identifier Patterns][pattern-matching]
-* [Philip Wadler - Propositions as Types][[propositions-as-types]]
+* [Philip Wadler - Propositions as Types][propositions-as-types]
 
 [source-code]: https://github.com/arialdomartini/state-monad-for-the-rest-of-us
 [pattern-matching]: https://learn.microsoft.com/en-us/dotnet/fsharp/language-reference/pattern-matching#identifier-patterns
