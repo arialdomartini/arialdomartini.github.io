@@ -45,3 +45,6 @@ Enjoy the journey!
 
 ## Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/30)
+
+
+{% include fp-newsletter.html %}

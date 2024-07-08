@@ -532,8 +532,10 @@ You need a bit of energy. So stretch your fingers, take a little rest,
 have a sorbet and then we will get going!
 
 See you in Chapter 6. (Hey! I am still writing it! If you are
-interested, drop me an [email](mailto:arialdo.martini@gmail.com) or
-write a [comment][discussions], I will let you know when it's done!)
+interested, drop me an [email](mailto:arialdo.martini@gmail.com),
+write a [comment][discussions], or subscribe to the newsletter: I will let you know when it's done!)
+
+
 
 # References
 * [Microsoft - Computation Expressions][computation-expressions]
@@ -547,3 +549,6 @@ write a [comment][discussions], I will let you know when it's done!)
 
 [monads-for-the-rest-of-us]: https://arialdomartini.github.io/monads-for-the-rest-of-us
 [discussions]: https://github.com/arialdomartini/arialdomartini.github.io/discussions/30
+
+
+{% include fp-newsletter.html %}

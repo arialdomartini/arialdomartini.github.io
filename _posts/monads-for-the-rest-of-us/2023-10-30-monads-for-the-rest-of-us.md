@@ -40,3 +40,6 @@ I challenged myself to write a post that:
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/26)
+
+
+{% include fp-newsletter.html %}

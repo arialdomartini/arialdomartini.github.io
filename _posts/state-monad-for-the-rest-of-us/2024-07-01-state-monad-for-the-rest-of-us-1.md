@@ -407,6 +407,7 @@ discover][propositions-as-types]) Functors.
 
 Jump to [Chapter 2](state-monad-for-the-rest-of-us-2).
 
+
 # References
 
 * [State Monad For The Rest Of Us - source code][source-code]
@@ -419,3 +420,5 @@ Jump to [Chapter 2](state-monad-for-the-rest-of-us-2).
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/30)
+
+{% include fp-newsletter.html %}
