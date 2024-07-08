@@ -281,3 +281,5 @@ Grab your keyboard. It's time to give birth to your first monad. Jump to [Chapte
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/26)
+
+{% include fp-newsletter.html %}
