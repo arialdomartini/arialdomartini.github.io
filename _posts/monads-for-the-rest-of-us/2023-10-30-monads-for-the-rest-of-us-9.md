@@ -262,18 +262,21 @@ IO<int> l = io.Select(length);
 
 # That's it
 Wow, you did it!  
-Those 9 chapters were quite a mouthful, right? Now that you've dined on monads, reward yourself with a slice of meringue pie!  
-You've really earned it!
+Those 9 chapters were quite a mouthful, right? Now that you've dined
+on monads, reward yourself with a slice of meringue pie! You've really
+earned it!
+
+Cheers!
 
 # What's next?
 There are some topics I didn't get around to covering.
 
 * How to deal with multi-parameter functions, with currying and partial application.
 * How to use LINQ to bind any custom monadic functions in a fluent way
-* Implementation of more monads, such as `Either`, `State`, `Reader` and `Writer`.
+* Implementation of more monads, such as `Either`, `Reader` and `Writer`.
 
-I promise I will follow up with a new series.  
-Cheers!
+You might like the series [State Monad For The Rest Of
+Us](state-monad-for-the-rest-of-us).
 
 
 # Comments
