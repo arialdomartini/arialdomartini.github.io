@@ -2,9 +2,6 @@
 layout: home
 ---
 
-
-
-
 {% assign filtered_posts = site.posts | where_exp: 'post', "post.most_read == true" %}
 <div class="container">
   {% assign post_count=filtered_posts | size %}
