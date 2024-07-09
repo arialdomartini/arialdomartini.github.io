@@ -6,6 +6,7 @@ tags:
 - C#
 - Functional Programming
 most_read: true
+ftrof: true
 ---
 Virtually all the tutorials on Monads introduce them only after a lengthy discussion about Functors, and often resorting to intrepid and debatable metaphors.  
 I dare to take a different path and to go straight to the point, following what Mike Vanier did in his seminal 8-post series [Yet Another Monad Tutorial][yet-another-tutorial].

@@ -282,6 +282,9 @@ summary:hover {
     margin-bottom: 1em;
 }
 
+.row {
+    margin-bottom: 2em;
+}
 
 blockquote {
     margin-top: 1em;
