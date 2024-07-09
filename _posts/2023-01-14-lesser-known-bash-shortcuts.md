@@ -5,6 +5,7 @@ author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - bash
 - zsh
+most_read: true
 ---
 Did you know Bash has got macros, a multi-clipboard, an undo feature, and a word completion based on history?
 

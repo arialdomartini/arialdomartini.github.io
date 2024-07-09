@@ -6,7 +6,7 @@ tags:
 - tdd
 - functional programming
 - property-based testing
-ftrof: true
+ftrou: true
 ---
 It's no secret that getting started with Property-Based Testing (PBT) is hard. This series of articles does not have the presumption of changing this fact. It is merely the outcome of the observations and thoughts I have gathered during my personal journey.<br/>
 By no means is this a comprehensive manual. Consider it as a friendly introduction to help dispel the fear.

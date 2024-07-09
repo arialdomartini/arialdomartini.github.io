@@ -6,8 +6,8 @@ tags:
 - F#
 - Functional Programming
 include_in_index: true
-most_read: true
-ftrof: true
+most_read: false
+ftrou: true
 ---
 Distilling the State Monad from the very ground up. In F#, no prior knowledge needed.
 <!--more-->

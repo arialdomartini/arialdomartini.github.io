@@ -6,6 +6,8 @@ tags:
 - C#
 - Functional Programming
 - Lambda Calculus
+most_read: true
+ftrou: true
 ---
 ![A tattoo with the Y Combinator](static/img/y-combinator-in-csharp/y-combinator.jpg)
 

@@ -6,6 +6,7 @@ tags:
 - Testing
 - TDD
 - DB
+most_read: true
 ---
 Or: how I learnt to stop resetting the DB after each integration test.
 

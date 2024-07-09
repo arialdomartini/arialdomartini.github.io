@@ -4,6 +4,7 @@ title: "No Reason To Squash"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - git
+most_read: true
 ---
 **TL;DR**
 * Even without squashing, **Pull Requests already include a squashed commit** 
