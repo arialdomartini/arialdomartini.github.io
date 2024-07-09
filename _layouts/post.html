@@ -3,28 +3,27 @@ layout: layout
 ---
 
 <div class="container blog-post">
-	<div class="panel panel-default">
-		<div class="panel-body">
-			<div class="blogpost">
-
-	          <div class="blog-title">
-	            <h1>
-                  {{page.title}}
-	            </h1>
-                <div>
-		          {{ page.author}}
- 		          &mdash;
-                  {{ page.date | date: "%e/%m/%Y" }}
-                  &mdash;
-			      {% for tag in page.tags %}
-			      <span class="label label-success">{{ tag }}</span>
-			      {% endfor %}
-                </div>
-	          </div>
-              <br/>
-              {{ content }}
-			</div>
-		</div>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="blogpost">
+	<div class="blog-title">
+          <h1>
+            {{page.title}}
+          </h1>
+          <div>
+	    {{ page.author}}
+ 	    &mdash;
+            {{ page.date | date: "%e/%m/%Y" }}
+            &mdash;
+	    {% for tag in page.tags %}
+	    <span class="label label-success">{{ tag }}</span>
+	    {% endfor %}
+          </div>
 	</div>
-	{% include disqus.html %}
+        
+        <br/>
+        {{ content }}
+      </div>
+    </div>
+  </div>
 </div>
