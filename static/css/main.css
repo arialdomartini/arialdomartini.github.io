@@ -71,18 +71,7 @@ body {
 .navbar-default .navbar-link:hover {
   color: #6b6b6b;
 }
-@media (max-width: 767px) {
-  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
-    color: #6b6b6b;
-  }
-  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
-    color: #6b6b6b;
-  }
-  .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
-    color: #6b6b6b;
-    background-color: #ffffff;
-  }
-}
+
 
 /* Custom page CSS
 -------------------------------------------------- */
@@ -299,4 +288,25 @@ blockquote {
     margin-bottom: 1em;
     margin-left: 1em;
     background-color: #eeeeee;
+}
+
+
+.newsletter-subscription {
+    width: 50%;
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #6b6b6b;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #6b6b6b;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #6b6b6b;
+    background-color: #ffffff;
+  }
+  .newsletter-subscription {
+      width: 100%;
+  }
 }
