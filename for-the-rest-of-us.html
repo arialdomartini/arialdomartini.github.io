@@ -16,17 +16,18 @@ layout: layout
 
                 <p>A collection of series on Functional
                     Programming advanced topics, simply explained and
-                    built from the very ground up.</p>
+                    built from the very ground up.
+                </p>
                 <ul>
                     {% for post in filtered_posts %}
                     <li>
                         <a href="{{ post.url }}">{{ post.title }}</a>
-                        <!-- <p>{{ post.excerpt }}</p> -->
                     </li>
                     {% endfor %}
                 </ul>
 
-                {% include fp-newsletter.html %}
+                <h2>Newsletter</h2>
+                {% include fp-newsletter-form.html %}
 
                 {% endif %}
             </div>
