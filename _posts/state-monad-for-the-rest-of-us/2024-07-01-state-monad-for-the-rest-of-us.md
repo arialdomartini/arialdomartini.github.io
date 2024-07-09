@@ -24,7 +24,7 @@ and builds an intuition on State Monad from the very ground up.
   with recursive types and recursive functions.
 * [Chapter 2](state-monad-for-the-rest-of-us-2): in which you find
   that binary trees have no more secrets for you.
-* [Chapter 2](state-monad-for-the-rest-of-us-2): in which you invent
+* [Chapter 3](state-monad-for-the-rest-of-us-3): in which you invent
   Functors.
 * [Chapter 4](state-monad-for-the-rest-of-us-4): in which you hit a
   brick wall.
