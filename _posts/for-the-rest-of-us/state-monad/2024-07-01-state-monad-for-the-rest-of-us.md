@@ -15,10 +15,10 @@ Distilling the State Monad from the very ground up. In F#, no prior knowledge ne
 If you are completely new to Monads, the ticket to get you in the loop
 could be the gentle introduction of [Monads for the Rest of
 Us][monads-for-the-rest-of-us] which uses C# examples. This series,
-instead, uses F# and is only slightly more challenging.  
-Nonetheless, no previous knowledge of F# is needed, neither is
-understanding of monads. In fact, the series starts from the scratch
-and builds an intuition on State Monad from the very ground up.
+instead, uses F# and is only slightly more challenging. Nonetheless,
+no previous knowledge of F# is needed, neither is understanding of
+monads. In fact, the series starts from the scratch and builds an
+intuition on State Monad from the very ground up.
 
 ## Table of chapters
 * [Chapter 1](state-monad-for-the-rest-of-us-1): in which you play
