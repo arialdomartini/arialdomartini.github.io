@@ -81,7 +81,7 @@ I hope they can help you too.
       <td>Function application<br>(partial, on a list)</td>
       <td>
         <p>
-            <span class="left"><tt>foldl</tt></span> it the outer function.
+            <span class="left"><tt>foldl</tt></span> is the outer function.
         </p>
         <p>
             <code class="highlighter-rouge">
@@ -93,7 +93,7 @@ I hope they can help you too.
       </td>
       <td>
         <p>
-            <span class="right"><tt>f</tt></span> it the outer function.
+            <span class="right"><tt>f</tt></span> is the outer function.
         </p>
         <p>
            <code class="highlighter-rouge">
