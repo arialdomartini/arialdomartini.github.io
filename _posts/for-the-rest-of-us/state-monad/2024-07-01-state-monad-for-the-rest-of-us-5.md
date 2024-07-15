@@ -23,7 +23,7 @@ let rec map f =
 is not as mighty as it needs to index a tree.  
 You need to create a more powerful function. Be ready to bet,
 it will need to pattern match on leaves and nodes just like `map` does. 
-Let's follow this gut feeling, and let's start from this scaffold:
+Following this gut feeling, you can start from this scaffold:
 
 
 ```fsharp
