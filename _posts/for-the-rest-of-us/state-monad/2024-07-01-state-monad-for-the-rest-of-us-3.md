@@ -177,7 +177,7 @@ Haskell (see [`fmap` on Hoogle][fmap]):
 let rec map f tree =
     match tree with
     | Leaf v -> Leaf(f v)
-    | Node(l, r) -> Node(map l, map r)
+    | Node(l, r) -> Node(map f l, map f r)
 ```
 
 The reason why this introduces a fundamentally different
@@ -261,7 +261,7 @@ let rec map f =
   fun tree -> 
     match tree with
     | Leaf v -> Leaf(f v)
-    | Node(l, r) -> Node(map l, map r)
+    | Node(l, r) -> Node(map f l, map f r)
 ```
 
 You give `map` a humble function `f: a -> b`, which can only
