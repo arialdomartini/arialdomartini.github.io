@@ -49,6 +49,8 @@ In which you develop the State Monad.
 * [Chapter 7](state-monad-for-the-rest-of-us-7): in which you use a
   bit of type modeling to hide the state handling logic.
 * [Chapter 8](state-monad-for-the-rest-of-us-8): in which you discover Applicative Functors.
+* [Chapter 9](state-monad-for-the-rest-of-us-9): in which you learn to
+  manipulate the state like it was mutable.
 
 
 ### Part III

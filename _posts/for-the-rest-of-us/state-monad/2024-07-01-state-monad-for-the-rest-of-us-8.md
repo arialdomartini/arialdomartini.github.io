@@ -547,40 +547,10 @@ provide the same basic interface and they completely abstract away the
 effect-handling logic.
 
 The `Leaf` branch is inherently different: although the count-handling
-logic is still handled by `<*>`, the code has somehow to manipulate
-`count`. That's a novel kind of challenge. Fortunately, an easy one,
-which will bring you closer to the State Monad.
-
-## State manipulation
-We would like the `Leaf` branch to look more or less like this:
-
-```fsharp
-    let leaf = Leaf (v, getCount)
-    writeCount (getCount + 1)
-    leaf
-```
-
-We can try to implement `getCount` and `writeCount`. Remember that this is the starting point:
-
-```fsharp
-let rec index =
-    function
-    | Leaf v ->
-        WithCount (fun count -> (Leaf (v, count), count + 1))
-    | Node (l, r) ->
-        pure' build <*> index l <*> index r
-```
-
-It is worth to repeat that the `Leaf` branch does not directly return
-a `Leaf` instance: instead, it returns a `Int -> (a, Int)` function
-wrapped in a `WithCount`. Most likely, also `getCount` and
-`writeCount` need to deal with a `WithCount`.
-
-### Reading the state
-
-
-
-
+logic is still taken care of by `<*>`, the code must somehow
+manipulate `count`. That's a novel kind of challenge. Fortunately, an
+easy one, which will bring you closer to the State Monad. Something
+deserving a little break and a [new chapter](state-monad-for-the-rest-of-us-9).
 
 
 
