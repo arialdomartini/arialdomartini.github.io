@@ -12,7 +12,7 @@ Source code: [github.com/arialdomartini/state-monad-for-the-rest-of-us][source-c
 ## Generic mapping
 In the [last chapter](state-monad-for-the-rest-of-us-2) we challenged
 ourselves to generalize the 2 almost identical functions. I have
-already spoiler it: doing so, you will invent Functors. Let's go
+already spoiled it: doing so, you will invent Functors. Let's go
 started.
 
 Let's consider again the original function:
