@@ -20,10 +20,10 @@ let rec map f =
     | Node(l, r) -> Node(map f l, map f r)
 ```
 
-is not as mighty as it needs to index a tree. Nevertheless, it is very
-likely that, whatever function you will end up with, it will need to
-pattern match on leaves and nodes just like `map` does. Let's follow
-this gut feeling, and let's start from this scaffold:
+is not as mighty as it needs to index a tree.  
+You need to create a more powerful function. Be ready to bet,
+it will need to pattern match on leaves and nodes just like `map` does. 
+Let's follow this gut feeling, and let's start from this scaffold:
 
 
 ```fsharp
