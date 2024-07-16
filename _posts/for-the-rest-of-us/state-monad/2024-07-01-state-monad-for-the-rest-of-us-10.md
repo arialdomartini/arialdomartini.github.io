@@ -10,7 +10,8 @@ include_in_index: false
 Source code:
 [github.com/arialdomartini/state-monad-for-the-rest-of-us][source-code].
 
-In [chapter 7](state-monad-for-the-rest-of-us-7), when we wanted to introduce a new type for the result value of `index`:
+In [chapter 7](state-monad-for-the-rest-of-us-7), when we wanted to
+introduce a new type for the result value of `index`:
 
 ```fsharp
 // Tree a -> (Int -> (Tree (a, Int), Int))
@@ -46,7 +47,8 @@ Tree a -> Tree (a, Int)
 ```
 
 taking a tree of whatever content and returning an indexed version of
-it.  This is the original domain logic, which you can easily make more generic with:
+it. This is the original domain logic, which you can easily make more
+generic with:
 
 ```haskell
 a -> (a, Int)
@@ -142,18 +144,15 @@ type State<'b, 's> = State of ('s -> ('b * 's))
 
 This generalized version of `WithCount` is, ladies and gentlemen, the
 signature of the State Monad.  
-It's definitely the time to implement it. Ready! Steady! Go with [Chapter 11](state-monad-for-the-rest-of-us-11)!
-
+It's definitely the time to implement it. Ready! Steady! Go with
+[Chapter 11](state-monad-for-the-rest-of-us-11)!
 
 
 # References
 * [State Monad For The Rest Of Us - source code][source-code]
   
-[source-code]: https://github.com/arialdomartini/state-monad-for-the-rest-of-us
-
-
 # Comments
 [GitHub Discussions][discussions]
 
-
+[source-code]: https://github.com/arialdomartini/state-monad-for-the-rest-of-us
 [discussions]: https://github.com/arialdomartini/arialdomartini.github.io/discussions/30

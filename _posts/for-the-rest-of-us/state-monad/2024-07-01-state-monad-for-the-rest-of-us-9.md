@@ -286,6 +286,12 @@ let rec index<'a> =
     function
     | Leaf v ->
         pure' buildLeaf' <*> pure' v <*> getCount <*> incrementCount
+
+let rec index'<'a> =
+    function
+    | Leaf v -> pure' buildLeaf' <*> pure' v <*> getCount <*> incrementCount
+    | Node(l, r) -> pure' buildNode <*> index l <*> index r
+
 ```
 
 ### Apply and Discard Right
@@ -348,6 +354,10 @@ right expression.
 
 Try it: the types match, the compiler pleased nods, the test is so
 green. Cool.
+
+(If you think that there is some duplication in the the implementation
+of `<*` and `<*>`, you are right: in fact, `<*` can be derived
+directly from `<*>`).
 
 ## Wait, discard what?
 The first time I stumbled upon `<*` I was so confused. What does
@@ -420,11 +430,11 @@ Monad. See you in [Chapter 10](state-monad-for-the-rest-of-us-10).
 * [State Monad For The Rest Of Us - source code][source-code]
 * [Command Query Separation - Wikipedia][cqs]
   
-[source-code]: https://github.com/arialdomartini/state-monad-for-the-rest-of-us
-[cqs]: https://en.wikipedia.org/wiki/Command%E2%80%93query_separation
-
 # Comments
 [GitHub Discussions][discussions]
 
-
+[source-code]: https://github.com/arialdomartini/state-monad-for-the-rest-of-us
+[cqs]: https://en.wikipedia.org/wiki/Command%E2%80%93query_separation
 [discussions]: https://github.com/arialdomartini/arialdomartini.github.io/discussions/30
+
+
