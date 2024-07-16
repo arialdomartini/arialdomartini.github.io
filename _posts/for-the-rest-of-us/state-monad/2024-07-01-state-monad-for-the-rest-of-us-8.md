@@ -568,5 +568,3 @@ chapter](state-monad-for-the-rest-of-us-9).
 
 [discussions]: https://github.com/arialdomartini/arialdomartini.github.io/discussions/30
 
-
-{% include fp-newsletter.html %}

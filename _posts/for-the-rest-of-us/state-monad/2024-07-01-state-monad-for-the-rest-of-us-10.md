@@ -10,10 +10,24 @@ include_in_index: false
 Source code:
 [github.com/arialdomartini/state-monad-for-the-rest-of-us][source-code].
 
-In [chapter 7](state-monad-for-the-rest-of-us-7) I mentioned that
-there was a second perspective with which to get to the same result:
+In [chapter 7](state-monad-for-the-rest-of-us-7), when we wanted to introduce a new type for the result value of `index`:
 
-* Manipulate the signature, separating the state-management and domain
+```fsharp
+// Tree a -> (Int -> (Tree (a, Int), Int))
+let rec index =
+    function
+    | Leaf v -> fun count -> (Leaf (v, count), count + 1)
+    | Node (l, r) ->
+        fun count ->
+            let li, lc = index l count
+            let ri, rc = index r lc
+            Node (li, ri), rc
+```
+
+I mentioned that there was a second perspective, leading to the same
+signature of `WithCount`:
+
+* Manipulate the signature, separating the `count`-handling and domain
   logic on the type level.
 
 Let us do this, because it will lead to some interesting refinements
@@ -25,29 +39,23 @@ Observing again the original signature:
 Tree a -> (Int -> (Tree (a, Int), Int))
 ```
 
-it's not hard to see what happened. Ideally, you wanted a function:
+it's not hard to see what happened. Ideally, you wanted a simple function:
 
 ```haskell
 Tree a -> Tree (a, Int)
 ```
 
-taking a tree of whatever content, and returning an indexed version of
-it.  This is the original domain logic.  
-Or, even better, ideally you wanted the indexing logic only:
+taking a tree of whatever content and returning an indexed version of
+it.  This is the original domain logic, which you can easily make more generic with:
 
 ```haskell
 a -> (a, Int)
 ```
 
-or a generic:
 
-```haskell
-a -> b
-```
-
-letting a Functor take care of the logic for traversing a tree. But
-then you found out that Functors are not powerful enough to apply that
-function with `map`.  
+Then, you wanted to have a Functor to take care of the logic for
+traversing a tree. But then you found out that Functors are not
+powerful enough to apply an indexing function with `map`.  
 
 Instead of that, you ended up with:
 
@@ -103,7 +111,7 @@ makes sense to defind it with:
 type WithCount<'b> = WithCount of (int -> 'b * int)
 ```
 
-Of course, this could be more specif to trees:
+Of course, this could be more specific to trees:
 
 ```fsharp
 type WithCount<'b> = WithCount of (int -> Tree<'b> * int)
@@ -133,7 +141,9 @@ type State<'b, 's> = State of ('s -> ('b * 's))
 ```
 
 This generalized version of `WithCount` is, ladies and gentlemen, the
-State Monad.
+signature of the State Monad.  
+It's definitely the time to implement it. Ready! Steady! Go with [Chapter 11](state-monad-for-the-rest-of-us-11)!
+
 
 
 # References
@@ -147,6 +157,3 @@ State Monad.
 
 
 [discussions]: https://github.com/arialdomartini/arialdomartini.github.io/discussions/30
-
-
-{% include fp-newsletter.html %}
