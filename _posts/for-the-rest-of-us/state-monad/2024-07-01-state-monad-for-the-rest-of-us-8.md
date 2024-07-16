@@ -45,13 +45,13 @@ not be immediately apparent that it is invoking a function. Let's make
 it more explicit:
 
 ```fsharp
-let build l r = Node(l, r)
+let buildNode l r = Node(l, r)
 
 ...
 WithCount(fun count ->
    let li, lc = run (index l) count
    let ri, rc = run (index r) lc
-   (build li ri), rc)
+   (buildNode li ri), rc)
 ```
 
 Now, the goal is to get rid of all the count-handling code, and to be
@@ -60,23 +60,24 @@ able to just write the domain logic code:
 ```fsharp
 let li = index l
 let ri = index r
-build li ri
+buildNode li ri
 ```
 
 or
 
 ```fsharp
-build (index l) (inder r)
+buildNode (index l) (inder r)
 ```
 
-along the lines of what you did in the very first chapters. Unfortunately, this does not work as expected  
+along the lines of what you did in the very first chapters.
+Unfortunately, this does not work as expected  
 The problem is that this does not compile. The types don't match:
 
-| Value     | Type                         |
-|-----------|------------------------------|
-| `build`   | `Tree a -> Tree a -> Tree a` |
-| `index l` | `WithCounter (Tree a)`       |
-| `index r` | `WithCounter (Tree a)`       |
+| Value       | Type                         |
+|-------------|------------------------------|
+| `buildNode` | `Tree a -> Tree a -> Tree a` |
+| `index l`   | `WithCounter (Tree a)`       |
+| `index r`   | `WithCounter (Tree a)`       |
 
 
 You cannot apply a `WithCounter (Tree a)` value to a function
@@ -130,7 +131,7 @@ Getting back to:
 
 
 ```fsharp
-build (index l) (inder r)
+buildNode (index l) (inder r)
 ```
 
 Maybe what you need is a function application on steroids able to
@@ -138,7 +139,7 @@ apply `WithCounter a` arguments to functions expecting just `a`
 values:
 
 ```fsharp
-build <???> index l <???> index r
+buildNode <???> index l <???> index r
 ```
 
 This extended, hypothetical super-function application should take
@@ -176,14 +177,14 @@ let rec index =
           fun count ->
               let li, lc = run (index l) count
               let ri, rc = run (index r) lc
-              (build li ri), rc)
+              (buildNode li ri), rc)
 ```
 
 and focus on the `Node` branch. Make an attempt to mentally remove all
 the count-handling logic and focus on the domain logic only. See how
-this branch returns the result of `build li ri` somehow enclosed in a
-`WithCount` instance. Since you want to isolate the domain logic, we
-can try to extract `build` and to put it in a `WithCount`:
+this branch returns the result of `buildNode li ri` somehow enclosed
+in a `WithCount` instance. Since you want to isolate the domain logic,
+we can try to extract `buildNode` and to put it in a `WithCount`:
 
 ```fsharp
 let rec index =
@@ -191,7 +192,7 @@ let rec index =
     | Leaf v ->
         WithCount (fun count -> (Leaf (v, count), count + 1))
     | Node (l, r) ->
-        let build' = putInWithCount build
+        let buildNode' = putInWithCount buildNote
         ...
 ```
 
@@ -250,19 +251,19 @@ let rec index =
     function
     | Leaf v -> WithCount(fun count -> (Leaf(v, count), count + 1))
     | Node(l, r) ->
-        let build' = pure' build
+        let buildNode' = pure' buildNode
         ...
 ```
 
 F# flags `pure` as reserved for future uses &mdash; a good sign, I
 guess! &mdash; so I'm opting for `pure'`.  
-What's `build'` signature? It's the signature of a `build` inside a
-`WithCount`:
+What's `buildNode'` signature? It's the signature of a `buildNode`
+inside a `WithCount`:
 
-| Function      | Signature                                |
-|---------------|------------------------------------------|
-| `build`       | `Tree a -> Tree a -> Tree a`             |
-| `pure' build` | `WithCount (Tree a -> Tree a -> Tree a)` |
+| Function          | Signature                                |
+|-------------------|------------------------------------------|
+| `buildNode`       | `Tree a -> Tree a -> Tree a`             |
+| `pure' buildNode` | `WithCount (Tree a -> Tree a -> Tree a)` |
 
 
 Let's continue along this line, focus on the domain logic only:
@@ -273,7 +274,7 @@ let rec index =
     | Leaf v -> WithCount(fun count -> (Leaf(v, count), count + 1))
     | Node(l, r) ->
         // `WithCount (Tree a -> Tree a -> Tree a)`
-        let build' = pure' build
+        let buildNode' = pure' buildNode
         
         // WithCount (Tree (string,int))
         let li = index l
@@ -459,27 +460,27 @@ let rec index<'a> =
     function
     | Leaf v -> ....
     | Node(l, r) ->
-        let build' = pure' build
+        let buildNode' = pure' buildNode
         let li = index l
         let ri = index r
-        build' <*> li <*> ri
+        buildNode' <*> li <*> ri
 ```
 
-Inlining `build'`, `li` and `ri` you get to:
+Inlining `buildNode'`, `li` and `ri` you get to:
 
 ```fsharp
 let rec index<'a> =
     function
     | Leaf v -> ...
     | Node(l, r) ->
-        pure' build <*> index l <*> index r
+        pure' buildNode <*> index l <*> index r
 ```
 
 Which is beautiful! If you ignore the little noise produced by `pure'`
 and `<*>`, it has the very shape of:
 
 ```fsharp
-              build    (index l)   (index r)
+              buildNode    (index l)   (index r)
 ```
 
 Please focus again on the `Node` branch and notice:
@@ -536,23 +537,23 @@ The `Node` branch is completely devoid of any count-handling logic:
 
 ```fsharp
 | Node(l, r) ->
-    pure' build <*> index l <*> index r
+    pure' buildNode <*> index l <*> index r
 ```
 
-Not only does not it mention `count` in any way, but it does not even
+Not only does it not mention `count` in any way, but it does not even
 know it is running in a context where `count` is handled. From the
-`Node` branch perspective, it could be run in another monadic
-context. And, as an aside, this is the beauty of monads: they all
-provide the same basic interface and they completely abstract away the
+`Node` branch perspective, it could run in another monadic context.
+And, as an aside, this is the beauty of monads: they all provide the
+same basic interface and they completely abstract away the
 effect-handling logic.
 
-The `Leaf` branch is inherently different: although the count-handling
-logic is still taken care of by `<*>`, the code must somehow
-manipulate `count`. That's a novel kind of challenge. Fortunately, an
-easy one, which will bring you closer to the State Monad. Something
-deserving a little break and a [new chapter](state-monad-for-the-rest-of-us-9).
-
-
+The `Leaf` branch, instead, is inherently different: although the
+count-handling logic is still taken care of by `<*>`, the code must
+somehow manipulate `count`. So, the `Leaf` branch must both delegate
+`count` to `<*>` and work with it. That's a novel kind of a challenge.
+Fortunately, it is an easy one, which will bring you closer to the
+State Monad. Something deserving a little break and a [new
+chapter](state-monad-for-the-rest-of-us-9).
 
 
 # References
