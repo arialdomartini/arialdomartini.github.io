@@ -332,19 +332,41 @@ internal static class WithCountExtensions
 }
 ```
 
-Yes, it's way less readable than the equivalent F# version. There's a
-reason why functional programmers prefer F# over C#.  
-You can find the complete working C# implementation in
+Yes, it's way less readable than the equivalent F# version &mdash; now
+you see why functional programmers prefer F# over C#, don't you?.  
+You can find the complete C# implementation in
 [StateMonadTest.cs][csharp-porting].
 
 Anyway, here's the take away: LINQ is much more than a tool for
-embedding SQL and manipulating lists. LINQ is syntactic sugar for
-monads, any monad, just like the Haskell's do notation and F#
-Computation Expressions. LINQ is indeed a monad engine.
+embedding SQL and manipulating lists. Just like the Haskell's *do
+notation and F# Computation Expressions, LINQ is syntactic sugar for
+monads, any monad. LINQ is indeed a monad engine.
 
 You can read more about it in [Thinking Functionally: What is LINQ
 really?][thinking-functionally], from the
 [language-ext][language-ext]'s wiki.
+
+
+## Much simpler than this
+You made it to the end! Congrats!  
+If you found getting to the State Monad arduous, it is because it
+really was.
+
+Here's something that might catch you off guard: *working* with a
+State Monad is really trivial.  
+I really think that this is a general trait of Functional Programming:
+*using* functional programming concepts is orders of magnitude simpler
+than *re-implementing them from the scratch*. What you have done, in
+these 12 strenuous chapters, was to distill a State Monad out of thin
+air, starting from the ground up, incrementally and taking many
+detours for reasoning about any little nuance as you stumbled upon
+along the journey.
+
+In the next &mdash; much easier &mdash; chapters, I want to show you
+how easy and smooth working with a State Monad is, once it is
+implemented.
+
+Stay tuned! I will publish them in the next days!
 
 # References
 * [State Monad For The Rest Of Us - source code][source-code]
@@ -357,6 +379,8 @@ really?][thinking-functionally], from the
 # Comments
 [GitHub Discussions][discussions]
 
+
+{% include fp-newsletter.html %}
 
 [discussions]: https://github.com/arialdomartini/arialdomartini.github.io/discussions/30
 [source-code]: https://github.com/arialdomartini/state-monad-for-the-rest-of-us
