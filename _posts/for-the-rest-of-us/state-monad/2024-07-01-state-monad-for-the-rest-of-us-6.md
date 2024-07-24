@@ -531,10 +531,7 @@ promise that it will be an interesting journey!
 You need a bit of energy. So stretch your fingers, take a little rest,
 have a sorbet and then we will get going!
 
-See you in Chapter 6. (Hey! I am still writing it! If you are
-interested, drop me an [email](mailto:arialdo.martini@gmail.com),
-write a [comment][discussions], or subscribe to the newsletter: I will let you know when it's done!)
-
+See you in [Chapter 7](state-monad-for-the-rest-of-us-7).
 
 
 # References
