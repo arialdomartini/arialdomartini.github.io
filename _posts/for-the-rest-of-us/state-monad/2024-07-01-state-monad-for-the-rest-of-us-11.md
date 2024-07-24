@@ -403,29 +403,33 @@ let rec index =
 
 Run the test and see it pass.
 
+The type `WithCount`, together with `>>=` and `pure'` is what we call
+a State Monad. In this implementation, it only accounts for an integer
+`count`, but nothing prevents you from making it more generic.
+
 ## Do you like it?
-I don't know you, but that series of `>>=` and `fun s ->` makes my
-head spin. Yes, it's amazing: it's stateful code with an imperative
-scent. See how:
+I know you are not excited. How could you be? That series of `>>=` and
+`fun s ->` makes head spin, don't they? Yes, it's true: it's stateful
+code with an imperative scent. See how:
 
 ```fsharp
 putCount (count + 1)
 ```
 
-seems to imperatively update a global variable.
+seems to imperatively update a global variable. I'm sure you can
+follow the flow and understand it, and reading between the lines you
+can see how how it looks like imperative code. Yet, I bet you would
+call it all but fluent and readable.
 
-
-I'm sure you can follow the flow and understand it, and reading
-between the lines you can see how how it looks like imperative code.
-Yet, I bet you would call it all but fluent and readable.
-
-
-If you are only partially satisfied with the result, you are not
-alone. The designers of Haskell also felt that expressions like the
-above could be improved with some little syntactic sugar.
+If you are only partially satisfied with the result and you expected
+the State Monad to be more magic, you are not alone. The designers of
+Haskell also felt that expressions like the above could be improved
+with some little syntactic sugar.
 
 So they invented the *do notation*. Which is what you are going to
-implement too in the [next chapter](state-monad-for-the-rest-of-us-12).
+implement too in the [next
+chapter](state-monad-for-the-rest-of-us-12), and which will make you
+see the true nature of LINQ.
 
 
 # References

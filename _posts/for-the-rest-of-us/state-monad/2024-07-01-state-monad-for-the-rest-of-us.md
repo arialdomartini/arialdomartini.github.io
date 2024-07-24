@@ -56,6 +56,8 @@ In which you develop the State Monad.
   which you play with signatures.
 * [Chapter 11](state-monad-for-the-rest-of-us-11): in which you
   finally give birth to a State Monad.
+* [Chapter 12](state-monad-for-the-rest-of-us-12): in which you
+  see LINQ for what it is: a monadic engine.
 
 ### Part III
 In which you play with some State Monad use cases (and you see how
