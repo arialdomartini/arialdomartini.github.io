@@ -50,9 +50,9 @@ surely remember when we enumerated the possible placements for the
 
 | Position                            | Signature                                                                                                               |
 |-------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
-| As the first `index` parameter      | `let rec count index = ...`                                                                                             |
-| As the second `index` parameter     | `let rec index count = ...`                                                                                             |
-| As the parameter of a nested lambda | `let rec index =` <br/>&nbsp;&nbsp;&nbsp;&nbsp;`function`<br/>&nbsp;&nbsp;&nbsp;&nbsp;  `| Leaf v -> fun count -> ....` |
+| As the first `index` parameter      | `let rec index count tree = ...`                                                                                             |
+| As the second `index` parameter     | `let rec index tree count = ...`                                                                                             |
+| As the parameter of a nested lambda | `let rec index tree =` <br/>&nbsp;&nbsp;&nbsp;&nbsp;`match tree with`<br/>&nbsp;&nbsp;&nbsp;&nbsp;  `| Leaf v -> fun count -> ....` |
 
 and you remember that we went with the 3rd option. You might have
 already noticed that the last 2 are equivalent. Compare their
