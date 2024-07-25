@@ -7,8 +7,9 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
+[Index](state-monad-for-the-rest-of-us)  
 Source code:
-[github.com/arialdomartini/state-monad-for-the-rest-of-us][source-code].
+[github.com/arialdomartini/state-monad-for-the-rest-of-us][source-code]
 
 In [chapter 7](state-monad-for-the-rest-of-us-7), when we wanted to
 introduce a new type for the result value of `index`:

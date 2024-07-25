@@ -7,7 +7,10 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
-Source code: [github.com/arialdomartini/state-monad-for-the-rest-of-us][source-code].
+[Index](state-monad-for-the-rest-of-us)  
+Source code:
+[github.com/arialdomartini/state-monad-for-the-rest-of-us][source-code]
+
 
 ## Binary Trees
 
