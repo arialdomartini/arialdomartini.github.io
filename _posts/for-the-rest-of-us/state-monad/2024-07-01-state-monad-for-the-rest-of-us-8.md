@@ -23,21 +23,21 @@ let rec index =
     | Leaf v ->
         WithCount (fun count -> (Leaf (v, count), count + 1))
     | Node (l, r) ->
-         WithCount (
-          fun count ->
-              let li, lc = run (index l) count
-              let ri, rc = run (index r) lc
-              Node (li, ri), rc)
+        WithCount (
+            fun count ->
+                let li, lc = run (index l) count
+                let ri, rc = run (index r) lc
+                Node (li, ri), rc)
 ```
 
 Focus on the `Node` branch:
 
 ```fsharp
-WithCount (
- fun count ->
-     let li, lc = run (index l) count
-     let ri, rc = run (index r) lc
-     Node (li, ri), rc)
+        WithCount (
+            fun count ->
+                let li, lc = run (index l) count
+                let ri, rc = run (index r) lc
+                Node (li, ri), rc)
 ```
 
 Look the very last line, which creates an instance of `Node`: it might
@@ -70,8 +70,8 @@ buildNode (index l) (inder r)
 ```
 
 along the lines of what you did in the very first chapters.
-Unfortunately, this does not work as expected  
-The problem is that this does not compile. The types don't match:
+Unfortunately, this does not work as expected. It does not even
+compile. The types don't match:
 
 | Value       | Type                         |
 |-------------|------------------------------|
@@ -81,8 +81,8 @@ The problem is that this does not compile. The types don't match:
 
 
 You cannot apply a `WithCounter (Tree a)` value to a function
-expecting `Tree a`. Function Application in F# is not compatible with
-the types you are providing.
+expecting a naked `Tree a`. Function Application in F# is not
+compatible with the types you are providing.
 
 ## Reimplementing the built-in Function Application
 If F# Function Application is not compatible with `WithCounter`
@@ -126,7 +126,9 @@ let result = add <| 2 <| 3
 ```
 
 Well, you don't even have to implement `<|`, because it's natively
-defined in F#.  
+defined in F#. Try yourself, it really works. In Haskell the same
+operator is called `$`.
+
 Getting back to:
 
 
@@ -134,9 +136,8 @@ Getting back to:
 buildNode (index l) (inder r)
 ```
 
-Maybe what you need is a function application on steroids able to
-apply `WithCounter a` arguments to functions expecting just `a`
-values:
+What you need is a function application on steroids able to apply
+`WithCounter a` arguments to functions expecting just `a` values:
 
 ```fsharp
 buildNode <???> index l <???> index r
@@ -273,7 +274,7 @@ let rec index =
     function
     | Leaf v -> WithCount(fun count -> (Leaf(v, count), count + 1))
     | Node(l, r) ->
-        // `WithCount (Tree a -> Tree a -> Tree a)`
+        // WithCount (Tree a -> Tree a -> Tree a)
         let buildNode' = pure' buildNode
         
         // WithCount (Tree (string,int))
@@ -286,8 +287,8 @@ let rec index =
 It is simpler that it sounds:
 
 * You have a function inside a `WithCount`.
-* Its first argument, also inside a `WithCount`.
-* And so its second argument.
+* Its first argument is also inside a `WithCount`.
+* And so is its second argument.
 
 If it wasn't for the surrounding `WithCount`, you could just apply the
 2 arguments to the function, using the ordinary Function
@@ -320,7 +321,7 @@ if b = x -> y
 (a -> x -> y) -> a -> x -> y
 ```
 
-Find. So, let's implement `<*>`.
+Fine. So, let's implement `<*>`.
 
 ## Implementing `<*>`
 
@@ -485,7 +486,7 @@ and `<*>`, it has the very shape of:
 
 Please focus again on the `Node` branch and notice:
 
-* This code properly handle the `count` argument.
+* This code properly handles the `count` argument.
 * Yet, neither the `count` values nor the returned tuples are ever
   mentioned.
 * Of course: their handling have been extracted and coded once for all
@@ -527,7 +528,7 @@ that
   and to compose the result.
 * The `Leaf` node performs the actual business logic.
 
-Now, the actual business logic is about indexing a leaf, that is:
+Now, the actual business logic is about indexing a leaf. This implies:
 
 * Somehow acquiring the value of `count`.
 * Creating a indexed `Leaf`.
@@ -552,7 +553,9 @@ count-handling logic is still taken care of by `<*>`, the code must
 somehow manipulate `count`. So, the `Leaf` branch must both delegate
 `count` to `<*>` and work with it. That's a novel kind of a challenge.
 Fortunately, it is an easy one, which will bring you closer to the
-State Monad. Something deserving a little break and a [new
+State Monad.
+
+Something deserving a little break and a [new
 chapter](state-monad-for-the-rest-of-us-9).
 
 
