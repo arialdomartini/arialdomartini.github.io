@@ -348,9 +348,8 @@ really?][thinking-functionally], from the
 
 
 ## Much simpler than this
-You made it to the end! Congrats!  
-If you found getting to the State Monad arduous, it is because it
-really was.
+You made it to the end! Congrats! If you found getting to the State
+Monad arduous, it is because it really was.
 
 Here's something that might catch you off guard: *working* with a
 State Monad is really trivial.  
@@ -358,9 +357,9 @@ I really think that this is a general trait of Functional Programming:
 *using* functional programming concepts is orders of magnitude simpler
 than *re-implementing them from the scratch*. What you have done, in
 these 12 strenuous chapters, was to distill a State Monad out of thin
-air, starting from the ground up, incrementally and taking many
-detours for reasoning about any little nuance as you stumbled upon
-along the journey.
+air, from the ground up, incrementally and taking many detours for
+reasoning about any little nuance as you stumbled upon along the
+journey.
 
 In the next &mdash; much easier &mdash; chapters, I want to show you
 how easy and smooth working with a State Monad is, once it is
