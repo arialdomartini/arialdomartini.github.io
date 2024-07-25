@@ -120,8 +120,8 @@ let rec index =
               Node (li, ri), rc)
 ```
 
-Spoiler: `WithCount` is the type around which you will develop the
-State Monad. Keep an eye on it.
+Spoiler alert: `WithCount` is the type around which you will develop
+the State Monad. Keep an eye on it.
 
 `WithCount` does nothing but holding that convoluted function. In a
 sense, it decorates it, it encapsulates the function and hides its

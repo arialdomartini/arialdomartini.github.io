@@ -488,7 +488,7 @@ Once you separate them, what you will end up with is:
 * A magic State Monad, handling the statefulness nature of the problem
   behind the scenes.
   
-Here's a spoiler:
+Here's a spoiler alert:
 
 ```fsharp
 let rec index =
