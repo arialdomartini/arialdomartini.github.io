@@ -7,11 +7,11 @@ tags:
 - Functional Programming
 include_in_index: false
 ---
+
 Source code:
 [github.com/arialdomartini/state-monad-for-the-rest-of-us][source-code].
 
-Here's what you got in [Chapter
-11](state-monad-for-the-rest-of-us-11):
+Here's what you got in [Chapter 11](state-monad-for-the-rest-of-us-11):
 
 ```fsharp
 let rec index =
@@ -151,7 +151,7 @@ Now, just create an instance of it:
 let withCount = WithCountExpression()
 ```
 
-and, voil‡!, you can use the new syntax:
+and, voil√†!, you can use the new syntax:
 
 ```fsharp
 let rec index =
