@@ -125,11 +125,10 @@ the State Monad. Keep an eye on it.
 
 `WithCount` does nothing but holding that convoluted function. In a
 sense, it decorates it, it encapsulates the function and hides its
-complexity. More importantly, having a name, gives us the
-chance to define dedicated functions to operate on it.  
-Which functions? Well, first of all, the ones we need to fix the
-compilation errors. There are severals, and they revolve around 2
-problems:
+complexity. More importantly, having a name, it gives us the chance to
+define dedicated functions to operate on it. Which functions? Well,
+first of all, the ones we need to fix the compilation errors. There
+are severals, and they revolve around 2 problems:
 
 1. `WithCount` is not even defined.
 2. `index` does not return a function anymore: its returned value
@@ -149,7 +148,7 @@ the right is not: it is the data constructor that can be used to build
 an instance of `WithCount`. Think of it as the C# class constructor.
 
 What to replace `???` with? Let's be lazy and let's ask F# itself. If
-you extract the argument of `WithCount` to a variable, if can use the
+you extract the argument of `WithCount` to a variable, you can use the
 F# type inference to ask the F# compiler its opinion:
 
 ```fsharp
@@ -175,24 +174,24 @@ This matches our experience:
 
 
 In fact, we could be way more generic. For the time being, let's
-settle for this little generalization:
+settle for this little generalization, using `v` instead of `Tree (a,
+Int)`:
 
 ```fsharp
 type WithCount<'v> = WithCount of (int -> 'v * int)
 ```
 
-so `WithCount` is not specific to trees. Afterall, the logic for
-traversing trees is already implemented in `index`. It might not be
-immediately evident, but what this `WithCount` definition does, it to
-isolate the pure, domain logic from the count-handling logic. We will
-discuss this more thoroughly in [chapter xxx](state-monad-for-the-rest-of-us-xxx).
+This makes `WithCount` not specific to trees. Afterall, the logic for
+traversing trees is already implemented in `index`: it does not need
+to affect `WithCount` too. Indeed, it might not be immediately
+evident, but what this `WithCount` definition does, it to isolate the
+pure, domain logic from the count-handling logic. We will discuss this
+more thoroughly in the next chapters.
 
 ### Running `WithCount`
-
-Your code is full of invocations of that function that now fail to
-even compile, because the function is hidden behind a `WithCount`
-type.  
-Take the test, for example:
+Now for the other compilation issues. Your code is full of invocations
+of that function that now fail to even compile, because the function
+is hidden behind a `WithCount` type. Take the test, for example:
 
 ```fsharp
 [<Fact>]
@@ -216,7 +215,8 @@ fails to compile. You could read it as:
 (index tree) 1
 ```
 
-Before you introduced `WithCount`, this was equivalent to:
+Before you introduced `WithCount`, `index tree` used to return a
+function and was equivalent to:
 
 ```fsharp
 // f :: Int -> (Tree (String, Int), Int)
@@ -224,7 +224,7 @@ let f = index tree  // invoking index
 f 1                 // invoking the returned function
 ```
 
-In this version, `f` is a function ready to be invoked. After the last change, what
+`f` was a function ready to be invoked. After the last change, what
 you get is instead:
 
 ```fsharp
@@ -233,15 +233,15 @@ let withCount = index tree  // invoking index
 withCount 1                 // this fails to compile
 ```
 
+Not an invocable function anymore.  
 By the way: notice the simplification you already gained. What you get
 back from invoking `index` is an indexed tree, `Tree (string, int)`,
 surrounded by a `WithCount`. In this signature, there is no mention at
 all to the count-handling logic. As I commented before, `WithCount` lets you
-liberate your domain logic from the state handling. We will see this
-better shortly.
+liberate your domain logic from the state handling.
 
-Let's fix the compilation errors, first. F#'s function application is
-not smart enough to pass an argument to a function when it is inside a
+Let's fix the compilation errors. F#'s function application is not
+smart enough to pass an argument to a function when it is inside a
 `WithCount`. You need a special version of function application. Let's
 call it `run`:
 
@@ -293,9 +293,8 @@ which are a bit harder to concatenate, unless you extend some F#'s
 native functionalities.
 
 ## Let it compile
-Back to fixing the compilation errors. Everywhere there used to be a
-native F#'s function application, you need to use your novel `run`
-function. Here's the working result:
+Back to fixing the compilation errors using you novel `run` function.
+Here's the working result:
 
 ```fsharp
 type WithCount<'v> = WithCount of (int -> 'v * int)
@@ -324,8 +323,8 @@ let ``indexes a tree`` () =
 So far, you got a bit on improvement on the signature, but the
 implementation code is still convoluted, and domain logic and
 count-handling logic are still interwoven.  
-It's time to sort out the tangle, and to invent the Applicative
-Functor. Have a coffee and see you in a minute in [Chapter
+It's time to sort the tangle out, and to invent the Applicative
+Functor. Feel free to have a coffee! See you in a minute in [Chapter
 8](state-monad-for-the-rest-of-us-8).
 
 
