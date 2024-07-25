@@ -138,8 +138,8 @@ have placed `count` as a function parameter:
 
 ```fsharp
 // Int -> Tree a -> Tree (a, Int)
-let rec count index =
-    function
+let rec index count tree=
+    match tree with
     | Leaf v -> Leaf (v, count)
     | Node(l, r) -> failwith "Not yet implemented"
 ```
@@ -147,8 +147,8 @@ let rec count index =
 2. As the second `index` parameter:
 ```fsharp
 // Tree a -> Int -> Tree (a, Int)
-let rec index count =
-    function
+let rec index tree count =
+    match tree with
     | Leaf v -> Leaf (v, count)
     | Node(l, r) -> failwith "Not yet implemented"
 ```
@@ -156,8 +156,8 @@ let rec index count =
 3. As the parameter of a nested lambda:
 ```fsharp
 // Tree a -> (Int -> Tree (a, Int))
-let rec index =
-    function
+let rec index tree =
+    match tree with
     | Leaf v -> fun count -> Leaf (v, count)
     | Node(l, r) -> failwith "Not yet implemented"
 ```
