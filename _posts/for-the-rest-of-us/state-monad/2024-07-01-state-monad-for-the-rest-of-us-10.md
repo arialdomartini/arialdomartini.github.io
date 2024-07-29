@@ -135,9 +135,8 @@ type WithCount<'b, 'c> = WithCount of ('c -> 'b * 'c)
 
 where `'c` is the type of the state being chained, and `'b` is the
 original domain logic result type.  
-`c` is not a count anymore, it's a generic state. Let's call it
-`s`. And `WithCounter` is a misleading name. We can easily call it
-`State`:
+`c` is not a count anymore, it's a generic state. Let's call it `s`.
+And `WithCount` is a misleading name. We can easily call it `State`:
 
 ```fsharp
 type State<'b, 's> = State of ('s -> ('b * 's))

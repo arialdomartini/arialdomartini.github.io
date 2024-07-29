@@ -77,16 +77,16 @@ compile. The types don't match:
 | Value       | Type                         |
 |-------------|------------------------------|
 | `buildNode` | `Tree a -> Tree a -> Tree a` |
-| `index l`   | `WithCounter (Tree a)`       |
-| `index r`   | `WithCounter (Tree a)`       |
+| `index l`   | `WithCount (Tree a)`         |
+| `index r`   | `WithCount (Tree a)`         |
 
 
-You cannot apply a `WithCounter (Tree a)` value to a function
+    You cannot apply a `WithCount (Tree a)` value to a function
 expecting a naked `Tree a`. Function Application in F# is not
 compatible with the types you are providing.
 
 ## Reimplementing the built-in Function Application
-If F# Function Application is not compatible with `WithCounter`
+If F# Function Application is not compatible with `WithCount`
 parameters, let's reinvent Function Application.  
 You can start from reimplementing the standard F# Function
 Application. When you write:
@@ -138,7 +138,7 @@ buildNode (index l) (inder r)
 ```
 
 What you need is a function application on steroids able to apply
-`WithCounter a` arguments to functions expecting just `a` values:
+`WithCount a` arguments to functions expecting just `a` values:
 
 ```fsharp
 buildNode <???> index l <???> index r
