@@ -195,8 +195,8 @@ index (Leaf v) =
     }
 index (Node l r) =
     do {
-        let! ll = index l
-        let! rr = index r
+        ll <- index l
+        rr <- index r
         return buildNode ll rr
     }
 ```
