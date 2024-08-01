@@ -375,7 +375,7 @@ it:
 ```fsharp
 let (<*>) f a =
     WithCount (fun count ->
-        let ff, fc = run f count
+        let fv, fc = run f count
         ...
 ```
 
