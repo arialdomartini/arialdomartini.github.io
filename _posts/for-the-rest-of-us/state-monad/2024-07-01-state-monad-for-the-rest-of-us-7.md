@@ -78,7 +78,7 @@ utterly exhausting. It is definitely worth to simplify it.
 
 As it often happens in Functional Programming, the first step to
 elaborating an idea &mdash; to simplify it &mdash; is to give it a
-name. *Giving an idea a name* rally means *to define a type* to
+name. *Giving an idea a name* really means *to define a type* to
 represent it. The more you will apply Functional Programming, the more
 you will find yourself modeling your applications through types.
 
