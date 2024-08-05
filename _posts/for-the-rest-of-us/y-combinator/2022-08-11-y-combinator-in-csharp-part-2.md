@@ -23,7 +23,10 @@ var result = new List<int>{1, 2, 3}.Select(n => n == 0 ? 0 : n + ???(n - 1));
 ```
 
 
-The smart C# programmer will observe that the undefined `???` can be seen as a [continuation][continuation], and that nothing prevents us from providing the anonymous lambda with an extra parameter, with which to feed the proper continuation:
+The smart programmer will observe that the undefined `???` can be seen
+as a [continuation][continuation], and that nothing prevents us from
+providing the anonymous lambda with an extra parameter, with which to
+feed the proper continuation:
 
 ```csharp
 var quasi_sum = 
