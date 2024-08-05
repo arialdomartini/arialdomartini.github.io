@@ -207,7 +207,7 @@ type Tree = Leaf | Node of (Tree * Tree)
 `Tree` is a type, `Leaf` and `Node` are not: `Leaf` and `Node` are
 ways for *creating* an instance of type `Tree`. This is akin to the
 difference between a class and its constructors. In F#, we would call
-`Tree` and `Leaf` as follows:
+`Tree`, `Leaf` and `Node`as follows:
 
 | Element                            | Name                     |
 |------------------------------------|--------------------------|
