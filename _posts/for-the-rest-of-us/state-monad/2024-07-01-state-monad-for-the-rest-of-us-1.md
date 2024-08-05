@@ -250,10 +250,8 @@ let numberOfLeaves tree =
 Read it as a glorified `if/then/else` and ask yourself:
 
 * If `numberOfLeaves` receives a tree, and that tree is a single
-  `Leaf`, how many leaves does that tree have?
-  
-It means that the function needs to calculate the number of leaves of
-this tree:
+  `Leaf`, how many leaves does that tree have? In other words, the
+  function needs to calculate the number of leaves of this tree:
 
 ```
    Leaf
