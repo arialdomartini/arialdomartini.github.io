@@ -60,7 +60,7 @@ Func<Func<int, int>, Func<int, int>> quasi_sum =
             n == 0 ? 0 : n + continuation(n - 1)
 ```
 
-Ok, not it compiles. But, wow, that's a mouthful.<br/> If only C# supported type aliases we could write:
+Ok, now it compiles. But, wow, that's a mouthful.<br/> If only C# supported type aliases we could write:
 
 ```csharp
 type Sum = Func<int, int>;
