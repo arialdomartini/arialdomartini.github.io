@@ -53,8 +53,10 @@ var sum = quasi_sum( proper_continuation );
 Neither `sum` nor `quasi_sum` are recursive.
 
 We have a couple of little problems here.<br/>
-First: `proper_continuation` is still undefined.<br/>
-Second, `quasi_sum` does not even compile: the poor C#'s type inference is not able to workout the type. We need to give the compiler a hand:
+- First: `proper_continuation` is still undefined.
+- Second, `quasi_sum` does not even compile: the poor C#'s type
+  inference is not able to workout the type. We need to give the
+  compiler a hand:
 
 ```csharp
 Func<Func<int, int>, Func<int, int>> quasi_sum =
@@ -63,7 +65,8 @@ Func<Func<int, int>, Func<int, int>> quasi_sum =
             n == 0 ? 0 : n + continuation(n - 1)
 ```
 
-Ok, now it compiles. But, wow, that's a mouthful.<br/> If only C# supported type aliases we could write:
+Ok, now it compiles. But, wow, that's a mouthful. If only C# supported
+type aliases we could write:
 
 ```csharp
 type Sum = Func<int, int>;
