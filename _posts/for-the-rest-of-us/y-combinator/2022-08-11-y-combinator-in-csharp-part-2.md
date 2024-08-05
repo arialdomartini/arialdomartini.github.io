@@ -52,7 +52,8 @@ var sum = quasi_sum( proper_continuation );
 
 Neither `sum` nor `quasi_sum` are recursive.
 
-We have a couple of little problems here.<br/>
+We have a couple of little problems here:
+
 - First: `proper_continuation` is still undefined.
 - Second, `quasi_sum` does not even compile: the poor C#'s type
   inference is not able to workout the type. We need to give the
@@ -78,8 +79,8 @@ Func<Sum, Sum> quasi_sum =
 
 ```
 
-Much better.<br/>
-Actually, we can partially simulate type aliasing with delegates:
+Much better. Actually, we can partially simulate type aliasing with
+delegates:
 
 ```csharp
 delegate int Sum(int n);
@@ -95,11 +96,14 @@ Cool. This `quasi_sum` is kind of a sum-function maker: when it is given a prope
 
 
 ## Feeding itself with itself
-Problem solved?<br/>
-Not really: we have just shifted it. Now we are stuck with the question what the right continuation is.
+Problem solved? Not really: we have just shifted it. Now we are stuck
+with the question what the right continuation is.
 
-The ideal continuation must be a function able to continue the sum calulation. So, a function equivalent to `sum` itself. That is, exactly the function  `quasi_sum` is supposed to create.<br/>
-This gives the smart reader the idea of feeding `quasi_sum` with itself. Which, in turn, screams recursion.
+The ideal continuation must be a function able to continue the sum
+calulation. So, a function equivalent to `sum` itself. That is,
+exactly the function `quasi_sum` is supposed to create.  
+This gives the smart reader the idea of feeding `quasi_sum` with
+itself. Which, in turn, screams recursion.
 
 That's the basic idea to build on top of. Sounds more a dog chasing its tail than a solution, an egg and chicken problem variant, right?
 
