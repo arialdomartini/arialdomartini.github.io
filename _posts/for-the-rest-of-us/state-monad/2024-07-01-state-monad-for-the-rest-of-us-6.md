@@ -92,7 +92,7 @@ and over. What I would like you to notice, instead, is:
   
 Throughout this series, every time we managed to have a compiling
 code, that was a reliable sign that the functionality was complete and
-corret, and the green test was there to testify it. It's not the case
+correct, and the green test was there to testify it. It's not the case
 here anymore. The very moment you resolve the dependency to
 `count` with an shared mutable variable, as far as the compiler is
 concerned, the code is alredy complete and correct.
