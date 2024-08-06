@@ -168,7 +168,7 @@ have placed `count` as a function parameter:
 
 
 I would like to convince you that the 3rd option is the most
-convenient, because it better exhibit the mental metaphor of monads.
+convenient, because it better exhibits the mental metaphor of monads.
 
 
 ## Learn to procrastinate
