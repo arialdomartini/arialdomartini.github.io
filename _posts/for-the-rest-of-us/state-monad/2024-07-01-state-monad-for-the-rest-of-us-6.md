@@ -253,7 +253,7 @@ let rec index =
         fun count ->
             let li = index l count
             let ri = index r count
-			Node (li, ri)
+            Node (li, ri)
 ```			
 
 `li` and `ri` stand for `left, indexed` and `right, indexed`.
