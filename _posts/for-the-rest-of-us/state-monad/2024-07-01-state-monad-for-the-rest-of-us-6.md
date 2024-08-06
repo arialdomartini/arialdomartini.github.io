@@ -353,7 +353,7 @@ Notice how the leaf branch is returning 2 information:
 |-------------------|--------------------------|
 | `Leaf (v, count)` | `count +1`               |
 
-Also notice that, again, the whole signature of `index`, so its type,!
+Also notice that, again, the whole signature of `index`, so its type!,
 changed. And this immediately sets off alarms bells for the type
 system. That, ideed, signals that the node branch fails to compile. Of
 course! 
