@@ -14,7 +14,7 @@ Source code:
 ## Red pill, blue pill
 
 Welcome back! I hope your tea (or your whiskey and cigar) inspired
-you. We left eachother in [chapter
+you. We left each other in [chapter
 5](state-monad-for-the-rest-of-us-5) with an existential question: 
 
 Where does `count` come from in this hypothetical, scaffold implementation?
