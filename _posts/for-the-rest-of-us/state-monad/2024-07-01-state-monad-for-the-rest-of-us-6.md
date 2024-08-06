@@ -98,7 +98,7 @@ here anymore. The very moment you resolve the dependency to
 concerned, the code is alredy complete and correct.
 
 I like to interpret the apathy we are getting from the Type Sytem as
-if it telling us:
+if it is telling us:
 
 "So you are not giving me any hints about the types at play. Fine,
 your loss, go ahead and do it your way".
