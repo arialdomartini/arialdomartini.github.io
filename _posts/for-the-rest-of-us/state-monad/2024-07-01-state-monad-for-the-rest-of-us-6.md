@@ -126,8 +126,9 @@ that is, its type. Exactly what the Type Sytem was moaning about.
 
 Although the change is as simple as before (you just added a humble
 `count`), the Type Sytem will not let you down. On the contrary, it
-immediately highlights all the lines where your code fails to compile.  
-Notice: a compilation error now is not a harm. On the contrary: it's a
+immediately highlights all the lines where your code fails to compile.
+
+Notice: a compilation error is not a harm. On the contrary: it's a
 gift from Heaven, it's a lighthouse to follow. Instead of being
 left to sink or swim, the Type Sytem is there to suggest you how to
 complete your implementation. Beautiful.
