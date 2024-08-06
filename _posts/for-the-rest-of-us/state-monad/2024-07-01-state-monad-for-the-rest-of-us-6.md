@@ -529,7 +529,7 @@ let! ri = index r
 
 seem 2 sequential statements, they are in fact 2 functions bound
 together with the `bind` operator. Puzzling, isn't it? I'm sure you
-understand that, to fully get there, we stilllq have to walk a bit. I
+understand that, to fully get there, we still have to walk a bit. I
 promise that it will be an interesting journey!
 
 You need a bit of energy. So stretch your fingers, take a little rest,
