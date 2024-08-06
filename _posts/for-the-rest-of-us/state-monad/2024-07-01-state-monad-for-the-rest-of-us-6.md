@@ -481,7 +481,7 @@ cause:
 Sometimes coding is so predictable, isn't it? It's always the same old
 problems. With approving smiles and nods, the Venerable Sages observe
 us contentedly, implying: "it's all about the Single Responsibility ,
-the Open Closed , the Dependency Inversion Principles . It's always a
+the Open Closed, the Dependency Inversion Principles . It's always a
 matter of Low Coupling and High Cohesion".
 
 So, you know how to get out of this mess: you have to separate the
