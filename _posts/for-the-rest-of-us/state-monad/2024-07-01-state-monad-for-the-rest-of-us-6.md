@@ -327,7 +327,7 @@ Another useful perspective on returning a `fun count ->` is to view it
 as a communication channel. it's a way for the code to send
 information back to its caller, back to the past. It says:
 
-> I don't knwo who used to run before me,
+> I don't know who used to run before me,
 > but it had to pass me the correct value of `count`
 
 You can use the same trick to send information forward to the future
