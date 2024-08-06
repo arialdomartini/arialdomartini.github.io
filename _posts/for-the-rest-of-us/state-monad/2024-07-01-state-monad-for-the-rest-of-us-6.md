@@ -380,7 +380,7 @@ let rec index =
 ```
 
 `lc` stands for `left count`; `rc` for `right count`.  
-Still not compiling. *Good*! There are 2 problems:
+Still not compiling. *Good!* There are 2 problems:
 
 1. Why are we indexing the right branch starting from the value
    `count`?
