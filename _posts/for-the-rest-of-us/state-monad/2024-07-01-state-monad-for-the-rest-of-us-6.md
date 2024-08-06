@@ -30,23 +30,23 @@ There are in fact 2 legit answers:
 
 1. It is a **global variable**
 
-```fsharp
-let count = 1
+    ```fsharp
+    let count = 1
 
-let rec index =
-    function
-    | Leaf v -> Leaf (v, count)
-    | Node(l, r) -> failwith "Not yet implemented"
-```
+    let rec index =
+        function
+        | Leaf v -> Leaf (v, count)
+        | Node(l, r) -> failwith "Not yet implemented"
+    ```
 
 2. It is a **function parameter**:
 
-```fsharp
-let rec index count =
-    function
-    | Leaf v -> Leaf (v, count)
-    | Node(l, r) -> failwith "Not yet implemented"
-```
+    ```fsharp
+    let rec index count =
+        function
+        | Leaf v -> Leaf (v, count)
+        | Node(l, r) -> failwith "Not yet implemented"
+    ```
 
 This is a very strong design decision.
 
@@ -137,31 +137,33 @@ have placed `count` as a function parameter:
 
 1. As the first `index` parameter:
 
-```fsharp
-// Int -> Tree a -> Tree (a, Int)
-let rec index count tree=
-    match tree with
-    | Leaf v -> Leaf (v, count)
-    | Node(l, r) -> failwith "Not yet implemented"
-```
+    ```fsharp
+    // Int -> Tree a -> Tree (a, Int)
+    let rec index count tree=
+        match tree with
+        | Leaf v -> Leaf (v, count)
+        | Node(l, r) -> failwith "Not yet implemented"
+    ```
 
 2. As the second `index` parameter:
-```fsharp
-// Tree a -> Int -> Tree (a, Int)
-let rec index tree count =
-    match tree with
-    | Leaf v -> Leaf (v, count)
-    | Node(l, r) -> failwith "Not yet implemented"
-```
+
+    ```fsharp
+    // Tree a -> Int -> Tree (a, Int)
+    let rec index tree count =
+        match tree with
+        | Leaf v -> Leaf (v, count)
+        | Node(l, r) -> failwith "Not yet implemented"
+    ```
 
 3. As the parameter of a nested lambda:
-```fsharp
-// Tree a -> (Int -> Tree (a, Int))
-let rec index tree =
-    match tree with
-    | Leaf v -> fun count -> Leaf (v, count)
-    | Node(l, r) -> failwith "Not yet implemented"
-```
+
+    ```fsharp
+    // Tree a -> (Int -> Tree (a, Int))
+    let rec index tree =
+        match tree with
+        | Leaf v -> fun count -> Leaf (v, count)
+        | Node(l, r) -> failwith "Not yet implemented"
+    ```
 
 
 I would like to convince you that the 3rd option is the most
