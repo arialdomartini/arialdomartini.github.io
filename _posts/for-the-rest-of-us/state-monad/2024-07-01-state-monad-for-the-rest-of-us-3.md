@@ -53,9 +53,12 @@ let countVowels (input: string) : int =
 ```
 
 Since both share with `String.length` the same signature `String ->
-Int`, you can easily plug them in your algorithm:
+Int`, you could easily use either in your algorithm:
 
 ```fsharp
+// String -> Int
+let algo (input: string)  int = ...
+
 // Tree String -> Tree Int
 let rec lengths tree =
     match tree with
@@ -66,6 +69,10 @@ let rec lengths tree =
 and
 
 ```fsharp
+
+// String -> Int
+let countVowels (input: string) : int = ...
+
 // Tree String -> Tree Int
 let rec lengths tree =
     match tree with
