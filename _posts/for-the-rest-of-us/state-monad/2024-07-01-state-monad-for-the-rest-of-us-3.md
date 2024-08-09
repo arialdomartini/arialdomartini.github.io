@@ -57,19 +57,18 @@ Int`, you could easily use either in your algorithm:
 
 ```fsharp
 // String -> Int
-let algo (input: string)  int = ...
+let String.length (input: string)  int = ...
 
 // Tree String -> Tree Int
 let rec lengths tree =
     match tree with
     | Leaf v -> Leaf(parseWordToInt v)
-    | Node(l, r) -> Node(algo l, algo r)
+    | Node(l, r) -> Node(String.length l, String.length r)
 ```
 
 and
 
 ```fsharp
-
 // String -> Int
 let countVowels (input: string) : int = ...
 
