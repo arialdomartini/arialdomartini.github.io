@@ -49,7 +49,7 @@ Let's do ourselves a favor and agree they don't.
 
 A Node always contains 2 Leaves. What does a Leaf contain? Nothing: it
 just is.  
-So, a Tree is either a Leaf or a Node containing 2 branches, each
+So, a Tree is either a Leaf or a Node made of 2 branches, each
 containing another Tree structure. Remember this definition, because
 we will translate it more or less literally to F#.
 
