@@ -22,7 +22,7 @@ tags:
 - [The classic TDD approach](#the-classic-tdd-approach)
 - [Can we do better?](#can-we-do-better)
 - [The PBT approach](#the-pbt-approach)
-- [Ruminating on PBT](ruminating-on-pbt)
+- [Ruminating on PBT](#ruminating-on-pbt)
     - [Capturing the requirement](#capturing-the-requirement)
     - [Covering the examples](#covering-the-examples)
     - [But can it be used to *lead development*?](#but-can-it-be-used-to-lead-development)
