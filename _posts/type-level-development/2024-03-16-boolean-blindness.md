@@ -295,5 +295,5 @@ Happy programming!
 [magic-number]: https://luzkan.github.io/smells/magic-number
 [robert-harper]: https://existentialtype.wordpress.com/2011/03/15/boolean-blindness/
 [dan-licata]: https://dlicata.wescreates.wesleyan.edu/
-[mr-boole]: https://sydneypadua.com/2dgoggles/uncategorized/happy-200th-birthday-george-boole/
+[mr-boole]: https://web.archive.org/web/20221024044854/https://sydneypadua.com/2dgoggles/uncategorized/happy-200th-birthday-george-boole/
 [lovelace-and-babbage]: https://sydneypadua.com/2dgoggles/the-book/
