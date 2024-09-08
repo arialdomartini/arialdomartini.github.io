@@ -184,9 +184,9 @@ cases and have the compiler supervising the usage and its consistency
 everywhere, for free.
 
 # Domain-Modeling
-My personal take-away is: wherever I find the opportunity, I try to
-give an emerging domain notion the dignity of a type, so that I can
-treat it as a *thing*. I often do the same with booleans.
+My personal take-away is: wherever you find the opportunity, try to
+give an emerging domain notion the dignity of a type, so that you can
+treat it as a *thing*. This is especially true with booleans.
 
 In my experience, the domain experts:
 
