@@ -219,59 +219,10 @@ yet. ArialdoLang is unlikely to see the light anytime soon.
 If you are intollerant to hair-splitting posts, you can safely stop
 here. Instead, if you want to be inspired by mathematical and
 phylosophical arguments, go read [Boolean Blindness][robert-harper] by
-Robert Harper.  
-Amongst the interesting arguments he brings there is the following: booleans are ofter confused with logical propositions, but this is an
-error. Propositions express assertions, they make claims; booleans do
-not, they just are. The former are computed, the latter are not.
+Robert Harper, or my summary in [the appendix of this post](boolean-blindness-appendix).
 
-An intriguing argument Robert Harper brings is: the innocent `equals`
-function:
 
-```
-equals :: t -> t -> Bool
-equals a b = a == b
-```
-
-opens a Pandora box with very profound (philosophical) consequences.  
-Here's the catch: are you ready to bet that if 2 things are marked as
-*not equal* by that function are in fact *not equal*?
-
-The problem arises from the following observation. Compared to
-equality of values, equality of functions is way more
-complicated. Provided that 2 *functions* (2 propositions) are equal,
-in many programming languages it is almost impossible to prove that
-they are equal. Take the following:
-
-```csharp
-bool Or1(bool a, bool b) => a || b;
-bool Or2(bool a, bool b) => b || a;
-```
-
-`equals` fails to prove they express the same. The same would happen
-for logic statements such as:
-
-```
-Proposition 1: "All humans are mortal."
-Proposition 2: "If something is human, then it is mortal."
-```
-
-As Rober Harper notices:
-
-> For a proposition, p, to be true means that it has a proof;
-> there is a communicable, rational argument for why p is the case.
-> For a proposition, p, to be false means that it has a refutation;
-> there is a counterexample that shows why p is not the case.
->
-> The language here is delicate.  The judgement that a proposition,
-> p, is true is not the same as saying that p is equal to true, 
-> nor is the judgement that p is false the same as saying that p
->is equal to false!  In fact, it makes no sense to even ask the
-> question, is p equal to true, for the former is a proposition
-> (assertion), whereas the latter is a Boolean (data value); 
-> they are of different type.
-
-But this is, in fact, (beautiful) philosophy.
-
+# Conclusion
 If you want to keep your feet on the ground, please: next time you
 happen to be in front of a yes/no, true/false, here/there, this/that
 situation, try to model it with a type.
@@ -282,6 +233,7 @@ complain.
 Happy programming!
 
 # References
+* [Arialdo Martini - appendix](boolean-blindness-appendix)
 * [Dan Licata][dan-licata]
 * [Luzkan - Boolean Blindness][luzkan]
 * [Luzkan - Uncommunicative Name][uncommunicative-name]
