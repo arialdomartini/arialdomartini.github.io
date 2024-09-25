@@ -82,7 +82,7 @@ Until then, all that the `Nond<Position>` monad does is to provide the programme
 Now, how to structure `Nond<A>`? It's only natural to model the multiple possible values as a collection of values of type `A`.  
 In fact, you could have just used a list for representing nondeterministic computations. It's indeed a classical approach. But it does not tell the whole story: lists are only one of the many ways to model nondeterminism.
 
-A `decimal -> Nond<decimal>` representing the forecast price of a stock is likely to return values following a Gaussian distribution. From this perspective, `IEnumerable<decimal>` would be a broken model, because it corresponds to a distrubution of equally probable prices, and this poorly model the reality.
+A `decimal -> Nond<decimal>` representing the forecast price of a stock is likely to return values following a Gaussian distribution. From this perspective, `IEnumerable<decimal>` would be a broken model, because it corresponds to a uniform distribution of equally probable prices, and this poorly model the reality.
 
 In implementing `Nond<decimal>`, you could easily decide to store the mean and the variance, rather than a collection of possible prices. The `Nond` monad is all about *abstracting* the nondeterministic effect away, so that your code can be made independent from it. What is important, for your implementation, is that given 2 functions built around the notion of a Gaussian distribution (or whatever else notion of nondeterminism), their combination is done in a way that preserves some specific statistical rules.
 
