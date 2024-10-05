@@ -107,7 +107,7 @@ captures exactly what you did in [chapter
 | You return the domain logic result *plus* the next `count` value |       | `-> (b, Int)` |
 
 
-If you want to give this idea a name, and capture it with a type, it
+If you want to give this idea a name and to capture it with a type, it
 makes sense to defind it with:
 
 ```fsharp
