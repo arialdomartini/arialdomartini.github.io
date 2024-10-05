@@ -81,7 +81,7 @@ compile. The types don't match:
 | `index r`   | `WithCount (Tree a)`         |
 
 
-    You cannot apply a `WithCount (Tree a)` value to a function
+You cannot apply a `WithCount (Tree a)` value to a function
 expecting a naked `Tree a`. Function Application in F# is not
 compatible with the types you are providing.
 
