@@ -108,7 +108,7 @@ captures exactly what you did in [chapter
 
 
 If you want to give this idea a name and to capture it with a type, it
-makes sense to defind it with:
+makes sense to define it with:
 
 ```fsharp
 type WithCount<'b> = WithCount of (int -> 'b * int)
