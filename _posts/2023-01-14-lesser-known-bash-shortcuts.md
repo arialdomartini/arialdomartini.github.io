@@ -390,7 +390,7 @@ to `~/.inputrc`.
 |----------|---------------------|-------------------------------------------------------|
 | `C-t`    | `(transpose-chars)` | swaps the char on the left with the char on the right |
 | `M-t`    | `(transpose-words)` | swaps the word on the left with the word on the right |
-<br/>
+
 
 <video width="100%" controls>
     <source 
