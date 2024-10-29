@@ -67,12 +67,12 @@ repository. This is wonderfully represented in this interactive
 [Git Cheatsheet][git-cheatsheet]. For Emacs we have something similar
 (and way simpler):
 
-![Change me](static/img/emacs/mark-ring/mark-ring.svg "No title")
+![A graphical representation of the mark ring](static/img/emacs/mark-ring/mark-ring.svg "No title")
 
 
 ## Just Going Back
-So you have variable to store a history of marked position. The basic
-idea is:
+So you have a variable to store the history of marked position. The
+basic idea is:
 
 * You store a position for future use.
 * You move around.
