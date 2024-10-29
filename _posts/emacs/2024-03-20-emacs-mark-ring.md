@@ -81,11 +81,8 @@ basic idea is:
   
 Here is the basic usage:
 
-* Whenever you want to leave a breadcrumb, use `C-SPC
-  (set-mark-command)`. Hit it twice: the first time it will start
-  selecting text (in Emacs lingo: it will *activate the mark*). Here
-  we don't want to select anything: we just want to write a position
-  down in the history.
+* Whenever you want to leave a breadcrumb, hit twice `C-SPC
+  (set-mark-command)`. Hit it twice.  
   `C-SPC (set-mark-command)` updates the current mark and *pushes* the
   previous a value in the mark ring, in fact creating a history of
   positions.
@@ -99,6 +96,13 @@ Here is the basic usage:
   hit `C-u C-SPC`. Your cursor will be moved where the mark is, and
   the previous position will be popped out from the mark ring. In
   other words, with `C-u C-SPC` you will be consuming the position history.
+
+
+If you wonder why you had to hit `C-SPC` twice: the first time it
+starts selecting text (in Emacs lingo: it *activates the mark*). The
+second time, you disable the text selection. Indeed, you don't want to
+select anything: you just want to write a position down in the
+history.
 
 Follow the diagram. It's really easier done than said.
 
