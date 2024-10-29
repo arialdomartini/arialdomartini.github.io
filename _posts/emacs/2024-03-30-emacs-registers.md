@@ -42,9 +42,8 @@ In this case, there are better data structures than a ring. As
 a programmer, you might prefer a key-value lookup table. 
 
 ## By hand, from the scratch
-Imagining to use single characters as keys, storing the current
-position in the current buffer and associating it to the key `a` could
-be easily done with a hash table with something like:
+Imagine you want to give each stored position a name, using a single
+character such as `a` or `x`. This could be easily done with a hash table:
 
 ```emacs-lisp
 (setq buffer-positions (make-hash-table))
@@ -127,10 +126,9 @@ it from the file it was visiting.
 functionality wasn't already natively implemented in Emacs?
 
 ## Registers
-Registers are implemented in Emacs the same way we just described them
-above: a single alist variable, called `register-alist`, containing
-keys and values. Plus, naturally, a large set of functions to operate
-on them.
+Registers are implemented in Emacs the same way we just described: a
+single alist variable, called `register-alist`, containing keys and
+values. Plus, naturally, a large set of functions to operate on them.
 
 Once you have stored a couple of buffer positions, one to key `a`
 (ASCII `97`) and one to `x` (ASCII `120`), the value of

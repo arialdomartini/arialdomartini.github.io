@@ -67,12 +67,12 @@ repository. This is wonderfully represented in this interactive
 [Git Cheatsheet][git-cheatsheet]. For Emacs we have something similar
 (and way simpler):
 
-![Change me](static/img/emacs/mark-ring/mark-ring.svg "No title")
+![A graphical representation of the mark ring](static/img/emacs/mark-ring/mark-ring.svg "No title")
 
 
 ## Just Going Back
-So you have variable to store a history of marked position. The basic
-idea is:
+So you have a variable to store the history of marked position. The
+basic idea is:
 
 * You store a position for future use.
 * You move around.
@@ -81,24 +81,29 @@ idea is:
   
 Here is the basic usage:
 
-* Whenever you want to leave a breadcrumb, use `C-SPC
-  (set-mark-command)`. Hit it twice: the first time it will start
-  selecting text (in Emacs lingo: it will *activate the mark*). Here
-  we don't want to select anything: we just want to write a position
-  down in the history.
+* Whenever you want to leave a breadcrumb, hit twice `C-SPC
+  (set-mark-command)`. Hit it twice.  
   `C-SPC (set-mark-command)` updates the current mark and *pushes* the
   previous a value in the mark ring, in fact creating a history of
   positions.
-* If `C-SPC` saves a position, it should not come as a surprise that
-  prefixing it with `C-u` reverses the behavior. That's a common
-  pattern in Emacs: in general, `C-u (universal-argument)` is a way
-  for starting inputing a numeric argument to a function; for many
-  commands, as for `C-SPC`, it serves as a flag to deviate from the
-  default behaviour.
-* Indeed: whenever you want to move back to the previous position,
-  hit `C-u C-SPC`. Your cursor will be moved where the mark is, and
-  the previous position will be popped out from the mark ring. In
-  other words, with `C-u C-SPC` you will be consuming the position history.
+* Whenever you want to move back to the previous position, hit `C-u
+  C-SPC`. Your cursor will be moved where the mark is, and the
+  previous position will be popped out from the mark ring. In other
+  words, with `C-u C-SPC` you will be consuming the position history.
+
+Two notes:
+
+* If you wonder why you had to hit `C-SPC` twice: the first time it
+  starts selecting text (in Emacs lingo: it *activates the mark*). The
+  second time, it disables the text selection. Indeed, you don't want
+  to select anything: you just want to write a position down in the
+  history.
+
+* If you wonder where that `C-u` comes from: that's a common pattern
+  in Emacs; `C-u (universal-argument)` is a way for inputing a numeric
+  argument to a function; for many commands, as for `C-SPC`, it serves
+  as a flag to deviate from the default behaviour, in this case
+  inverting it. `C-SPC` writes, `C-u C-SPC` reads.
 
 Follow the diagram. It's really easier done than said.
 
