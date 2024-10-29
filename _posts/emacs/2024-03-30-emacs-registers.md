@@ -23,7 +23,7 @@ Let's go!  <!--more-->
 # Table of Contents
 * [Mark Ring](/emacs-mark-ring)
 * Registers
-* Bookmarks
+* [Bookmarks](/emacs-bookmarks)
 
 As we saw in [the previous installment](/emacs-mark-ring), rings are a
 beautiful and powerful idea. Being cyclic LIFO data structures they

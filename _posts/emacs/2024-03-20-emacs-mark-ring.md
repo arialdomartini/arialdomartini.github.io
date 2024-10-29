@@ -15,7 +15,7 @@ followed the same idea.
 # Table of Contents
 * Mark Ring
 * [Registers](/emacs-registers)
-* Bookmarks
+* [Bookmarks](/emacs-bookmarks)
 
 
 The mark ring itself is an amazingly simple idea: it is just a

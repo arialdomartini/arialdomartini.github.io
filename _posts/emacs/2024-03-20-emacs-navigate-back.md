@@ -44,7 +44,7 @@ In this series, we will explorer them all!
 # Table of Contents
 * [Mark Ring](/emacs-mark-ring)
 * [Registers](/emacs-registers)
-* Bookmarks
+* [Bookmarks](/emacs-bookmarks)
 
 # References
 * [z][z]
