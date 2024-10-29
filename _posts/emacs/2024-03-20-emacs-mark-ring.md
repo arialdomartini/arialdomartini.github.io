@@ -86,23 +86,24 @@ Here is the basic usage:
   `C-SPC (set-mark-command)` updates the current mark and *pushes* the
   previous a value in the mark ring, in fact creating a history of
   positions.
-* If `C-SPC` saves a position, it should not come as a surprise that
-  prefixing it with `C-u` reverses the behavior. That's a common
-  pattern in Emacs: in general, `C-u (universal-argument)` is a way
-  for starting inputing a numeric argument to a function; for many
-  commands, as for `C-SPC`, it serves as a flag to deviate from the
-  default behaviour.
-* Indeed: whenever you want to move back to the previous position,
-  hit `C-u C-SPC`. Your cursor will be moved where the mark is, and
-  the previous position will be popped out from the mark ring. In
-  other words, with `C-u C-SPC` you will be consuming the position history.
+* Whenever you want to move back to the previous position, hit `C-u
+  C-SPC`. Your cursor will be moved where the mark is, and the
+  previous position will be popped out from the mark ring. In other
+  words, with `C-u C-SPC` you will be consuming the position history.
 
+Two notes:
 
-If you wonder why you had to hit `C-SPC` twice: the first time it
-starts selecting text (in Emacs lingo: it *activates the mark*). The
-second time, you disable the text selection. Indeed, you don't want to
-select anything: you just want to write a position down in the
-history.
+* If you wonder why you had to hit `C-SPC` twice: the first time it
+  starts selecting text (in Emacs lingo: it *activates the mark*). The
+  second time, it disables the text selection. Indeed, you don't want
+  to select anything: you just want to write a position down in the
+  history.
+
+* If you wonder where that `C-u` comes from: that's a common pattern
+  in Emacs; `C-u (universal-argument)` is a way for inputing a numeric
+  argument to a function; for many commands, as for `C-SPC`, it serves
+  as a flag to deviate from the default behaviour, in this case
+  inverting it. `C-SPC` writes, `C-u C-SPC` reads.
 
 Follow the diagram. It's really easier done than said.
 
