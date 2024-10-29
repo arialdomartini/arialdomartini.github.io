@@ -25,7 +25,7 @@ git checkout -
 Neat, right?  
 Of course, there are *way* more powerful tools built around this idea
 (such as [z][z], [autojump][autojump] and [zoxide][zoxide]). And
-&mdash; did you doubt? &mdash; similar powerful features in Emacs
+&mdash; did you doubt? &mdash; similar powerful features are in Emacs
 too. Let's explore them.
 
 <!--more-->
