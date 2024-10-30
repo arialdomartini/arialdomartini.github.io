@@ -6,7 +6,7 @@ tags:
 - emacs
 - lisp
 ---
-
+[Playing Hansel and Gretel](/emacs-navigate-back)  
 * [Mark Ring](/emacs-mark-ring)
 * [**Registers**](/emacs-registers)
 * [Bookmarks](/emacs-bookmarks)
@@ -25,6 +25,8 @@ keyboard macros, windows layouts and even custom values.
 Playing Hansel and Gretel is just the excuse to happily slip into
 yet another rabbit hole.  
 Let's go! 
+
+<!--more-->
 
 ## Giving elements a name
 As we saw in [the previous installment](/emacs-mark-ring), rings are a

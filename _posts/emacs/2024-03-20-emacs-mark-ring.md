@@ -6,6 +6,7 @@ tags:
 - emacs
 - lisp
 ---
+[Playing Hansel and Gretel](/emacs-navigate-back)  
 * [**Mark Ring**](/emacs-mark-ring)
 * [Registers](/emacs-registers)
 * [Bookmarks](/emacs-bookmarks)
@@ -15,6 +16,8 @@ buffers &mdash; are a beautiful idea: one day I will eventually write
 something about how undoing changes is handled in Emacs with the
 [undo-ring][undo]. I find outrageous that other editors have not
 followed the same idea.
+
+<!--more-->
 
 The mark ring itself is an amazingly simple idea: it is just a
 variable storing buffer positions. Around it, there are of course

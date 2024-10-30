@@ -6,6 +6,7 @@ tags:
 - emacs
 - lisp
 ---
+[Playing Hansel and Gretel](/emacs-navigate-back)  
 * [Mark Ring](/emacs-mark-ring)
 * [Registers](/emacs-registers)
 * [**Bookmarks**](/emacs-bookmarks)
@@ -17,7 +18,10 @@ Bookmarks are like Registers, with a few special traits:
 - They have arbitrarily long names.
 - They are context aware.
 
-Consider them as specialized, super convenient Registers.  
+Consider them as specialized, super convenient Registers.
+
+<!--more-->
+
 Just like Registers are stored in the variable `register-alist`,
 Bookmarks are kept in the equivalent `bookmark-alist`. Nothing new,
 here: again, it's all a combination of the same, basic building blocks.
