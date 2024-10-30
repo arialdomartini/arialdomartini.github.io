@@ -93,8 +93,8 @@ manipulating `bookmark-alist`.
 
 One is `edit-bookmark`.  
 Run it, and you will enter `bmenu`, a Dired-like environment: just
-like with Dired you can create, filter, select, delete, modify and
-manipulate files, with `edit-bookmark` you can do the same, with
+like Dired lets you create, filter, select, delete, modify and
+manipulate files, `edit-bookmark` lets you do the same with
 Bookmarks. Here are some keybindings you can use:
 
 | Keybinding | What is does                                                 |
