@@ -50,6 +50,10 @@ you are going to jump back to. I often find it handy to run
 `(consult-bookmark)` only to preview a file: then, I hit `C-g` to jump
 back to what I was working.
 
+Oh, and you can also jump to bookmarks using `(consult-buffer)`: just
+prefix your input with `m` followed by a space, and you will be
+filtering bookmarks instead of buffers. Neat!
+
 ## Saved, by default
 When you quit Emacs (do you, really?), Bookmarks are automatically
 serialized in the file `bookmarks`, in the directory specified by
