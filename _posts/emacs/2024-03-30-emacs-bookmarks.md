@@ -31,7 +31,7 @@ here: again, it's all a combination of the same, basic building blocks.
 If you read the [Emacs Manual on Bookmarks][bookmarks], you will see a
 bunch of functions to manipulate them. They are always useful to know,
 but I would suggest you to start with a way simpler approach: just go
-with [Consult][contult].  
+with [Consult][consult].  
 With Consult, there is a single command to keep in mind: `C-x r b`
 `(consult-bookmark)`.
 
