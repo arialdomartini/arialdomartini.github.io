@@ -119,8 +119,8 @@ What if you jump to a bookmark and you have already killed the buffer
 it targets? In the [previous post](/emacs-registers) we sow how
 Registers deal with this with some less than crystalline machinery. On
 this regards, Bookmarks are way more linear: they always store a file
-path, not a buffer reference. Notice the field `filename` in the
-`writing` Bookmark below:
+path, not a buffer reference.  
+Notice the field `filename` in the `writing` Bookmark below:
 
 ```emacs-lisp
 (("writing"
