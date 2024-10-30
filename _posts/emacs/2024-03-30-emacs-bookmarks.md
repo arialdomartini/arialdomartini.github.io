@@ -100,9 +100,9 @@ Here are some keybindings you can use:
 
 | Keybinding | What is does                                                 |
 |------------|--------------------------------------------------------------|
-| `d`        | Mark a Bookmark for deletion. Execute the deletion with `x`. |
-| `r`        | Rename a Bookmark.    d                                      |
-| `e`        | Write an annotation, associated to a Bookmark                |
+| `d`        | Mark a bookmark for deletion. Execute the deletion with `x`. |
+| `r`        | Rename a bookmark.    d                                      |
+| `e`        | Write an annotation, associated to a bookmark                |
 | `a`        | Show the annotation annotations                                         |
 | `q`        | Quit `bmenu`.                                                        |
 
@@ -118,7 +118,7 @@ After all, Emacs is sold as a self-documenting editor for a reason.
 What if you jump to a bookmark and you have already killed the buffer
 it targets? In the [previous post](/emacs-registers) we sow how
 Registers deal with this with some less than crystalline machinery. On
-this regards, Bookmarks are way more linear: they always store a file
+this regards, bookmarks are way more linear: they always store a file
 path, not a buffer reference.  
 Create a bookmark, visit the `bookmark-alist` variable (`M-x
 describe-variable RET bookmark-alist`) and notice the field
@@ -134,7 +134,7 @@ describe-variable RET bookmark-alist`) and notice the field
  ...
 ```
 
-So, it's always trivial for a Bookmark to re-open a buffer by just
+So, it's always trivial for a bookmark to re-open a buffer by just
 visiting the file.
 
 ## Moved files
@@ -144,15 +144,14 @@ on the assumption this is done using Emacs itself: if so, Emacs could
 reflect the change updating the item in `bookmark-alist`.
 
 That's not what happens, though. Instead, if you move or rename a
-file, its Bookmarks will be orphaned. When trying to jump to the file,
+file, its bookmarks will be orphaned. When trying to jump to the file,
 not finding it, Emacs would invoke `(bookmark-relocate)` This function
 will ask you the new file location, and will then update the
-`filename` field for the affected Bookmark.
+`filename` field for the affected bookmark.
 
 ## Modified files
-What instead if the file is not moved, but the specific line where the
-Bookmark was set changed, maybe because other lines have been added or deleted?  
-This is where the *context awarness* of Bookmarks comes into play.
+What instead if the file is not moved, but the specific line the bookmark targets changes, maybe because other lines have been added or deleted?  
+This is where the *context awarness* of bookmarks comes into play.
 Read the content of your bookmarks (`M-x describe-variable RET
 bookmark-alist RET`). You will see something like:
 
@@ -166,7 +165,7 @@ bookmark-alist RET`). You will see something like:
  ...
 ```
 
-Not only does each Bookmark contain the exact location in the file, in
+Not only does each bookmark contain the exact location in the file, in
 the field `position`: it also holds a bit of the surrounding context,
 in the `front-context-string` and `rear-context-string` fields. When
 jumping to the bookmark, the 3 together are used, in the attempt of
