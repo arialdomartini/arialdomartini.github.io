@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Emacs: Registers"
+title: "Emacs: Bookmarks"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - emacs
@@ -21,7 +21,7 @@ Bookmarks are like Registers, with a few special traits:
 Consider them as specialized, super convenient Registers.  
 Just like Registers are stored in the variable `register-alist`,
 Bookmarks are kept in the equivalent `bookmark-alist`. Nothing new,
-here: again, it's all built on the same, basic building blocks.
+here: again, it's all a combination of the same, basic building blocks.
 
 ## One command to rule them all
 
@@ -166,23 +166,11 @@ in the `front-context-string` and `rear-context-string` fields. When
 jumping to the bookmark, the 3 together are used, in the attempt of
 compensating the possibly occurred changes.
 
-## You said Bookmark+?
-[Bookmark+][bookmark-plus] is an impressive package that extends what
-you can do with Bookmarks. Among many other things:
-
-* It lets you bookmarks URLs, regions of text, buffers not associated
-  to a file.
-* It lets you store keyboard macros, Lisp functions and variables
-  inside bookmarks.
-* It lets you organize your bookmarks with tags.
-* It lets you manage text snippets.
-
-But this the topic for a separate post.
 
 I wish you a great day and many happy hours of coding!
 
 
-(Thanks to [Protesilaos][prot] for the kind review).
+(Thanks to [Protesilaos][prot] for coaching me and for the kind review)
 
 # References
 * [Protesilaos Stavrou][prot]
