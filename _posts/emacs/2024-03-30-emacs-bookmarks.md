@@ -89,8 +89,9 @@ production, but it could give you some inspiration.
 
 ## Like Dired, but for Bookmarks
 There are indeed a few, interesting built-in functions for
-manipulating `bookmark-alist`. One is `edit-bookmark`.
+manipulating `bookmark-alist`.
 
+One is `edit-bookmark`.  
 Run it, and you will enter `bmenu`, a Dired-like environment: just
 like with Dired you can create, filter, select, delete, modify and
 manipulate files, with `edit-bookmark` you can do the same, with
