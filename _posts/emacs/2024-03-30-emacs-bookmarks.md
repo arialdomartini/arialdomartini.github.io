@@ -63,8 +63,8 @@ use `M-x bookmark-save RET`. Of course, `bookmark-save` comes together
 with its alter-ego `bookmark-load`.
 
 ## Bookmarks are pluggable
-Bookmarks are just a variable. This, and the existence of
-`bookmark-save` and `bookmark-load` could inspire you to have multiple
+Bookmarks are just items in a variable. This, and the existence of
+`bookmark-save` and `bookmark-load`, could inspire you to have multiple
 sets of bookmarks in different files, and to load them on demand,
 maybe when you switch from one project to another, just like
 [direnv][direnv] does with your `.profile`.
