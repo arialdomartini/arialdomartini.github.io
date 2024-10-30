@@ -23,7 +23,7 @@ Let's go!  <!--more-->
 # Table of Contents
 * [Mark Ring](/emacs-mark-ring)
 * Registers
-* Bookmarks
+* [Bookmarks](/emacs-bookmarks)
 
 As we saw in [the previous installment](/emacs-mark-ring), rings are a
 beautiful and powerful idea. Being cyclic LIFO data structures they
@@ -341,15 +341,36 @@ retrieving other kinds or elements with registers:
 | Numbers                           | `number-to-register`               | `C-u number C-x r n` | Store a number                                                                             |
 |                                   | `increment-register`               | `C-u number C-x +`   | Increment a number                                                                         |
 |                                   | `insert-register`                  | `C-x r i`            | `insert-register` is smart enough to understand<br/>it's dealing with a number             |
+12
 
-
-Wow, that's a mouthful of things to remember, isn't it?  
+Wow, that's a mouthful of keybindings to remember, isn't it?  
 But I insist: don't be intimidated by shortcuts. Think to commands
 instead. They are way more intuitive. `M-x` &mdash; and consult
 &mdash; are your best friends. If, and only if, if happen to use `C-u
 number C-x r n` so many times that you will find it convenient to
 learn the key sequence, then memorize it. Otherwise, just enjoy Emacs
 and forget its shortcuts.
+
+## Consult, again
+You are a lazy and a short-memory person like me, you could appreciate
+`consult-register-store`. It is a smart enough to understand what you
+want to store in a register from the context. If you have an active
+region, *of course* it will store a region. 
+
+In case of multiple possibilities, it will ask you how to proceed:
+
+![Menu of consult-register-store](static/img/emacs/register/consult-register-store.png)
+
+In the case of storing a region, it asks you whether you want to
+append or prepend it to a register:
+
+![Menu of consult-register-store](static/img/emacs/register/consult-register-store.png)
+
+Then, browse your registers with `consult-register` or directly load
+them with `consult-register-load`.
+
+Neat, isn't it? I love Consult: [Daniel Mendler][minad] would deserve
+a monument.
 
 ## A register is forever
 Here is another tempting though: if `register-alist` is an ordinary
