@@ -83,8 +83,8 @@ the built-in building blocks, with a bunch of Lisp lines. Here's an idea:
 ```
 
 This lets you have a `.bookmarks` file in each project, and load it
-whenever you enter it. It's a draft, by no means ready for production,
-but it could give you some inspiration.
+whenever you enter its folder. It's a draft, by no means ready for
+production, but it could give you some inspiration.
 
 
 ## Like Dired, but for Bookmarks
