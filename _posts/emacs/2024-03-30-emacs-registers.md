@@ -6,6 +6,12 @@ tags:
 - emacs
 - lisp
 ---
+* [Mark Ring](/emacs-mark-ring)
+* [**Registers**](/emacs-registers)
+* [Bookmarks](/emacs-bookmarks)
+
+*****
+
 In our exploration of the ways to navigate back to previous buffer
 positions, Registers can be seen as mark ring items with an assigned
 name, so that they can be conveniently accessed by that name in an arbitrary order.  
@@ -19,12 +25,9 @@ keyboard macros, windows layouts and even custom values.
 
 Playing Hansel and Gretel is just the excuse to happily slip into
 yet another rabbit hole.  
-Let's go!  <!--more-->
-# Table of Contents
-* [Mark Ring](/emacs-mark-ring)
-* Registers
-* [Bookmarks](/emacs-bookmarks)
+Let's go! 
 
+## Giving elements a name
 As we saw in [the previous installment](/emacs-mark-ring), rings are a
 beautiful and powerful idea. Being cyclic LIFO data structures they
 are very suitable for linearly traversing back histories. For example:

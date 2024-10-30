@@ -6,10 +6,11 @@ tags:
 - emacs
 - lisp
 ---
-# Table of Contents
 * [Mark Ring](/emacs-mark-ring)
 * [Registers](/emacs-registers)
-* Bookmarks
+* [**Bookmarks**](/emacs-bookmarks)
+
+****
 
 Bookmarks are like Registers, with a few special traits:
 
