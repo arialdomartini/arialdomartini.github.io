@@ -95,7 +95,8 @@ One is `edit-bookmark`.
 Run it, and you will enter `bmenu`, a Dired-like environment: just
 like Dired lets you create, filter, select, delete, modify and
 manipulate files, `edit-bookmark` lets you do the same with
-Bookmarks. Here are some keybindings you can use:
+Bookmarks.  
+Here are some keybindings you can use:
 
 | Keybinding | What is does                                                 |
 |------------|--------------------------------------------------------------|
@@ -107,11 +108,10 @@ Bookmarks. Here are some keybindings you can use:
 
 Now, only the Almighty Flying Spaghetti Monster knows how much I
 dislike having to keep all the keybindings in my mind. It's just
-beyond my possibilities.  
-Having the memory of a goldfish, what I often do is to run `C-h b`
-`(describe-bindings)`: it displays the set of all the active
-keybindings for the current buffer, each with its documentation, in a
-beautiful interactive and foldable list, from which I can even jump to the documentation.  
+beyond my possibilities. Having the memory of a goldfish, what I often
+do is to run `C-h b` `(describe-bindings)`: it displays the set of all
+the active keybindings for the current buffer, each with its
+documentation, in a beautiful interactive and foldable list, from which I can even jump to the documentation.  
 After all, Emacs is sold as a self-documenting editor for a reason.
 
 ## Resurrecting buffers
