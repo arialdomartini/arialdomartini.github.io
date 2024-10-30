@@ -6,11 +6,10 @@ tags:
 - emacs
 - lisp
 ---
+
 * [Mark Ring](/emacs-mark-ring)
 * [**Registers**](/emacs-registers)
 * [Bookmarks](/emacs-bookmarks)
-
-*****
 
 In our exploration of the ways to navigate back to previous buffer
 positions, Registers can be seen as mark ring items with an assigned
@@ -319,6 +318,7 @@ And this is very legit ambition! There is indeed no reason not to do
 that. In fact, there are other groups of functions for storing and
 retrieving other kinds or elements with registers:
 
+
 | Kind of element                   | Command                            | Key binding          | Functionality                                                                              |
 |-----------------------------------|------------------------------------|----------------------|--------------------------------------------------------------------------------------------|
 | Buffer positions                  | `point-to-register`                | `C-x r SPC`          | Store a position                                                                           |
@@ -344,7 +344,7 @@ retrieving other kinds or elements with registers:
 | Numbers                           | `number-to-register`               | `C-u number C-x r n` | Store a number                                                                             |
 |                                   | `increment-register`               | `C-u number C-x +`   | Increment a number                                                                         |
 |                                   | `insert-register`                  | `C-x r i`            | `insert-register` is smart enough to understand<br/>it's dealing with a number             |
-12
+
 
 Wow, that's a mouthful of keybindings to remember, isn't it?  
 But I insist: don't be intimidated by shortcuts. Think to commands
@@ -403,7 +403,7 @@ Unfortunately, there are some pitfalls with this approach. But this
 is another rabbit hole: it deserves a separate post and I promise I
 will write about this soon.
 
-First, we need to talk about bookmarks.
+First, we need to talk about [bookmarks](/emacs-bookmarks).
 
 (Thanks to [Protesilaos][prot] for the kind review).
 

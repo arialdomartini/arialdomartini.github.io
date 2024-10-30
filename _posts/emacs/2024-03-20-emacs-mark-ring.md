@@ -10,8 +10,6 @@ tags:
 * [Registers](/emacs-registers)
 * [Bookmarks](/emacs-bookmarks)
 
-*****
-
 Rings &mdash; fixed sized variables acting as circular
 buffers &mdash; are a beautiful idea: one day I will eventually write
 something about how undoing changes is handled in Emacs with the

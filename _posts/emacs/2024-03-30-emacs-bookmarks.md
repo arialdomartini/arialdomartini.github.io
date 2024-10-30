@@ -10,8 +10,6 @@ tags:
 * [Registers](/emacs-registers)
 * [**Bookmarks**](/emacs-bookmarks)
 
-****
-
 Bookmarks are like Registers, with a few special traits:
 
 - They are long-lived (they survive reboots).
@@ -40,7 +38,7 @@ With Consult, there is a single command to keep in mind: `C-x r b`
     
 No need to remember multiple commands.
 
-![A list of bookmarks displayed by consult-bookmark](static/img/emacs/bookmarks/consult-bookmark.png)
+<img src="static/img/emacs/bookmarks/consult-bookmark.png" alt="A list of bookmarks displayed by consult-bookmark" width="100%"/>
 
 Naturally, in perfect consult style, the bookmark list can be filtered
 as you type, and it provides you with a real-time preview of the file
