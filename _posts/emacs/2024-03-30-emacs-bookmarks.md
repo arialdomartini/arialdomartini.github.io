@@ -120,7 +120,9 @@ it targets? In the [previous post](/emacs-registers) we sow how
 Registers deal with this with some less than crystalline machinery. On
 this regards, Bookmarks are way more linear: they always store a file
 path, not a buffer reference.  
-Notice the field `filename` in the `writing` Bookmark below:
+Create a bookmark, visit the `bookmark-alist` variable (`M-x
+describe-variable RET bookmark-alist`) and notice the field
+`filename`. For example:
 
 ```emacs-lisp
 (("writing"
