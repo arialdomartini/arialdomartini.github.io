@@ -70,7 +70,7 @@ maybe when you switch from one project to another, just like
 [direnv][direnv] does with your `.profile`.
 
 Indeed, this is what the package [Bookmark+][bookmark-plus] does.  
-But if you are curious, you could build this by yourself, on top of
+But if you are curious, you could develop this by yourself, on top of
 the built-in building blocks, with a bunch of Lisp lines. Here's an idea:
 
 ```emacs-lisp
