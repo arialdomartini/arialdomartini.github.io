@@ -698,7 +698,7 @@ var tuplesWithDifferentElements =
 
 The following generates `Users` whose `FirstName` is one of `"Don"`, `"Henrik"` or `null`, a `LastName` with one of `"Syme"` and `"Feldt"` (but never `null`), and an `id` between `0` and `1000`:
 
-```fsharp
+```csharp
 record User(int Id, string FirstName, string LastName);
 
 Gen<User> users =
@@ -746,7 +746,6 @@ genImage = do
   (x, y) <- arbitrary `suchThat` ( \(x,y) -> x > 0 && y > 0 )
   return $ generateImage f x y
 ```
-
 
 I don't expect you to fully understand the code above yet. Just focus on the key messages:
 
