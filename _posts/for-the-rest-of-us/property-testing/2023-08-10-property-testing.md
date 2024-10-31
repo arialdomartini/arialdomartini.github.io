@@ -569,7 +569,7 @@ By now you should have built the intuition that just generating purely random va
 What about replacing our fictional attributes with custom made functions?
 
 ```csharp
-[Property]
+[Fact]
 void account_name_is_unique()
 {
     Account[] existingAccounts = GenerateAllDifferent();
@@ -593,7 +593,7 @@ I see the following traits:
 ```csharp
 record Input(Account[] ExistingAccounts, RegistrationForm form)
 
-[Property]
+[Fact]
 void account_name_is_unique()
 {
     Input[] inputs = Generate(10_000);
