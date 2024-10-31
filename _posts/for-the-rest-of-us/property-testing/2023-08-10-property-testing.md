@@ -519,11 +519,11 @@ You are forced to think of some other *property* which holds whatever the input.
 ```csharp
 [Property]
 bool sum_is_commutative(int a, int b) => 
-    a + b == b + a;
+    add(a, b) == add(b, a);
 
 [Property]
 bool adding_zero_does_not_change_the_result(int a) => 
-    a + 0 == a;
+    add(a, 0) == a;
 ```
 
 I chose the silly sum example because it is the basis of the epic video [The lazy programmer's guide to writing thousands of tests][lazy-programmer] by Scott Wlashlin. It's a joy to watch.
