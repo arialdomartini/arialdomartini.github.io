@@ -319,11 +319,9 @@ Let me stress this loudly: only at a first glance is Property-based Testing abou
 
 When the domain expert of an e-commerce company tells you:
 
-```
-Food products are restricted from international shipping 
-due to regulatory compliance, 
-unless there is an active Promotion.
-```
+> Food products are restricted from international shipping 
+> due to regulatory compliance, 
+> unless there is an active Promotion.
 
 and then you see an implementation such as:
 
