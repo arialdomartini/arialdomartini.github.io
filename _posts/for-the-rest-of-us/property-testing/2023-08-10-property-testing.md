@@ -90,7 +90,7 @@ As a side effect, you will get an excellent tool for catching nasty bugs and, mo
 
 ## Show me the code
 
-OK, I see you are impatient. Here we go. I will give you 2 simple examples. In the next pages we will delve more into details.
+OK, I see you are impatient. Here we go. I will give you some examples. In the next pages we will delve more into details.
 
 Given the following integration test:
 
@@ -130,6 +130,7 @@ bool all_products_can_be_persisted(Product product)
 ```
 
 Basically, the same test, without the specific value for `Product`.
+This does nothing to "capture the essence of requirement", though.
 
 As a second case, here's a xUnit Theory for the Fizz Buzz Kata:
 
@@ -159,7 +160,104 @@ Property all_the_multiples_of_15_return_fizzbuzz()
 }
 ```
 
-Notice how `ForAll(multiplesOf15, n => fizzbuzz(n) == "fizzbuzz");` is a direct and honest translation of the requirement `All the multiples of 15 return "fizzbuzz"`.
+Better. `ForAll(multiplesOf15, n => fizzbuzz(n) == "fizzbuzz");` is a
+direct and honest translation of the requirement `All the multiples of
+15 return "fizzbuzz"`.
+
+As some more complex examples, let's translate 2 of the abstract rules
+we mentioned before:
+
+| Abstract rules                                                                                                          |
+|-------------------------------------------------------------------------------------------------------------------------|
+| "Account names are unique and case insensitive"                                                                         |
+| "We never apply more than 1 discount promotion to a single purchase;<br/>we always select the most convenient discount" |
+
+
+> "Account names are unique and case insensitive"
+
+A possible implementation is:
+
+```csharp
+internal record Employee(string FirstName, string SecondName);
+
+internal static class AccountNameGenerator
+{
+    private static string Generate(Employee employee) => ...
+}
+
+[Property]
+bool account_names_are_unique(List<Employee> employees)
+{
+    var accountNames = employees.Select(AccountNameGenerator.Generate);
+
+    return accountNames.ContainNoDuplicates();
+}
+
+[Property]
+bool account_names_are_case_insensitive_(Employee employee)
+{
+    var accountName = AccountNameGenerator.Generate(employee);
+
+    var upper = accountName.ToUpper();
+        
+    return AuthenticationSystem.Login(upper);
+}
+```
+
+Read it as:
+
+- Given a random number of random employees
+- Generating the account name for each of them
+- Will result in no duplicates
+
+- Given a random employee
+- Generating their account name
+- Login would work even using the upper-case version
+
+I made use of some custom helper methods. This is something that
+happens often. And, yes: it also happens that I feel the need to cover
+those helper methods with tests. I do test my tests, why not?
+
+Last example:
+
+> - We never apply more than 1 discount promotion 
+> - we always select the most convenient discount
+
+could be translated to:
+
+```csharp
+[Property]
+bool we_never_apply_more_than_1_discount_and_we_always_select_the_most_convenient_discount(List<Product> products, List<Promotion> promotions)
+{
+    var cart = new Cart(promotions);
+    var total = cart.Checkout(products);
+
+    var theOtherTotals = promotions.Select(promotion =>
+    {
+        var singlePromotionCart = new Cart([promotion]);
+        return singlePromotionCart.Checkout(products);
+    }).ToList();
+
+    return
+        theOtherTotals.All(otherTotal => otherTotal >= total) &&
+        theOtherTotals.Any(otherTotal => otherTotal == total);
+}
+```
+
+Read it as:
+
+- Given an arbitrary set of Products and a arbitrary number of
+  arbitrary Promotions
+- Adding those Products to a Cart, with those Promotions enabled
+- Then at checkout I will get a total.
+- Comparing that total with what I would get from a Cart with any of
+  those Promotions taken individually:
+  - then, all the other promotions would be less convenient
+  - and there is one matching exactly what I was granted.
+
+Wow, not as simple as mere example, I guess. But I imagine you see how
+they are all more general and rigorous, don't you?
+
 
 ## So, define Property-based Testing
 Here's the bold statement.<br/>
