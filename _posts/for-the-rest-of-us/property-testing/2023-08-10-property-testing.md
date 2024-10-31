@@ -90,7 +90,10 @@ As a side effect, you will get an excellent tool for catching nasty bugs and, mo
 
 ## Show me the code
 
-OK, I see you are impatient. Here we go. I will give you some examples. In the next pages we will delve more into details.
+OK, I see you are impatient. Here we go. I will give you some
+examples. I don't expect you to understand them just yet. Just try to
+catch the gist of them. In the next pages we will delve more into
+details.
 
 Given the following integration test:
 
