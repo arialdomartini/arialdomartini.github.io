@@ -146,7 +146,7 @@ val factors = mutableListOf<int>
 if(remainder > 1) {
   if(remainder % 2 ==  0)  {
     factors.add(2)
-	remainder /= 2
+    remainder /= 2
   }
 }
 if(remainder > 1)
@@ -190,7 +190,7 @@ val factors = mutableListOf<int>
 if(remainder > 1) {
   while(remainder%2 ==  0) {
     factors.add(2)
-	remainder /= 2
+    remainder /= 2
   }
 }
 if(remainder > 1)
@@ -213,14 +213,14 @@ val factors = mutableListOf<int>
 if(remainder > 1)
 {
   var divisor = 2
-  while(reminder > 1)
+  while(remainder > 1)
   {
       while(remainder% divisor ==  0)
       {
         factors.add(divisor)
-    	remainder /= divisor
+        remainder /= divisor
       }
-	  divisor ++
+      divisor ++
   }
 }
 
