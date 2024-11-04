@@ -595,11 +595,33 @@ More probably, instead, you will be curious to know how the random values genera
 Sounds like a more systematic approach, doesn't it?
 
 ### Is it safer?
-Compare this 2 traits: 
+Here some observations:
 
-* With TDD, we started with a simplification of the requirement (the function shall return `emptyList`). In each step, we then extended the requirement, until it was finally complete.<br/>This means that, along the process, for a good deal of time the specification was incomplete and partially lying.<br/>Some green tests were deceiving. In fact, we did not trust and we kept adding tests.
+* With Example-Based tests, we started with a simplification of the
+  requirement (the function shall return `emptyList`). In each step,
+  we then extended the requirement, until it was finally
+  complete.<br/>This means that, along the process, for a good deal of
+  time the specification was incomplete and partially lying. Some
+  green tests were deceiving. In fact, we did not trust and we kept
+  adding tests.
 
-* With PDD we practiced an incremental development letting the shrinker identify the increasingly complex use cases. Doing this, we never needed to modify the requirement: on the contrary, we started since the beginning with a complete specification, and we maintained it immutated till the end.<br/>Green test really meant completeness.
+* With Example-Based tests, the algorithm has been buggy for a good
+  deal of time.<br/> For example: when we implemented the test for
+  `4`, the function returned *the wrong* result of a moltitude of
+  cases, such as `[2, 9]` instead of `[2, 3, 3]` as the factors of
+  `9`.<br/> Yet the test suite was green. Green tests did not mean
+  completeness at all.
+  
+* Surprisingly, at the same step `4`, the code would also return * the
+  right result* for `5` and `7`, although this was completely
+  incidental and not intentional. This lack of intentionality and
+  control gives to think.
+
+* With PDD we practiced an incremental development letting the
+  shrinker identify the increasingly complex use cases. Doing this, we
+  never needed to modify the requirement: on the contrary, we started
+  since the beginning with a complete specification, and we maintained
+  it immutated till the end.<br/>Green test really meant completeness.
 
 Generally, we pursue a green test suite for the confidence it instills. There might be exceptions where green tests do not necessarily imply we are done, but as a matter of facts, in the prime factors kata, the approach of PDD tended to have lesser exceptions than TDD. I'm inclined to think that this holds broader validity.
 
