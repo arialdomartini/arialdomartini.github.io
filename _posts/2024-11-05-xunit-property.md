@@ -148,11 +148,36 @@ is mine):
 > generation.**  
 
 
+Here are some code examples from the paper. In the first one:
+
+```java
+public void additionIsInverseOfSubtraction(int x, int y) {
+    assertEquals(x, (x + y) - y);
+}
+```
+
+the assertion should hold over the entire valid input space. In the
+following:
+
+```java
+@Theory
+void equalObjectsEqualHashes(Object a, Object b) {
+  assumeTrue(a.equals(b));
+  assertTrue(a.hashCode() == b.hashCode());
+}
+```
+
+the assumption expressed by `assumeTrue` further restricts which
+inputs are valid for evaluating the assertion.
+
+In one of the last chapters, the paper introduces the idea of a
+*Theory Explorer*, an input generator based on Agitator, used to find
+inputs that will cause the theory to fail.
 
 This Theory-Base Testing is really akin to Property-Based Testing (the
-paper even mention automatic data generation). Which, honestly, I
-found puzzling, because [QuickCheck][quickcheck] predates that paper
-by 9 years.
+paper even mentions the classical test on reversing a string). Which,
+honestly, I found puzzling, because [QuickCheck][quickcheck] predates
+that paper by 9 years.
 
 
 ## My conclusion
