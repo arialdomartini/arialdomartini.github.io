@@ -147,9 +147,12 @@ is mine):
 > and it can be exercised by human-chosen data or by automatic data
 > generation.**  
 
-This Theory-Base Testing is really akin to Property-Based Testing.
-Which, honestly, I found puzzling, because [QuickCheck][quickcheck]
-predates that paper by 9 years.
+
+
+This Theory-Base Testing is really akin to Property-Based Testing (the
+paper even mention automatic data generation). Which, honestly, I
+found puzzling, because [QuickCheck][quickcheck] predates that paper
+by 9 years.
 
 
 ## My conclusion
