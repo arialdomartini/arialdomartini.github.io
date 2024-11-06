@@ -174,10 +174,10 @@ In one of the last chapters, the paper introduces the idea of a
 *Theory Explorer*, an input generator based on Agitator, used to find
 inputs that will cause the theory to fail.
 
-This Theory-Base Testing is really akin to Property-Based Testing (the
-paper even mentions the classical test on reversing a string). Which,
-honestly, I found puzzling, because [QuickCheck][quickcheck] predates
-that paper by 9 years.
+This Theory-Based Testing is really akin to Property-Based Testing.
+The paper even mentions the classical test on reversing a string and
+Haskell's [QuickCheck][quickcheck], which predates the paper by 9
+years. No mention to PBT is present, though.
 
 
 ## My conclusion
