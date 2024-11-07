@@ -7,12 +7,12 @@ tags:
 - tdd
 - pbt
 ---
-Ever wondered why parametric tests in xUnit are called "*theories*"? And
-why tests are "*facts*" instead of, well, just "*tests*"?
+Ever wondered why parametric tests in xUnit are called "*theories*"?
+And why are tests called "*facts*" instead of, well, just "*tests*"?
 
 Investigating on this topic helped me realize that I have always used
-xUnit theories incorrectly. And that xUnit loves the idea of Property-Based
-Testing..
+xUnit theories incorrectly. And that xUnit loves the idea of
+Property-Based Testing.
 
 <!--more-->
 
