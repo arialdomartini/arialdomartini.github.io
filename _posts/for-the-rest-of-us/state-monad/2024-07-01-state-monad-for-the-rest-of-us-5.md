@@ -91,7 +91,7 @@ You have 2 options.
 If there is a single takeaway you will ever remember from this series,
 please, let it be this one. Big decisions often come from tiny, at
 first glance harmless decisions. And I can tell you: this one is a
-humongous decions. This is, indeed, the inflection point where your
+humongous decision. This is, indeed, the inflection point where your
 code:
 
 * either takes on imperative nature
