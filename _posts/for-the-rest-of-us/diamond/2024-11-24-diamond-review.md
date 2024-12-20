@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "There is no Emergent Design in TDD (and how to fix it) - Review"
+title: "I suck at TDD (and how to fix it) - Review"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - tdd
