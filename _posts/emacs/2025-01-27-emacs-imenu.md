@@ -22,7 +22,8 @@ Today it's the Imenu's turn.
 Imenu is an Emacs feature that produces menu items for accessing
 locations in buffers. Here's the one for this very blog post:
 
-<img width="100%" src="/static/img/emacs/imenu/imenu.gif" />
+<img width="100%" src="/static/img/emacs/imenu/imenu.png" />
+
 
 If you are a programmer it is very likely that you have switched the
 visual menu off with:
@@ -39,6 +40,10 @@ Imenu happily works in the minibuffer too. Try yourself:
 
 If you have [consult.el][consult] installed, you would surely prefer
 `M-x consult-imenu` which offers narrowing and real-time preview.
+
+Here's how `consult-imenu` looks like while visiting `imenu.el`:
+
+<img width="100%" src="/static/img/emacs/imenu/consult-imenu.png" />
 
 Why would an F# mode need Imenu in the first place? Because you would
 use it to jump to function definitions, variables and other structural
