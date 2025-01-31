@@ -133,7 +133,7 @@ You will not see those 3 hard-coded items. Instead, it seems that
 
 Wrapping up, our first intuition could be that:
 
-- `imenu` displays the content of `imenu--index-alist`.
+- Imenu displays the content of `imenu--index-alist`.
 - `imenu--index-alist` is populated by some function which is invoked
   when `*Rescan*` is selected.
 - `consult-imenu` refreshes the content of `imenu--index-alist` when
@@ -167,7 +167,7 @@ of the `imenu--make-index-alist` function:
       (funcall imenu-create-index-function))
 ```
 
-Here's the function that sets the value for `imenu--index-alist`!  
+This! We spotted the code where `imenu--index-alist` is populated!  
 So, Imenu expects that someone or something provides it with a
 function to scan the buffer and to return an index of menu item. This
 *something* is normally the major mode of the buffer.
@@ -265,7 +265,7 @@ Way better than working with regular expressions. We will get to it.
 
 ## The default imenu index function
 Time to see what's inside the default index function, provided
-out-of-the-box by `imenu`.
+out-of-the-box by `imenu.el`.
 
 - Open the function documentation with `M-x describe-function RET
   imenu-default-create-index-function RET`.
@@ -347,7 +347,7 @@ popular &mdash; but not necessarily the most powerful &mdash; usage of
 Imenu.
 
 ### imenu-generic-expression
-So,/ this is the case in which `imenu--generic-function` is passed the
+So, this is the case in which `imenu--generic-function` is passed the
 regular expressions defined in `imenu-generic-expression`. I'm curious
 to inspect both. Notice that `imenu--generic-function` is private, so
 it's not meant to be modified. `imenu-generic-expression`, instead, is
