@@ -599,10 +599,14 @@ episode.
 
 Hang tight! Happy emacsing.
 
+(Thank you [Prot][prot] for guiding me in this journey)
+
 # References
 
 * [consult.el][consult]
 * [Emacs: how to activate the functionality X for all files of type Y?](/emacs-hooks)
+* [Protesilaos Stavrou][prot]
 
 [consult]: https://github.com/minad/consult
+[prot]: https://protesilaos.com/coach/
 
