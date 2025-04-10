@@ -11,8 +11,9 @@ found out that `isearch-forward-symbol-at-point (M-s .)` was a thing,
 I felt the desire to integrate it with consult.el. Luckily, this was
 way easier than I thought.
 
-Let's walk through the steps I took. As usual, along the path, there
-are random pearls here and there to pick.
+Let's walk through the steps I took. As often happens with Emacs,
+along the path of exploring its source code, we will find some random
+pearls here and there to pick.
 
 TL; DR:
 
@@ -229,7 +230,7 @@ with `symbol-at-point` as the initial value.
 (global-set-key (kbd "M-s .") #'consult-line-symbol-at-point)
 ```
 
-Try it out. Nope. We get a `apply: Wrong type argument: stringp, Try`.
+Try it out. Nope. We get an `apply: Wrong type argument: stringp, Try`.
 This is because `(symbol-at-point)` returns a `symbol`, whereas
 `consult-line` wants a `string`. Fine: there must be a function to
 convert symbols to strings, right? I would try with:
