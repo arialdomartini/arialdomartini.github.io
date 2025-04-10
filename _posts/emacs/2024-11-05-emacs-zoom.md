@@ -378,7 +378,7 @@ it cannot possibly figure out if this is a file, a string, a number or
 a symbol from a list, such as in our case. You must give it a hint.  
 Enter `completing-read`.
 
-#### completing-read
+### completing-read
 Try:
 
 ```elisp
