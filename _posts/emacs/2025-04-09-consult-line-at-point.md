@@ -33,7 +33,7 @@ This issue is based on a lesson I got from [Protesilaos][prot].
 
 ## You have no idea how powerful isearch is!
 I was fascinated by the post [You have no idea how powerful isearch
-is!][bozhidar] by [Bozhidar Batsov][bozhidar]. In fact, I really had
+is!][bozhidar] by [Bozhidar Batsov][bozhidar-home]. In fact, I really had
 no idea.
 
 One of the tricks he suggests is:
@@ -630,7 +630,7 @@ It really works! Try yourself.
 
 [consult]: https://github.com/minad/consult
 [prot]: https://protesilaos.com/
-[bozhidar]: https://emacsredux.com/blog/2025/03/18/you-have-no-idea-how-powerful-isearch-is/
 [thing-at-point.el]: https://www.emacswiki.org/emacs/ThingAtPoint
 [dwim]: https://www.emacswiki.org/emacs/DoWhatIMean
-[bozhidar]: https://emacsredux.com/
+[bozhidar]: https://emacsredux.com/blog/2025/03/18/you-have-no-idea-how-powerful-isearch-is/
+[bozhidar-home]: https://emacsredux.com/
