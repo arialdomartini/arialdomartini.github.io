@@ -8,14 +8,14 @@ tags:
 ---
 I'm addicted to [consult.el][consult]. It is so convenient that when I
 found out that `isearch-forward-symbol-at-point (M-s .)` was a thing,
-I felt the desire to integrate it with consult.el. Luckily, this was
-way easier than I thought.
+I immediately felt the desire to integrate it with
+consult.el. Luckily, this was way easier than I thought.
 
 Let's walk through the steps I took. As often happens with Emacs,
 along the path of exploring its source code, we will find some random
 pearls here and there to pick.
 
-TL; DR:
+## TL; DR:
 
 ```elisp
 (defun consult-line-symbol-at-point ()
@@ -33,11 +33,12 @@ This issue is based on a lesson I got from [Protesilaos][prot].
 
 ## You have no idea how powerful isearch is!
 I was fascinated by the post [You have no idea how powerful isearch
-is!][bozhidar] by Bozhidar Batsov. In fact, I really had no idea.
+is!][bozhidar] by [Bozhidar Batsov][bozhidar]. In fact, I really had
+no idea.
 
 One of the tricks he suggests is:
 
-> Type `M-s .` to search for the symbol at point.
+> Type `M-s .` to search for the symbol at point.<br/>
 > (useful in the context of programming languages)
 
 It's very convenient: when your point is over a symbol, just hit `M-s .`
@@ -53,7 +54,7 @@ symbol,
 - `C-s` to trigger `consult-line`
 - `C-y` to use it as the search pattern.
 
-`M-s .` does the same in one single hit. With the only difference
+`M-s .` does the same in one single shot. With the only difference
 that, alas!, it uses `isearch-forward` instead of `consult-line`.  
 As I mentioned, once tried `consult.el`, I could not do without it
 anymore. Unfortunately, `consult.el` does not provide
@@ -83,7 +84,7 @@ It is bound to M-s ..
 (isearch-forward-symbol-at-point &optional ARG)
 ```
 
-From the help page, you can jump to the source code either:
+From this help page, you can jump to the source code either:
 
 * hitting `s`.
 * running `M-x help-view-source`.
@@ -112,7 +113,7 @@ Fine. Here's the code:
 ```
 
 Spitting blood (I'm not that good at Lisp), I could extract the part
-that identifies the symbol at point with in this function:
+that identifies the symbol at point with this function:
 
 ```elisp
 (defun get-symbol-at-point ()
@@ -125,8 +126,8 @@ that identifies the symbol at point with in this function:
      (t ()))))
 ```
 
-(I'm honest: I cannot understand it completely).  
-You can interactively test how it works:
+I'm honest: I cannot understand it completely. However, it's easy to
+verify that it actually works:
 
 ```elisp
 (defun show-symbol-at-point ()
@@ -140,7 +141,7 @@ RET`. Cool: sounds like it is a good starting point.
 ## Emacs' geological layers?
 My good friend [Prot][prot] brought to my attention that in fact a
 function `symbol-at-point` is built-in in Emacs. It is part of
-[thingatpt.el][thing-at-point.el] and a git blame reveals it has been
+[thingatpt.el][thing-at-point.el] and a `git blame` reveals it has been
 introduced 19 years ago. Indeed, it is used here and there (check the
 code of `org-open-at-point-global`, `describe-symbol`,
 `imenu--completion-buffer` for example). It's not completely clear to
@@ -149,8 +150,9 @@ Maybe there are historical reasons. This confuses me, since
 `isearch-forward-symbol-at-point` has been introduced after
 `thingatpt.el`.
 
-Whatever. Let's try it out, replacing my horrible custom
-`get-symbol-at-point` with the standard `symbol-at-point`:
+Whatever.  
+Let's try it out, replacing my horrible custom `get-symbol-at-point`
+with the standard `symbol-at-point`:
 
 ```elisp
 (defun show-symbol-at-point ()
@@ -159,7 +161,7 @@ Whatever. Let's try it out, replacing my horrible custom
 ```
 
 Works like a charm! Good: we know how to get the symbol at point.
-We will have to pass it to `consult-line`.
+We will have to pass it somehow to `consult-line`.
 
 ## How does `consult-line` work?
 Now, if we want to build a `consult-line-symbol-at-point` function,
@@ -204,14 +206,15 @@ and the last `isearch-string' is added to the future history."
      :state (consult--location-state candidates))))
 ```
 
-Basically, `consult-line` is just a thin wrapper around the internal
-function `consult--read`. We found something similar when we wanted to
-replace `completing-read` with a consult function, for getting
+That's it, not so huge, afterall. Basically, `consult-line` is just a
+thin wrapper around the internal function `consult--read`. We found
+something similar when we wanted to replace `completing-read` with a
+consult function, for getting
 real-time preview in [Emacs: let's zoom](/emacs-zoom#completing-read).  
-In the worst hypothesis, we could do the same and use `consult--read`
-passing it the symbol at point. But this is not even necessary. Notice
-the first `consult-line` parameter, `initial`. If it's not `nil`, then
-it will be used as the initial pattern.  
+In the worst hypothesis, we could do the same and use this internal
+`consult--read`, passing it the symbol at point. But this is not even
+necessary. Notice the first `consult-line` parameter, `initial`? If
+it's not `nil`, then it will be used as the initial pattern.  
 Let's see how it works. Evaluate this with `C-x C-e`:
 
 ```elisp
@@ -230,7 +233,12 @@ with `symbol-at-point` as the initial value.
 (global-set-key (kbd "M-s .") #'consult-line-symbol-at-point)
 ```
 
-Try it out. Nope. We get an `apply: Wrong type argument: stringp, Try`.
+Try it out. Nope. We get an 
+
+```
+apply: Wrong type argument: stringp, Try
+```
+
 This is because `(symbol-at-point)` returns a `symbol`, whereas
 `consult-line` wants a `string`. Fine: there must be a function to
 convert symbols to strings, right? I would try with:
@@ -263,16 +271,17 @@ declares:
 
 > Return the symbol at point, or nil if none is found.
 
-`(consult-line)` happily works if the `initial` pattern is `nil` (or
-if it omitted). But the problem in our code is with `symbol-name`:
-`(symbol-name nil)` is `"nil"`, as a string. So consult.el would
-search for that string. Mumble mumble, shall we raise an error, in
-that case?
+`(consult-line)` happily works when the `initial` pattern is `nil`
+&mdash; or if it omitted. But the problem in our code is with
+`symbol-name`: `(symbol-name nil)` is `"nil"`, as a string. So
+consult.el would search for that string. Mumble mumble, shall we raise
+an error, in that case?
 
 ## DWIM
 There's a better alternative: to implement a [Do What I Mean][dwim]
 behavior. That is, if there is no symbol at point, `M-s .` shall act
-as a standard `consult-line`.
+as a standard `consult-line`, if it's over a symbol, it would search
+for that symbol.
 
 We may use an `if` clause:
 
@@ -354,13 +363,13 @@ So:
     (consult-line (when symbol (symbol-name symbol)))))
 ```
 
-Now, if you are curious as a monkey, you could not save yourself
-from browsing the code of `symbol-at-point`. Which reveals a possible
+Now, if you are curious as I am, it’s impossible not to take a closer
+look to the code of `symbol-at-point`. Which reveals a possible
 further improvement.
 
 ## How does `symbol-at-point` work?
-It turns out that `symbol-at-point` is just a little wrapper around
-the more generic `thing-at-point`:
+It turns out that also `symbol-at-point` is just a little wrapper, in
+this case around the more generic `thing-at-point`:
 
 ```elisp
 (defun symbol-at-point ()
@@ -376,7 +385,7 @@ You see that call to `intern`? If you check `intern`'s documentation
 
 Now we see why we needed to invoke `symbol-name`! `symbol-at-point`
 converts the string to a symbol, so we needed `symbol-name` to get the
-string back! It makes sense to just invoke `thing-at-point`, then:
+string back! It makes sense to directly invoke `thing-at-point`, then:
 
 ```elisp
 (defun consult-line-symbol-at-point ()
@@ -407,9 +416,9 @@ with `when`. We can simplify our code as:
 There is no greater pleasure than deleting code, is there?
 
 ## Have I already told you are curious as a monkey?
-I know what you are thinking: what is that `'symbol` argument we
-passed to `thing-at-point`? Sounds like the *kind of thing* we want to
-detect.  
+I know what you are asking yourself: what is that `'symbol` argument
+we passed to `thing-at-point`? Sounds like the *kind of thing* we want
+to detect.  
 And what about that part of the `thing-at-point` documentation that
 mentions other possible values?
 
@@ -424,7 +433,7 @@ And, finally, what about this intriguing invitation?
 > on how to define a symbol as a valid THING.
 
 I can not resist, can you? We have to try those other *syntactic
-entity* types, then we have to challenge ourselves to define our first
+entity* types, then we have to challenge ourselves defining our first
 custom *thing-at-point*.
 
 ## You are repetitive, Arialdo!
@@ -444,10 +453,9 @@ Try yourself.
 Notice how we are asking `thing-at-point` to detect a whole sentence,
 not just the single symbol at point.
 
-![consult-line-sentence-at-point in action](static/img/emacs/consult-line-at-point/try-yourself.png)
+![consult-line-sentence-at-point in action](static/img/emacs/consult-line-at-point/try-yourself.png){:width="100%"}
 
-Cool. I'm not that repetitive, after all.
-
+Cool. I'm not that repetitive, after all.  
 Honestly, I have no idea how this would be useful. Maybe detecting
 sexps could come more in handy:
 
@@ -457,14 +465,13 @@ sexps could come more in handy:
   (consult-line (thing-at-point 'sexp)))
 ```
 
-![consult-line-sexp-at-point in action](static/img/emacs/consult-line-at-point/sexp-at-point.png)
+![consult-line-sexp-at-point in action](static/img/emacs/consult-line-at-point/sexp-at-point.png){:width="100%"}
 
 
 You got the idea.
 
 This bears the question: how to define a new custom
-type of thing? We have no choice but to try.
-
+type of thing? We have no choice but to try.  
 The documentation is clear:
 
 > See the file 'thingatpt.el' for documentation
@@ -498,17 +505,18 @@ question.
 Sounds like our culprit.
 
 If you recap what we discovered until this point, you probably agree
-that this is a beautiful design decision of Emacs:
+that this is a beautiful design trait of Emacs:
 
 * `isearch-forward-symbol-at-point` focuses on *searching* things,
   seen as strings.
 * `thing-at-point` focuses on returning that *thing*. It does that by
 delegating the job to a customizable collection of *thing*-providers.
-* Each *thing*-provider implements some custom logic to detect a
-  *thing* given the position in a buffer.
+* Each *thing*-provider implements some custom, arbitrary logic to
+  detect a *thing* given the position in a buffer.
 
 Indeed, we were able to easily create our
-`consult-line-symbol-at-point` because of this modular nature.  
+`consult-line-symbol-at-point` because of this modular nature.
+
 Time to challenge ourselves to define a *thing* that is not natively
 supported by `isearch-forward-symbol-at-point`.
 
@@ -516,20 +524,21 @@ supported by `isearch-forward-symbol-at-point`.
 ## A provider for literal strings, via Tree Sitter
 Imagine we want to write `consult-line-literal-string-at-point`, to
 search for occurrences of the whole literal string at point, whatever
-the current programming language in the buffer defines as a literal
-string. You could use it to find duplicated strings in code:
+buffer's programming language defines as a *literal string*. You could
+use it to find duplicated strings in code:
 
-![consult-line-literal-string-at-point in action](static/img/emacs/consult-line-at-point/literal-string-at-point.png)
+![consult-line-literal-string-at-point in action](static/img/emacs/consult-line-at-point/literal-string-at-point.png){:width="100%"}
 
 What we should do is to define a new provider,
 `ts-get-literal-string-at-point`, a function whose goal is to return
 the literal string around the point. Notice the `ts-` in the name?
 That stands for Tree-sitter. Indeed, we will rely on whatever
-Tree-sitter grammar is defined for the current buffer.
+Tree-sitter grammar is active in the current buffer.
 
 Once defined the provider, we will need to register it in the list of
 the global or the local *thing-at-point* providers. At that moment, we
-will get the chance to associate it to a symbol of our choice.
+will get the chance to associate it to a symbol of our choice (we will
+use `str_lit`).
 
 Once done that, `thing-at-point` will be able to detect literal
 strings at point (using the symbol we chose).
@@ -537,7 +546,7 @@ strings at point (using the symbol we chose).
 (Pause a minute to reflect again on the modular design of Emacs: Tree
 Sitter has been conceived in 2018, independently from Emacs and when
 Emacs was already 34. What we are really doing here is connecting some
-prehistoric Emacs machinery with Tree-sitter, branch new kid on the
+prehistoric Emacs machinery with Tree-sitter, the brand new kid on the
 block. There must be some deep beauty in the Emacs design if this
 works without any gimmick).
 
@@ -553,11 +562,11 @@ So, here's the provider:
 
 It works like this:
 
-* It asks Tree-sitter to get the node at point (`(treesit-node-at
-  (point)))`.
-* It checks the node type is of a literal string (`str_lit`),
-* then it returns its content (`(treesit-node-text node)).
-* Otherwise, just return `nil`.
+* It asks Tree-sitter to get the node at point, with `(treesit-node-at
+  (point))`.
+* It checks the node type is of a literal string, `(equal ... "str_lit")`,
+* then it returns its content `(treesit-node-text node)`.
+* Otherwise, it just returns `nil`.
 
 And here is how we can (globally) register it:
 
@@ -566,6 +575,13 @@ And here is how we can (globally) register it:
             (append thing-at-point-provider-alist
                     '((str_lit . ts-get-literal-string-at-point))))
 ```
+
+In a real case scenario, this would be done by a major mode, so most
+likely using `setq-local` instead of `setq`, inside a hook. If you are
+curious how major modes and hooks work in Emacs, you might give a read
+to [Emacs: how to
+activate the functionality X for all files of type
+Y?](emacs-hooks).
 
 Finally, let's have a function connecting `thing-at-point` against
 `str_lit` with `consult`:
@@ -592,9 +608,11 @@ It really works! Try yourself.
 * [Protesilaos Stavrou][prot]
 * [thingatpt.el][thing-at-point.el]
 * [DWIM][dwim]
+* [Bozhidar Batzov - Emacs Redux][bozhidar]
 
 [consult]: https://github.com/minad/consult
 [prot]: https://protesilaos.com/
 [bozhidar]: https://emacsredux.com/blog/2025/03/18/you-have-no-idea-how-powerful-isearch-is/
 [thing-at-point.el]: https://www.emacswiki.org/emacs/ThingAtPoint
 [dwim]: https://www.emacswiki.org/emacs/DoWhatIMean
+[bozhidar]: https://emacsredux.com/
