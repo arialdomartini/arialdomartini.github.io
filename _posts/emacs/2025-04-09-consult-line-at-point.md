@@ -57,10 +57,28 @@ symbol,
 `M-s .` does the same in one single shot. With the only difference
 that, alas!, it uses `isearch-forward` instead of `consult-line`.  
 As I mentioned, once tried `consult.el`, I could not do without it
-anymore. Unfortunately, `consult.el` does not provide
-`consult-line-symbol-at-point`.
+anymore. ~~Unfortunately, `consult.el` does not provide
+`consult-line-symbol-at-point`~~.
 
 How hard is it to write it?
+
+Edit: it turns out (thank you @Crandel!) that the consult.el [README](https://github.com/minad/consult/blob/30a42ac8f3d42f653eda234ee538c1960704f4f2/README.org#fine-tuning-of-individual-commands)
+suggests obtaining this result simply with:
+
+```elisp
+(consult-customize
+ consult-line
+ :add-history (seq-some #'thing-at-point '(region symbol)))
+
+(defalias 'consult-line-thing-at-point 'consult-line)
+
+(consult-customize
+ consult-line-thing-at-point
+ :initial (thing-at-point 'symbol))
+```
+
+Although next time I should RTFM!, I don't regret not knowing this:
+learning it by hacking has been a rewarding experience.
 
 ## How does `isearch-forward-symbol-at-point` work?
 It makes sense to figure out first how
