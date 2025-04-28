@@ -1,0 +1,308 @@
+---
+layout: post
+title: "Monadic Parser Combinators in F# - Composition"
+author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
+tags:
+- fsharp
+- functional programming
+- property-based testing
+ftrou: true
+include_in_index: false
+---
+You have surely noticed that people into functional programming have
+an obsession with the notion of composition. For example, you could
+have stumbled into sentences such as:
+
+- Exceptions don't compose well.
+- Locks are bad because they don't compose.
+- Monads compose nicely.
+
+and the like.
+
+This installment will try to help you develop an intuition about what
+composition is, why you want your parsers to be *composable* and what
+Applicative Functors and Monads have to do with all of this.
+
+## What's the fuss about composition?
+Your esoteric language's success will reach such heights that you'll
+exploit its popularity and design a beautiful, groundbreaking
+serialization format to finally eradicate the use of JSON and YAML. It
+will let developers express a record as:
+
+```
+inst Person
+   - Id <- *b19b8e87-3d39-4994-8568-0157a978b89a*
+   - Name <- <<Richard>>
+   - Birthday <- date{16/03/1953}
+```
+
+What a gorgeos syntax, isn't it? To deserialize such a string into the
+F# record:
+
+```fsharp
+type Person =
+    { Id: Guid
+      Name: string
+      Birthday: DateOnly }
+```
+
+you need a parsing function of type:
+
+
+```fsharp
+var parsePerson: string -> Person
+```
+
+Let's reflect how to implement it. For sure, `parsePerson` should
+tackle somehow the problem of parsing the syntax specific to records,
+such as the initial `inst` keyword and the series of:
+
+```
+   - fieldName <- value
+```
+
+strings.  
+As for the field values, though, `parsePerson` could smartly delegate
+the parsing of GUIDs, strings and dates to some specialized
+sub-functions. Each would have a specific signature:
+
+```fsharp
+var parseGuid: string -> Guid
+var parseString: string -> string
+var parseDateOnlye: string -> DateOnly
+```
+
+`parseGuid` knows how to get a GUID value from a string surrounded by
+`*`, `parseString` would extract strings from texts surronded by `<<`
+and `>>`, and so on. `parsePerson` will not need to worry about
+those details, so its implementation can be something like:
+
+
+```fsharp
+let parsePerson: string -> Person = fun s ->
+    let recordPart: string = ...
+    let guidPart: string = ...
+    let namePart: string = ...
+    let birthdayPart: string = ...
+    
+
+    { Id = parseGuid guidPart
+      Name = parseString namePart
+      Birthday = parseBirthday birthdayPart }
+```
+
+In other words, `parsePerson` is a *composition* of:
+
+- some logic specific to the syntax of a record.
+- and some lower level parsers.
+
+Is this what functional programmers mean with *composable*?
+
+Well, kind of. It's less black and white than this.
+
+
+## 5 Shades Of Composability
+First of all, there is no clear consensus about what "to compose well"
+means. Search for "monads are composable" and "monads don't compose":
+you will find plenty of articles supporting either the claims.
+
+I like to think that the line separating *composable* and
+*non-composable* stuff is blurry. Given 2 instances of `X`, whatever
+`X` is, you can either have that:
+
+1. They just cannot be combined together.
+2. They can be combined, but the result is not an `X` anymore.
+3. They can be combined together and they even form another `X`; but
+  the result might behave differently from expected.
+4. They can be combined together to form another `X`, 100% preserving all
+  the expected properties. But combining them is hard and not scalable.
+5. They can be combined together to form another `X`, 100% preserving
+  all the expected properties. And combining them is easy.
+
+
+If you will, we have the following levels:
+
+
+|   | They can be combined | forming another `X` | preserving their properties | It is easy |
+|---|----------------------|---------------------|-----------------------------|------------|
+| 1 | No                   | -                   | -                           | -          |
+| 2 | Yes                  | No                  | -                           | -          |
+| 3 | Yes                  | Yes                 | No                          | -          |
+| 4 | Yes                  | Yes                 | Yes                         | No         |
+| 5 | Yes                  | Yes                 | Yes                         | Yes        |
+
+Of course, for your language, you aim to write parsers deserving the
+last level.
+
+Let me give you some examples.
+
+### Case 1: things that do not compose
+
+Expressions and statements don't compose.
+
+The majority of languages distinguish expressions from statements.
+Expressions can be composed via operators (like in `a * b` and `list1
+++ list2`); statements can be composed sequencing them, or via
+control flow structures such as `if`, `for` and `while`.  
+However, this creates asymmetry:
+
+- Control structures can use expressions (e.g., `if(condition) { ...
+  }` gets a condition, which is an expression)
+
+- The opposite is not true. Expressions can't use control structures. This:
+
+```c
+int myList = for(int i=0; i<10; i++) { ... };
+```
+
+does not even compile.
+
+Similarly, you can pass the expression `sqrt(42)` as an argument to a
+function. You cannot pass it a `for` statement.  
+So, in a sense, "expressions and statements don't compose".
+
+By the way, that's one of the appealing traits of some functional
+languages: they treat control structures as first-class objects,
+unifying the 2 worlds. They offer greater composability by allowing
+control logic to be manipulated just like any other value. For
+example, this is valid F# code:
+
+```fsharp
+let squares = [for x in 1..10 do yield x*x]
+```
+
+### Case 2: `X`s that composing results in something other than `X`.
+
+Or, more concisely: things not closed under composition
+
+The canonical example is with integer numbers: they compose via
+division, but they result in float numbers.
+
+Objects are another notable case. You can compose `Wheel` and
+`Engine`, but you want the result to be `Car`, not something that is
+both a `Wheel` and an `Engine`.
+
+### Case 3: Things that compose in surprising ways
+The canonical example is again with numbers. In many languages'
+floating-point arithmetic: `0.1 + 0.2` computes to
+`0.30000000000000004`, not exactly to `0.3`. You can say that float
+numbers compose via the sum operation, but not so nicely, do they?
+
+Possibly, another more interesting example is with multi-threading
+functions using locks. They *do compose*, but in a surprising and
+unsafe way.
+
+Imagine that you have the guarantee that every process requesting a
+locks eventually releases them. You can count on this property. Does
+the composition of 2 processes hold the same guarantee?
+
+Unfortunately, no. Consider 2 functions acquiring 2 locks `x` and `y`,
+in opposite order:
+
+```
+open System.Threading
+open System.Threading.Tasks
+open Xunit
+open Swensen.Unquote
+
+let x = obj ()
+let y = obj ()
+
+let threadA =
+    async {
+        return
+            lock x (fun () ->
+                Thread.Sleep(1000)
+
+                lock y (fun () -> 21))
+    }
+
+let threadB =
+    async {
+        return
+            lock y (fun () ->
+                Thread.Sleep(1000)
+
+                lock x (fun () -> 21))
+    }
+
+let combined =
+    task {
+        let taskA = Async.StartAsTask threadA
+        let taskB = Async.StartAsTask threadB
+
+        let! a = taskA
+        let! b = taskB
+
+        return a + b
+    }
+
+[<Fact>]
+let ``threadA only`` () =
+    task {
+        let! b = threadA
+        test <@ b = 21 @>
+    }
+
+[<Fact>]
+let ``threadB only`` () =
+    task {
+        let! a = threadB
+        test <@ a = 21 @>
+    }
+
+
+[<Fact>]
+let ``thread A and B combined cause a deadlock`` () =
+    task {
+        let! ab = combined
+        test <@ ab = 42 @>
+    }
+```
+
+Although when run separately each async function is guaranteed to
+successfully return, their combination might generate a deadlock. So,
+function using locks do compose into other functions, but not nicely:
+their composition cannot guarantee all the invariant s still hold.
+
+### What about our manual parser?
+Getting back to our fictional Parser, in which slot similarly written
+parsers fall?
+
+
+```fsharp
+let parsePerson: string -> Person = fun s ->
+    let recordPart: string = ...
+    let guidPart: string = ...
+    let namePart: string = ...
+    let birthdayPart: string = ...
+    
+
+    { Id = parseGuid guidPart
+      Name = parseString namePart
+      Birthday = parseBirthday birthdayPart }
+```
+
+
+I hope that the next installment will manage to convince you that it's
+a case for the 4th level: indeed, imperative parsers like this *do
+compose*, and mostly without unexpected suprises. But the code you
+need to write would not scale with complexity. It will easily explode
+from convoluted to crazy unmaintanable.
+
+Did I already tell you that by moving to Applicative and Monadic
+Parser Combinators you will reach the 5th level, the complete zen
+illumination and probably a couple of other super-powers?
+
+Have a hot infusion, relax and when ready, jump to the next section.
+
+
+# References
+
+
+# Comments
+[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/33)
+
+
+
+{% include fp-newsletter.html %}
