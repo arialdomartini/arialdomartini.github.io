@@ -317,27 +317,9 @@ passed to the next parser, so that this can keep consuming the input.
 
 
 ```fsharp
-let parsePerson: string -> (string * Person) = fun input ->
+let parsePerson: string -> (string * Person) =
+    fun input ->
 
-    let (remaining, _) = parseRecord input
-    let (remaining, id) = parseGuid remaining
-    let (remaining, _) = parseUpToName remaining
-    let (remaining, name) = parseString remaining
-    let (remaining, _) = parseUpToBirthday remaining
-    let (remaining, birthday) = parseBirthday remaining
-    let (remaining, _) = parseTillTheEnd remaining
-    
-    { Id = id
-      Name = name
-      Birthday = birthday } , remaining
-```
-
-No, wait: we also have to consider error handling:
-
-```fsharp
-let parsePerson: string -> (string * Person) = fun input ->
-
-    try
         let (remaining, _) = parseRecord input
         let (remaining, id) = parseGuid remaining
         let (remaining, _) = parseUpToName remaining
@@ -345,13 +327,35 @@ let parsePerson: string -> (string * Person) = fun input ->
         let (remaining, _) = parseUpToBirthday remaining
         let (remaining, birthday) = parseBirthday remaining
         let (remaining, _) = parseTillTheEnd remaining
-        
+
+        remaining,
         { Id = id
           Name = name
-          Birthday = birthday } , remaining
-    with
-    | ParseException e ->
-        raise (ParseException $"Failed to parse Person because of {e}")
+          Birthday = birthday }
+```
+
+No, wait: we also have to consider error handling:
+
+```fsharp
+let parsePerson: string -> (string * Person) =
+    fun input ->
+        try
+
+            let (remaining, _) = parseRecord input
+            let (remaining, id) = parseGuid remaining
+            let (remaining, _) = parseUpToName remaining
+            let (remaining, name) = parseString remaining
+            let (remaining, _) = parseUpToBirthday remaining
+            let (remaining, birthday) = parseBirthday remaining
+            let (remaining, _) = parseTillTheEnd remaining
+
+            remaining,
+            { Id = id
+              Name = name
+              Birthday = birthday }
+        with
+        | ParseException e ->
+            raise (ParseException $"Failed to parse Person because of {e}")
 ```
 
 You can imagine that in the first invocation, `parseRecord` consumes
@@ -382,7 +386,9 @@ away into a separate, generic function:
 
 
 ```fsharp
-let parseSequence (parsers: (string -> string * 'a) list) (input: string) =
+exception ParseException of string
+
+let rec sequence<'a> (parsers: (string -> string * 'a) list) (input: string) : string * 'a list =
     let rec parseRec remainingInput parsers acc =
         match parsers with
         | [] -> (remainingInput, List.rev acc)
@@ -391,6 +397,30 @@ let parseSequence (parsers: (string -> string * 'a) list) (input: string) =
             parseRec newRemaining remainingParsers (parsedValue::acc)
 
     parseRec input parsers []
+
+
+type Something = Something of int
+
+let mockParser (i: int) (input: string) = (input[1..], Something i)
+
+[<Fact>]
+let ``applies all the parsers consuming 1 character for parser`` () =
+
+    let fiveParsers =
+        [ 1..5 ]
+        |> Seq.map mockParser
+        |> Seq.toList
+
+    let parser = fiveParsers |> sequence
+
+    let parsedValues = [
+        Something 1
+        Something 2
+        Something 3
+        Something 4
+        Something 5 ]
+
+    test <@ parser "12345abc" = ("abc", parsedValues) @>
 ```
 
 Woah! Isn't this another Parser Combinator? It's not directly usable
@@ -411,8 +441,7 @@ type MyTypes =
 While this it surely overkill for a serialization language, it is
 indeed the typical approach for programming language parsers.
 
-
-Now, we could even live with this series of:
+So, we have to live with this series of:
 
 ```fsharp
 let (remaining, value1) = parse1 input
@@ -423,7 +452,31 @@ let (remaining, value4) = parse4 remaining
 let (remaining, valueN) = parseN remaining
 ```
 
-if it wasn't for the second problem. That definetely kills our mood.
+for a bit more. Speaking about elegance, I don't know about you, but
+these verbose signatures:
+
+```fsharp
+val sequence<'a> (string -> string * 'a) list -> string -> string * 'a list
+```
+
+are really starting to get on my nerves. We should do something to
+make them simpler. Type aliases for the win! Just defining:
+
+```fsharp
+type Parser<'a> = string -> string * 'a
+```
+
+`choice` and `sequence` simplify to:
+
+```fsharp
+val choice<'a>: 'a Parser list -> 'a Parser
+
+val sequence<'a>: 'a Parser list -> 'a list Parser
+```
+
+Ah! Much, much better!  
+We still have to talk about the second problem, though. This will
+definetely kill our mood.
 
 ## It's coupled
 The second problem arises because we are impatient and we never
@@ -433,19 +486,21 @@ supposed to use an `Either` or a `Result` instead".
 
 OK, fine: let's use a `Result`, then.
 
-There are 2 possibilities. We could either return the unconsumed input
-only in case of a successful parsinsg:
+There are 2 possibilities. Either we return the unconsumed input only
+in case of a successful parsing:
 
 ```fsharp
 type ParseError = string
+type Input = string
+type Rest = string
 
-var parser : string -> Result<ParseError, (string * 'a)>
+type Parser<'a> = Input -> Rest * Result<'a, ParseError>
 ```
 
-or in both cases of success and failure:
+or we return it in any case:
 
 ```fsharp
-var parser : string -> string * Result<ParseError, 'a>
+type Parser<'a> = Input -> Result<Rest * 'a, ParseError>
 ```
 
 You might recognize this last signature as the one of a State Monad
@@ -458,81 +513,95 @@ handling concern with the parsing logic.
 Let's use the first signature.
 
 ## From Exceptions to functional error handling
-Adapting our 2 combinators is a piece of cake:
+Adapting our 2 combinators and their tests is a piece of cake. For
+example, `choice` becomes:
 
 ```fsharp
-let rec choice parsers input =
-    match parsers with
-    | [] -> Failure "All parsers failed"
-    | parser::others ->
-        let result = parser input
-        match result with
-        | Success _ as success -> success 
-        | Failure err -> parseFirst others input 
-
-let parseSequence (parsers: (string -> string * Result<ParseError, 'a>) list) (input: string) =
-    let rec parseRec remainingInput parsers acc =
+let rec choice<'a> (parsers: 'a Parser list) : 'a Parser =
+    fun input ->
         match parsers with
-        | [] -> (remainingInput, List.rev acc)
-        | currentParser::remainingParsers ->
-            let (newRemaining, parsedValue) = currentParser remainingInput
-            parseRec newRemaining remainingParsers (parsedValue::acc)
+        | [] -> Error "All parsers failed"
+        | parser::others ->
+            match parser input with
+            | Ok success -> Ok success
+            | Error _ -> choice others input
 
-    parseRec input parsers []
+let failingParser i : 'a Parser =
+    fun _ ->
+        Result.Error $"parser {i} failed"
+
+let failingParsers<'a>: 'a Parser list =
+    [1..10]
+    |> Seq.map failingParser
+    |> Seq.toList
+
+
+[<Fact>]
+let ``it fails if all the parsers fail`` () =
+
+    let parser = choice failingParsers
+
+    test <@ parser "whatever input" = Error "All parsers failed" @>
+
+[<Fact>]
+let ``uses the first successful parser`` () =
+
+    let first _ = Ok ("", "first succeeded!")
+    let second _  = Ok ("", "first succeeded!")
+
+    let parser: string Parser =
+                choice
+                     [failingParser 1
+                      failingParser 2
+                      first
+                      failingParser 3
+                      second ]
+
+    test <@ parser "whatever input" = Ok ("", "first succeeded!") @>
 ```
 
-Very good! This shows that factoring out functionalities always pays
-off! Unfortunately, the same cannot be said for `parsePerson`:
-
+Voilà, no more exceptions!  
+Unfortunately, the same cannot be said for `parsePerson`:
 
 
 ```fsharp
-let parsePerson: string -> Person = fun input ->
+let parsePerson: Person Parser = fun input ->
 
-    let error e = Failure $"Failed to parse Person because of {e}"
-
-    let (remaining, result) = parseRecord input
-    match result with
-    | Success (remaining, r) ->
-        let (remaining, id) = parseGuid remaining
-        match result with
-        | Success (remaining, id) ->
-            let (remaining, _) = parseUpToName remaining
-            match result with
-            | Success (remaining, id) ->
-                let (remaining, name) = parseString remaining
-                match result with
-                | Success (remaining, id) ->
-                    let (remaining, _) = parseUpToBirthday remaining
-                    match result with
-                    | Success (remaining, id) ->
-                        let (remaining, birthday) = parseBirthday remaining
-                        match result with
-                        | Success (remaining, id) ->
-                            let (remaining, _) = parseTillTheEnd remaining
-                            match result with
-                            | Success (remaining, id) ->
-                                Success (
+    match parseRecord input with
+    | Ok (remaining, _) -> 
+        match parseGuid remaining with
+        | Ok (remaining, id) ->
+            match parseUpToName remaining with
+            | Ok (remaining, _) ->
+                match parseString remaining with
+                | Ok (remaining, name) ->
+                    match parseUpToBirthday remaining with
+                    | Ok (remaining, _) ->
+                        match parseBirthday remaining with
+                        | Ok (remaining, birthday) ->
+                            match parseTillTheEnd remaining with
+                            | Ok (remaining, _) ->        
+                                Ok (remaining,
                                     { Id = id
                                       Name = name
-                                      Birthday = birthday } , remaining )
-                            | Failure err -> error err
-                        | Failure err -> error err
-                    | Failure err -> error err
-                | Failure err -> error err
-            | Failure err -> error err
-        | Failure err -> error err
-    | Failure err -> error err
+                                      Birthday = birthday })
+                            | Error err -> Error err
+                        | Error err -> Error err
+                    | Error err -> Error err
+                | Error err -> Error err
+            | Error err -> Error err
+        | Error err -> Error err
+    | Error err -> Error err
 ```
 
-Holy crap. This is absolutely horrific.
+Holy crap! This is absolutely horrific. There is more error control
+code than domain logic!
 
-The good news: The attempts to factor this mess out will lead us to
+The good news: the attempts to factor this mess out will lead us to
 invent Applicative Functors and Monads.
 
-Before proceeding with code, I think it's useful to expand our mind
-and realize that there might be a kind of coupling we never thought
-of.
+Before proceeding with code, I think it's useful to reflect how we
+should proceed.
 
 ## A tale of 2 coupling types 
 
@@ -629,7 +698,7 @@ So, let's see how to fix the pyramid of doom we wrote in
 `parsePerson'` and how this leads us to re-invent &mdash; yet another
 time &mdash; monads.
 
-Take a break, bite an apple, then jump to the next installment.
+Take a break, bite an apple, then jump to [the next installment](/monadic-parser-combinators-4).
 
 # References
 
