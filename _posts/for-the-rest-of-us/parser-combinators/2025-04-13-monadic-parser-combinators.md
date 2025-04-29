@@ -25,7 +25,7 @@ have several components:
 * A Linker, and so on.
 
 Here we are focusing on the very first component: a piece of code able
-to analyze the source, to check its syntax against the esotheric
+to analyze the source, to check its syntax against the esoteric
 formal grammar you defined, and to generate something very well
 structured for the next components to crunch.
 
@@ -48,7 +48,6 @@ errors in case there are any. Better return a `Result`, then:
 
 ```fsharp
 type ParserError = { Expected: string; Encountered: string }
-// or just: type ParserError = string
 
 val parser : SourceCode -> Result<ParserError, AbstractSyntaxTree>
 ```
@@ -70,10 +69,10 @@ the signatures.
 [Tree-sitter][tree-sitter] too does something similar. It parses a string like:
 
 ```
-"let x = 42;"
+"let x = 42"
 ```
 
-and emits a tree like:
+and it emits a tree like:
 
 ```
 (program
@@ -133,9 +132,9 @@ conventionally, the single-character parser. This does not.
 Instead, we will focus on combinators first, postponing the
 implementation of concrete parsers to the last chapter. When I was
 first introduced to parsers, I was just confused: what on earth does
-it mean to parse a single character? What's the point, where is this
-leading me? My own 'aha!' moment came when I got how
-composition turns tiny parsers into something actually useful.  
+it mean to parse a single character returning a character? What's the
+point? Where is this leading me? My own 'aha!' moment came when I got
+how composition turns tiny parsers into something actually useful.  
 I hope I can help you skip past that initial disorientation entirely.
 
 - We will write code with Test-Driven Development.  
@@ -143,7 +142,7 @@ Isn't it ironic that we developers often lament the absence of tests
 in our daily job projects and yet, when it comes to writing posts,
 tutorials and books, we never address testing at all?
 
-Ready? Let's go started.
+Fine, enough with the introduction. Ready? [Let's get started](/monadic-parser-combinators-2).
 
 # References
 

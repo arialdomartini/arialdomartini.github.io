@@ -1,4 +1,4 @@
----
+-------------------------------------------------------------------------------
 layout: post
 title: "Monadic Parser Combinators in F# - Composition"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
@@ -34,7 +34,7 @@ type RockTrio =
 
 Beside some specific syntax that might exist for it &mdash; and which
 we don't care at the moment &mdash; the point is that we can alway
-reuse `parseString` and `parsePerson`. Good.
+write `parseRockTrio` reusing `parseString` and `parsePerson`. Good.
 
 What if we also have `SoloArtist` to be parsed as:
 
@@ -54,8 +54,8 @@ type
 
 ```fsharp
 type RockBand =
-    | RockTrio
-    | SoloArtist
+    | RockTrio of RockTrio
+    | SoloArtist of SoloArtist
 ```
 
 We will need to try both parsers and to keep the value of the one
@@ -65,12 +65,21 @@ Maybe we can let parsers raise exceptions in case of failure. OK,
 fine: this means that our client code need to be:
 
 ```fsharp
-let parseBand input =
+
+let parseBand parseRockTrio parseSoloArtist input : RockBand =
     try
         parseRockTrio input
-    with
-    | ParseException ->
+    with ParseException ->
         parseSoloArtist input
+
+[<Property>]
+let ``it parses a SoloArtist if parsing of RockTrio fails`` (artist: SoloArtist) (input: string) =
+    let justFail input = raise ParseException
+    let successfullyParseSoloArtist input = SoloArtist artist
+
+    let parsed = parseBand justFail successfullyParseSoloArtist input
+
+    test <@ parsed = SoloArtist artist @>
 ```
 
 This doesn't seem such a big deal, does it? There are in fact 2 problems
@@ -96,7 +105,7 @@ not scale. If besided `RockTrio` and `SoloArtist` the input string
 also contained other cases, the cascade would indefinitely grow:
 
 ```fsharp
-let parseBand input =
+let parseBand parseCase1 parseCase2 parseCase3 parseCase4 ... input =
     try
         parseCase1 input
     with
@@ -121,46 +130,64 @@ You see where this goes: your esoteric programming language and your
 funny serialization format will have tens if not hundreds of cases and
 you don't want to write a specific code for each and every combination
 of parsers, do you? You will probably want to factor this logic to a
-generic function that, given some parsers, returns the first
-successfull one:
+generic function `choise` that, given a collection of parsers, returns
+the first successful one:
+
 
 ```fsharp
-let choice parser1 parser2 parser3 parser4 parser5 parser6 input =
-    try
-        parser1 input
-    with ParseException ->
-        try
-            parser2 input
-        with ParseException ->
-            try
-                parser3 input
-            with ParseException ->
-                try
-                    parser4 input
-                with ParseException ->
-                    try
-                        parser5 input
-                    with ParseException ->
-                        parser6 input
-```
+exception ParseException of string
 
-Or even better, generalizing:
-
-```fsharp
-let rec choice (parsers: (string -> 'a) list) (input: string) =
+let rec choice<'a> (parsers: (string -> 'a) list) (input: string) =
     match parsers with
     | [] -> raise (ParseException "All parsers failed")
     | parser::others ->
         try
             parser input
         with
-        | ParseException _ -> parseFirst others input
+        | ParseException _ -> choice others input
+
+
+// Tests
+
+let failingParser<'a> (i: int) (input: string) : 'a =
+    raise (ParseException $"parser {i} failed")
+
+let failingParsers<'a> : (string -> 'a) list =
+    [1..10]
+    |> Seq.map failingParser
+    |> Seq.toList
+
+[<Fact>]
+let ``it fails if all the parsers fail`` () =
+
+    let parser = choice failingParsers
+
+    raisesWith<ParseException>
+        <@ parser "whatever input" @>
+        (fun e -> <@ e.Data0 = "All parsers failed" @>)
+
+
+[<Fact>]
+let ``uses the first successful parser`` () =
+
+    let first input : string = "first succeeded!"
+    let second input : string = "first succeeded!"
+
+    let parser: string -> string =
+                choice
+                     [failingParser 1
+                      failingParser 2
+                      first
+                      failingParser 3
+                      second ]
+
+    test <@ parser "whatever input" = "first succeeded!"@>
 ```
 
 Notice the signature:
 
 ```fsharp
-var choice: ((string -> 'a) list) -> string -> 'a
+val choice: ((string -> 'a) list) -> string -> 'a
 ```
 
 This is a function that, given a list of Parsers (`(string -> 'a)
@@ -237,8 +264,8 @@ inst Person
    - Id <-
 ```
 
-then delegate to `parseGuid`; then it needs to check that the input
-continues with:
+then it must delegate to `parseGuid`; then it needs to check that the
+input continues with:
 
 ```
 
@@ -273,13 +300,13 @@ sequentially, from the first to the last character.
 So, rather than:
 
 ```fsharp
-var parser<'a> = string -> 'a
+val parser<'a> = string -> 'a
 ```
 
 a parser would rather have the signature:
 
 ```fsharp
-var parser<'a> = string -> (string, 'a)
+val parser<'a> = string -> (string, 'a)
 ```
 
 The returned tuple contains the unconsumed input *plus* the parsed
@@ -290,7 +317,7 @@ passed to the next parser, so that this can keep consuming the input.
 
 
 ```fsharp
-let parsePerson: string -> Person = fun input ->
+let parsePerson: string -> (string * Person) = fun input ->
 
     let (remaining, _) = parseRecord input
     let (remaining, id) = parseGuid remaining
@@ -308,7 +335,8 @@ let parsePerson: string -> Person = fun input ->
 No, wait: we also have to consider error handling:
 
 ```fsharp
-let parsePerson': string -> Person = fun input ->
+let parsePerson: string -> (string * Person) = fun input ->
+
     try
         let (remaining, _) = parseRecord input
         let (remaining, id) = parseGuid remaining
@@ -334,8 +362,8 @@ inst Person
    - Id <- 
 ```
 
-ignoring the output, only as a mechanism to get to the point where
-`parseGuid` can proceed.  
+It can ignore the output, since it just needs either to fail or to get
+to the point where `parseGuid` can proceed.  
 Similarly `parseUpToName` would consume:
 
 ```
@@ -345,12 +373,12 @@ Similarly `parseUpToName` would consume:
 and so on.  
 OK, that's not too complicated. But I bet you agree: it's a bit
 repetitive and not very elegant. Passing that `remaining` value around
-is super boring. I'm personally too lazy to even copy paste that
-monotonous code.
+is super boring.
 
-As it often happens, developers laziness is the catalyst of
-abstraction: this code immediately ignites our wish to factoring the
-duplication away into a separate, generic function:
+I'm personally too lazy to even copy paste that monotonous code. As it
+often happens, developer's laziness is the catalyst of abstraction:
+this code immediately ignites our wish to factor the duplication
+away into a separate, generic function:
 
 
 ```fsharp
