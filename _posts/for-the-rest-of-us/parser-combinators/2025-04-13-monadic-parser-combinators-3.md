@@ -1,4 +1,4 @@
--------------------------------------------------------------------------------
+---
 layout: post
 title: "Monadic Parser Combinators in F# - Composition"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
@@ -388,7 +388,7 @@ away into a separate, generic function:
 ```fsharp
 exception ParseException of string
 
-let rec sequence<'a> (parsers: (string -> string * 'a) list) (input: string) : string * 'a list =
+let sequence<'a> (parsers: (string -> string * 'a) list) (input: string) : string * 'a list =
     let rec parseRec remainingInput parsers acc =
         match parsers with
         | [] -> (remainingInput, List.rev acc)
