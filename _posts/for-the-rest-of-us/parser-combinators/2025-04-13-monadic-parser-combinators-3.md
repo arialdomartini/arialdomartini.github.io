@@ -33,8 +33,9 @@ type RockTrio =
 ```
 
 Beside some specific syntax that might exist for it &mdash; and which
-we don't care at the moment &mdash; the point is that we can alway
-write `parseRockTrio` reusing `parseString` and `parsePerson`. Good.
+we don't care at the moment &mdash; the point is that we can think of
+writing `parseRockTrio` reusing `parseString` and `parsePerson`. This
+is the basis of composition.
 
 What if we also have `SoloArtist` to be parsed as:
 
@@ -49,24 +50,26 @@ and `parsePerson`. This is what I call reuse!
 
 ## Detecting early problems
 Wait a sec: what if the input string can contain either a `RockTrio` or
-a `SoloArtist`, provided that they are both cases of the same union
-type
-
-```fsharp
-type RockBand =
-    | RockTrio of RockTrio
-    | SoloArtist of SoloArtist
-```
+a `SoloArtist`?
 
 We will need to try both parsers and to keep the value of the one
 succeeding. Oh, so there must be a notion of succeeding and failing.
 This means that somehow a parser needs to signal if it failed. Uhm...
 Maybe we can let parsers raise exceptions in case of failure. OK,
-fine: this means that our client code need to be:
+fine: provided that `RockTrio` and
+`SoloArtist` are both cases of the same union type:
+
+```fsharp
+type RockBand =
+    | RockTrio of RockTrio
+    | SoloArtist of SoloArtist
+``` 
+
+our parser could be:
 
 ```fsharp
 
-let parseBand parseRockTrio parseSoloArtist input : RockBand =
+let parseBand parseRockTrio parseSoloArtist put : RockBand =
     try
         parseRockTrio input
     with ParseException ->
@@ -82,8 +85,8 @@ let ``it parses a SoloArtist if parsing of RockTrio fails`` (artist: SoloArtist)
     test <@ parsed = SoloArtist artist @>
 ```
 
-This doesn't seem such a big deal, does it? There are in fact 2 problems
-here.
+This doesn't seem such a big deal, does it? In fact, there are 2
+problems here.
 
 - This approach falls short, it does not scale.
 - Parsing logic is too much coupled with other concerns.

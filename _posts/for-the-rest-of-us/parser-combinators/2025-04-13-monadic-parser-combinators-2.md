@@ -54,8 +54,9 @@ val parsePerson: string -> Person
 ```
 
 Let's reflect how to implement it. Again: we are more interested in
-the journey of *decomposing* the problem into smaller problems and then
-of *combining* them, rather than in writing this specific parser.
+the journey of *decomposing* the problem into smaller problems and
+then of *combining* them to generate a parser, rather than in writing
+this specific parser by hand.
 
 For sure, `parsePerson` should tackle somehow the problem of parsing
 the syntax specific to records, such as the initial `inst` keyword and
@@ -136,21 +137,25 @@ Well, kind of. It's less black and white than this.
 
 ## 5 Shades Of Composability
 First of all, there is no clear consensus about what "to compose well"
-means. Search for "monads are composable" and "monads don't compose":
-you will find plenty of articles supporting either the claims.
+means. Search for "*monads are composable*" and "*monads don't
+compose*": you will find plenty of articles supporting either the
+claims.
 
 I like to think that the line separating *composable* and
 *non-composable* is blurry. Given 2 instances of `X`, whatever `X` is,
 you can either have that:
 
-1. They just cannot be combined together.
-2. They can be combined, but the result is not an `X` anymore.
-3. They can be combined together and they even form another `X`; but
-  the result might behave differently from expected.
-4. They can be combined together to form another `X`, 100% preserving all
-  the expected properties. But combining them is hard and not scalable.
-5. They can be combined together to form another `X`, 100% preserving
-  all the expected properties. And combining them is easy.
+1. They just **cannot** be combined together.
+2. They **can** be combined together, but the result is **not an `X`**
+   anymore.
+3. They **can** be combined and they even **form another `X`**; but
+  the result might **behave differently** from expected.
+4. They **can** be combined together to **form another `X`**, **100%
+preserving** all the expected properties. But combining them is
+**hard** and not scalable.
+5. They **can** be combined together to form **another `X`**, **100%
+  preserving** all the expected properties. And combining them is
+  **easy**.
 
 
 If you will, you can see these levels as follows:
@@ -175,12 +180,23 @@ Expressions and statements don't compose.
 
 The majority of languages distinguish expressions from statements.
 Expressions can be composed via operators (like in `a * b` and `list1
-++ list2`); statements can be composed sequencing them, possibly in
-combination of control flow structures such as `if`, `for` and `while`.  
+++ list2`); statements can be composed sequencing them, like in:
+
+```fsharp
+use writer = new StreamWriter(filename)
+writer.WriteLine("Hello, world!")
+```
+
+possibly in combination of control flow structures such as `if`, `for` and `while`.  
 However, this creates asymmetry:
 
-- Control structures can use expressions (e.g., `if(condition) { ...
-  }` gets a condition, which is an expression)
+- Control structures like `if` can use expressions:
+
+```fsharp
+if(condition) { ...  }
+```
+
+gets `condition`, which is an expression.
 
 - The opposite is not true. Expressions can't use control structures. This:
 
@@ -191,7 +207,8 @@ int myList = for(int i=0; i<10; i++) { ... };
 does not even compile.
 
 Similarly, you can pass the expression `sqrt(42)` as an argument to a
-function. You cannot pass it a `for` statement.  
+function. You cannot pass it a `for` statement. This just doesn't make
+sense, right?  
 So, in a sense, "expressions and statements don't compose".
 
 By the way, that's one of the appealing traits of some functional
@@ -204,7 +221,7 @@ example, this is valid F# code:
 let squares = [for x in 1..10 do yield x*x]
 ```
 
-### Case 2: `X`s that composing results in something other than `X`.
+### Case 2: composing `X`s results in something other than `X`.
 
 Or, more concisely: things not closed under composition.
 
@@ -223,17 +240,17 @@ numbers compose via the sum operation, but not so nicely.
 
 Possibly, another more interesting example is with multi-threading
 functions using locks. They *do compose*, but in a surprising and
-unsafe way.
+unsafe way. Let me show you.
 
-Imagine that you have the guarantee that every process requesting a
+Imagine that you have the guarantee that every process requesting
 locks eventually releases them. While you can count on this property
-for evey process in isolation, does the composition of 2 processes
+for every process in isolation, does the composition of 2 processes
 hold the same guarantee?
 
 Unfortunately, no. Consider 2 functions acquiring 2 locks `x` and `y`,
 in opposite order:
 
-```
+```fsharp
 open System.Threading
 open System.Threading.Tasks
 open Xunit
@@ -300,8 +317,8 @@ successfully return, their combination might generate a deadlock. So,
 but not nicely: you cannot guarantee all the invariants still hold.
 
 ### What about our manual parser?
-Getting back to our fictional Parser, in which slot does it, and other
-similarly written parsers, fall?
+Getting back to our fictional Parser, in which slot does it &mdash;
+and other similarly written parsers &mdash; fall?
 
 
 ```fsharp
