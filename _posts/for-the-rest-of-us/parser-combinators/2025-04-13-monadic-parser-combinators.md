@@ -14,6 +14,16 @@ Parser Combinators. You've always wanted, just admit it.
 
 <!--more-->
 
+## Index
+
+
+1. [Chapter 1 - Intro](/monadic-parser-combinators)
+2. [Chapter 2 - Composition](/monadic-parser-combinators-2)
+3. [Chapter 3](/monadic-parser-combinators-3)
+4. [Chapter 4](/monadic-parser-combinators-4)
+
+## Introduction
+
 The compiler of your beautiful new language &mdash; with which you
 want to bring the use of `goto` and `null` back to life &mdash; will
 have several components:
