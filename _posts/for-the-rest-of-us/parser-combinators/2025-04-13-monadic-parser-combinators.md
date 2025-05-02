@@ -19,8 +19,9 @@ Parser Combinators. You've always wanted, just admit it.
 
 1. [Chapter 1 - Intro](/monadic-parser-combinators)
 2. [Chapter 2 - Composition](/monadic-parser-combinators-2)
-3. [Chapter 3](/monadic-parser-combinators-3)
-4. [Chapter 4](/monadic-parser-combinators-4)
+3. [Chapter 3 - Combinators!](/monadic-parser-combinators-3)
+4. [Chapter 4 - I told you not to touch the signature!](/monadic-parser-combinators-4)
+5. [Chapter 4 - Two Shades of Coupling](/monadic-parser-combinators-5)
 
 ## Introduction
 
@@ -136,6 +137,14 @@ That's the goal of this series.
 There are many similar series online, some specific to F# such as [The
 "Understanding Parser Combinators" series][wlaschin] by Scott
 Wlaschin. This post tries to stand out in a few different ways:
+
+- If other attempts to this topic left you scratching your head, this
+  series should make things a lot easier.  
+  I've done my best to keep the learning curve as smooth as
+  possible. Having to pick between being brief and assuming you knew a
+  lot, or taking a longer path I went with the latter. I think it's
+  nicer to know why stuff works rather than being being hit with
+  jargon-heavy explanations.
 
 - Many tutorials begin with writing a simple parser &mdash;
 conventionally, the single-character parser. This does not.  
