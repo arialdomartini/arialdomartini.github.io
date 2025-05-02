@@ -12,23 +12,22 @@ include_in_index: false
 
 ## A tale of 2 coupling types 
 
-The implementation of `parsePerson` delegates the parsing of GUIDs,
-strings and dates to external functions. We think that this makes
-`parsePerson` decoupled from the parsing logic of the specific
-fields. And this is so true.
+`parsePerson` delegates the parsing of GUIDs, strings and dates to
+external functions. We think that this makes it decoupled from the
+parsing logic of the specif fields. And this is so true.
 
 Yet, the code we just obtained clearly shows that some problems still
 exist. You should have grasped why by now, and realized that there are
 in fact 2 types of coupling:
 
 - A function can be coupled with *the logic* of other components.  
-That cannot be our case: `parsePerson` does not even know how GUIDs
+This cannot be our case: `parsePerson` does not even know how GUIDs
 are represented; this logic is completely delegated to `parseGuid`.
 
 - A function could be coupled with *the mechanics* of glueing things
   together, what we called the *effectful logic*.  
   This means that even if it is *functionally isolated*, the code
-  structure still depends on this "glueing mechanism". This must be
+  structure still depends on this *glueing mechanism*. This must be
   our case.
   
 
@@ -62,9 +61,10 @@ This leads to 2 traits in the OOP's function application:
   we write wrappers and adapters to work around the incompatibility.
 
 - We often assume function application is dumb.  
-  It just passes a value to the next function, and we are happy with
-  that. There are few exceptions: indeed, design patterns like
-  Decorator are a way to add some logic to method calls.
+  It just passes a value to the next function, doing nothing else
+  meanwhile, and we are happy with that. There are few exceptions:
+  indeed, design patterns like Decorator and Aspect Oriented
+  Programming are a way to add some logic to method calls.
 
 
 The farest we go with making things intentionally incompatible and
@@ -103,8 +103,8 @@ application does all of this, under the hood.
 
 But both exceptions and `async`/`await` are ad-hoc, built-in
 solutions. We cannot expect that the native F# function application
-provides a special treatment for parser functions returning `Result`s
-of tuples, or for any other custom signature we will write.
+provided a special treatment for parser functions returning `Result`s
+of tuples. This is too specific to our peculiar use case.  
 
 In fact, in FP it's often the case that we intentionally design the
 function signatures ignoring the native gluing mechanism. We take the
@@ -113,7 +113,11 @@ application is easy to extend. And because this gives us the chance to
 put some custom logic in the gluing mechanism.
 
 As an FP programmer you don't settle with the dumb native function
-application. You want fancier ones: you want them to log each call; or to deal with errors via a `Result` instance, as in our case. Or to do some combinatorial calculation.
+application. You want fancier ones: you want them to log each call; or
+to deal with errors via a `Result` instance, as in our case. Or to do
+some combinatorial calculation. I'm using the plural, here, because
+really, you want a family of function applications, one for each of
+your specific use case.  
 
 FP techniques provide a way more generic solution than special
 keywords like `async` and `await`.  If you read [Monads for The Rest
