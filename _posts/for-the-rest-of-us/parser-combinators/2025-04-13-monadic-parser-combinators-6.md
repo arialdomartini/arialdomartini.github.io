@@ -9,6 +9,7 @@ tags:
 ftrou: true
 include_in_index: false
 ---
+    
 The gist of the previous chapter is: we should factor the structural
 dependencies away from our code.
 
@@ -24,15 +25,15 @@ these aspects, we could think of having:
 - Lifting functions and operators, to project ordinary functions into
   the Parser world.
 
-Let me give you some examples.
+Let me give you some examples for each of those 4 categories.
 
 ## Functions for combining generic parsers
 
-Imagine that for your language you already managed to parse predicates
-like `(a or b) and not callme()` with a parser called `predicate`, and
-arbitrary code blocks with a parser called `codeBlock`. You want to
-build a parser able to build an internal representation of an `if`
-statement:
+Imagine that while building your language you already managed to parse
+predicates like `(a or b) and not callme()` with a parser called
+`predicate`, and arbitrary code blocks with a parser called
+`codeBlock`. You want to have a parser able to build an internal
+representation of an `if` statement:
 
 ```fsharp
 type If =
@@ -49,11 +50,11 @@ IF -> <<whatever_predicate>>
 
 (I'm amazed by the beauty of this syntax: definetely, I'm a fan of your language).
 
-You like to build the new parser combining the 2 existing `predicate`
-and `codeBlock` with something like:
+You will like to build the new parser combining the 2 existing
+`predicate` and `codeBlock` with something like:
 
 ```fsharp
-let parseIf:
+let parseIf =
     predicate 
     |> between (str 'IF -> <<') (str '>>')
     |> andThen codeBlock
@@ -64,20 +65,22 @@ let parseIf:
 
 Read it as:
 
-- build a parser that given any predicate
+- build a parser that
+- given any predicate
 - that is surrounded by `IF -> <<` and `>>`
 - and followed by any code block
 - returns an instance of the custom type `If`, containing the parsed
   predicate and the parsed code block.
 
 
-Yes, there are slightly more details for ignoring the empty spaces and
-indentation, but I hope you get the idea: you could use combinators
-like `between` and `andThen` to *describe* your syntax and get back a
-new parser, without being distracted by the unconsumed input and the
-error handling. In particular, notice the arguments we are passing
-these functions: they are by themselves parsers. We are actually
-building a new parser combining other parsers in a descriptive way.
+Yes, I skated over parsing the empty spaces and the indentation, but I
+hope you get the idea: you can use combinators like `between` and
+`andThen` to *describe* your syntax and to get back a new parser,
+without being distracted by the unconsumed input and the error
+handling. In particular, notice the arguments we are passing these
+`between` and `andThen` functions: they are by themselves parsers. We
+are actually building a new parser combining other parsers in a
+descriptive way.
 
 ## Operators for building parsing-combining expressions
 
@@ -152,64 +155,78 @@ is assigning values to variables, magically taking those values from
 the input.
 
 In reality, what you see on the right side of a `let!` is a parser,
-not a value. The special syntax `let!` runs the parser on the right,
-saves its result in a variable and then continues parsing the rest.
+not a parsed value. The special syntax `let!` runs the parser on the
+right, saves its result in a variable and then continues parsing the
+rest. Also in this case: we will build this syntax by hand, from the
+ground up.
 
 
 ## Lifting functions and operators
-Consider again the case for the funny `if` statement. You want to
-build an instance of:
+Consider the case of parsing an arithmetic expression:
 
-```fsharp
-type If =
-    { Predicate: Predicate
-      CodeBlock: CodeBlock }
+```
+42+79
 ```
 
-Well, if you had an actual predicate and an actual code block,
-building an instance of `If` would be a matter of defining:
+In the AST of your language, this should be represented as an instance
+of `Expression`:
 
 ```fsharp
-let buildIf (predicate: Predicate) (codeBlock: CodeBlock) = 
-    { Predicate = predicate
-      CodeBlock = codeBlock}
+type Operation = Sum | Sub | Mul | Div
+type Expression = Expression of int * int * Operation
+
+let ``parses a sum`` () =
+    let input = "42+49"
+    
+    test <@ run parseExp input = Expression(42, 79, Sum) @>
 ```
 
-and of invoking it passing it a predicate and a code block. Just that
-easy.  
-Sure: but you want to build a parser. You don't actually have a
-predicate and a code block! All that you have is *a parser of
-predicates* and *a parser of code blocks*. And you cannot feed
-`buildIf` with parsers: it wants *the result of parsing*.
-
-Fear not! You can lift `buildIf` into the magic world of parsers, so
-that it becomes a `buildIf` on steroids. It willlq happily accepts parsers
-of values rather than values:
+Well, if you had the 2 int values `42` and `79` and the value of  `Sum`, building an instance of `Expression` would be a matter of defining:
 
 ```fsharp
-let buildIfOnSteroids = lift2 buildIf
+let buildExpression (a: int) (op: Operation) (b: int) = 
+    Expression (a, b, op)
 ```
 
-Believe me or not, while `buildIf` signature was:
+and of invoking it:
 
 ```fsharp
-val buildIf : Predicate -> CodeBlock -> If
+let expression = buildExpression 42 79 Sum
 ```
 
-`buildIfOnSteroids`' signature is:
+Sure: but you don't want an expression; you want a parser of
+expressions. All that you have is *a parser of integers* and *a parser
+of operations*. You cannot feed `buildExpression` with parsers: it
+wants *the result of parsing*.
+
+Fear not! You can lift `buildExpression` into the magic world of
+parsers, so that it becomes a `buildExpression` on steroids. It will
+happily accepts parsers of values rather than values:
 
 ```fsharp
-val buildIfOnSteroids : Predicate Parser -> CodeBlock Parser -> If
-Parser
+let buildExpressionOnSteroids = lift3 buildExpression
 ```
 
-This about it: from a humble, ordinary factory function that *builds
+Believe me or not, while `buildExpression` signature was:
+
+```fsharp
+val buildExpression : int -> Operation -> int -> Expression
+```
+
+`buildExpressionOnSteoids`' signature is:
+
+```fsharp
+val buildExpressionOnSteoids : int Parser -> Operation Parser-> int
+Parser -> Expression Parser
+```
+
+Think about it: from a humble, ordinary factory function that *builds
 something* you managed to create a function that *parses that
-something*. And all of this just applying `lift2`. There must be some
-black magic involved.
+something*. All of this just applying `lift3`. Sounds diabolic.
 
-Or look this, imagine this use case. For some crazy reason, in your
-language:
+
+Or look this. As the Benevolent Dictator For Life of your language,
+you proclaim that the syntax:
 
 ```
 7 times date{16/03/1953}
@@ -230,17 +247,16 @@ let ``parses a Foo`` () =
          Foo [date; date; date; date; date; date; date]
 ```
 
-(I'm sold: yours is definitely the most beautiful language I have ever
-seen).
+(By the way: I'm sold. Yours is, hands down, the most beautiful
+language I have ever seen).
 
-Instead of writing this `fooParser`, imagine to split the input `7
-times 2025-09-18` into its syntactical components:
+Instead of writing this `fooParser`, imagine to split the input `7 times date{16/03/1953}` into its syntactical components:
 
 - `7`: the number.
 - ` `: a space
 - `times`: one of your language's commands.
 - ` `: a space
-- `2025-09-18`: the date.
+- `DateOnly(1953, 03, 16)`: the date.
 
 For now, just ignore the problem of *obtaining* those values. Assuming
 you have them, how would you build a `Foo`? Easy peasy:
@@ -251,8 +267,9 @@ let makeFoo (n: int) (space: char) (command: string) (space2: char) (d: DateOnly
     Foo dates
 ```
 
-Wonderful. Here's a builder of `Foo`s. The problem is: you don't have
-`n`, `command` and `d`. Instead, you have *a parser* for each of them:
+That is: just a builder of `Foo`s (Notice how `space` and `space2`
+are ignored). The problem is: you don't have the values `n`, `space`,
+`command` and `d`. Instead, you have *a parser* for each of them:
 
 ```fsharp
 let nP:             int Parser     = intParser
@@ -263,24 +280,23 @@ let dateP:          DateOnly Parer = parseDateOnly
 
 (we don't actually mind how they work).
 
-Fine. But can you feed `makeFoo` with parsers instead of actual
-values?
+Can you feed `makeFoo` with parsers instead of actual values?
 
 ```fsharp
 let foo = makeFoo nP spaceP commandP spaceP dateP
 ```
 
 Of course you can't! This won't even compile!  
-Wait for it: what if you use instead a specialized *parser-aware
-function application*?
+What if instead you use a specialized *parser-aware function
+application*?
 
 ```fsharp
 let fooParser: Foo Parser =
     makeFoo <!> nP <*> spaceP <*> commandP <*> spaceP <*> dateP
 ```
 
-What the!? This funny syntax gives you back is *a parser* for `Foo`.
-How can it be?
+What the heck? It works!! This funny syntax gives you back is *a parser*
+for `Foo`. How can it be? There must be some black magic involved!
 
 
 
@@ -292,8 +308,6 @@ That's exactly what we are doing in [the next
 chapter](/monadic-parser-combinators-7).
 
 Enough with reading code: let's finally hit some keys!
-
-# References
 
 
 # Comments
