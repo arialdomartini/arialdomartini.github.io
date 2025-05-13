@@ -21,6 +21,8 @@ these aspects, we could think of having:
 - Operators for building parsing-combining expressions.
 - A special syntax for manipulating parsers with imperative code, with
   the same ease of manipulating values.
+- Lifting functions and operators, to project ordinary functions into
+  the Parser world.
 
 Let me give you some examples.
 
@@ -32,11 +34,10 @@ arbitrary code blocks with a parser called `codeBlock`. You want to
 build a parser able to build an internal representation of an `if`
 statement:
 
-```
-type If = {
-    Predicate: Predicate
-    CodeBlock: Block
-}
+```fsharp
+type If =
+    { Predicate: Predicate
+      CodeBlock: CodeBlock }
 ```
 
 from a string like:
@@ -154,11 +155,141 @@ In reality, what you see on the right side of a `let!` is a parser,
 not a value. The special syntax `let!` runs the parser on the right,
 saves its result in a variable and then continues parsing the rest.
 
-If this sounds confusing, that's perfectly fine. What you see above is
-a fair bit of syntactic sugar, involving some behind-the-scenes magic.
-As with any magic trick, true understanding comes from peeking behind
-the curtain and rebuilding it from scratch. That's exactly what we
-are doing in [the next chapter](/monadic-parser-combinators-7).
+
+## Lifting functions and operators
+Consider again the case for the funny `if` statement. You want to
+build an instance of:
+
+```fsharp
+type If =
+    { Predicate: Predicate
+      CodeBlock: CodeBlock }
+```
+
+Well, if you had an actual predicate and an actual code block,
+building an instance of `If` would be a matter of defining:
+
+```fsharp
+let buildIf (predicate: Predicate) (codeBlock: CodeBlock) = 
+    { Predicate = predicate
+      CodeBlock = codeBlock}
+```
+
+and of invoking it passing it a predicate and a code block. Just that
+easy.  
+Sure: but you want to build a parser. You don't actually have a
+predicate and a code block! All that you have is *a parser of
+predicates* and *a parser of code blocks*. And you cannot feed
+`buildIf` with parsers: it wants *the result of parsing*.
+
+Fear not! You can lift `buildIf` into the magic world of parsers, so
+that it becomes a `buildIf` on steroids. It willlq happily accepts parsers
+of values rather than values:
+
+```fsharp
+let buildIfOnSteroids = lift2 buildIf
+```
+
+Believe me or not, while `buildIf` signature was:
+
+```fsharp
+val buildIf : Predicate -> CodeBlock -> If
+```
+
+`buildIfOnSteroids`' signature is:
+
+```fsharp
+val buildIfOnSteroids : Predicate Parser -> CodeBlock Parser -> If
+Parser
+```
+
+This about it: from a humble, ordinary factory function that *builds
+something* you managed to create a function that *parses that
+something*. And all of this just applying `lift2`. There must be some
+black magic involved.
+
+Or look this, imagine this use case. For some crazy reason, in your
+language:
+
+```
+7 times date{16/03/1953}
+```
+
+builds a list of `7` dates (all the same), boxed inside a `Foo`
+object. Sounds a very useful construct, doesn't it?
+
+```fsharp
+type Foo = Foo of (DateOnly list)
+
+[<Fact>]
+let ``parses a Foo`` () =
+  let input = "7 times date{16/03/1953}"
+  
+  let date = DateOnly(1953, 03, 16)
+  test <@ run fooParser input = 
+         Foo [date; date; date; date; date; date; date]
+```
+
+(I'm sold: yours is definitely the most beautiful language I have ever
+seen).
+
+Instead of writing this `fooParser`, imagine to split the input `7
+times 2025-09-18` into its syntactical components:
+
+- `7`: the number.
+- ` `: a space
+- `times`: one of your language's commands.
+- ` `: a space
+- `2025-09-18`: the date.
+
+For now, just ignore the problem of *obtaining* those values. Assuming
+you have them, how would you build a `Foo`? Easy peasy:
+
+```fsharp
+let makeFoo (n: int) (space: char) (command: string) (space2: char) (d: DateOnly) : Foo =
+    let dates = [ for i in 0 .. n - 1 -> d ]
+    Foo dates
+```
+
+Wonderful. Here's a builder of `Foo`s. The problem is: you don't have
+`n`, `command` and `d`. Instead, you have *a parser* for each of them:
+
+```fsharp
+let nP:             int Parser     = intParser
+let spaceP:         char Parser    = charParser ' '
+let commandP:       string Parser  = str " times "
+let dateP:          DateOnly Parer = parseDateOnly
+```
+
+(we don't actually mind how they work).
+
+Fine. But can you feed `makeFoo` with parsers instead of actual
+values?
+
+```fsharp
+let foo = makeFoo nP spaceP commandP spaceP dateP
+```
+
+Of course you can't! This won't even compile!  
+Wait for it: what if you use instead a specialized *parser-aware
+function application*?
+
+```fsharp
+let fooParser: Foo Parser =
+    makeFoo <!> nP <*> spaceP <*> commandP <*> spaceP <*> dateP
+```
+
+What the!? This funny syntax gives you back is *a parser* for `Foo`.
+How can it be?
+
+
+
+If all of this sounds confusing, that's perfectly fine. What you see
+above involves a fair bit of syntactic sugar, and a good amount of
+behind-the-scenes magic. As with any magic trick, true understanding
+comes from peeking behind the curtain and rebuilding it from scratch.
+That's exactly what we are doing in [the next
+chapter](/monadic-parser-combinators-7).
 
 Enough with reading code: let's finally hit some keys!
 
