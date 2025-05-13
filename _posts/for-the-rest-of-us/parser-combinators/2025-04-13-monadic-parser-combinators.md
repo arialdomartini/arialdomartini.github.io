@@ -21,7 +21,9 @@ Parser Combinators. You've always wanted, just admit it.
 2. [Chapter 2 - Composition](/monadic-parser-combinators-2)
 3. [Chapter 3 - Combinators!](/monadic-parser-combinators-3)
 4. [Chapter 4 - I told you not to touch the signature!](/monadic-parser-combinators-4)
-5. [Chapter 4 - Two Shades of Coupling](/monadic-parser-combinators-5)
+5. [Chapter 5 - Two Shades of Coupling](/monadic-parser-combinators-5)
+5. [Chapter 6 - Bird's-eye view of what you will
+   build](/monadic-parser-combinators-6)
 
 ## Introduction
 
