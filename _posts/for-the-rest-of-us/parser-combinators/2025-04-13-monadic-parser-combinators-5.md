@@ -14,7 +14,7 @@ include_in_index: false
 
 The implementation of `parsePerson` delegates the parsing of GUIDs,
 strings and dates to external functions. We think that this makes
-`parsePerson` decoupled from the parsing logic of the specif
+`parsePerson` decoupled from the parsing logic of the specific
 fields. And this is so true.
 
 Yet, the code we just obtained clearly shows that some problems still
@@ -25,7 +25,7 @@ in fact 2 types of coupling:
 That cannot be our case: `parsePerson` does not even know how GUIDs
 are represented; this logic is completely delegated to `parseGuid`.
 
-- A function could be coupled with *the mechanic* of glueing things
+- A function could be coupled with *the mechanics* of glueing things
   together, what we called the *effectful logic*.  
   This means that even if it is *functionally isolated*, the code
   structure still depends on this "glueing mechanism". This must be
@@ -95,22 +95,25 @@ etc.
 Your domain code would be horribly polluted by this error handling stuff.  
 A way out of this could be to extend the native function application
 so that, other than just passing a value from a function to the next
-one, it would *also* tackle the error handling
-responsibility. Exceptions are so convenient to use only because they
-are natively implemented by the runtime.
+one, it would *also* tackle the error handling responsibility.
+Exceptions are so convenient to use only because the native function
+application does all of this, under the hood.
 
 ## Breaking the rules
 
 But both exceptions and `async`/`await` are ad-hoc, built-in
-solutions. We cannot expect that the native F# function application provides a special treatment for parser functions returning `Result`s of tuples.  
+solutions. We cannot expect that the native F# function application
+provides a special treatment for parser functions returning `Result`s
+of tuples, or for any other custom signature we will write.
 
-In FP it's often the case that we intentionally design the function
-signatures ignoring the native gluing mechanism. We take the freedom
-to design functions that don't fit together because this gives us the
-chance to put some custom logic in the gluing mechanism. 
+In fact, in FP it's often the case that we intentionally design the
+function signatures ignoring the native gluing mechanism. We take the
+freedom to design functions that don't fit together because function
+application is easy to extend. And because this gives us the chance to
+put some custom logic in the gluing mechanism.
 
 As an FP programmer you don't settle with the dumb native function
-application. You want fancier ones: you want them to log each call; or to deal with errors via a `Result` instance, as in our case. Or to do some combinatorial calculation.  
+application. You want fancier ones: you want them to log each call; or to deal with errors via a `Result` instance, as in our case. Or to do some combinatorial calculation.
 
 FP techniques provide a way more generic solution than special
 keywords like `async` and `await`.  If you read [Monads for The Rest
@@ -124,10 +127,10 @@ adapters, in FP the same incompatibility is *a design tool* to be
 leveraged.
 
 So, let's see how to fix the pyramid of doom we wrote in `parsePerson`
-and how this leads us to re-invent &mdash; yet another time &mdash;
-monads.
+by distilling a new function application. And let's see how this leads
+us to re-invent &mdash; yet another time &mdash; monads.
 
-Take a break, bite an apple, then jump to [the next installment](/monadic-parser-combinators-4).
+Take a break, bite an apple, then jump to [the next installment](/monadic-parser-combinators-6).
 
 # References
 

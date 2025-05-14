@@ -26,8 +26,8 @@ let parsePerson: string -> Person = fun s ->
       Birthday = parseBirthday birthdayPart }
 ```
 
-I was very reticent. It's OK that `parseGuid` is able to parse a GUID
-from the string:
+I have been very reticent. It's OK that `parseGuid` is able to parse a
+GUID from the string:
 
 ```
 *b19b8e87-3d39-4994-8568-0157a978b89a*
@@ -83,7 +83,7 @@ OK, things start getting really complicated.
 
 We need to break this problem down into smaller ones. An idea that
 would immensely help is: each parser could return 3 pieces
-information:
+of information:
 
 1. The parsed value (this is the main goal of a parser).
 2. If it either succeeded or failed (we covered this with Exceptions)
@@ -258,13 +258,14 @@ for a bit more.
 
 Please, notice that this mechanism of passing `remaining` around
 &mdash; which is now polluting `parsePerson` &mdash; has nothing to do
-with parsing a `Person`: it is the consequence of changing the parser
-signature; if you will, it was caused by a *structural* or a
+with parsing a `Person`: it is the consequence of having changed the
+parser signature; if you will, it was caused by a *structural* or a
 *non-functional* change. Therefore, it is a problem doomed to affect
 all our parsers, from now on. Damn!  
-This is what in the previous chapter I called the *effectful
-logic*. As long as we won't be able to factor it away somewhere else
-(yes: in a Monad), it will spoil the elegance of all our parsers.
+This is what in the previous chapter I called the *effectful logic*.
+The *effect* is the need of passing `remaining` around, from a call to
+the next one. As long as we won't be able to factor it away somewhere
+else (yes: in a Monad), it will spoil the elegance of all our parsers.
 
 ## Please, gimme a type
 Speaking about elegance, I don't know about you, but these verbose
@@ -291,7 +292,7 @@ val sequence : 'a Parser list -> 'a list Parser
 
 Ah! Much, much better!
 
-Don't feel now inspired to pour a bit more complication into our
+Don't you feel now inspired to pour a bit more complication into our
 parsers? We saw before how a change to the parser signature was
 reflected into a more convoluted code structure in the parser
 implementation. Let's keep exploring this path to see where it leads
@@ -299,10 +300,9 @@ us.
 
 
 ## Friends don't let friends use Exceptions
-We are impatient and we never settle. We read what we coded so far and
-we torment ourselves thinking "*Exception sucks. We are functional
-programmers, damn! We are supposed to use an `Either` or a `Result`
-instead!*"
+You read what we coded so far and you torment yourself thinking
+"*Exception sucks. I am a functional programmer, damn! I am supposed
+to use an `Either` or a `Result` instead!*"
 
 OK, I'm sold: let's use a `Result`, then.
 
@@ -323,10 +323,10 @@ or we return it in any case:
 type Parser<'a> = Input -> Rest * Result<'a, ParseError>
 ```
 
-Notice the position of `Rest`: in one case it is external to `Result`;
-in the other, it is part of the successful case of `Result`. Both
-approaches are viable and both will throw a wreck on the code we have
-written so far, making it apparent that we coupled the error
+Notice the position of `Rest`: in one case it is part of the
+successful case of `Result`, in the other it is external to `Result`.
+Both approaches are viable and both will throw a wreck on the code we
+have written so far, making it apparent that we coupled the error
 handling concern (the *effectful logic*) with the parsing logic.  
 Let's use the first signature.
 
@@ -367,7 +367,7 @@ let ``falls back to second parser if first parser fails`` () =
 ```
 
 
-VoilÃ , no more exceptions!  
+Voilà , no more exceptions!  
 Unfortunately, the same cannot be said for `parsePerson`:
 
 
@@ -402,8 +402,8 @@ let parsePerson: Person Parser = fun input ->
 ```
 
 Holy crap! This is absolutely horrific. There is more error control
-code than domain logic! But this was expected: changing the signature
-of `Parser` implies expecting some kind *structural logic* to be
+code than domain logic! But this was somehow expected: changing the
+signature of `Parser` implies some kind *structural logic* to be
 executed when parsers &mdash; *all the parsers* &mdash; are executed.
 In our case we pushed ourselves to the limit combining 2 structural
 changes: passing `remaining` around and matching error cases.

@@ -196,7 +196,7 @@ However, this creates asymmetry:
 if(condition) { ...  }
 ```
 
-gets `condition`, which is an expression.
+`if`, a statement, gets `condition`, an expression.
 
 - The opposite is not true. Expressions can't use control structures. This:
 
@@ -207,8 +207,8 @@ int myList = for(int i=0; i<10; i++) { ... };
 does not even compile.
 
 Similarly, you can pass the expression `sqrt(42)` as an argument to a
-function. You cannot pass it a `for` statement. This just doesn't make
-sense, right?  
+function. You cannot pass a `for` statement as an argument to a
+function. This just doesn't make sense, right?  
 So, in a sense, "expressions and statements don't compose".
 
 By the way, that's one of the appealing traits of some functional

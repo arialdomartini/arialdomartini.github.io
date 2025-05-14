@@ -14,9 +14,9 @@ The gist of the previous chapter is: we should factor the structural
 dependencies away from our code.
 
 This will let us write and combine parsers focusing on the essence of
-parsing, ignoring the uninteresting mechanic of passing `rest` around
-and of pattern-matching errors. If we find a way to abstract over
-these aspects, we could think of having:
+parsing, ignoring the uninteresting mechanic of passing `remaining`
+around and of pattern-matching errors. If we find a way to abstract
+over these aspects, we could think of having:
 
 1. Easy-to-use functions for combining generic parsers.
 2. Operators for building parsing-combining expressions.
@@ -56,7 +56,7 @@ You will be able to build the new parser combining the 2 existing
 ```fsharp
 let parseIf =
     predicate 
-    |> between (str 'IF -> <<') (str '>>')
+    |> between (str "IF -> <<") (str ">>")
     |> andThen codeBlock
     |>> fun (predicate, codeBlock) -> 
           { Predicate = predicate
@@ -78,8 +78,11 @@ you get the idea: you can use combinators like `between` and `andThen`
 to *describe* your syntax and to get back a new parser, without being
 distracted by the unconsumed input and the error handling. In
 particular, notice the arguments we are passing these `between` and
-`andThen` functions: they are by themselves parsers. You are actually
-building a new parser combining other parsers in a descriptive way.
+`andThen` functions: they are by themselves parsers. For example: `str
+">>"` is not the string `">>"`, but a parser that succeeds when the
+input contains `>>`.  
+You are actually building a new parser combining other parsers in a
+descriptive way.
 
 ## Operators for building parsing-combining expressions
 
@@ -131,14 +134,14 @@ tuple, you might write:
   
   
 ```fsharp
-let tuple : (string * DateTime * int) Parser = parse {
-    let! s = singleQuotedString
-    let! _ = comma
-    let! d = date
-    let! _ = comma
-    let! i = number
-    return (s, d, i)
-}
+let tuple : (string * DateTime * int) Parser = 
+    parse {
+        let! s = singleQuotedString
+        let! _ = comma
+        let! d = date
+        let! _ = comma
+        let! i = number
+        return (s, d, i) }
 
 [<Fact>]
 let ``parses a tuple`` () =
@@ -149,7 +152,8 @@ let ``parses a tuple`` () =
 
 Read it as:
 
-- `tuple` is a parser that builds a `(string * DateTime * int)` from
+- `tuple` is a parser (see that `parse {`)
+- that builds a `(string * DateTime * int)` from
 - a single quoted string
 - a date
 - and a number
@@ -164,14 +168,16 @@ statements like:
     let! i = number
 ```
 
-is a way to assign values to variables, which magically take those
-values from the input.
+is a way to assign to variables values magically being distilledfrom
+the input.
 
-In reality, what you see on the right side of a `let!` not a parsed
+In reality, what you see on the right side of a `let!` is not a parsed
 value, but a parser. The special syntax `let!` runs the parser on the
-right, saves its result in a variable and then continues parsing the
-rest. Also in this case: we will build this syntax by hand, from the
-ground up, so don't worry if you cannot wrap your head around it.
+right, saves its result in the variable on the left and then continues
+parsing the rest, doing all the magic about passing `remaining` and
+pattern matching the `Result`. Also in this case: we will build this
+syntax by hand, from the ground up, so don't worry if you cannot wrap
+your head around it just yet.
 
 
 ## Lifting functions and operators
@@ -210,12 +216,10 @@ and of invoking it:
 let expression = buildExpression 42 79 Sum
 ```
 
-Sure, that's trivial. But you don't want an expression; you want a
-parser of expressions.
-
-Now, imagine that you already have *a parser of integers* and *a
-parser of operations*. How to combine them? You cannot feed
-`buildExpression` with parsers: it wants *the result of parsing*.
+Sure, that's trivial. But, first: you don't want an expression; you
+want a parser of expressions. Also, you don't have those values. You
+have *parsers* of those values. You cannot feed `buildExpression` with
+parsers: it wants *the result of parsing*.
 
 Fear not! You can lift `buildExpression` into the magic world of
 parsers, so that it becomes a `buildExpressionOnSteroids`. It will
@@ -231,17 +235,18 @@ Believe me or not, while `buildExpression` signature was:
 val buildExpression : int -> Operation -> int -> Expression
 ```
 
-`buildExpressionOnSteoids`' signature is:
+by the application of `lift3` the `buildExpressionOnSteoids`'
+signature turned into:
 
 ```fsharp
 val buildExpressionOnSteoids : int Parser -> Operation Parser-> int
 Parser -> Expression Parser
 ```
 
-And it passes the test. Unbelievable.  
+It's a parser! And it passes the test. Unbelievable.  
 Think about it: from a humble, ordinary factory function that *builds
 something* you managed to create a function that *parses that
-something*. All of this just applying `lift3`. Diabolic.
+something*. Diabolic.
 
 
 Or look this. As the Benevolent Dictator For Life of your language,
@@ -278,7 +283,7 @@ Instead of writing this `fooParser`, imagine to split the input `7 times date{16
 - `DateOnly(1953, 03, 16)`: the date.
 
 For now, just ignore the problem of *obtaining* those values. Assuming
-you have them, how would you build a `Foo`? Easy peasy:
+you have them already, how would you build a `Foo`? Easy peasy:
 
 ```fsharp
 let makeFoo (n: int) (space: char) (command: string) (space2: char) (date: DateOnly) : Foo =
@@ -293,7 +298,7 @@ ignored). The problem is: you don't have the values `n`, `space`,
 ```fsharp
 let nP:        int Parser      = intParser
 let spaceP:    char Parser     = charParser ' '
-let commandP:  string Parser   = str " times "
+let commandP:  string Parser   = str "times"
 let dateP:     DateOnly Parser = parseDateOnly
 ```
 
@@ -321,12 +326,13 @@ involved!
 
 
 
-If all of this sounds confusing, that's perfectly fine. What you see
-above involves a fair bit of syntactic sugar, and a good amount of
-behind-the-scenes magic. As with any magic trick, true understanding
-comes from peeking behind the curtain and rebuilding it from scratch.
-That's exactly what we are doing in [the next
-chapter](/monadic-parser-combinators-7).
+If all of this sounds confusing, that's perfectly fine. I hope it
+sounds also a bit exciting.  
+What you see above involves a fair bit of syntactic sugar, and a good
+amount of behind-the-scenes magic. As with any magic trick, true
+understanding comes from peeking behind the curtain and rebuilding it
+from scratch. That's exactly what we are doing in [the next
+chapter](monadic-parser-combinators-7).
 
 Enough with reading code: let's finally hit some keys!
 

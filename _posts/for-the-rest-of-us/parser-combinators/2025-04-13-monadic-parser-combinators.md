@@ -57,22 +57,15 @@ val parser : SourceCode -> AbstractSyntaxTree
 ```
 
 Most likely, you would like the parser to fail and to emit syntax
-errors in case there are any. Better return a `Result`, then:
-
-```fsharp
-type ParserError = { Expected: string; Encountered: string }
-
-val parser : SourceCode -> Result<ParserError, AbstractSyntaxTree>
-```
+errors in case there are any.
 
 If you think about it, that's not qualitatively different from
 deserializing a JSON string:
 
 ```fsharp
 type JSON = string
-type Error = string
 
-val jsonDeserializer : JSON  -> Result<Error, MyObject>
+val jsonDeserializer : JSON  -> MyObject
 ```
 
 Of course, it's likely that a programming language grammar is more
@@ -99,7 +92,7 @@ and it emits a tree like:
 We can imagine the Tree-sitter grammar for F# as a function with this signature:
 
 ```fsharp
-val treeSitter : SourceCode -> Result<TreeSitterError, TreeSitterSExpression>
+val treeSitter : SourceCode -> TreeSitterSExpression
 ```
 
 I guess you see the pattern.  
@@ -142,11 +135,11 @@ Wlaschin. This post tries to stand out in a few different ways:
 
 - If other attempts to this topic left you scratching your head, this
   series should make things a lot easier.  
-  I've done my best to keep the learning curve as smooth as
-  possible. Having to pick between being brief and assuming you knew a
-  lot, or taking a longer path I went with the latter. I think it's
-  nicer to know why stuff works rather than being being hit with
-  jargon-heavy explanations.
+  I've done my best to keep the learning curve as smooth as possible.
+  Having to pick between being brief and assuming you knew a lot, or
+  taking a longer path I went with the latter. I think it's nicer to
+  know why stuff works rather than being hit with jargon-heavy
+  explanations.
 
 - Many tutorials begin with writing a simple parser &mdash;
 conventionally, the single-character parser. This does not.  
@@ -154,8 +147,7 @@ Instead, we will focus on combinators first, postponing the
 implementation of concrete parsers to the last chapter. When I was
 first introduced to parsers, I was just confused: what on earth does
 it mean to parse a single character returning a character? What's the
-point? Where is this leading me? My own 'aha!' moment came when I got
-how composition turns tiny parsers into something actually useful.  
+point? Where is this leading me?  
 I hope I can help you skip past that initial disorientation entirely.
 
 - We will write code with Test-Driven Development.  

@@ -49,8 +49,8 @@ No problem: we can again delegate most of the work to `parseString`
 and `parsePerson`. This is what I call reuse!
 
 ## Your first Parser Combinator
-Wait a sec: what if the input string can contain *either* a `RockTrio`
-*or* a `SoloArtist`?
+Wait a sec: what if the input string happens to contain *either* a
+`RockTrio` *or* a `SoloArtist`?
 
 We will need to try both parsers and to keep the value of the one
 succeeding. Oh! So there must exist a notion of *success* and
@@ -178,10 +178,11 @@ you could conceive other Parser Combinators such as:
 etc.
 
 
-If you are smart enough to design very expressful and fine tuned
-building blocks, you might not even need to write the code of a single
-parser: maybe you will be able to generate any imaginable parser only
-combinining the most trivial parsers that could be conceived, that are:
+It turns out that if you design a set of very expressful and fine
+tuned building blocks, you don't need to write the code of a single
+parser: you will be able to generate any imaginable parser only
+combinining the most trivial parsers that could be conceived, that
+are:
 
 | Name        | Signature                                                                     | Generates a parser that...                                                      |
 |-------------|-------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
