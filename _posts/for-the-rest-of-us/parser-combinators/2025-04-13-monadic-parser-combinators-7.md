@@ -66,9 +66,101 @@ Let me list them below so you know right away where we're headed.
 Don't feel overwhelmed. They are way easier to write than they appear
 at first.
 
-## Tupled Sequencing Combinator
+## Parser-powered function application
+So, the idea is to develop an alternative to the native F# function
+application that takes care, under the hood, to pass `remaining`
+around and to do error handling.
+
+What's the native F# function application, for a starter?
+
+```fsharp
+[<Fact>]
+let ``function application`` () =
+    let twice x = x * 2
+
+    test <@ twice 42 = 84 @>
+```
+
+Do you see that whitespace between `twice` and `42`?
+
+```fsharp
+            twice 42
+                 ^
+```
+
+With a bit of fantasy, you imagine that this is an actual operator. If
+it were real, its signature would be:
+
+```fsharp
+let ( ) (f: 'a -> 'b) (a: 'a) : 'b = ....
+```
+
+This is fictional code: an operator cannot have a whitespace as its
+name. But wait a moment! F# *does provide* an actual operator with
+that exact signature! It's `<|`! Its signature and implementation
+could be:
+
+```fsharp
+let (<|) (f: 'a -> 'b) (a: 'a) : 'b = f a
+
+[<Fact>]
+let ``function application`` () =
+    let twice x = x * 2
+
+    test <@ twice <| 42 = 84 @>
+```
+
+
+Its real implementation ([FSharp.Core/prim-types.fs#L4546][apply-source]) is:
+
+```fsharp
+let inline (<|) func arg1 = func arg1
+```
+
+`<|` is the same of the famous pipe operator `|>`, with flipped
+parameters:
+
+
+```fsharp
+let (|>) (a: 'a) (f: 'a -> 'b) : 'b = f a
+
+[<Fact>]
+let ``function application with pipe`` () =
+    let twice x = x * 2
+
+    test <@ 42 |> twice = 84 @>
+```
+
+`|>` is actually defined like this in the F# code ([FSharp.Core/prim-types.fs#L4540][pipe-source]):
+
+```fsharp
+let inline (|>) arg func = func arg
+```
+
+
+
+
+## andThen
+
+This Tupled Sequencing Combinator
 
 sequence and keep both
+
+
+- Run the first parser.
+- If it fails, return the error.
+- Otherwise, run the second parser with the remaining input.
+- If it fails, return the error.
+- If both parsers succeed, return a tuple with both the parsed values.
+
+# References
+
+- [F# source code: `<|` operator][apply-source]
+- [F# source code: `|>` operator][pipe-source]
+
+
+[apply-source]: https://github.com/dotnet/fsharp/blob/main/src/FSharp.Core/prim-types.fs#L4546
+[pipe-source]: https://github.com/dotnet/fsharp/blob/main/src/FSharp.Core/prim-types.fs#L4540
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/33)
