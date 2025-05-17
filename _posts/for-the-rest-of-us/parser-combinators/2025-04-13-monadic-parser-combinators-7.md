@@ -89,28 +89,118 @@ able to build whatever parser.
 
 Let me list them below so you know right away where we're headed.
 
-| Name        | Alternative name | Signature                                                                    | Purpose                                                                      |
-|-------------|------------------|------------------------------------------------------------------------------|------------------------------------------------------------------------------|
-| `.>>.`      | `andThen`        | `'a Parser -> 'b Parser -> ('a * 'b) Parser`                                 | Parse `'a`, then `'b`, and finally return both in a tuple.                   |
-| `>>=`       | `bind`           | `'a Parser -> ('a -> 'b Parser) -> 'b Parser`                                | Parse `'a` and pass it to a continuation.                                    |
-| `<!>`       | `<<|`, `map`     | `('a -> 'b) -> 'a Parser -> 'b Parser`                                       | Transform a Parser of `'a` into a Parser of `'b`.                            |
-| `|>>`       | `pipe`           | `'a Parser -> ('a -> 'b) -> 'b Parser`                                       | Like F# pipe operator `|>`, but operating with Parsers.                      |
-| `<*>`       | `ap`             | `('a -> 'b) Parser -> 'a Parser -> 'b Parser`                                | Partial application of a Parser argument to a multi-parameters function.     |
-| `<|>`       | "or"             |                                                                              | Try applying a Parser. It if fails, try another one.                         |
-| `.>>`       |                  |                                                                              | Apply 2 parsers, returning the result of the first one only.                 |
-| `>>.`       |                  |                                                                              | Apply 2 parsers, returning the result of the second one only.                |
-| `many`      |                  | `'a Parser -> 'a list Parser`                                                | Repeatedly apply a parser until it fails, returning a list of parsed values. |
-| `many1`     |                  | `'a Parser -> 'a list Parser`                                                | Same as above, but expects at least 1 occurrence.                            |
-| `skipMany`  |                  | `'a Parser -> () Parser`                                                     | Parse zero or more occurrences of something, discarding the result.          |
-| `skipMany1` |                  | `'a Parser -> () Parser`                                                     | Same as above, but expects at least 1 occurrence.                            |
-| `between`   |                  | `'o Parser -> 'c Parser -> 'a Parser -> 'a Parser`                           | Parse something between opening and closing elements.                        |
-| `sepBy`     |                  | `'a Parser -> 'b Parser -> 'a list Parser`                                   | Parse a list of `'a` elements separate by `b`.                               |
-| `returnp`   |                  | `'a -> 'a Parser`                                                            | Lift a plain value into the Parser world.                                    |
-| `lift`      | Synonym of `map` |                                                                              | Elevate a 1-parameter function into the Parsers world.                       |
-| `lift2`     |                  | `('a -> 'b -> 'c) -> 'a Parser -> 'b Parser -> 'c Parser`                    | Elevate a 2-parameter function into the Parsers world.                       |
-| `lift3`     |                  | `('a -> 'b -> 'c -> 'd) -> 'a Parser -> 'b Parser -> 'c Parser -> 'd Parser` | Elevate a 3-parameter function into the Parsers world.                       |
-| `pipe2`     |                  | `'a Parser -> 'b Parser -> ('a -> 'b -> 'c) -> 'c Parser`                    | Apply 2 Parser arguments to a 2-parameter function expecting values.         |
-| `pipe3`     |                  | `'a Parser -> 'b Parser -> 'c Parser -> ('a -> 'b -> 'c -> 'd) -> 'd Parser` | Apply 3 Parser arguments to a 3-parameter function expecting values.         |
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; width:100%;">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th style="width:60%;">Signature</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>.>>.</code><br/><code>andThen</code></td>
+      <td><code>'a Parser -> 'b Parser -> ('a * 'b) Parser</code></td>
+      <td>Parse <code>'a</code>, then <code>'b</code>, and finally return both in a tuple.</td>
+    </tr>
+    <tr>
+      <td><code>>>=</code><br/><code>bind</code></td>
+      <td><code>'a Parser -> ('a -> 'b Parser) -> 'b Parser</code></td>
+      <td>Parse <code>'a</code> and pass it to a continuation.</td>
+    </tr>
+    <tr>
+      <td><code><!></code><br/><code><<|</code><br/><code>map</code></td>
+      <td><code>('a -> 'b) -> 'a Parser -> 'b Parser</code></td>
+      <td>Transform a Parser of <code>'a</code> into a Parser of <code>'b</code>.</td>
+    </tr>
+    <tr>
+      <td><code>|>></code><br/><code>pipe</code></td>
+      <td><code>'a Parser -> ('a -> 'b) -> 'b Parser</code></td>
+      <td>Like F# pipe operator <code>|></code>, but operating with Parsers.</td>
+    </tr>
+    <tr>
+      <td><code><*></code><br/><code>ap</code></td>
+      <td><code>('a -> 'b) Parser -> 'a Parser -> 'b Parser</code></td>
+      <td>Partial application of a Parser argument to a multi-parameters function.</td>
+    </tr>
+    <tr>
+      <td><code><|></code></td>
+      <td><code>'a Parser -> 'a Parser -> 'a Parser</code></td>
+      <td>Try applying a Parser. It if fails, try another one.</td>
+    </tr>
+    <tr>
+      <td><code>.>></code></td>
+      <td><code>'a Parser -> 'b Parser -> 'a Parser</code></td>
+      <td>Apply 2 parsers, returning the result of the first one only.</td>
+    </tr>
+    <tr>
+      <td><code>>>.</code></td>
+      <td><code>'a Parser -> 'b Parser -> 'b Parser</code></td>
+      <td>Apply 2 parsers, returning the result of the second one only.</td>
+    </tr>
+    <tr>
+      <td><code>many</code></td>
+      <td><code>'a Parser -> 'a list Parser</code></td>
+      <td>Repeatedly apply a parser until it fails, returning a list of parsed values.</td>
+    </tr>
+    <tr>
+      <td><code>many1</code></td>
+      <td><code>'a Parser -> 'a list Parser</code></td>
+      <td>Same as above, but expects at least 1 occurrence.</td>
+    </tr>
+    <tr>
+      <td><code>skipMany</code></td>
+      <td><code>'a Parser -> () Parser</code></td>
+      <td>Parse zero or more occurrences of something, discarding the result.</td>
+    </tr>
+    <tr>
+      <td><code>skipMany1</code></td>
+      <td><code>'a Parser -> () Parser</code></td>
+      <td>Same as above, but expects at least 1 occurrence.</td>
+    </tr>
+    <tr>
+      <td><code>between</code></td>
+      <td><code>'o Parser -> 'c Parser -> 'a Parser -> 'a Parser</code></td>
+      <td>Parse something between opening and closing elements.</td>
+    </tr>
+    <tr>
+      <td><code>sepBy</code></td>
+      <td><code>'a Parser -> 'b Parser -> 'a list Parser</code></td>
+      <td>Parse a list of <code>'a</code> elements separate by <code>b</code>.</td>
+    </tr>
+    <tr>
+      <td><code>returnp</code></td>
+      <td><code>'a -> 'a Parser</code></td>
+      <td>Lift a plain value into the Parser world.</td>
+    </tr>
+    <tr>
+      <td><code>lift</code><br/><code>map</code></td>
+      <td><code>('a -> 'b) -> 'a Parser -> 'b Parser</code></td>
+      <td>Elevate a 1-parameter function into the Parsers world.</td>
+    </tr>
+    <tr>
+      <td><code>lift2</code></td>
+      <td><code>('a -> 'b -> 'c) -> 'a Parser -> 'b Parser -> 'c Parser</code></td>
+      <td>Elevate a 2-parameter function into the Parsers world.</td>
+    </tr>
+    <tr>
+      <td><code>lift3</code></td>
+      <td><code>('a -> 'b -> 'c -> 'd) -> 'a Parser -> 'b Parser -> 'c Parser -> 'd Parser</code></td>
+      <td>Elevate a 3-parameter function into the Parsers world.</td>
+    </tr>
+    <tr>
+      <td><code>pipe2</code></td>
+      <td><code>'a Parser -> 'b Parser -> ('a -> 'b -> 'c) -> 'c Parser</code></td>
+      <td>Apply 2 Parser arguments to a 2-parameter function expecting values.</td>
+    </tr>
+    <tr>
+      <td><code>pipe3</code></td>
+      <td><code>'a Parser -> 'b Parser -> 'c Parser -> ('a -> 'b -> 'c -> 'd) -> 'd Parser</code></td>
+      <td>Apply 3 Parser arguments to a 3-parameter function expecting values.</td>
+    </tr>
+  </tbody>
+</table>
+
 
 Don't feel overwhelmed. They are way easier to write than they appear
 at first. In this chapter you will build `|>>` and `<<|`.
