@@ -7,7 +7,6 @@ tags:
 - fsharp
 - functional programming
 - property-based testing
-ftrou: true
 include_in_index: false
 ---
 ## Arialdo, you are a liar

@@ -6,7 +6,6 @@ tags:
 - fsharp
 - functional programming
 - property-based testing
-ftrou: true
 include_in_index: false
 ---
 Time to build an applicative and monadic parser combinator library.

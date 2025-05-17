@@ -6,7 +6,6 @@ tags:
 - fsharp
 - functional programming
 - property-based testing
-ftrou: true
 include_in_index: false
 ---
 So, let's challenge the composability of our imperative parsers.
