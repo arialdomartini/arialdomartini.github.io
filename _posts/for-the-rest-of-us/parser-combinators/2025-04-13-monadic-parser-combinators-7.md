@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Monadic Parser Combinators in F# - bind, ap, map"
+title: "Monadic Parser Combinators in F# - Parser-Powered Function Application"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - fsharp
@@ -41,10 +41,10 @@ type ParseResult<'a> =
 type Parser<'a> = Parser of (Input -> 'a ParseResult)
 ```
 
-This defined, the detail about passing `remaining` and handling errors
-is not directly visible from the outside. Good for information hiding.
-A drawback of having the function wrapped inside a `Parser`, though,
-it that you can't direcly apply it to a string input. A helper
+This defined, the details about passing `remaining` and handling
+errors are not directly visible from the outside. Good for information
+hiding.  A drawback of having the function wrapped inside a `Parser`,
+though, it that you can't direcly apply it to a string input. A helper
 function will come in handy:
 
 ```fsharp
@@ -52,9 +52,7 @@ let run (p: 'a Parser) (input: string)=
     match p with
     | Parser f -> f input
 
-
 // Test
-
 type SomeType = One | Two | Three
 
 [<Fact>]
@@ -223,12 +221,12 @@ let ``function application`` () =
 Do you see that whitespace between `twice` and `42`?
 
 ```fsharp
-            twice 42
-                 ^
+twice 42
+     ^
 ```
 
 With a bit of fantasy, you can imagine that this is an actual
-operator: it applies `twice` to the value `42`. If it was a real
+operator: it applies `twice` to the value `42`. If it were a real
 operator, its signature would be:
 
 ```fsharp
@@ -237,7 +235,7 @@ val ( ) : ('a -> 'b) -> 'a -> 'b
 
 This is fictional code, though: a whitespace cannot be used as an
 operator name. But wait a moment! F# *does provide* an actual operator
-with that exact signature! It's `<|`! If you were to write it
+with that exact signature! It's `<|`. If you were to write it
 manually, you would have:
 
 ```fsharp
@@ -292,10 +290,17 @@ operators:
 
 with these signatures:
 
-| Version        | Apply                                    | Pipe                                     |
-|----------------|------------------------------------------|------------------------------------------|
-| F# native      | `(  <| ): ('a -> 'b) -> 'a        -> 'b` | `( |> ):  'a        -> ('a -> 'b) -> 'b` |
-| Parser-powered | `( <<| ): ('a -> 'b) -> 'a Parser -> 'b` | `( |>> ): 'a Parser -> ('a -> 'b) -> 'b` |
+| Version        | Operator | Signature                       |
+|----------------|----------|---------------------------------|
+| F# native      | `<|`     | `('a -> 'b) -> 'a -> 'b` |
+| Parser-powered | `<<|`    | `('a -> 'b) -> 'a Parser -> 'b` |
+
+and:
+
+| Version        | Operator | Signature                       |
+|----------------|----------|---------------------------------|
+| F# native      | `|>`     | `'a        -> ('a -> 'b) -> 'b` |
+| Parser-powered | `|>>`    | `'a Parser -> ('a -> 'b) -> 'b` |
 
 
 
@@ -322,14 +327,14 @@ But this is a complete nosense! Think about it: an `int Parser` is not
 an `int` value; it's *a promise* of an `int`. Put your ear up to it
 and you'll hear it whispering:
 
-> True, I am not an integer. But I promise I can provide you with one.
+> True, I am not an integer. But I promise I can provide you with one.  
 > Just feed me with an input string: I will do my best and, if I don't
-> fail, I will eventually give you back an `int` value".
+> fail, I will eventually give you back an `int` value.
 
 Read the 2nd to last line again:
 
 ```fsharp
-    test <@ twice <<| pint = 84 @>
+test <@ twice <<| pint = 84 @>
 ```
 
 How can possibly `twice <<| p42` return `84` if `pint` will
@@ -353,10 +358,20 @@ This means that the signature of our enhanced operators should rather
 be:
 
 
-| Version        | Apply                                           | Pipe                                            |
-|----------------|-------------------------------------------------|-------------------------------------------------|
-| F# native      | `(  <| ): ('a -> 'b) -> 'a        -> 'b`        | `( |> ):  'a        -> ('a -> 'b) -> 'b`        |
-| Parser-powered | `( <<| ): ('a -> 'b) -> 'a Parser -> 'b Parser` | `( |>> ): 'a Parser -> ('a -> 'b) -> 'b Parser` |
+| Version        | Operator | Signature                       |
+|----------------|----------|---------------------------------|
+| F# native      | `<|`     | `('a -> 'b) -> 'a -> 'b` |
+| Parser-powered | `<<|`    | `('a -> 'b) -> 'a Parser -> 'b Parser` |
+
+and:
+
+| Version        | Operator | Signature                              |
+|----------------|----------|----------------------------------------|
+| F# native      | `|>`     | `'a        -> ('a -> 'b) -> 'b`        |
+| Parser-powered | `|>>`    | `'a Parser -> ('a -> 'b) -> 'b Parser` |
+
+
+
 
 Notice that both `<<|` and `|>>` now return a `'b Parser`. This means
 that the assertions:
@@ -636,10 +651,10 @@ let (<<|) (f: 'a -> 'b) (ap: 'a Parser) : 'b Parser =
 Given that all the functions in F# are curried, there are 2 ways to
 interpret it:
 
-| Definition                    | Input                              | Output                   | Interpretation                         |
-|-------------------------------|------------------------------------|--------------------------|----------------------------------------|
-| `let (<<|) f ap = ...`        | `(f: 'a -> 'b) -> (ap: 'a Parser`) | `'b Parser`              | Apply `f` to the value parsed by `ap`. |
-| `let (<<|) f = fun ap -> ...` | `(f: 'a -> 'b)`                    | `'a Parser -> 'b Parser` | Lift `f` to the Parser world           |
+| Input                     | Output                   | Interpretation                             |
+|---------------------------|--------------------------|--------------------------------------------|
+| `('a -> 'b) -> 'a Parser` | `'b Parser`              | Apply a function to the result of a parser |
+| `('a -> 'b)`              | `'a Parser -> 'b Parser` | Lift a function to the Parser world        |
 
 
 You can easily apply the 1st interpretation to the `EpicTime` case.
@@ -666,8 +681,8 @@ The types in the game are:
 
 | Element      | Signature                                                        |
 |--------------|------------------------------------------------------------------|
-| `toEpicTime` | ` DateTime -> EpicTime`                                          |
-| `dateTimeP`   | `                            DateTime Parser`                    |
+| `toEpicTime` | `DateTime -> EpicTime`                                           |
+| `dateTimeP`  | `DateTime Parser`                                                |
 | `<<|`        | (`DateTime -> EpicTime`) -> `DateTime Parser -> EpicTime Parser` |
 
 
@@ -722,19 +737,12 @@ let ``date test`` () =
     test <@ run epicTimeParser "2025-01-01 18:11:12, the rest" = Success (", the rest", EpicTime 626140030.0) @>
 ```
 
+<hr>
 
-## andThen
-
-This Tupled Sequencing Combinator
-
-sequence and keep both
-
-
-- Run the first parser.
-- If it fails, return the error.
-- Otherwise, run the second parser with the remaining input.
-- If it fails, return the error.
-- If both parsers succeed, return a tuple with both the parsed values.
+Wow... That was a mouthful, wasn't it?  
+Take a break, enjoy a salmiakki and when you feel ready, jump to [chapter
+8](monadic-parser-combinators-8): we will learn of to sequence 2
+parsers.
 
 # References
 
