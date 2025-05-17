@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Monadic Parser Combinators in F# - I told you not to touch the
+title: "Monadic Parser Combinators in F# - I told you not to mess with the
 signature!"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
