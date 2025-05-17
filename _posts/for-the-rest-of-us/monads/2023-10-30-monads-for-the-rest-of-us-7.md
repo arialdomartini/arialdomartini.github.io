@@ -94,17 +94,17 @@ That's perfect: the function `bind` gave you back a function that wants a `Monad
 
 Here's the gist. `bind` transforms a series of not type-compatible monadic functions:
 
-![a series of monadic functions](static/img/monads-for-the-rest-of-us/monadic-functions-series-of-functions.png){: height="300px" }
+![a series of monadic functions](static/img/monads-for-the-rest-of-us/monadic-functions-series-of-functions.png){: width="100%" }
 
 lifting their input types so that they can be *bound* and composed together:
 
-![a series of monadic functions with bind applied](static/img/monads-for-the-rest-of-us/monadic-functions-series-of-bound-functions.png){: height="300px" }
+![a series of monadic functions with bind applied](static/img/monads-for-the-rest-of-us/monadic-functions-series-of-bound-functions.png){: width="100%" }
 
 In other words: you know there are benefits in working in the monadic world; `bind` takes those function that are still with one of their legs in the ordinary world and it elevates them.
 
 Completing this with `return` and `run`, it's intuitive to think that the core pattern adopted in programming functionally with monads is the following:
 
-![return + bound functions + run](static/img/monads-for-the-rest-of-us/functional-programming-with-monads.png){: height="300px" }
+![return + bound functions + run](static/img/monads-for-the-rest-of-us/functional-programming-with-monads.png){: width="100%" }
 
 * You start by elevating your input value to the monadic world with `return`.
 * You process it with a series of monadic functions, bound with `Bind`.
