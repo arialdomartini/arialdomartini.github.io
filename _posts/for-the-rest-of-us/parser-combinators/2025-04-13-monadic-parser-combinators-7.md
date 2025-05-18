@@ -657,13 +657,16 @@ interpret it:
 
 
 You can easily apply the 1st interpretation to the `EpicTime` case.
-You had a function from `DateTime` to `EpicTime`:
+
+You have a function from `DateTime` (the sad cat) to `EpicTime` (the
+happy, punk cat):
 
 ```fsharp
 val toEpicTime : DateTime -> EpicTime
 ```
 
-and you wanted to apply it to *the value inside the* `DateTime Parser` box:
+and you wanted to apply it to *the value inside the* `DateTime Parser`
+box (the glass can):
 
 ```fsharp
 val dateTimeP: DateTime Parser
@@ -685,9 +688,24 @@ The types in the game are:
 | `<<|`        | (`DateTime -> EpicTime`) -> `DateTime Parser -> EpicTime Parser` |
 
 
-You see how `toEpicTime` is applied to "the content" of `dateTimeP`.
 
-The second interpretation arises as soon as you partially apply `<<|`.
+You can imagine how `<<|`:
+
+- Gets the glass can with the sad `DateTime` cat.
+- Opens the can freeing the cat.
+- Applies `toEpicTime` to the sad `DateTime` cat turning it into a
+  happy, punk `EpicTime` cat.
+- Then, secures the cat back in the glass can.
+
+
+Generally: `<<|` lets you apply a function to "the content" of a
+box. This box is called Functor and `<<|` is also called `map`. You
+will often hear expressions such as "A Functor is something you can
+map over".
+
+
+The second &mdash; more fascinating and powerful &mdash;
+interpretation arises as soon as you partially apply `<<|`.
 
 ```fsharp
 let epicTime' = (<<|) toEpicTime
