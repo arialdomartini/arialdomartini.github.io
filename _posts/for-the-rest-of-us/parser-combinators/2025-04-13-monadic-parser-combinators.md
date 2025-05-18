@@ -27,7 +27,7 @@ Parser Combinators. You've always wanted, just admit it.
    build](/monadic-parser-combinators-6)
 6. [Chapter 7 - Parser-Powered Function
    Application](/monadic-parser-combinators-7)
-   
+
    
 ## Introduction
 
@@ -160,6 +160,16 @@ in our daily job projects and yet, when it comes to writing posts,
 tutorials and books, we never address testing at all?
 
 Fine, enough with the introduction. Ready? [Let's get started](/monadic-parser-combinators-2).
+
+## Notes
+
+I am not a native English speaker: if you spot any typo or weird
+sentence, feel free to [send me a pull
+request](https://github.com/arialdomartini/arialdomartini.github.io/).
+
+This blog is crafted by people, not AI. Illustrations are original
+work by Nanou.
+
 
 # References
 
