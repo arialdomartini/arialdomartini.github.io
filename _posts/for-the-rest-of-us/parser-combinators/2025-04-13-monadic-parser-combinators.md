@@ -23,10 +23,11 @@ Parser Combinators. You've always wanted, just admit it.
 4. [Chapter 4 - I told you not mess with the
    signature!](/monadic-parser-combinators-4)
 5. [Chapter 5 - Two Shades of Coupling](/monadic-parser-combinators-5)
-5. [Chapter 6 - Bird's-eye view of what you will
+6. [Chapter 6 - Bird's-eye view of what you will
    build](/monadic-parser-combinators-6)
-6. [Chapter 7 - Parser-Powered Function
+7. [Chapter 7 - Parser-Powered Function
    Application](/monadic-parser-combinators-7)
+8. [Chapter 8 - Here comes the tuple](/monadic-parser-combinators-8)
 
    
 ## Introduction

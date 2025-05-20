@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Monadic Parser Combinators in F# - Sequencing Parsers"
+title: "Monadic Parser Combinators in F# - Here comes the tuple"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - fsharp
@@ -229,7 +229,6 @@ let andThen<'a, 'b> (aP: 'a Parser) (bP: 'b Parser): ('a * 'b) Parser =
             | Success (restB, valueB) -> Success (restB, (valueA, valueB)))
 ```
 
-
 Putting `.>>.` and `|>>` togehter you get:
 
 
@@ -267,8 +266,10 @@ let ``parse the assignment of an int variable`` () =
     test <@ run intAssignment "42foo bla bla bla" = Success(" bla bla bla", expected) @>
 ```
 
+Nice. You did it.
+
 In the next chapters you will learn how to reduce `andThen` / `.>>.`
-this to the (way more readable):
+to the (way more readable):
 
 ```fsharp
 let andThen aP bP =
