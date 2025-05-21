@@ -28,7 +28,7 @@ Parser Combinators. You've always wanted, just admit it.
 7. [Chapter 7 - Parser-Powered Function
    Application](/monadic-parser-combinators-7)
 8. [Chapter 8 - Here comes the tuple](/monadic-parser-combinators-8)
-
+9. [Chapter 9 - Things you don't care about](/monadic-parser-combinators-9)
    
 ## Introduction
 
