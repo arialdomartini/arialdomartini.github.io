@@ -306,11 +306,11 @@ let ``salutation between dates`` () =
     test <@ run contentInTagsP "2025-12-11Hello!2025-12-11 the rest" = Success (" the rest", "Hello!")@>
 ```
 
-Don't worry about how basic and fragile the `dateOnlyP` parser is in
-this test: it's a mock parser, just like all the other parsers we have
-defined so far. Eventually, you'll learn how to build them in a robust
-way, by composing lower-level building blocks. Just like everything
-else in FP.
+Don't worry about how basic and fragile the `dateOnlyP` parser and the
+other parsers are in these tests: they are mock parsers, created for
+testing purposes only. Eventually, you'll learn how to build real
+parsers in a robust way, by composing lower-level building blocks.
+Just like everything else in FP.
 
 
 # References
