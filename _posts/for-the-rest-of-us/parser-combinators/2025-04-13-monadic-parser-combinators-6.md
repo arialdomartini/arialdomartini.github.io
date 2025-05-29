@@ -267,7 +267,7 @@ let ``parses a Foo`` () =
   
   let date = DateOnly(1953, 03, 16)
   test <@ run fooParser input = 
-         Foo [date; date; date; date; date; date; date]
+         Success ("", Foo [date; date; date; date; date; date; date]) @>
 ```
 
 (By the way: I'm sold. Yours is, hands down, the most beautiful
