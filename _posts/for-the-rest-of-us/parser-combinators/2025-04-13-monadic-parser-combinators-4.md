@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Monadic Parser Combinators in F# - I told you not to mess with the
-signature!"
+title: "Monadic Parser Combinators in F# - I Told You Not To Mess With
+The Signature!"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - fsharp

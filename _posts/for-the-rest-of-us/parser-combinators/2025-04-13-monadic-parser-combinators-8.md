@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Monadic Parser Combinators in F# - Here comes the tuple"
+title: "Monadic Parser Combinators in F# - Here Comes The Tuple"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - fsharp

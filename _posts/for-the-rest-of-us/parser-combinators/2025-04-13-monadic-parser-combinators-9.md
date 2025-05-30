@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Monadic Parser Combinators in F# - Things you don't care about"
+title: "Monadic Parser Combinators in F# - Things You Don't Care About"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - fsharp

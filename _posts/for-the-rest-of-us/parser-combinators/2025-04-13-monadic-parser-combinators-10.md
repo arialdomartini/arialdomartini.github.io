@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Monadic Parser Combinators in F# - Applying functions, ad nauseam"
+title: "Monadic Parser Combinators in F# - Applying Functions, Ad Nauseam"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - fsharp

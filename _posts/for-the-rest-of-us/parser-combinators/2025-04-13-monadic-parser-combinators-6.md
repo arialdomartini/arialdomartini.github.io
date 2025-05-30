@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Monadic Parser Combinators in F# - bird's-eye view of what you will build"
+title: "Monadic Parser Combinators in F# - Bird's-Eye View Of What You Will Build"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - fsharp
