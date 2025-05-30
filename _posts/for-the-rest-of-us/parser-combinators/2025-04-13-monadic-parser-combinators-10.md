@@ -603,7 +603,7 @@ one. Here we are facing a new challenge: how to parse an integer with
 an unknown number of digits? This require a new tool in our toolbelt.
 
 
-But enough for now. Do take break: you deserve a pistacchio kulfi to
+Enough for now. Let's take a break: you deserve a pistacchio kulfi to
 refresh your mind.  
 See you later in [Chapter 11](/monadic-parser-combinators-11).
 

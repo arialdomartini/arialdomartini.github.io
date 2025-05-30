@@ -17,20 +17,19 @@ Parser Combinators. You've always wanted, just admit it.
 ## Index
 
 
-1. [Chapter 1 - Intro](/monadic-parser-combinators)
-2. [Chapter 2 - Composition](/monadic-parser-combinators-2)
-3. [Chapter 3 - Combinators!](/monadic-parser-combinators-3)
-4. [Chapter 4 - I told you not mess with the
+1. [Intro](/monadic-parser-combinators)
+2. [Composition](/monadic-parser-combinators-2)
+3. [Combinators!](/monadic-parser-combinators-3)
+4. [I told you not mess with the
    signature!](/monadic-parser-combinators-4)
-5. [Chapter 5 - Two Shades of Coupling](/monadic-parser-combinators-5)
-6. [Chapter 6 - Bird's-eye view of what you will
+5. [Two Shades of Coupling](/monadic-parser-combinators-5)
+6. [Bird's-eye view of what you will
    build](/monadic-parser-combinators-6)
-7. [Chapter 7 - Parser-Powered Function
+7. [Parser-Powered Function
    Application](/monadic-parser-combinators-7)
-8. [Chapter 8 - Here comes the tuple](/monadic-parser-combinators-8)
-9. [Chapter 9 - Things you don't care about](/monadic-parser-combinators-9)
-10. [Chapter 9 - Applying functions, ad
-    nauseam](/monadic-parser-combinators-10)
+8. [Here comes the tuple](/monadic-parser-combinators-8)
+9. [Things you don't care about](/monadic-parser-combinators-9)
+10. [Applying functions, ad nauseam](/monadic-parser-combinators-10)
    
 ## Introduction
 
