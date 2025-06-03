@@ -596,12 +596,89 @@ the result, for now; we'll soon make it better.
 
 
 We are left with one last building block to write: `intP`. It is
-supposed to parse the `7` in `7 times date{16/03/1953}`. Wait: what if
-it's `42` or `42000` instead of `7`? With the date we were lucky that
-the day was always `2` digits number and the year always a `4` digits
-one. Here we are facing a new challenge: how to parse an integer with
-an unknown number of digits? This require a new tool in our toolbelt.
+supposed to parse the `7` in `7 times date{16/03/1953}`. We can just
+use `digitsP 1`, can't we?  
+Sure. But what if it's `42` or `42000` instead of `7`? With the date
+we were lucky that the day was always a `2` digits number, and the
+year always a `4` digits one. Here we are facing a new challenge: how
+to parse an integer with an unknown number of digits? This require a
+new tool in our toolbelt. Which we will cover in the next chapter.
+Let's close this one with one last twist: let's invent the notion of lifting functions.
 
+## Lift
+We learnt that a function taking values can be applied to parsers of
+those values by the means of replacing the pseudo-operator white-space
+with `<!>` and `<*>` like this:
+
+```fsharp
+let f:  'value         = f     a      b      c
+let fP: 'value Parser  = f <!> aP <*> bP <*> cP
+```
+
+Can you write an operator that converts `f` into `fP`, so from:
+
+```fsharp
+f:   a -> b -> c -> d
+```
+
+to:
+
+```fsharp
+fP: 'a Parser -> 'b Parser -> 'c Parser -> 'd Parser
+```
+
+That's trivial! We don't even need a test for this, type checking will
+suffice:
+
+```fsharp
+let lift3 f a b c = f <!> a <*> b <*> c 
+```
+
+
+`lift3` comes in handy to simplify the syntax. Refactoring the `fooP`
+parser above, instead of:
+
+```fsharp
+let fooP =
+  makeFoo <!> intP <*> times <*> fancyDate
+```
+
+you can just write:
+
+```fsharp
+let makeFooP = lift3 makeFoo
+
+let fooP = makeFooP intP times fancyDate
+```
+
+It's like writing parser-powered code while removing all the parser
+boilerplate from sight, so to get back the original linear, pure code.
+Sweet!
+
+
+As the name suggests, `lift3` works for 3-parameter functions. For
+2-parameter functions `lift2` is similarly defined as:
+
+```fsharp
+let lift2 f a b = f <!> a <*> b
+```
+
+Removing 1 parameter more, it's easy to define `lift`, the lift
+function for 1-parameter functions:
+
+```fsharp
+let lift f a = f <!> a
+```
+
+But look! *Eta-reducing* this expression &mdash; that is, removing `a`
+and `f` from both sides &mdsah; it's easy to see that `lift` is in
+fact our old friend `map`:
+
+```fsharp
+let lift = (<!>)
+```
+
+Given the diagram, it all makes sense.
 
 Enough for now. Let's take a break: you deserve a pistacchio kulfi to
 refresh your mind.  
@@ -613,12 +690,6 @@ See you later in [Chapter 11](/monadic-parser-combinators-11).
 
 
 {% include fp-newsletter.html %}
-
-
-let fooParser: Foo Parser =
-    makeFoo <!> intP <*> <*> commandP <*> dateP
-```
-
 
 
 # Comments
