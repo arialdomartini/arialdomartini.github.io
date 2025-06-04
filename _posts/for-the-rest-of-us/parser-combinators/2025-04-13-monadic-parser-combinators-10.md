@@ -25,10 +25,10 @@ let ``function application with 2 parameters`` () =
     test <@ c = "42, True" @>
 ```
 
-- `f` is a function that takes `a`,  an `int`, and that returns
+- `fa` is a function that takes `a`, an `int`, and that returns
   another function, `bool -> string`.
 - If you use the native function application to apply `f` to `42`, you
-  get that `bool -> string` function back.
+  get `fb: bool -> string` back.
 - Now, thare's nothing special in that `bool -> string` function. It
   is just another function. So, you can keep using the F# native
   function application to pass it the next argument, a `true` value,
@@ -109,8 +109,8 @@ let ``Parser-powered function application with 3 parameters`` () =
 ```
 
 Then, we apply it to an argument `'a Parser`, of course using `map`.
-Let me use the symbol `<!>` instead of `<<|` or `map`; we mentioned
-that they are all synonyms:
+Let me use the symbol `<!>` instead of `<<|` or `map`; after all, we
+mentioned that they are all synonyms:
 
 ```fsharp
 let (<!>) = map
@@ -130,23 +130,23 @@ let ``Parser-powered function application with 3 parameters`` () =
     ...
 ```
 
-Oh no! Look the signature of `fa`! The result is not just another
+Oh no! Look at `fa`'s signature! The result is not just another
 function with 1 parameter less, like it happened before . It's not
 even a function anymore: it's a function wrapped inside a Parser. This
 means that we cannot apply `<!>` again... We definitely need a
 different operator.
 
-If `map` is of little help, it's time to invent a more powerful
-version of Functors: enter Applicative Functors.
+If Functor's `map` is of little help, it's time to invent a more
+powerful version of Functors: enter Applicative Functors.
 
 
 ## Beyond Functors
 
 I'm confident you can guess our next step: we will implement a new
 operator letting its signature lead the way. And then we will invent
-yet another symbol. That's right. Here's the spoiler: we will distill
-`<*>` which, with a burst of creativity, we are going to call "apply"
-or `ap`.
+yet another symbol. True. Here's the spoiler: we will distill `<*>`
+which, with a burst of creativity, we are going to call "apply" or
+`ap`.
 
 We left with this:
 
@@ -154,9 +154,8 @@ We left with this:
 let fa: ('b -> 'c -> 'd) Parser = f <!> a
 ```
 
-Notice: it's a 2-parameter function inside a Parser.
-
-Ideally, we wanted to apply it to the next argument, a `'b Parser`:
+Notice: it's a 2-parameter function inside a Parser. We want to apply
+it to the next argument, a `'b Parser`:
 
 [<Fact>]
 let ``Parser-powered function application with 3 parameters`` () =
@@ -169,13 +168,12 @@ let ``Parser-powered function application with 3 parameters`` () =
         failwith "Not yet implemented"
     
     let fa: ('b -> 'c -> 'd) Parser = f  <!> a
-    let fb:       ('c -> 'd) Parser = fa <*> b
-    let fc:              'd  Parser = fb <*> c
+    let fb:       ('c -> 'd) Parser = fa <*> b  // <-- this
+    let fc:              'd  Parser = fb <*> c  // <-- then this
     ...
 ```
 
-
-If you are confused, let me reformat this in a more streamlined way.
+If this is confusing, let me reformat it in a more streamlined way.
 
 With the native F# function application you have:
 
@@ -187,7 +185,7 @@ val c: 'c
 val f: 'a -> 'b -> 'c -> 'd
 ```
 
-and you can apply `f` to arguments just separating them with white
+and you can apply `f` to arguments just by separating them with white
 spaces (the F# native function application pseudo-operator):
 
 
@@ -196,7 +194,7 @@ let d = f a b c
 ```
 
 In the Parser world, you have to use `<!>` for the first argument,
-which give you back a Parser-wrapped function. So, you have to
+which gives you back a Parser-wrapped function. So, you have to
 continue with this yet-to-be-implemented `<*>` apply operator.
 
 ```fsharp
@@ -232,10 +230,10 @@ lets us apply the wrapped `'a -> 'b` to an `'a Parser` argument:
 val ap : ('a -> 'b) Parser -> 'a Parser -> ...
 ```
 
-What can this give us back? Let's think about it. We cannot get back a
-`'b` value, right? A Parser is a promise of a value, so if we give
-parsers it's fair to be paid back with parsers. It's legitimate to
-assume we get back a `'b Parser`:
+What will this give us back? Let's think about it. We cannot get back
+a `'b` value, right? A Parser is a promise of a value, so if we give
+parsers it's fair to be paid back with other parsers. It's legitimate
+to assume we get back a `'b Parser`:
 
 
 ```fsharp
@@ -264,7 +262,7 @@ let ``ap with a 1-parameter function`` () =
 ```
 
 Notice that in the test we have created 2 super simple parsers, which
-do not even consume the input. `aP` just returns a Parser wrapped
+do not even consume the input. `aP` just returns a Parser-wrapped
 `42`, `fP` a Parser-wrapped `fun i -> i * 2`.
 
 For cases like these, let's have a convenience function `pure'`, which
@@ -351,10 +349,11 @@ Wait a second: why did we have to pattern match and to pass unconsumed
 input around? Didn't we say that we could always build on top of the
 previous building blocks?  
 It turns our that the Applicative Functor's `<*>` operator you just
-invented cannot be built in terms of humble Functor's `map`. On the
-contrary: we can demonstrate that Applicative Functors are more
-powerful than Functors, and that we can rewrite `map` in terms of
-`pure'` and `ap`:
+invented cannot be built in terms of humble Functor's `map`. We could
+even demonstrate it mathematically. On the contrary: we can
+mathematically demonstrate that, since Applicative Functors are more
+powerful than Functors, we can alway rewrite `map` in terms of `pure'`
+and `ap`:
 
 ```fsharp
 let map (f: 'a -> 'b) (a: 'a Parser) : 'b Parser =
@@ -377,12 +376,11 @@ really discovered something deep.
 We opened this chapter claiming that there is something magic about
 the native F# function application, because you can apply a function
 returning a function returning a function &mdash; ad nauseam &mdash;
-to arguments, and the unsuspectedly powerful whitespace
+to arguments, and because the unsuspectedly powerful whitespace
 pseudo-operator will happily do its work.
 
-Does your brand new `<*>` have the same super-power?
-
-Let's see. We want to have the equivalent of this test:
+Does your brand new `<*>` have the same super-power? Let's see. We
+want to have the equivalent of this test:
 
 ```fsharp
 [<Fact>]
@@ -416,11 +414,12 @@ let ``ap with a 3-parameter function`` () =
 ```
 
 Amazing! It works! You have actually invented a very generic
-Parser-powered function application ever. As you guess, the
-combination of `pure'` and `<*>` is what conventionally defines
-Applicative Functors. You are just one last step from inventing monads.
+Parser-powered function application. I did not introduce `pure'` as a
+coincidence: in fact, the combination of `pure'` and `<*>` is what
+conventionally defines Applicative Functors.
+from discovering monads.
 
-But first, let's put `<*>` into play to build real powerful parsers.
+Let's put `<*>` into play to build real powerful parsers.
 
 
 ## Fancy dates
@@ -561,8 +560,8 @@ let ``parses the date part`` () =
 ```
 
 Dropping down another level, we have to define `digitsP`. This
-function takes the number of digits as input and returns an `int
-Parser` that parses a number with exactly that many digits.
+function takes the expected number of digits and returns an `int
+Parser` to parse a number with exactly that many digits.
 
 At this stage, we haven't yet developed the ideal building blocks to
 make this parser elegant. We could try anyway with our current tools:
@@ -602,12 +601,14 @@ Sure. But what if it's `42` or `42000` instead of `7`? With the date
 we were lucky that the day was always a `2` digits number, and the
 year always a `4` digits one. Here we are facing a new challenge: how
 to parse an integer with an unknown number of digits? This require a
-new tool in our toolbelt. Which we will cover in the next chapter.
-Let's close this one with one last twist: let's invent the notion of lifting functions.
+new tool in our toolbelt, something giving our parsers the ability to
+*try* a parsing, and to eventually recover from a failure. We will
+cover exactly this in the next chapter. Let's close this one with one
+last twist: let's invent the notion of *lifting functions*.
 
 ## Lift
 We learnt that a function taking values can be applied to parsers of
-those values by the means of replacing the pseudo-operator white-space
+those values by the means of replacing the  white-space pseudo-operator
 with `<!>` and `<*>` like this:
 
 ```fsharp
@@ -615,13 +616,16 @@ let f:  'value         = f     a      b      c
 let fP: 'value Parser  = f <!> aP <*> bP <*> cP
 ```
 
-Can you write an operator that converts `f` into `fP`, so from:
+In a sense, the combination of `<!>` and `<*>` elevates a function
+from the value realm to the parser world, during function application.
+It would be nice to have an operator to perform that elevation before
+hand, even before function application. In other words, we want to convert:
 
 ```fsharp
 f:   a -> b -> c -> d
 ```
 
-to:
+into:
 
 ```fsharp
 fP: 'a Parser -> 'b Parser -> 'c Parser -> 'd Parser
@@ -633,7 +637,6 @@ suffice:
 ```fsharp
 let lift3 f a b c = f <!> a <*> b <*> c 
 ```
-
 
 `lift3` comes in handy to simplify the syntax. Refactoring the `fooP`
 parser above, instead of:
@@ -663,8 +666,8 @@ As the name suggests, `lift3` works for 3-parameter functions. For
 let lift2 f a b = f <!> a <*> b
 ```
 
-Removing 1 parameter more, it's easy to define `lift`, the lift
-function for 1-parameter functions:
+Removing 1 parameter more, it's easy to define `lift`, for lifting
+1-parameter functions:
 
 ```fsharp
 let lift f a = f <!> a
