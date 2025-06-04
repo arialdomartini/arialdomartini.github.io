@@ -350,16 +350,51 @@ let ``applies a parser many times`` () =
     test <@ run manyWell "well!well!well! the rest" = Success(" the rest", ["well!";"well!";"well!"]) @>
 ```
 
-`many` will come in very handy: for example, it can be used to handle
-the case of an unknown number of spaces language syntactic elements.
-But, as you surely got by now, that the parser passed to `many` can be
-arbitrarily complex; it can be as simple as the parser of a single
-charactes as a whole JSON parser, or the parser for a huge piece of
-code in your convoluted programming language syntax. `many` just won't
-care.
+`many` will often come in handy: for example, it can be used to handle
+the case of an unknown number of spaces between keywords, in your
+language. Here's the complete code for parsing a simple binary
+mathematical expression:
+
+```fsharp
+type Operation = Sum | Substraction
+
+type Expression = Expression of (int * int * Operation)
+
+[<Fact>]
+let ``parses elements ignoring the separating white spaces`` () =
+    let toInteger (digits: char list) : int =
+        digits
+        |> List.map string
+        |> String.concat ""
+        |> int
+
+    let digit = anyOf ['0'..'9']
+    let intP = many digit |>> toInteger
+
+    let sum = (str "+") |>> (fun _ -> Sum)
+    let subtraction = (str "-") |>> (fun _ -> Substraction)
+
+    let operation: Operation Parser = sum <|> subtraction
+
+    let spaces = many (charP ' ')
+
+    let makeExpression n1 _spaces1 op _space2 n2 =
+        Expression (n1, n2, op)
+
+    let expression =
+        makeExpression <!> intP <*> spaces <*> operation <*> spaces <*> intP
+
+    test <@ run expression "12  +   42" = Success ("", Expression (12, 42, Sum)) @>
+    test <@ run expression "1942-9" = Success ("", Expression (1942, 9, Substraction)) @>
+```
 
 
-Implementing `many` is actually very challenging. We have to build a
+As for any other parser combinator, the parser manipulated by `many`
+can be arbitrarily complex; it can be as simple as the parser of a
+single charactes as a whole JSON parser. `many` just won't care.
+
+
+Implementing `many` is actually quite challenging. We have to build a
 list of results, so recursion comes naturally to mind. The hard part
 is that we are not really building a list, but a parser emitting a
 list. What can help is to think that `many`, by itself, can never
@@ -469,7 +504,7 @@ let many<'a> (parser: 'a Parser): 'a list Parser = Parser (fun input ->
     Success(zeroOrMore input))
 ```
 
-Ladies and gentlement, welcome monads and monadic computation
+Ladies and gentlemen, enter monads and monadic computation
 expressions. We've dragged this out long enough. It's time to open
 that door.
 
