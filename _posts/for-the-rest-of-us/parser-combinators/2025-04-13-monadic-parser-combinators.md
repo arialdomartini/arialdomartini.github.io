@@ -20,17 +20,15 @@ Parser Combinators. You've always wanted, just admit it.
 1. [Intro](/monadic-parser-combinators)
 2. [Composition](/monadic-parser-combinators-2)
 3. [Combinators!](/monadic-parser-combinators-3)
-4. [I Told You Not Mess With The
-   Signature!](/monadic-parser-combinators-4)
+4. [I Told You Not Mess With The Signature!](/monadic-parser-combinators-4)
 5. [Two Shades of Coupling](/monadic-parser-combinators-5)
-6. [Bird's-Eye View Of What You Will
-   Build](/monadic-parser-combinators-6)
-7. [Parser-Powered Function
-   Application](/monadic-parser-combinators-7)
+6. [Bird's-Eye View Of What You Will Build](/monadic-parser-combinators-6)
+7. [Parser-Powered Function Application](/monadic-parser-combinators-7)
 8. [Here Comes The Tuple](/monadic-parser-combinators-8)
 9. [Things You Don't Care About](/monadic-parser-combinators-9)
 10. [Applying Functions, Ad Nauseam](/monadic-parser-combinators-10)
-   
+11. [Things You Are Not Sure About](/monadic-parser-combinators-11)
+
 ## Introduction
 
 The compiler of your beautiful new language &mdash; with which you
