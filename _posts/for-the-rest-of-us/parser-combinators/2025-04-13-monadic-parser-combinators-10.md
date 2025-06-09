@@ -132,8 +132,28 @@ let ``Parser-powered function application with 3 parameters`` () =
 
 Oh no! Look at `fa`'s signature! The result is not just another
 function with 1 parameter less, like it happened before . It's not
-even a function anymore: it's a function wrapped inside a Parser. This
-means that we cannot apply `<!>` again... We definitely need a
+even a function anymore: it's a function wrapped inside a Parser.
+
+This all makes sense, if you think what `<!>` does. Applying it to an
+`'a -> 'b` function would get you this:
+
+<p align="center">
+  <img src="static/img/parser-combinators-for-the-rest-of-us/map-ap-part-1.png"
+  alt="" height="350px">
+</p>
+
+It's easy to see what happens when you apply it to a 2-parameter
+function `'a -> 'b -> 'c`, if you think to it as a 1-parameter
+function `'a -> ('b -> 'c)` which just happens to return another
+function. Then:
+
+<p align="center">
+  <img src="static/img/parser-combinators-for-the-rest-of-us/map-ap-part-2.png"
+  alt="" height="350px">
+</p>
+
+
+This means that we cannot apply `<!>` again... We definitely need a
 different operator.
 
 If Functor's `map` is of little help, it's time to invent a more
@@ -211,6 +231,13 @@ let dP: 'd Parser  = f <!> aP <*> bP <*> cP
 
 
 Basically, we are writing an enhanced version of whitespace.
+
+
+
+<p align="center">
+  <img src="static/img/parser-combinators-for-the-rest-of-us/map-ap-part-3.png"
+  alt="" width="100%">
+</p>
 
 
 So, let's be driven by the type signature! We start with the case of
@@ -606,7 +633,7 @@ new tool in our toolbelt, something giving our parsers the ability to
 cover exactly this in the next chapter. Let's close this one with one
 last twist: let's invent the notion of *lifting functions*.
 
-## Lift
+## Lifting functions
 We learnt that a function taking values can be applied to parsers of
 those values by the means of replacing the  white-space pseudo-operator
 with `<!>` and `<*>` like this:
@@ -630,6 +657,11 @@ into:
 ```fsharp
 fP: 'a Parser -> 'b Parser -> 'c Parser -> 'd Parser
 ```
+
+
+<p align="center">
+  <img src="static/img/parser-combinators-for-the-rest-of-us/lift3.png" alt="lift3 function" height="350px">
+</p>
 
 That's trivial! We don't even need a test for this, type checking will
 suffice:
@@ -658,13 +690,16 @@ It's like writing parser-powered code while removing all the parser
 boilerplate from sight, so to get back the original linear, pure code.
 Sweet!
 
-
 As the name suggests, `lift3` works for 3-parameter functions. For
 2-parameter functions `lift2` is similarly defined as:
 
 ```fsharp
 let lift2 f a b = f <!> a <*> b
 ```
+
+<p align="center">
+  <img src="static/img/parser-combinators-for-the-rest-of-us/lift2.png" alt="lift2 function" height="350px">
+</p>
 
 Removing 1 parameter more, it's easy to define `lift`, for lifting
 1-parameter functions:
@@ -673,6 +708,11 @@ Removing 1 parameter more, it's easy to define `lift`, for lifting
 let lift f a = f <!> a
 ```
 
+<p align="center">
+  <img src="static/img/parser-combinators-for-the-rest-of-us/lift.png" alt="lift function" height="350px">
+</p>
+
+
 But look! *Eta-reducing* this expression &mdash; that is, removing `a`
 and `f` from both sides &mdsah; it's easy to see that `lift` is in
 fact our old friend `map`:
@@ -680,6 +720,11 @@ fact our old friend `map`:
 ```fsharp
 let lift = (<!>)
 ```
+
+
+<p align="center">
+  <img src="static/img/parser-combinators-for-the-rest-of-us/map.png" alt="map function" height="350px">
+</p>
 
 Given the diagram, it all makes sense.
 

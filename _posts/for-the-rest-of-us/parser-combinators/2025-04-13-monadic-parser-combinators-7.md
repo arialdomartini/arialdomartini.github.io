@@ -726,19 +726,27 @@ Read `map`'s signature as:
 val map: ('a -> 'b) -> ('a Parser -> 'b Parser)
 ```
 
-`map` is that combinator that given a function `f` operating on
-ordinary values (`'a -> 'b`) *lifts* it to work on parsers (`('a
-Parser -> 'b Parser)`). It maps things from the lower world to the elevated, Parser-powered universe.  
-Look:
+`map` is that combinator that given a function `f : 'a -> 'b`
+operating on ordinary values *lifts* it to work on parsers, as an `'a
+Parser -> 'b Parser` function. It maps things from the lower world to
+the elevated, Parser-powered universe.    
+
+<p align="center"> <img
+  src="static/img/parser-combinators-for-the-rest-of-us/map.png"
+  alt="" height="350px"> </p>
+
+
+So:
 
 - You have `toEpicTime: DateTime -> EpicTime`.
-- Tou lift `toEpicTime`:
+- You lift `toEpicTime` with `map`:
 
 ```fsharp
 let toEpicTimeP = map toEpicTime
 ```
 
-- It was transformed to `toEpicTimeP: Parser DateTime -> Parser EpicTime`.
+- It is transformed to `toEpicTimeP: Parser DateTime -> Parser
+  EpicTime`.
 
 Now you can feed it with a parser:
 
