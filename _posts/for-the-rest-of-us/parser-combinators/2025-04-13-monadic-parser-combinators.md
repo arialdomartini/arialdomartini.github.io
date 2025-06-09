@@ -53,16 +53,15 @@ like:
 type SourceCode = string
 
 type AbstractSyntaxTree =
-| Goto of Label
-| VariableDefinition of ...
-| ...
+    | Goto of Label
+    | VariableDefinition of ...
+    | ...
 
 val parser : SourceCode -> AbstractSyntaxTree
 ```
 
 Most likely, you would like the parser to fail and to emit syntax
-errors in case there are any.
-
+errors in case there are any.  
 If you think about it, that's not qualitatively different from
 deserializing a JSON string:
 
@@ -127,15 +126,18 @@ be built.
 
 Now, if writing the trivial parsers is, well, trivial, the only
 challenge that's left is to learn how to *combine* parsers. That is,
-how these Parsers Combinators work.
+how Parsers Combinators work.
 
 That's the goal of this series.
 
 ## How we will proceed
 
-There are many similar series online, some specific to F# such as [The
-"Understanding Parser Combinators" series][wlaschin] by Scott
-Wlaschin. This post tries to stand out in a few different ways:
+There are many similar series online, some specific to F#, such as
+[The "Understanding Parser Combinators" series][wlaschin] by Scott
+Wlaschin, many others based on Haskell, like the excellent [Parser
+Combinators: a Walkthrough, Or: Write you a Parsec for Great
+Good][leblanc] by Antoine Leblanc.  
+This post tries to stand out in a few different ways:
 
 - If other attempts to this topic left you scratching your head, this
   series should make things a lot easier.  
@@ -146,20 +148,22 @@ Wlaschin. This post tries to stand out in a few different ways:
   explanations.
 
 - Many tutorials begin with writing a simple parser &mdash;
-conventionally, the single-character parser. This does not.  
-Instead, we will focus on combinators first, postponing the
-implementation of concrete parsers to the last chapter. When I was
-first introduced to parsers, I was just confused: what on earth does
-it mean to parse a single character returning a character? What's the
-point? Where is this leading me?  
-I hope I can help you skip past that initial disorientation entirely.
+  conventionally, the single-character parser. This does not. Instead,
+  we will focus on combinators first, postponing the implementation of
+  concrete parsers. When I was first introduced to parsers, I was just
+  confused: what on earth does it mean to parse a single character
+  returning a character?  What's
+  the point? Where is this leading me?  
+  I hope I can help you skip past that initial disorientation
+  entirely.
 
 - We will write code with Test-Driven Development.  
 Isn't it ironic that we developers often lament the absence of tests
 in our daily job projects and yet, when it comes to writing posts,
 tutorials and books, we never address testing at all?
 
-Fine, enough with the introduction. Ready? [Let's get started](/monadic-parser-combinators-2).
+Fine, enough with the introduction. Ready? Treat yourself to a sorbet,
+then [let's get started](/monadic-parser-combinators-2).
 
 ## Notes
 
@@ -170,17 +174,20 @@ request](https://github.com/arialdomartini/arialdomartini.github.io/).
 This blog is crafted by people, not AI. Illustrations are original
 work by Nanou.
 
+[Next: Chapter 2 - Composition](/monadic-parser-combinators-2)
 
 # References
 
 * [Recursive Descent Parser][recursive-descent-parser]
 * [Tree-sitter][tree-sitter]
 * [Scott Wlaschin - The "Understanding Parser Combinators" series][wlaschin]
-
+* [Antoine Leblanc - Parser Combinators: a Walkthrough, Or: Write you
+  a Parsec for Great Good][leblanc]
+  
 [recursive-descent-parser]: https://en.wikipedia.org/wiki/Recursive_descent_parser
 [tree-sitter]: https://tree-sitter.github.io/tree-sitter/
 [wlaschin]: https://fsharpforfunandprofit.com/series/understanding-parser-combinators/
-
+[leblanc]: https://hasura.io/blog/parser-combinators-walkthrough
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/33)
