@@ -141,8 +141,8 @@ This is a function that, given 2 generic Parsers `(string -> 'a)`,
 returns a new Parser `(string -> 'a)`. Think about it: so far we have
 thought of creating parsers *writing their code*, at the most reusing
 some pre-existing parsers. But here something new happened: this is a
-high-order function that *combines* parsers *generating*, out of the
-thin air, another brand new Parser. See this in use:
+high-order function that *combines* parsers, *generating* out of the
+thin air another brand new Parser. See this in use:
 
 ```fsharp
 let parseRockTrioOrSoloArtist = parseRockTrio <|> parseSoloArtist
@@ -177,17 +177,17 @@ you could conceive other Parser Combinators such as:
 etc.
 
 
-It turns out that if you design a set of very expressful and fine
-tuned building blocks, you don't need to write the code of a single
-parser: you will be able to generate any imaginable parser only
+It turns out that if you manage to design a set of very expressful and
+fine tuned building blocks, you don't need to write the code of a
+single parser: you will be able to generate any imaginable parser only
 combinining the most trivial parsers that could be conceived, that
 are:
 
 | Name        | Signature                                                                     | Generates a parser that...                                                      |
 |-------------|-------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
 | `eof`       | `(string -> ())`                                                              | succeeds only at the end of file.                                               |
-| `any`       | `(string -> charj`                                                            | succeeds no matter what the input contains.                                               |
-
+| `any`       | `(string -> char)`                                                            | succeeds no matter what the input contains.                                               |
+rty
 
 Don't despair. We will get to this.
 

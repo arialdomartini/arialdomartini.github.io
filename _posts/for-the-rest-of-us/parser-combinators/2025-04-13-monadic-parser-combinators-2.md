@@ -23,10 +23,9 @@ composition is, why you want your parsers to be *composable* and what
 Applicative Functors and Monads have to do with all of this.
 
 ## What's the fuss about composition?
-Your esoteric language's success will reach such heights that you'll
-exploit its popularity and design a beautiful, groundbreaking
-serialization format to finally eradicate the use of JSON and YAML. It
-will let developers express a record as:
+Your esoteric language will be so popular that you'll use its success
+to design a new groundbreaking serialization format to finally
+eradicate JSON and YAML. It will let developers express a record as:
 
 ```
 inst Person
@@ -55,11 +54,9 @@ val parsePerson: string -> Person
 Let's reflect how to implement it. Again: we are more interested in
 the journey of *decomposing* the problem into smaller problems and
 then of *combining* them to generate a parser, rather than in writing
-this specific parser by hand.
-
-For sure, `parsePerson` should tackle somehow the problem of parsing
-the syntax specific to records, such as the initial `inst` keyword and
-the series of:
+this specific parser by hand.  
+`parsePerson` must address parsing the syntax specific to records,
+such as that initial `inst` keyword and the series of:
 
 ```
    - fieldName <- value
@@ -67,7 +64,7 @@ the series of:
 
 strings.  
 As for the field values, though, `parsePerson` could smartly delegate
-the parsing of GUIDs, strings and dates to some specialized
+parsing of GUIDs, strings and dates to some specialized
 sub-functions. Each would have a specific signature:
 
 ```fsharp
@@ -129,9 +126,8 @@ In other words, `parsePerson` is a *composition* of:
 - some logic specific to the syntax of a record.
 - and some lower level parsers.
 
-Is this what functional programmers mean with *composable*?
-
-Well, kind of. It's less black and white than this.
+Is this what functional programmers mean with *composition*? Well,
+kind of. It's less black and white than this.
 
 
 ## 5 Shades Of Composability
@@ -222,7 +218,7 @@ let squares = [for x in 1..10 do yield x*x]
 
 ### Case 2: composing `X`s results in something other than `X`.
 
-Or, more concisely: things not closed under composition.
+Or, more concisely: some things are not closed under composition.
 
 The canonical example is with integer numbers: they compose via
 division, but they result in float numbers.
@@ -242,10 +238,9 @@ functions using locks. They *do compose*, but in a surprising and
 unsafe way. Let me show you.
 
 Imagine that you have the guarantee that every process requesting
-locks eventually releases them. While you can count on this property
-for every process in isolation, does the composition of 2 processes
-hold the same guarantee?
-
+locks eventually releases them. Given that you can count on this
+property for every process in isolation, does the composition of 2
+processes hold the same guarantee?  
 Unfortunately, no. Consider 2 functions acquiring 2 locks `x` and `y`,
 in opposite order:
 
@@ -346,6 +341,10 @@ illumination and probably a couple of other super-powers?
 
 OK, let's have a break here.  
 You deserve a hot infusion and some relax. When ready, jump to [the next section](/monadic-parser-combinators-3).
+
+
+[Previous - Intro](/monadic-parser-combinators) ⁓ [Next -
+Chapter 3: Combinators!](/monadic-parser-combinators-3)
 
 
 # References
