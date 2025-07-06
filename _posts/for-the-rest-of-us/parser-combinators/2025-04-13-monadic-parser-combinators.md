@@ -28,6 +28,7 @@ Parser Combinators. You've always wanted, just admit it.
 9. [Things You Don't Care About](/monadic-parser-combinators-9)
 10. [Applying Functions, Ad Nauseam](/monadic-parser-combinators-10)
 11. [Things You Are Not Sure About](/monadic-parser-combinators-11)
+12. [Things You Want To Remember](/monadic-parser-combinators-12)
 
 ## Introduction
 

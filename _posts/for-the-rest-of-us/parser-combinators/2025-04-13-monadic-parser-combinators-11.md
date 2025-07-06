@@ -507,11 +507,12 @@ let many<'a> (parser: 'a Parser): 'a list Parser = Parser (fun input ->
 ```
 
 Ladies and gentlemen, enter monads and monadic computation
-expressions. We've dragged this out long enough. It's time to open
-that door.
+expressions. We've delayed this out long enough. It's time to open
+that door. The next chapter should provide the rational why and in
+which cases we need monadic parsers. Then, we will invent them.
 
-Take a long break. Enjoy a Swiss cheese fondue. We will see in [Chapter 12](/monadic-parser-combinators-12).
-
+Take a long break. Enjoy a Swiss cheese fondue. We will see in
+[Chapter 12](/monadic-parser-combinators-12)
 
 # Comments
 [GitHub
