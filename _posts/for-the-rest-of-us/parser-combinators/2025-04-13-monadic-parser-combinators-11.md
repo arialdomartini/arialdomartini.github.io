@@ -17,7 +17,7 @@ library you are building:
 *Context Sensitivity* is the ability of a parser to reference the
 result of other parsers. Basically, it's equivalent to equipping
 parsers with a form of memory. This capability will allow you to parse
-more complex languages, and will dramatically change the way you write
+more complex languages and will dramatically change the way you write
 parsers.  
 As you have surely guessed already, this is about introducing monads.
 We will get there in the very next chapter.
@@ -93,7 +93,7 @@ let ``sequence of <|>`` () =
 ```
 
 This invites us to conceive a combinator that tries all the parsers we
-provide it:
+feed it with:
 
 ```fsharp
 let choice (parsers: 'a Parser list) : 'a Parser =
@@ -141,7 +141,8 @@ It would be nice to write it even more concisely, in Point Free Style
 as:
 
 ```fsharp
-let choice = List.reduce (<|>)
+let choice =
+    List.reduce (<|>)
 ```
 
 but F# type inference would scream at us.
@@ -188,7 +189,7 @@ would like to parse:
 | `"Dec"` | `12`         |
 
 
-Here how to create `12` parsers in one shot:
+Here is how we could create `12` parsers in one shot:
 
 ```fsharp
 let months: int Parser list =
@@ -210,7 +211,7 @@ let monthParsers =
     |> List.mapi (fun idx kw -> ((fun _ -> idx + 1) <!> (str kw)))
 ```
 
-It's easy to coalesce them in a single parser with `choice`:
+Then, we can use `choicea to coalesce them in a single parser:
 
 ```fsharp
 let monthParser = choice monthParsers
@@ -222,14 +223,16 @@ let ``parses a month`` () =
     test <@ run monthParser "not a month" = Failure "Expected Dec" @>
 ```
 
-Notice that when the collection of parsers fails, it emits the error
-of the last parser. This is a bit disappointing, and surely
-suboptimal. There are techniques to improve that, but let's not get
-sidetracked. We have other interesting combinators to invent, first.
+Notice that when this parser fails, it emits the error emitted by the
+last parser in the collection. This is less than ideal. There are
+techniques to improve that, but let's not get sidetracked. We have
+other interesting combinators to invent, first.
 
 Of course, if you want `monthParser` to return an `int` instead of a
-`char`, you can map an `char -> int` to it, using `<!>`. Are you
-getting familiar with this way of mixing those little combinators?
+`char`, you can `map` an `char -> int` function to it.  
+
+Are you getting familiar with this way of mixing these little
+combinators?
 
 ## anyOf
 A very convenient helper function you can build on top of `choose` is
@@ -286,7 +289,6 @@ So, back to our number with arbitrary digits problem. The idea is:
 Let's go.
 
 ```fsharp
-
 let many<'a> (parser: 'a Parser): 'a list Parser = 
     failwith "Not yet implemented"
     
@@ -443,7 +445,7 @@ let rec many parser =
 
 To be precise: this version is not quite correct, as it requires at
 least 1 application of parser (in the parser jargon: this is `many1`).
-`many` should succeeds also in case 0 applications. Easy peacy, `<|>`
+`many` should succeeds also in case 0 applications. Easy peasy, `<|>`
 to the resque:
 
 ```fsharp
@@ -456,7 +458,7 @@ lifted empty list.
 
 It perfectly type checks. This is promising! If it compiles it works,
 right! Until it does not. Damn. Try yourself: if you run the test, it
-enters an infinite loop. It compiled only because $\bot$, or `bottom`,
+enters an infinite loop. It compiled only because `⊥`, or `bottom`,
 the ideal type representing never-returning functions, is a member of
 all the types. What a scam...
 
@@ -514,16 +516,6 @@ Take a long break. Enjoy a Swiss cheese fondue. We will see in [Chapter 12](/mon
 # Comments
 [GitHub
 Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/33)
-
-
-
-{% include fp-newsletter.html %}
-
-
-
-
-# Comments
-[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/33)
 
 
 
