@@ -6,7 +6,6 @@ author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - fsharp
 - functional programming
-- property-based testing
 include_in_index: false
 ---
 ## Arialdo, you are a liar

@@ -5,7 +5,6 @@ author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - fsharp
 - functional programming
-- property-based testing
 ftrou: true
 ---
 You want to invent a new language, and you want to do this in F#,

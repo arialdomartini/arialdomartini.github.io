@@ -5,7 +5,6 @@ author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - fsharp
 - functional programming
-- property-based testing
 include_in_index: false
 ---
 Very well. We have a powerful tool at our disposal for applying

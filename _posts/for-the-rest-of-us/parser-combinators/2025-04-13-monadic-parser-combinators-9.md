@@ -5,7 +5,6 @@ author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - fsharp
 - functional programming
-- property-based testing
 include_in_index: false
 ---
 There is another elementary way to sequence 2 parsers: to only return

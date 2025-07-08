@@ -5,7 +5,6 @@ author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - fsharp
 - functional programming
-- property-based testing
 include_in_index: false
 ---
 Let's write the parser for an XML node. This is a task dressed up as a

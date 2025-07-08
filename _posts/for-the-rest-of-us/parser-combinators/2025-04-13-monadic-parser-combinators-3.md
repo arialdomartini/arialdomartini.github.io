@@ -5,7 +5,6 @@ author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - fsharp
 - functional programming
-- property-based testing
 include_in_index: false
 ---
 So, let's challenge the composability of our imperative parsers.
