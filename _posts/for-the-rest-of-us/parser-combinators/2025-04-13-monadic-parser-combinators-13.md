@@ -9,9 +9,11 @@ include_in_index: false
 ---
 Boiling the problem down, we can say that, in a Context-sensitive
 grammar, we need a parser to read a value &mdash; like a `Foo Parser`
-&mdash; and then use another parser based on that value &mdash; such
-as a `Foo -> Bar Parser`. Keeping types generic, this means that first
-we find an `'a Parser`, then eventually an `'a -> 'b Parser` follows.
+parsing a `Foo` instance &mdash; and then use another parser based on
+that value &mdash; such as a `Foo -> Bar Parser` consuming that `Foo`
+value to generate a `Bar Parser`. Keeping types generic, this means
+that first we find an `'a Parser`, then eventually an `'a -> 'b
+Parser` follows.
 
 Our goal is to write a parser combinator (`bind` or `>>=`) that given
 those 2 elements generates us back a `'b Parser`:
@@ -51,9 +53,9 @@ let ``closingTag works in a context-sensitive grammar`` () =
   test <@ run openCloseP "<pun></xyz>" = Failure ("Expected pun") @>
 ```
 
-The disrupting element is the closing tag parser, that depends on the
-`tagName` value, parsed by the previous parser. The combination of the
-2 parsers is obtained by the application of `>>=`:
+The disrupting element is the closing tag parser, since it depends on
+the `tagName` value parsed by the previous parser. The combination of
+the 2 parsers is obtained by the application of `>>=`:
 
 
 ```fsharp
