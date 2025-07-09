@@ -8,25 +8,28 @@ tags:
 include_in_index: false
 ---
 Let's write the parser for an XML node. This is a task dressed up as a
-walk in the park, but in fact in a park hiding an insidious maze
-inside. Let's see why.
+walk in the park, but in fact hiding an insidious maze inside. Let's
+see why.
 
 ## Opening and closing tags
-To keep things simple, we assume that a node is any text surrounded by
-an opening tag &mdash; such as `<pun>` &mdash; and its corresponding
-closing tag &mdash; in this case `</pun>`. The parser should work with
-arbitrary tag names, so any of the following strings should be
-successfully parsed:
+We assume that a node is any text surrounded by an opening tag &mdash;
+such as `<pun>` &mdash; and its corresponding closing tag &mdash; in
+this case `</pun>`. The parser should work with arbitrary tag names,
+so any of the following strings should be successfully parsed:
 
 * `<pun>I started out with nothing, and I still have most of it</pun>`
 * `<gardenPathSentence>Time flies like an arrow; fruit flies like
   bananas</gardenPathSentence>`<sup>1</sup>
 * `<well>well</well>`
 
+For the sake of simplicity, we won't support nested nodes nor
+attributes.
+
 (<sup>1</sup> By the way: parsing a [Garden Path Sentence][garden-path-sentence] is
 really a topic on its own).
 
-Let's say that we want to parse nodes as instances of this record:
+Let's say that parsing nodes should give us back instances of this
+record:
 
 ```fsharp
 type Node = 
@@ -48,26 +51,34 @@ It really seems that we have all the ingredients we need. Let's write
 this down into code:
 
 ```fsharp
-let tagNameP = many1 (anyOf ['a'..'Z'])
+type Node =
+    { tag: string
+      content: string }
+
+let alphaChars = [ 'a' .. 'z' ] @ [ 'A' .. 'Z' ]
+let punctuationMarks = [' '; ';'; ','; '.']
+
+let tagNameP = many1 (anyOf alphaChars) |>> String.Concat
 
 let openingTagP = tagNameP |> between (str "<")  (str ">")
-let closingTag  = tagNameP |> between (str "</") (str ">")
+let closingTagP = tagNameP |> between (str "</") (str ">")
 
-let content = many (anyOf ['a'..'Z'] @ [' '; ';'; ','])
+let contentP = many (anyOf (alphaChars @ punctuationMarks)) |>> String.Concat
 
 let buildNode openingTag content _closingTag =
     { tag = openingTag
       content = content }
 
-let nodeP = buildNode <!> openingTagP <*> content <*> closingTagP
+let nodeP = buildNode <!> openingTagP <*> contentP <*> closingTagP
 
+[<Fact>]
 let ``parses an XML node`` () =
   let s = "<pun>Broken pencils are pointless</pun>"
-  
-  let expected = 
+
+  let expected =
       { tag = "pun"
         content = "Broken pencils are pointless"}
-  
+
   test <@ run nodeP s = Success ("", expected) @>
 ```
 
@@ -93,38 +104,29 @@ let reverse (s: string) = new string(s.ToCharArray() |> Array.rev)
 ```
 
 Therefore, creating a parser for closing tags should be a matter of
-lifting this `reverse` function to the parser world. We start from:
+lifting this `reverse` function to the parser world. Maybe we could
+try mapping `reverse`, with `<!>`:
 
 ```fsharp
-let tagNameP = many1 (anyOf ['a'..'Z'])
-let openingTagP = tagNameP |> between (str "<")  (str ">")
-let closingTag  = tagNameP |> between (str "</") (str ">")
-```
-
-Maybe we could try mapping `reverse`, with `<!>`:
-
-```fsharp
-let tagNameP = many1 (anyOf ['a'..'Z'])
 let PemaNgat = reverse <!> tagNameP
-
+        
 let openingTagP = tagNameP |> between (str "<") (str ">")
 let closingTag =  PemaNgat |> between (str "</") (str ">")
 ```
 
-Does this work? I don't know, pal, how can we say that? Didn't we just
+Does this work? I don't know, pal, how can I tell? Didn't we just
 forget to work with TDD? Where are tests? Let's put it right at once!
 
 ```fsharp
-[Fact]
+[<Fact>]
 let ``parses an XML tag node with semordnilap tags`` () =
   let s = "<hello>ciao ciao</olleh>"
-  
-  let expected = 
+
+  let expected =
       { tag = "hello"
         content = "ciao ciao"}
-  
+
   test <@ run nodeP s = Success ("", expected) @>
-  
 
 
 [<Theory>]
@@ -141,97 +143,80 @@ let ``possible tag names`` (s: string) =
 [<InlineData("live")>]
 [<InlineData("evil")>]
 let ``possible closing tag names`` (s: string) =
-    test <@ run PemaNgat s = Success("", s)@>
+    test <@ run PemaNgat s = Success("", reverse s)@>
+
 ```
 
-Yes, it works.  
-Did you notice that we have `evil` and `live` in both the test input
-sets for the opening and the closing tags? And in both cases the tests
-are green?  Well, that should not come a surprise: `evil` is a legit
+Yes, it seems to works.  
+Did you notice that we have `evil` and `live` in the test input set
+for for both the opening and the closing tags? And in both cases the
+tests are green?  Well, that's not surprising: `evil` is a legit
 closing tag name, because it's the reverse of `live`. And `live` too
 is a legit closing tag name, because it's the reverse of `evil`. And
-both are legit
-*opening* tag names.  
-On second thought, the test for the closing tag requires that a string
-is the reverse of something. A very loose constraint, after all: any
-string is the reverse of, ehm, its reverse. Does it mean that this
-test would pass no matter the string? Let's find it out with a random
-string:
+both are also legit *opening* tag names.  
+The test for the closing tag requires that a string is the reverse of
+something. On second thought, it's a very loose constraint: any string
+is the reverse of, ehm, its reverse. Does it mean that this test would
+pass no matter the string? Let's find it out with a random string:
 
 ```fsharp
-open System
-
-let ```any string can be both an opening and a closing tag name` () =
-    let random = Random()
-    let letters = [|'a'..'z'|] @ [|'A'..'Z'|] |> Array.ofList
+[<Fact>]
+let ``a random string can be both an opening and a closing tag name`` () =
+    let random = System.Random()
 
     let randomString =
-        [| for _ in 1 .. 10 -> letters.[random.Next(letters.Length)] |]
+        [| for _ in 1 .. 10 -> alphaChars.[random.Next(alphaChars.Length)] |]
         |> System.String
 
-    test <@ run PemaNgat randomString = Success("", s)@>
+    test <@ run PemaNgat randomString = Success("", reverse randomString)@>
 ```
 
-Green. We could even ask FsCheck to generate 100 random strings, to
-dispel any doubt:
-
-```fsharp
-[<Property>]
-let ```any string can be both an opening and a closing tag name` () =
-    test <@ run tagNameP s = Success("", s)@>
-    test <@ run PemaNgat s = Success("", s)@>
-```
-
-Green. And notice that each time a string has been parsed both as an
-opening and a closing tag. That's puzzling.  
 Wait a minute! Does it mean that our XML node parser would just accept
 any closing tag? Let's see:
 
 
 ```fsharp
-[Fact]
-let ``parses an XML tag node with an arbitrary closing tag`` () =
+[<Fact>]
+let ``accepts a wrong closing tag`` () =
 
   let s = "<hello>ciao ciao</picture>"
-  
-  let expected = 
+
+  let expected =
       { tag = "hello"
         content = "ciao ciao"}
-  
+
   test <@ run nodeP s = Success ("", expected) @>
 ```
 
 Uh oh! Not a good news! (Note to self: next time, not only shall I
 write tests before the implementation, but I should also not forget
-the red phase of the red-green-refactor TDD mantra). Is this a bug
-introduced by the semordnilap-based syntax? Let's revert back to the
-conventional tag name rule:
+the red phase of the red-green-refactor TDD mantra. Also, I should
+test both the happy and the failure cas). Is this a bug introduced by
+the semordnilap-based syntax? Let's revert back to the conventional
+tag name rule, using a completely unrelated closing tag:
 
 ```fsharp
 let tagNameP = many1 (anyOf ['a'..'Z'])
 
 let openingTagP = tagNameP |> between (str "<") (str ">")
 let closingTagP = tagNameP |> between (str "</") (str ">")
-let content = many (anyOf ['a'..'Z'] @ [' '; ';'])
-```
 
-What if we use a completely unrelated closing tag?
-
-```fsharp
+[<Fact>]
 let ``XML node test`` () =
   let s = "<pun>Broken pencils are pointless</picture>"
-  
-  let expected = 
+
+  let expected =
       { tag = "pun"
         content = "Broken pencils are pointless"}
-  
+
   test <@ run nodeP s = Success ("", expected) @>
 ```
 
 Oh, no! It's still green! So, this bug is really inherent.
 
 ## Lack of context
-If you think about it, in the definitions of `openingTagP` and `closingTagP`:
+If you think about it, in the definition of `openingTagP` and
+`closingTagP`:
 
 ```fsharp
 let tagNameP = many1 (anyOf ['a'..'Z'])
@@ -242,16 +227,17 @@ let closingTagP = tagNameP |> between (str "</") (str ">")
 
 there is no indication at all that the tag name of the closing tag
 must match the string parsed by the opening tag.  
-"How so?" I can hear you cry. "They are using the very same
-`tagNameP`! They must be the same tag name! It's literally written there!"  
+"How so?" I can hear you cry: "They are using the very same
+`tagNameP`! They must match the same tag name! It's literally written there!"  
 Not quite. `openingTagP` and `closingTagP` share the same tag name
 *parser*, not the same tag name *value*. Remember? A parser is a
-function eventually returning a parsed value. It's not that value.
+function eventually returning a parsed value. It's not that
+value. It's like a promise of a value.
 
-`tagNameP`, as it is defined, would succeed with *any* sequence
-of letters. `PemaNgat` would also succeed with *any* string. Possibly,
-and most likely, with unrelated strings. There is really no
-connection between the two.
+`tagNameP`, as it is defined, would succeed with *any* sequence of
+letters. `PemaNgat` would also succeed with *any* sequence of
+letters. Possibly, and most likely, with unrelated ones. There is
+really no connection between the two.
 
 What we would rather do, instead, is to build `closingTagP` as the
 parser expecting *exactly* the *value* parsed by
@@ -267,23 +253,23 @@ let closingTag (openingTagName: string) =
 
 You see the tragedy? The value of `openingTagName` is not known until
 we physicall run the `openingTagP` parser. Until this page, we have
-encountered several parsers depending on other parsers. In fact, this
-is the first time we have a parser depending on *the result* of
-another parser. Seeing this from another perspective: it's the first
-time that our grammar requires a parser having a notion of its
-surrounding context.
+encountered several parsers depending on other parsers. But this is in
+fact the first time we have a parser depending on *the result* of
+another parser. Watching this from another perspective: it's the first
+time that the elements of our grammar requires parsers having a notion
+of their surrounding context.
 
 Do you remember when I stated "We assume that a node is whatever is
 surrounded by an opening tag &mdash; such as `<joke>` &mdash; and its
 *corresponding* closing tag"? The notion we just forgot to take into
 account is related to that *corresponding* word. It's only intuitive
-that this *corresponding* has to do with some kind of relationship
-between the elements of a grammar and, consequently, some kind of
-binding between its parsers.
+that *corresponding* has to do with some kind of relationship between
+the elements of a grammar and, consequently, some kind of *binding*
+between its parsers.
 
-Indeed, the XML grammar, with closing tags constrained to have a name
-bound to their corresponding opening tag, is a so called
-[Context-sensitive Grammar][context-sensitive-grammar].
+Indeed, grammars with elements depending on each other, like in the
+case of our matching opening and closing tags, are called
+[Context-sensitive Grammars][context-sensitive-grammar].
 
 A parser for this family of grammars requires a new tool that &mdash;
 it could be demonstrated &mdash; cannot be built as a composition of
