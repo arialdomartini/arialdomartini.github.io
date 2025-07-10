@@ -34,60 +34,80 @@ is directly followed by the closing tag:
 
 
 ```fsharp
-let tagNameP = many1 (anyOf ['a'..'Z'])
+let alphaChars = [ 'a' .. 'z' ] @ [ 'A' .. 'Z' ]
+let punctuationMarks = [' '; ';'; ','; '.']
+
+let tagNameP = many1 (anyOf alphaChars) |>> String.Concat
 
 let openingTagP = tagNameP |> between (str "<")  (str ">")
-let closingTag tagName = (str tagName) |> between (str "</") (str ">")
+let closingTagP tagName = (str tagName) |> between (str "</") (str ">")
 
-let bind (m: 'a Parser) (f: 'a -> 'b Parser) =
-    failwith "Not yet implemented"
+let bind m f = failwith "Not yet implemented"
 
 let (>>=) = bind
+let return' v = Parser (fun s -> Success (s, v))
 
-let openCloseP =
-    openingTagP >>= (fun tagName -> closingTag tagName)
+let nodeP = failwith "Not yet implemented"
 
+[<Fact>]
 let ``closingTag works in a context-sensitive grammar`` () =
+  let s = "<pun>Broken pencils are pointless</pun>rest"
 
-  test <@ run openCloseP "<pun></pun>" = Success ("", "pun") @>
-  test <@ run openCloseP "<pun></xyz>" = Failure ("Expected pun") @>
+  let expected =
+      { tag = "pun"
+        content = "Broken pencils are pointless" }
+
+  test <@ run nodeP s = Success ("rest", expected) @>
+
+[<Fact>]
+let ``not matching closing tags raise a failure`` () =
+  let s = "<pun>Broken pencils are pointless</xml>rest"
+
+  test <@ run nodeP s = Failure "Expected pun" @>
 ```
 
 The disrupting element is the closing tag parser, since it depends on
 the `tagName` value parsed by the previous parser. The combination of
 the 2 parsers is obtained by the application of `>>=`:
 
-
 ```fsharp
-let openCloseP = 
-    openingTagP >>= (fun tagName -> closingTagP tagName)
+let nodeP = 
+    openingTagP >>= (fun tagName ->
+        contentP >>= (fun content ->
+            (closingTagP tagName) >>= (fun _ ->
+                return' { tag = tagName; content = content })))
 ```
-
-Read it like this:
-
-* Combining the `openingTagP` with `closingTagP` requires
-* First, to apply `openingTagP`.
-* Then (`>>=`) passing the parsed value (`fun tagName ->`)
-* To the next parser (`closingTagP tagName`)
 
 
 If you squint your eyes you could read the funny `>>=` syntax as:
 
 ```fsharp
 let openCloseP = 
-         openingTagP    >>=    (fun tagName -> closingTagP tagName)
-// apply openingTagP   then    pass tagName to closingTagP 
+         openingTagP    >>=    (fun tagName -> ...)
+// apply openingTagP   then    pass tagName to a lambda continuation
 ```
 
-Oh! Of cours you can write this in Point Free style:
+so you can read the whole sequence as:
+
+* In order to parse an XML node
+* We first parse the opening tag (`openingTagP`).
+* Then, we pass forward the value it parses (`>>= (fun tagName -> ...`)
+* To a continuation. This, in turn will parse the content (`contentP`)
+* Passing forward the parsed value (`>>= (fun content -> ...`) 
+* to the next part. This will use `tagName` to build the
+  parser for the closing tag (`closingTagP tagName`)
+* Finally, handing over (`>>= fun _ ->`) to the last part
+* Whose purpose is to just return an instance of the tag record.
 
 
-```fsharp
-let openCloseP = openingTagP >>= closingTagP
-```
+Notice that `return'` is identical to the `pure'` function introduced
+with Applicative Functors.
 
-Believe me or not, you will eventually find this syntax more
-expressive and clear than the former.  
+If you find this code convoluted because of the value passing boiler
+plate, you are absolutely right: it sucks. Hang in there for a few
+more minutes: soon we will introduce a technique to dramatically
+streamline the code.
+
 Fine. Let's finally implement this infamous `bind` combinator.
 
 ## Follow the type signature
@@ -105,41 +125,71 @@ let bind m f = Parser (fun s ->
     ...)
 ```
 
-We have the input string and `m`, the `'a Parser`. If we run this
-parser with the input string, we will get back an `'a` value:
+We have the input string `s` and `m`, the `'a Parser`. If we run this
+parser with the input string, we will get back a parsing result,
+possibly containing a parsed value `a: 'a`:
 
 ```fsharp
 let bind m f = Parser (fun s ->
-    let a, rest = run m s
+    let resultA = run m s
     ...)
 ```
 
-The `'a` value is exactly what we needed to get the `'b Parser`:
+We are not sure that the parsing succeeded. We'd better pattern
+match. Of course, in case of failure, we can let `binda just fail.
+
+```fsharp
+let bind m f = Parser (fun s ->
+    let resultA = run m s
+    match resultA with
+    | Failure f -> Failure f
+    | Success(rest, a) ->
+        ...)
+```
+
+In case of success, we get the the unconsumed input and the `'a`
+value: exactly what we needed to get the `'b Parser`:
 
 
 ```fsharp
 let bind m f = Parser (fun s ->
-    let a, rest = run m s
-    let bParser = f a)
+    let resultA = run m s
+    match resultA with
+    | Failure f -> Failure f
+    | Success(rest, a) ->
+        let bParser = f a
+        ...)
 ```
 
 We are done! We got the `'b Parser` we wanted. We cannot just return
-it, because our code is all surronded by `Parser (fun s -> ...)` and
-we would end up with a parser inside a parser. Idea: we can run the `b
+it, because our code is surrounded by `Parser (fun s -> ...)`  and we
+would end up with a parser inside a parser. Idea: we can `run` the `b
 Parser` with the `rest` input to get its parsed value:
 
 
 ```fsharp
 let bind m f = Parser (fun s ->
-    let a, rest = run m s
-    let bParser = f a
-    let b = run bParser rest
-    b)
+    let resultA = run m s
+    match resultA with
+    | Failure f -> Failure f
+    | Success(rest, a) ->
+        let bParser = f a
+        run bParser rest)
 ```
 
 Test it. Green!
 
+## Is That All, Folks?
 
+You might not be impressed by this result. In fact, it's an explosive
+one. This little unsuspected `bind` function, together with `return'`,
+is so powerful that it could replace everything you did in the last 13
+chapters. It's such a game changer that F# provides native support for
+its style, which will bring a dramatic shift to both the syntax and
+style of your code, for the better.
+
+If you never enjoyed a Tamil Kootu, that's the perfect chance to give
+it a try. [Chapter 14](/monadic-parser-combinators-14), here we come!
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/33)
