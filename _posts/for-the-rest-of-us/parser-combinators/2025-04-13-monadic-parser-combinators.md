@@ -29,6 +29,7 @@ Parser Combinators. You've always wanted, just admit it.
 11. [Things You Are Not Sure About](/monadic-parser-combinators-11)
 12. [Things You Want To Remember](/monadic-parser-combinators-12)
 13. [Mind The Context](/monadic-parser-combinators-13)
+14. [One Combinator to Rule Them All](/monadic-parser-combinators-14)
 
 ## Introduction
 
