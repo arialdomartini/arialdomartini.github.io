@@ -133,7 +133,7 @@ tuple, you might write:
   
 ```fsharp
 let tuple : (string * DateTime * int) Parser = 
-    parse {
+    parser {
         let! s = singleQuotedString
         let! _ = comma
         let! d = date
@@ -150,7 +150,7 @@ let ``parses a tuple`` () =
 
 Read it as:
 
-- `tuple` is a parser (see that `parse {`)
+- `tuple` is a parser (see that `parser {`)
 - that builds a `(string * DateTime * int)` from
 - a single quoted string
 - a date

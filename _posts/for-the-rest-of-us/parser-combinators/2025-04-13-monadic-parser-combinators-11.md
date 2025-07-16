@@ -469,11 +469,11 @@ could possibly work, but that's not the case with F#.
 What about this implementation?
 
 ```fsharp
-let rec many p =
-    parser {
-        let! r = p
-        let! rest = many p
-        return r :: rest
+let rec many parser =
+    parse {
+        let! x = parser
+        let! xs = many parser
+        return x :: xs
     } <|> (pure' [])
 ```
 
@@ -481,13 +481,13 @@ OK, this is a syntax we never encountered before. I don't expect you
 to immediately understand it, if you never encountered do-notation.
 But maybe you can grasp some of it:
 
-* It's a parser, because of that initial `parser {`.
-* It returns the list `r :: rest`.
-* The head `r` is somehow related to running the parser (see that
-  `let! r = p`).
-* The tail `rest` is related to a recursive call to `many p`.
+* It's a parser, because of that initial `parse {`.
+* It returns the list `x :: xs`.
+* The head `x` is somehow related to running the parser (see that
+  `let! x = parser`).
+* The tail `xs` is related to a recursive call to `many parser`.
 * The last `<|> pure' []` accounts for what we saw before: `many`
-  shall not fail if the parser `p` cannot be applied even once.
+  shall not fail if the parser `parser` cannot be applied even once.
   
 I bet that you agree: besides the funny new syntactic elements, this
 version is way more linear than the original:

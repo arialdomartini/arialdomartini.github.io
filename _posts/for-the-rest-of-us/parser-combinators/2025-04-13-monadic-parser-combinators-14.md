@@ -74,6 +74,7 @@ let map = (<<|)
 let map (f: 'a -> 'b) (a: 'a Parser) : 'b Parser =
     pure' f <*> a
 ```
+
 We can do the same with Monads. Try yourself before reading the
 solution: how to write `map` only using `>>=` and `return`? It's not
 an easy exercise but it is worth trying. Anyway, fear not: later I
@@ -184,8 +185,8 @@ quite something!
 
 I guess that the result might appear cryptic and magic. I swear that,
 after playing enough with FP, you will find it understandable. And I
-promise that when we will eventually distill the do-notation, you will
-even find it familiar.
+promise that when we will eventually distill the *do notation*, you
+will even find it familiar.
 
 ## Look ma, applicative functors either!
 Writing `map` in terms of `>>=` was cool. But we already wrote it

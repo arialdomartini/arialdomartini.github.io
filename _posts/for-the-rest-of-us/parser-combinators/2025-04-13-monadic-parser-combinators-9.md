@@ -269,7 +269,7 @@ let ``date in tags`` () =
     test <@ run contentInTagsP "<foobar>2025-12-11</foobar>the rest" = Success ("the rest", DateOnly(2025,12,11))@>
 ```
 
-The implementationis is straighforward, once you have `.>>` and `>>.`:
+The implementation is straighforward, once you have `.>>` and `>>.`:
 
 ```fsharp
 let between opening closing content =
