@@ -67,9 +67,9 @@ parsing of GUIDs, strings and dates to some specialized
 sub-functions. Each would have a specific signature:
 
 ```fsharp
-var parseGuid: string -> Guid
-var parseString: string -> string
-var parseDateOnly: string -> DateOnly
+val parseGuid: string -> Guid
+val parseString: string -> string
+val parseDateOnly: string -> DateOnly
 ```
 
 `parseGuid` knows how to get a GUID value from a string surrounded by
