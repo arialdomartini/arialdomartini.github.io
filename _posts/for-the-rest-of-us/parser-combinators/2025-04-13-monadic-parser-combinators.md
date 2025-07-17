@@ -9,7 +9,7 @@ ftrou: true
 ---
 You want to invent a new language, and you want to do this in F#,
 don't you? And, of course, you want to base its parser on Monadic
-Parser Combinators. You've always wanted, just admit it.
+Parser Combinators. You've always wanted. So, let's make it happen!
 
 <!--more-->
 
@@ -35,12 +35,12 @@ Parser Combinators. You've always wanted, just admit it.
 ## Introduction
 
 The compiler of your beautiful new language &mdash; with which you
-want to bring the use of `goto` and `null` back to life &mdash; will
-have several components:
+will bring the use of `goto` and `null` back to life &mdash; will have
+several components:
 
 * A Lexer, for splitting the source code into tokens.
-* A Parser, to analyze the token sequence and to convert it into a
-  syntax tree, and to check the grammatical structure.
+* A Parser, to convert the token sequence into a syntax tree, and to
+  check the grammatical structure.
 * An Intermediate Code Generator.
 * A Linker, and so on.
 
@@ -63,8 +63,6 @@ type AbstractSyntaxTree =
 val parser : SourceCode -> AbstractSyntaxTree
 ```
 
-Most likely, you would like the parser to fail and to emit syntax
-errors in case there are any.  
 If you think about it, that's not qualitatively different from
 deserializing a JSON string:
 
@@ -107,7 +105,7 @@ A parser is a function that takes loosely-structured data (usually
 structured data out of it, accordingly to the rules of a formal
 grammar.
 
-## An inherent recursive structure
+## Mr.James, It's Parsers all The Way Down
 
 We say that the input data is loosely-structured because, in fact, it
 is not granted to adhere to the rules of the chosen grammar. Indeed,
@@ -131,14 +129,14 @@ Now, if writing the trivial parsers is, well, trivial, the only
 challenge that's left is to learn how to *combine* parsers. That is,
 how Parsers Combinators work.
 
-That's the goal of this series.
+That's the goal of these pages.
 
 ## How we will proceed
 
-There are many similar series online, some specific to F#, such as
-[The "Understanding Parser Combinators" series][wlaschin] by Scott
-Wlaschin, many others based on Haskell, like the excellent [Parser
-Combinators: a Walkthrough, Or: Write you a Parsec for Great
+There are many similar series online, some specific to F# &mdash; such
+as [The "Understanding Parser Combinators" series][wlaschin] by Scott
+Wlaschin &mdash; many others based on Haskell, like the excellent
+[Parser Combinators: a Walkthrough, Or: Write you a Parsec for Great
 Good][leblanc] by Antoine Leblanc.  
 This post tries to stand out in a few different ways:
 
@@ -160,10 +158,17 @@ This post tries to stand out in a few different ways:
   I hope I can help you skip past that initial disorientation
   entirely.
 
+- Parser Combinators are the the *leit-motiv* and serve as the central
+  theme of this book. Nevertheless, we'll often stray from the main
+  path and let our imagination roam, exploring a variety of other
+  subjects along the way. You can consider these pages an invitation
+  to discover functors, applicatives, and monads.
+
 - We will write code with Test-Driven Development.  
-Isn't it ironic that we developers often lament the absence of tests
-in our daily job projects and yet, when it comes to writing posts,
-tutorials and books, we never address testing at all?
+  Isn't it ironic that we developers often lament the absence of tests
+  in our daily job projects and yet, when it comes to writing posts,
+  tutorials and books, we never address testing at all?
+
 
 Fine, enough with the introduction. Ready? Treat yourself to a sorbet,
 then [let's get started](/monadic-parser-combinators-2).
@@ -186,11 +191,13 @@ work by Nanou.
 * [Scott Wlaschin - The "Understanding Parser Combinators" series][wlaschin]
 * [Antoine Leblanc - Parser Combinators: a Walkthrough, Or: Write you
   a Parsec for Great Good][leblanc]
-  
+* [Turtles all the way down][turtles]
+
 [recursive-descent-parser]: https://en.wikipedia.org/wiki/Recursive_descent_parser
 [tree-sitter]: https://tree-sitter.github.io/tree-sitter/
 [wlaschin]: https://fsharpforfunandprofit.com/series/understanding-parser-combinators/
 [leblanc]: https://hasura.io/blog/parser-combinators-walkthrough
+[turles]: https://en.wikipedia.org/wiki/Turtles_all_the_way_down
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/33)
