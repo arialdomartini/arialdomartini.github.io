@@ -17,7 +17,7 @@ Parser Combinators. You've always wanted. So, let's make it happen!
 
 
 1. [Intro](/monadic-parser-combinators)
-2. [Composition](/monadic-parser-combinators-2)
+2. [5 Shades Of Composability](/monadic-parser-combinators-2)
 3. [Combinators!](/monadic-parser-combinators-3)
 4. [I Told You Not Mess With The Signature!](/monadic-parser-combinators-4)
 5. [Two Shades of Coupling](/monadic-parser-combinators-5)
