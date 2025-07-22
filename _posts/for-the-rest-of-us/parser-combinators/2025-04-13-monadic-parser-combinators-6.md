@@ -335,6 +335,10 @@ chapter](monadic-parser-combinators-7).
 Enough with reading code: let's finally hit some keys!
 
 
+[Previous - A Different Kind of Coupling](/monadic-parser-combinators-5)
+⁓ [Next - Parser-Powered Function Application!](/monadic-parser-combinators-7)
+
+
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/33)
 

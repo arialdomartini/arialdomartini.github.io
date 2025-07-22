@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Monadic Parser Combinators in F# - Combinators!"
+title: "Monadic Parser Combinators in F# - That's a Combinator!"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - fsharp
@@ -211,6 +211,10 @@ functors and monads. Bear with me.
 
 Have a slice of Black Forest Cake, you deserve it and you need energy
 for [the next chapter](monadic-parser-combinators-4).
+
+[Previous - 5 Shades Of Composability](/monadic-parser-combinators-2)
+⁓ [Next - Combinators!](/monadic-parser-combinators-4)
+
 
 # References
 

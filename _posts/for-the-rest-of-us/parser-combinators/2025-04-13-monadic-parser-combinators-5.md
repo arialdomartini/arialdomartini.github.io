@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Monadic Parser Combinators in F# - Two Shades of Coupling"
+title: "Monadic Parser Combinators in F# - A Different Kind of Coupling"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - fsharp
@@ -134,7 +134,9 @@ us to re-invent &mdash; yet another time &mdash; monads.
 
 Take a break, bite an apple, then jump to [the next installment](/monadic-parser-combinators-6).
 
-# References
+[Previous - I Told You Not To Mess With
+The Signature!](/monadic-parser-combinators-4)
+⁓ [Next - Bird's-Eye View Of What You Will Build](/monadic-parser-combinators-6)
 
 
 # Comments

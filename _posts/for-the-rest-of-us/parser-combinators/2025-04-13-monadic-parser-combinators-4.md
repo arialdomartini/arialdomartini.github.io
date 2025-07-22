@@ -365,7 +365,7 @@ let ``falls back to second parser if first parser fails`` () =
 ```
 
 
-Voil�, no more exceptions!  
+Voilà, no more exceptions!  
 Unfortunately, the same cannot be said for `parsePerson`:
 
 
@@ -385,7 +385,7 @@ let parsePerson: Person Parser = fun input ->
                         match parseBirthday remaining with
                         | Ok (remaining, birthday) ->
                             match parseTillTheEnd remaining with
-                            | Ok (remaining, _) ->        
+                            | Ok (remaining, _) ->
                                 Ok (remaining,
                                     { Id = id
                                       Name = name
@@ -413,7 +413,9 @@ proceed.
 A quick espresso? Good idea, it's the perfect moment for a break! See
 you at the [5th chapter](monadic-parser-combinators-5).
 
-# References
+[Previous - That's a Combinator!](/monadic-parser-combinators-3)
+⁓ [Next - A Different Kind of Coupling](/monadic-parser-combinators-5)
+
 
 
 # Comments

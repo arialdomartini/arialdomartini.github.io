@@ -338,7 +338,7 @@ relax. When ready, jump to [the next
 chapter](/monadic-parser-combinators-3).
 
 [Previous - Intro](/monadic-parser-combinators) ⁓ [Next -
-Chapter 3: Combinators!](/monadic-parser-combinators-3)
+That's a Combinator!](/monadic-parser-combinators-3)
 
 
 # References
