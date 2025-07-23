@@ -39,7 +39,7 @@ type ParseResult<'a> =
 type Parser<'a> = Parser of (Input -> 'a ParseResult)
 ```
 
-This defined, the details about passing `remaining` and handling
+This defined, the details about passing `rest` and handling
 errors are not directly visible from the outside. Good for information
 hiding.  A drawback of having the function wrapped inside a `Parser`,
 though, it that you can't direcly apply it to a string input. A helper
@@ -203,7 +203,7 @@ at first. In this chapter you will build `|>>` and `<<|`.
 
 ## From the F# native function application...
 So, the idea is to develop an alternative to the F# native function
-application that, under the hood, takes care of passing `remaining`
+application that, under the hood, takes care of passing `rest`
 around and of handling errors.
 
 What's the native F# function application, for a starter?

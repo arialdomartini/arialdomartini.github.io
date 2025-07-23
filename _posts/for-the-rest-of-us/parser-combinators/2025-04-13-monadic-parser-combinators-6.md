@@ -12,7 +12,7 @@ The gist of the previous chapter is: we should factor the structural
 dependencies away from our code.
 
 This will let us write and combine parsers focusing on the essence of
-parsing, ignoring the uninteresting mechanic of passing `remaining`
+parsing, ignoring the uninteresting mechanic of passing `rest`
 around and of pattern-matching errors. If we find a way to abstract
 over these aspects, we could think of having:
 
@@ -172,7 +172,7 @@ the input.
 In reality, what you see on the right side of a `let!` is not a parsed
 value, but a parser. The special syntax `let!` runs the parser on the
 right, saves its result in the variable on the left and then continues
-parsing the rest, doing all the magic about passing `remaining` and
+parsing the rest, doing all the magic about passing `rest` and
 pattern matching the `Result`. Also in this case: we will build this
 syntax by hand, from the ground up, so don't worry if you cannot wrap
 your head around it just yet.
