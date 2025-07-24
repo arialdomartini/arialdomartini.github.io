@@ -7,80 +7,101 @@ tags:
 - functional programming
 include_in_index: false
 ---
-    
-The gist of the previous chapter is: we should factor the structural
-dependencies away from our code.
+I sometimes feel uneasy when books keep providing too many details
+without giving a hint of where things are headed. This chapter takes a
+more relaxed approach, setting aside implementation details to offer
+you an early overview of what to expect. I hope it helps you getting
+oriented as you read the next chapters.
 
-This will let us write and combine parsers focusing on the essence of
-parsing, ignoring the uninteresting mechanic of passing `rest`
-around and of pattern-matching errors. If we find a way to abstract
-over these aspects, we could think of having:
+The gist of the previous few pages is: we should factor structural
+dependencies away from our code. This will allow us to create and
+combine parsers while focusing on the essence of parsing, without
+getting bogged down by the uninsteresting mechanical details of
+passing `rest` and of pattern-matching errors. Once we understand how
+to abstract these concerns, we can set our sights on developing the
+following tools:
 
-1. Easy-to-use functions for combining generic parsers.
-2. Operators for building parsing-combining expressions.
-3. A special syntax for manipulating parsers with imperative code,
-  with the same ease of manipulating values.
+1. Some easy-to-use functions for combining generic parsers.
+2. Some operators for building more fluent parsing-combining
+   expressions.
+3. A special syntax for manipulating parsers in imperative style
+   &mdash; of course, while still being purely functional.
 4. Lifting functions and operators, to project ordinary functions into
   the Parser world.
 
-Let me give you some examples for each of those 4 categories.
+Let me show you some examples for each of those 4 categories.
 
-## Functions for combining generic parsers
-
-Imagine that, building your language, you already managed to parse
-predicates like `(a or b) and not callme()` with a parser called
-`predicate`, and arbitrary code blocks with a parser called
-`codeBlock`. You want to have a parser able to build an internal
-representation of an `if` statement:
-
-```fsharp
-type If =
-    { Predicate: Predicate
-      CodeBlock: CodeBlock }
-```
-
-from a source code like:
+## Functions For Combining Generic Parsers
+Your language needs a switch statement. You get a burst of inspiration
+and come up with this:
 
 ```csharp
-IF -> <<whatever_predicate>>
-  whatever_code_block
+SWITCH
+/condition/ ~~ <block>
+/condition/ ~~ <block>
+/condition/ ~~ <block>
+...
 ```
 
-(I'm amazed by the beauty of this syntax: definetely, I'm a fan of your language).
-
-You will be able to build the new parser combining the 2 existing
-`predicate` and `codeBlock` with something like:
+The beauty of this syntax! I'm such a fan of your language! You wish
+to parse this as an instance of `Switch`:
 
 ```fsharp
-let parseIf =
-    predicate 
-    |> between (str "IF -> <<") (str ">>")
-    |> andThen codeBlock
-    |>> fun (predicate, codeBlock) -> 
-          { Predicate = predicate
-            CodeBlock = codeBlock }
+type SwitchBranch = { Condition : Condition; Block : Block }
+type Switch = { Branches : SwitchBranch list }
 ```
 
-Read it as:
+Imagine that you already managed to have a parser for `predicate` and
+one for `block`. Presto! Here is `switchParser`:
 
-- build a parser that
-- given any predicate
-- that is surrounded by `IF -> <<` and `>>`
-- and followed by any code block
-- returns an instance of the custom type `If`, containing the parsed
-  predicate and the parsed code block.
+```fsharp
+let branch =
+    tuple3
+        (condition |> between (pchar '/') (pchar '/'))
+        (pstring " ~~ ")
+        (block |> between (pchar '<') (pchar '>'))
+    |> map (fun (cond, _, block) -> { Condition = cond; Block = block })
 
+let branches =
+    branch |> sepBy (pchar '\n')
 
-I skated over parsing the empty spaces and the indentation, but I hope
-you get the idea: you can use combinators like `between` and `andThen`
-to *describe* your syntax and to get back a new parser, without being
-distracted by the unconsumed input and the error handling. In
-particular, notice the arguments we are passing these `between` and
-`andThen` functions: they are by themselves parsers. For example: `str
-">>"` is not the string `">>"`, but a parser that succeeds when the
-input contains `>>`.  
-You are actually building a new parser combining other parsers in a
-descriptive way.
+let switchParser =
+    tuple3
+        (pstring "SWITCH")
+        (pchar '\n')
+        branches
+    |> map (fun (_, _, branches) -> { Branches = branches })
+```
+
+Read it from the bottom:
+
+- the `switchParser` parses 3 elements in a sequence (`tuple3`):
+  - the initial string `SWITCH`
+  - a newline
+  - and then all the branches (the `branches` parser).
+- In turn, the branches section is:
+  - a repetition of branch elements (`branch`)
+  - separated by newlines `sepBy (pchar '\n')`
+- And, finally, what's the syntax of a branch? It's 3 elements:
+  - a condition, surronded by `/`
+  - a lovely `~~`
+  - and a block, between `<` and `>`
+
+I hope you get the idea: you can use combinators like `between` and
+`sepBy` to *describe* your syntax and to build parsers without being
+distracted by the unconsumed input and the error handling. You can see
+this as an internal Domain Specific Language that tries to be more
+descriptive than imperative.
+
+Also, note that the arguments we feed `between` and `sepBy` with are
+parsers themselves. The outputs of `between` and `sepBy` are also
+parsers, which are then fed into `branch`, producing yet another
+parser. This parser is subsequently passed to `branches`, which
+multiplies it and generates a new parser. Finally, all of this
+culminates in `switchParser`, the outermost parser. [Satoshi
+Kon][paprika] would be surely delighted by this recursive dreamscape,
+where each parser unfolds into another parser, like a never ending
+spiral of dreams nested within dreams.
 
 ## Operators for building parsing-combining expressions
 
@@ -334,6 +355,11 @@ chapter](monadic-parser-combinators-7).
 
 Enough with reading code: let's finally hit some keys!
 
+
+# Refeences
+[Satoshi Kon - Paprika (2006)][paprika]
+
+[paprika]: https://en.wikipedia.org/wiki/Paprika_(2006_film)
 
 [Previous - A Different Kind of Coupling](/monadic-parser-combinators-5)
 ⁓ [Next - Parser-Powered Function Application!](/monadic-parser-combinators-7)
