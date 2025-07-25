@@ -103,22 +103,61 @@ Kon][paprika] would be surely delighted by this recursive dreamscape,
 where each parser unfolds into another parser, like a never ending
 spiral of dreams nested within dreams.
 
-## Operators for building parsing-combining expressions
-
-Given 3 parsers:
-
-- one able to detect an opening tag
-- one able to detect a closing tag
-- one that parses something (you don't care what)
-
-then you can think of transforming a "parser of something" into a
-"parser of something surrounded by tags", with:
+## Operators For Building Parsing-Combining Expressions
+Sometimes code is more expressive when infix operators are used. The
+syntax of F# is often regarded as a notable example, because it allows
+you to write expressions in a way that closely resembles natural
+language. Instead of a series of nested function calls like:
 
 ```fsharp
-let surroundedBy before after parser = before >>. parser .>> after
+let res =
+    saveAudit "user_flow" (
+        sendWelcomeIfNew "welcome_template" (
+            updateLastLogin true (
+                fetchProfile "basic" (
+                    getUser 42))))
+
 ```
 
-Read `a >>. b` as:
+one may prefer a cascade of calls connected with the pipe operator
+`|>`:
+
+```fsharp
+let res =
+    getUser 42
+    |> fetchProfile "basic"
+    |> updateLastLogin true
+    |> sendWelcomeIfNew "welcome_template"
+    |> saveAudit "user_flow"
+```
+
+Since F# supports custom operators (C#, why, why don’t you?) it is
+only logic that you will want some convenient infix operators for
+manipulating parsers.
+
+Here's an example. You can think of a combinator to transform a
+*parser of something* into a *parser of something surrounded by
+tags*. It would take 3 parameters:
+
+- A parser able to detect an opening tag.
+- A parser for the closing tag.
+- The parser you want to enrich.
+
+Here's an implementation:
+
+```fsharp
+let between before after parser = 
+    before >>. parser .>> after
+```
+
+Besided the implementation &mdash; which we will see in the next pages
+&mdash; you can think to `>>.` and `.>>` as pipe operators similar to
+the familiar `|>`: they connect the left parser with the right
+parser. See the `.` on one side? It indicates which parser you want to
+obtain the result from; the other parser will be executed, but then
+its result will be ignored.
+
+So, an expression like `a >>. b` can be read as:
 
 - give me a parser that
 - expects whatever the parser `a` expects
@@ -126,12 +165,11 @@ Read `a >>. b` as:
 - and, finally, returns only the thing parsed by `b`, dropping the
 result of `a`.
 
-Don't stress too much yourself understanding `>>.` and `.>>` just yet.
-We will build several other little operators like these, so you'll
-have plenty of time to grasp them. For now, just get the idea: you
-will end up enriching F# with a bunch of new little grammatical
-constructs and syntactic elements, to make your parsing language more
-expressive.
+We will build several other little operators, like `|>>`, `>>=`, `<|>`
+and the like. You'll have plenty of time to grasp them. For now, just
+get the idea: you will end up enriching F# with a bunch of new little
+grammatical constructs and syntactic elements, to make your parsing
+language more expressive.
 
 
 ## Special syntax for writing imperative code
