@@ -146,7 +146,7 @@ Take a break, bite an apple, then jump to [the next installment](/monadic-parser
 
 [Previous - I Told You Not To Mess With
 The Signature!](/monadic-parser-combinators-4)
-⁓ [Next - Bird's-Eye View Of What You Will Build](/monadic-parser-combinators-6)
+⁓ [Next - Mapping the Journey](/monadic-parser-combinators-6)
 
 
 # Comments

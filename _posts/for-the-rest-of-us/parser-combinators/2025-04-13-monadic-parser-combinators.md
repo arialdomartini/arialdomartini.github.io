@@ -20,7 +20,7 @@ Parser Combinators. You've always wanted. So, let's make it happen!
 3. [That's a Combinator!](/monadic-parser-combinators-3)
 4. [I Told You Not Mess With The Signature!](/monadic-parser-combinators-4)
 5. [A Different Kind of Coupling](/monadic-parser-combinators-5)
-6. [Bird's-Eye View Of What You Will Build](/monadic-parser-combinators-6)
+6. [Mapping the Journey](/monadic-parser-combinators-6)
 7. [Parser-Powered Function Application](/monadic-parser-combinators-7)
 8. [Here Comes The Tuple](/monadic-parser-combinators-8)
 9. [Things You Don't Care About](/monadic-parser-combinators-9)
