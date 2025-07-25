@@ -172,69 +172,82 @@ grammatical constructs and syntactic elements, to make your parsing
 language more expressive.
 
 
-## Special syntax for writing imperative code
-
-We would like to manipulate parsers with the same ease of manipulating
-values. For example, for parsing:
-
-```
-'john',2025-01-02,42
-```
-
-as a:
+## Special Syntax For Writing Imperative Code
+Sometimes infix operators are beautiful. Sometimes the dense syntax
+they produce is too much for our brain to crunch, and we prefer a more
+familiar, imperative style. Wouldn't be amazing if F# let you write
+imperative-like code, while making sure it's still functional?  Enter
+do-notation, or computation expressions. Here is how the `between`
+combinator we defined before can be written with this style:
 
 ```fsharp
-(string * DateTime * int)
+let between parser openTag closeTag =
+    parse {
+        let! _ = openTag
+        let content = parser
+        let! _ = closeTag
+        
+        return content
+    }
 ```
 
-tuple, you might write:
+- See the `parse {` in the second line? It makes it clear you are
+building a parser.
+- Each line runs a parser and stores the resulting parsed value in
+  variable, for future use.
+- Notice how they use a special parser-powered `let!` keyword.
+- It is apparent which values are being ignored and which one is
+  returned.
+  
+Despite the syntax seems a series of statements, it is in fact a
+combination of high-order functions. F#'s syntactic sugar magic lets
+you ignore this fact and just focus on the task at hand. We will see
+in a few pages how this works under the hood. For the time being, I
+invite you to see this as a way to easily express parsing activities
+that you wish to execute in a specific sequence.  
+For example, say you want to parse a tuple:
+
+```
+(42, 99)
+```
+
+as an instance of:
+
+```fsharp
+(int * int)
+```
+
+So, it's a `(` followed by a number, then a comma, then some spaces,
+etc. The corresponding needed parser is pretty much a literal
+translation of this description:
   
   
 ```fsharp
-let tuple : (string * DateTime * int) Parser = 
+let tuple : (int * int) Parser = 
     parser {
-        let! s = singleQuotedString
+        let! _ = str "("
+        
+        let! a = number
         let! _ = comma
-        let! d = date
-        let! _ = comma
-        let! i = number
-        return (s, d, i) }
-
-[<Fact>]
-let ``parses a tuple`` () =
-    let input = "'john',2025-01-02,42"
-
-    test <@ run tuple input = ("john", DateTime(2025,01,02), 42)@>
+        let! _ = many space
+        let! b = number
+        
+        let! _ = str ")"
+        
+        return (a, b)
+    }
 ```
 
-Read it as:
+Isn't this very conveniently linear? It looks like just assigning
+parsed values to variables. In fact, what you see on the right side of
+a `let!` is not a parsed value, but a parser. The special `let!` runs
+the parser on the right side, saves its result in the variable on the
+left side (possibly, ignoring the result) and then continues parsing
+the rest, doing all the magic about passing `rest` and pattern
+matching the `Result`.
 
-- `tuple` is a parser (see that `parser {`)
-- that builds a `(string * DateTime * int)` from
-- a single quoted string
-- a date
-- and a number
-- separate by commas.
-
-Squinting your eyes, you can think that a sequence of `let!`
-statements like:
-
-```fsharp
-    let! s = singleQuotedString
-    let! d = date
-    let! i = number
-```
-
-is a way to assign to variables values magically being distilledfrom
-the input.
-
-In reality, what you see on the right side of a `let!` is not a parsed
-value, but a parser. The special syntax `let!` runs the parser on the
-right, saves its result in the variable on the left and then continues
-parsing the rest, doing all the magic about passing `rest` and
-pattern matching the `Result`. Also in this case: we will build this
-syntax by hand, from the ground up, so don't worry if you cannot wrap
-your head around it just yet.
+Of course, you can have any complexity there, like recursive
+calls or nested computation expressions. More on this in the upcoming pages.
 
 
 ## Lifting functions and operators
