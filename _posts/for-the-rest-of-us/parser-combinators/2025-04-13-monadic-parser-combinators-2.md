@@ -7,9 +7,9 @@ tags:
 - functional programming
 include_in_index: false
 ---
-You have surely noticed that people into functional programming have
-an obsession with the notion of composition. For example, you could
-have stumbled into sentences such as:
+You have surely noted that people into functional programming have an
+obsession with the notion of composition. For example, you could have
+stumbled into sentences such as:
 
 - Exceptions don't compose well.
 - Locks are bad because they don't compose.

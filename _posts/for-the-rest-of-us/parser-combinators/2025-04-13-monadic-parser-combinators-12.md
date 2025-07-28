@@ -148,11 +148,11 @@ let ``possible closing tag names`` (s: string) =
 ```
 
 Yes, it seems to works.  
-Did you notice that we have `evil` and `live` in the test input set
-for for both the opening and the closing tags? And in both cases the
-tests are green?  Well, that's not surprising: `evil` is a legit
-closing tag name, because it's the reverse of `live`. And `live` too
-is a legit closing tag name, because it's the reverse of `evil`. And
+Did you note that we have `evil` and `live` in the test input set for
+for both the opening and the closing tags? And in both cases the tests
+are green?  Well, that's not surprising: `evil` is a legit closing tag
+name, because it's the reverse of `live`. And `live` too is a legit
+closing tag name, because it's the reverse of `evil`. And
 both are also legit *opening* tag names.  
 The test for the closing tag requires that a string is the reverse of
 something. On second thought, it's a very loose constraint: any string

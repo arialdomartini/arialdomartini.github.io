@@ -84,8 +84,8 @@ let f a b c = $"{a}, {b}, {c}"
 let d = f 42 true "foobar"
 ```
 
-Ah, much better! But, notice: it's just syntactic sugar. This is still
-a function returning a function &mdash; in turn, returning a function.
+Ah, much better! But, note: it's just syntactic sugar. This is still a
+function returning a function &mdash; in turn, returning a function.
 
 ## A crocked Function Application
 What about the Parser-Powered Function Application `<<|` that we have
@@ -173,7 +173,7 @@ We left with this:
 let fa: ('b -> 'c -> 'd) Parser = f <!> a
 ```
 
-Notice: it's a 2-parameter function inside a Parser. We want to apply
+Note: it's a 2-parameter function inside a Parser. We want to apply
 it to the next argument, a `'b Parser`:
 
 [<Fact>]
@@ -287,7 +287,7 @@ let ``ap with a 1-parameter function`` () =
     test <@ run (fP <*> aP) "some input" = Success ("some input", 84)@>
 ```
 
-Notice that in the test we have created 2 super simple parsers, which
+Note that in the test we have created 2 super simple parsers, which
 do not even consume the input. `aP` just returns a Parser-wrapped
 `42`, `fP` a Parser-wrapped `fun i -> i * 2`.
 
@@ -497,7 +497,7 @@ let makeFoo (n: int) (_command: string) (date: DateOnly) : Foo =
     Foo dates
 ```
 
-Notice that `_command` is ignored. In fact, we want the parser to
+Note that `_command` is ignored. In fact, we want the parser to
 ensure that the required string is found, but not to include it in the returned value.  
 Then, we apply `makeFoo` to parsers of values &dmash; instead of to
 values &mdash; using `<!>` and `<*>`:

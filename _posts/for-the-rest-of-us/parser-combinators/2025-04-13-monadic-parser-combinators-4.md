@@ -270,10 +270,10 @@ let valueN, rest = parseN rest
 
 for a bit more.
 
-Please, notice that this mechanism of passing `rest` around
-&mdash; which is now polluting `parsePerson` &mdash; has nothing to do
-with parsing a `Person`: it is the consequence of having changed the
-parser signature; if you will, it was caused by a *structural* or a
+Please, note that this mechanism of passing `rest` around &mdash;
+which is now polluting `parsePerson` &mdash; has nothing to do with
+parsing a `Person`: it is the consequence of having changed the parser
+signature; if you will, it was caused by a *structural* or a
 *non-functional* change. Therefore, it is a problem doomed to affect
 all our parsers, from now on. Damn!  
 This is what the previous chapter referred to as the *effectful
@@ -338,7 +338,7 @@ or we return it in any case:
 type Parser<'a> = Input -> Result<'a, ParseError> * Rest
 ```
 
-Notice the position of `Rest`: in one case it is part of the
+Note the position of `Rest`: in one case it is part of the
 successful case of `Result`, in the other it is external to `Result`.
 Both approaches are viable and both will throw a wreck on the code we
 have written so far, making it apparent that we coupled the error
