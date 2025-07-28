@@ -151,7 +151,7 @@ let between before after parser =
     before >>. parser .>> after
 ```
 
-Besided the internal implementation of those `>>.` and `.>>` &mdash;
+Besides the internal implementation of those `>>.` and `.>>` &mdash;
 which we will see in the next pages &mdash; you can think to them as
 pipe operators similar to the familiar `|>`: they connect the left
 parser with the right parser. See the `.` on one side of them? It

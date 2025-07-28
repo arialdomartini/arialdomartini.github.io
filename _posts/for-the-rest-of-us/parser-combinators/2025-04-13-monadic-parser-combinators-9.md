@@ -8,19 +8,16 @@ tags:
 include_in_index: false
 ---
 There is another elementary way to sequence 2 parsers: to only return
-the parsed value of one and just ignoring the parsed value of the
-other one.
+the parsed value of one and just ignoring the value of the other.
 
-WAT? Why one would possibly want to do that? What's the point of
-parsing something only to discard its value?
-
-Well, think about it. I said "ignoring the parsed value of the other
-one", not "ignoring the other one" altogether. I mean, you will still
-run the parser you are going to ignore the result of. It will still
-fail if it does not like the input you are giving it.  
-Indeed, it is possible that while parsing an input string you require
-something specific to be present, and yet you are not interested in
-getting back its value.
+WAT? Why one would possibly wish to do that? What's the point of
+parsing something only to discard its value? Well, think about it: I
+said "ignoring the parsed value of the other", not "ignoring the
+other" altogether. I mean, you will still run the parser you are going
+to ignore the result of. It will still fail if it does not like the
+input you are giving it. Indeed, it is perfectly legit that, while
+processing an input string, you wish something specific to be present,
+and not to be interested in getting back its value.
 
 You have already strumbled upon this case. Remember when in [Chapter
 2](/monadic-parser-combinators-2) we imagined a possible (exquisite)
@@ -42,19 +39,18 @@ type Person =
       Birthday: DateOnly }
 ```
 
-Focus on the `Id`. You defined that its GUID value must be surronded
-by `*`. Of course you want to make sure that during the parsing
-exactly one leading `*` and one trailing `*` are found, and of course
-you will raise an error if that's not the case. Yet, in order to build
-a `Guid` you are only interested in capturing the value
+Focus on the `Id` field. You defined that its GUID value must be
+surronded by `*`. You want to make sure that exactly one leading `*`
+and one trailing `*` are found, and you want your parser to raise an
+error if that's not the case. Yet, in order to build a `Guid`, you are
+only interested in capturing the value
 `b19b8e87-3d39-4994-8568-0157a978b89a` between the stars. The `*`
-values themselves are really of little value.
+values themselves don't contribute to the resulting value.
 
 To build the parser for a GUID you needs to give it this recipe:
 
 - Make sure there is a `*`. Raise an error if you don't find it. If
-  you find one, that's fine. Don't even bother store the result, I
-  don't need it.
+  you find one, don't even bother store the result, I don't need it.
 - Capture an `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` string. Do
   remember its value, I do need it!
 - Make sure there is another `*`. Again, either raise an error or just go ahead without storing its value.
@@ -76,10 +72,10 @@ and how I told you to read `a >>. b` as:
 result of `a`.
 
 
-If you agree that the use case can come in handy, then it's time to
-build `>>.` and `.>>`.
+That's exactly the same use case. I guess it's time to build `>>.` and
+`.>>`. It won't be hard.
 
-## Keep the right!
+## Keep The Right!
 Let's start with `>>.`. Notice the `.` on the right side? It's the
 hint that this operator runs both the parsers, but only keeps the
 result of the right one. Here's how you could test it:
@@ -90,16 +86,15 @@ type Content = Content of int
 
 let (>>.) leftP rightP = failwith "Not yet implemented"
 
-let afterFirstSlash (s:string) = let i = s.IndexOf('/') in s.[i+1..]
-
 [<Fact>]
 let ``keep right only`` () =
-    let prefixP = Parser (fun input -> Success (input |> afterFirstSlash, Prefix))
-    let contentP = Parser (fun input -> Success (input |> afterFirstSlash, Content 42))
+    let prefixP = str "the prefix/"
+    let contentP = str "the content"
 
     let prefixedP = prefixP >>. contentP
 
-    test <@ run prefixedP "the prefix/the content/something else" = Success ("something else", Content 42) @>
+    test <@ run prefixedP "the prefix/the content/the rest" =
+        Success("the content", "/the rest") @>
 ```
 
 If you think about it, the implementation must be very similar to the
@@ -110,30 +105,35 @@ you will not struggle to modify it as:
 
 ```fsharp
 let (>>.) leftP rightP =
-    Parser (fun input ->
+    Parser(fun input ->
         let resultL = run leftP input
+
         match resultL with
         | Failure f -> Failure f
-        | Success (restL, valueA) ->
+        | Success(_, restL) ->
             let resultR = run rightP restL
+
             match resultR with
             | Failure f -> Failure f
-            | Success (restR, valueR) -> Success (restR, valueR))
+            | Success(valueR, restR) -> Success(valueR, restR))
 ```
 
 Test green! Bravo!  
-Is there a better alternative? I argue: there must be! Every single
-time that an implementation is based on copypasta, you can bet your
-bottom dollar, thee is shorter and better alternative. Let's think
-about it: 
+
+## Composing Parsers-based Functions
+Is there a better alternative to this implementation? I argue: every
+time that some code is heavily based on copypasta, you can bet your
+bottom dollar that there is shorter and better alternative: most of
+the times you will win. Let's think about it:
 
 - if `>>.` is like `.>>.`, but returning the second element of
 the tuple only,
 - and if `snd` is the function returning the second element of a
 tuple,
-- maybe `>>.` can be thought as the composition of `.>>.` and `snd`.
+- then `>>.` can be thought as the composition of `.>>.` and `snd`.
 
-Quick review how to compose functions. If you have:
+Interesting. What does it mean to compose 2 functions each returning a
+parser? Quick review how to compose ordinary functions. If you have:
 
 ```fsharp
 val f : 'a -> 'b
@@ -157,7 +157,6 @@ let (>>) f g = fun a -> g(f(a))
 
 
 [<Fact>]
-[<Fact>]
 let ``function composition`` () =
     // string -> (string * int)
     let mkTuple (s: string) = (s, s.Length)
@@ -177,7 +176,7 @@ Indeed, this operator is natively provided by F# ([FSharp.Core/prim-types.fs#L45
 let inline (>>) func1 func2 x = func2 (func1 x)
 ```
 
-Let's give it a try:
+Let's give it a try, on our Parser-returnign functions:
 
 ```fsharp
 let (>>.) leftP rightP = 
@@ -203,8 +202,9 @@ let (>>.) leftP rightP =
     |>> snd
 ```
 
-Indeed, this compiles, and the test is green. So, using `fst` instead
-of `snd` we should easily obtain `.>>` as well! Let's see:
+Indeed, this compiles, and the test is green.  
+Wait a minute! Does it mean that using `fst` instead of `snd` we will
+obtain `.>>` as well? Let's see:
 
 
 ```fsharp
@@ -215,31 +215,35 @@ let (>>.) leftP rightP =
 
 [<Fact>]
 let ``keep left only`` () =
-    let contentP = Parser (fun input -> Success (input |> afterFirstSlash, Content 42))
-    let suffixP = Parser (fun input -> Success (input |> afterFirstSlash, Prefix))
+    let contentP = str "the content"
+    let suffix = str "/the suffix"
 
-    let prefixedP = contentP .>> suffixP
+    let prefixedP = contentP .>> suffix
 
-    test <@ run prefixedP "the content/the suffix/something else" = Success ("something else", Content 42) @>
+    test <@ run prefixedP "the content/the suffix/the rest" =
+        Success("the content", "/the rest") @>
 ```
 
-Indeed. Again: it's more test code than implementation. A very good sign!
+
+Yes! Green! And, by the way: it's again more test code than
+implementation. A very good sign!
 
 
-## Feeling surronded
+## Feeling Surronded
 I guess you see the pattern here:
 
 - You started writing very low-level building blocks such as `|>>` and
-`<<|` &mdash;
-- They gave you the chance to encapsulate the structural traits
-(passing unconsumed input and handling errors) once for all.
+`<<|`.
+- Those combinators gave you the chance to encapsulate the structural
+traits (passing unconsumed input and handling errors) once for all.
 - Now you are building other higher level building blocks just
-combining the existing ones, without repeating yourself. And ending up
-with super concise code.
+combining the existing ones, without repeating yourself, ending up
+with very concise code.
 
-Let's keep flying in this direction. Let's build a combinator that
-builds on top of `.>>` and `>>.` for ignoring the elements surronding
-something you want to parse. Its signature can be:
+Let's keep flying in this direction, building on top of `.>>` and
+`>>.`: let's invent a combinator for ignoring the elements surronding
+something you want to parse. You saw it already in [Chapter
+6](/monadic-parser-combinators-6). Its signature is:
 
 ```fsharp
 val between<'o, 'c, 'v> : 'o Parser -> 'c Parser -> 'v Parser
@@ -259,25 +263,26 @@ let between opening closing content = failwith "Not yet implemented"
 [<Fact>]
 let ``date in tags`` () =
 
-    let o = str "<foobar>"
-    let c = str "</foobar>"
+    let o = str "<birthday>"
+    let c = str "</birthday>"
     let dateOnlyP = Parser (fun input ->
-        Success(input[10..], DateOnly.Parse(input[..9])))
+        Success(DateOnly.Parse(input[..9]), input[10..]))
 
     let contentInTagsP = dateOnlyP |> between o c
 
-    test <@ run contentInTagsP "<foobar>2025-12-11</foobar>the rest" = Success ("the rest", DateOnly(2025,12,11))@>
+    test <@ run contentInTagsP "<birthday>2025-12-11</birthday>the rest" = 
+                Success (DateOnly(2025,12,11), "the rest")@>
 ```
 
-The implementation is straighforward, once you have `.>>` and `>>.`:
+The implementation is straighforward:
 
 ```fsharp
 let between opening closing content =
     opening >>. content .>> closing
 ```
 
-Green test. Nice.  
-Notice the parameters of `between`: they are not just the strings you
+That's it. Green test.  
+Note the parameters of `between`: they are not simply the strings you
 want to act as boundaries; instead, they are themselves parsers. You
 understand what this means: they can be arbitrarily complex. If you
 managed to develop a parser for a whole code block and a parser for
@@ -294,22 +299,26 @@ surrounded by dates:
 
 ```fsharp
 [<Fact>]
-let ``salutation between dates`` () =
+let ``greeting between dates`` () =
 
     let helloP = str "Hello!"
     let dateOnlyP = Parser (fun input ->
-        Success(input[10..], DateOnly.Parse(input[..9])))
+        Success(DateOnly.Parse(input[..9]), input[10..]))
 
     let contentInTagsP = helloP |> between dateOnlyP dateOnlyP
 
-    test <@ run contentInTagsP "2025-12-11Hello!2025-12-11 the rest" = Success (" the rest", "Hello!")@>
+    test <@ run contentInTagsP "2025-12-11Hello!2025-12-11 the rest" = Success ("Hello!", " the rest")@>
 ```
 
-Don't worry about how basic and fragile the `dateOnlyP` parser and the
-other parsers are in these tests: they are mock parsers, created for
-testing purposes only. Eventually, you'll learn how to build real
-parsers in a robust way, by composing lower-level building blocks.
-Just like everything else in FP.
+I hope this quirky example doesn't give you any wild ideas for funny
+language syntax constructs. Instead, please: take a break, enjoy a
+kiwi, and carry on with [Chapter
+10](/monadic-parser-combinators-10). I can only recommend not to eat
+much and stay light: we are going to apply functions ad nauseam.
+
+[Previous - Here Comes The Tuple](/monadic-parser-combinators-8) ⁓
+[Next - Applying Functions, Ad
+Nauseam](/monadic-parser-combinators-10)
 
 
 # References
