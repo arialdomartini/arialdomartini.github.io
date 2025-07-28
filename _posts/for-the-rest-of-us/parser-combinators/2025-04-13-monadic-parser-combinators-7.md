@@ -817,6 +817,10 @@ We've covered many details about transforming a single parser and adapting it to
 It's time to take a break, enjoy a salmiakki, and then jump to
 [chapter 8](monadic-parser-combinators-8) to explore this new topic.
 
+[Previous - Mapping the Journey](/monadic-parser-combinators-6)
+⁓ [Next - Here Comes The Tuple](/monadic-parser-combinators-8)
+
+
 # References
 
 - [F# source code: `<|` operator][apply-source]
