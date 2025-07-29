@@ -25,11 +25,12 @@ Parser Combinators. You've always wanted. So, let's make it happen!
 8. [Here Comes The Tuple](/monadic-parser-combinators-8)
 9. [Things You Don't Care About](/monadic-parser-combinators-9)
 10. [Applying Functions, Ad Nauseam](/monadic-parser-combinators-10)
-11. [Things You Are Not Sure About](/monadic-parser-combinators-11)
-12. [Things You Want To Remember](/monadic-parser-combinators-12)
-13. [Mind The Context](/monadic-parser-combinators-13)
-14. [One Combinator to Rule Them All](/monadic-parser-combinators-14)
-15. [A Programmable Semicolon](/monadic-parser-combinators-15)
+11. [Lifting Functions](/monadic-parser-combinators-11)
+12. [Things You Are Not Sure About](/monadic-parser-combinators-12)
+13. [Things You Want To Remember](/monadic-parser-combinators-13)
+14. [Mind The Context](/monadic-parser-combinators-14)
+15. [One Combinator to Rule Them All](/monadic-parser-combinators-15)
+16. [A Programmable Semicolon](/monadic-parser-combinators-16)
 
 ## Introduction
 

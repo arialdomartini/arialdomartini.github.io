@@ -1,308 +1,521 @@
 ---
 layout: post
-title: "Monadic Parser Combinators in F# - Things You Want To Remember"
+title: "Monadic Parser Combinators in F# - Things You Are Not Sure About"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - fsharp
 - functional programming
 include_in_index: false
 ---
-Let's write the parser for an XML node. This is a task dressed up as a
-walk in the park, but in fact hiding an insidious maze inside. Let's
-see why.
+There are only 2 important missing features in the Parser Combinator
+library you are building:
 
-## Opening and closing tags
-We assume that a node is any text surrounded by an opening tag &mdash;
-such as `<pun>` &mdash; and its corresponding closing tag &mdash; in
-this case `</pun>`. The parser should work with arbitrary tag names,
-so any of the following strings should be successfully parsed:
+- Context Sensitivity.
+- Backtracking.
 
-* `<pun>I started out with nothing, and I still have most of it</pun>`
-* `<gardenPathSentence>Time flies like an arrow; fruit flies like
-  bananas</gardenPathSentence>`<sup>1</sup>
-* `<well>well</well>`
+*Context Sensitivity* is the ability of a parser to reference the
+result of other parsers. Basically, it's equivalent to equipping
+parsers with a form of memory. This capability will allow you to parse
+more complex languages and will dramatically change the way you write
+parsers.  
+As you have surely guessed already, this is about introducing monads.
+We will get there in the very next chapter.
 
-For the sake of simplicity, we won't support nested nodes nor
-attributes.
 
-(<sup>1</sup> By the way: parsing a [Garden Path Sentence][garden-path-sentence] is
-really a topic on its own).
+*Backtracking* is the ability to recover from errors and to explore
+alternative parsing paths. This is necessary for the last use case we
+encountered: parsing an integer of an unknown number of digits.
 
-Let's say that parsing nodes should give us back instances of this
-record:
+Let's start from the latter.
 
-```fsharp
-type Node = 
-    { tag: string
-      content: string }
-```
+## Alternative
 
-Fine! How hard can it be? The first recipe that comes into mind is:
-
-- We parse the tag name between `<` and `>` using `between`.
-- Then we parse the content, combining `many` and `anyOf`.
-- Then, we parse again the tag name, this time betweeen `</` and
-  `>`. Of course, we will use `between` again.
-- Finally, we combine all that we parsed to build an instance of
-  `Node`, either using the applicative functor's `<*>` or lifting the
-  `Node` costructor with `lift3`.
-
-It really seems that we have all the ingredients we need. Let's write
-this down into code:
+The basic operator for implementing backtracking is `<|>`: its purpose
+is to try the parser on its left, first; if that parser fails, instead
+of propagating the error, it *backtracks* trying the parser on the
+right, using the original input. If both parsers fail, only then a
+parsing error is returned. The implementation is straightforward.
 
 ```fsharp
-type Node =
-    { tag: string
-      content: string }
+let orElse tryFirst fallback  =
+    Parser (fun input ->
+        match run tryFirst input with
+        | Success _ as first -> first
+        | Failure _ -> run fallback input)
 
-let alphaChars = [ 'a' .. 'z' ] @ [ 'A' .. 'Z' ]
-let punctuationMarks = [' '; ';'; ','; '.']
+let (<|>) = orElse
 
-let tagNameP = many1 (anyOf alphaChars) |>> String.Concat
 
-let openingTagP = tagNameP |> between (str "<")  (str ">")
-let closingTagP = tagNameP |> between (str "</") (str ">")
-
-let contentP = many (anyOf (alphaChars @ punctuationMarks)) |>> String.Concat
-
-let buildNode openingTag content _closingTag =
-    { tag = openingTag
-      content = content }
-
-let nodeP = buildNode <!> openingTagP <*> contentP <*> closingTagP
+type SomeResult = One | Two
 
 [<Fact>]
-let ``parses an XML node`` () =
-  let s = "<pun>Broken pencils are pointless</pun>"
+let ``applies the first parser if successful`` () =
+    let firstParser = Parser (fun _ -> Success ("the rest", One))
+    let fallback = Parser (fun _ -> Success ("the rest", Two))
 
-  let expected =
-      { tag = "pun"
-        content = "Broken pencils are pointless"}
-
-  test <@ run nodeP s = Success ("", expected) @>
-```
-
-That was really simple, indeed. What was the big deal?  
-The big deal is: this implementation is wrong. Did you spot the bug?
-
-## semordnilap tags
-If you did not, let me make it more apparent. Indulge me while I
-introduce a little silly change in the XML grammar, in line with the
-craziness of your yet-to-be-invented programming language: let's ask
-the user to type the closing tag name by spelling it backward, as a
-[semordnilap][semordnilap]. This will have the delightful effect of
-producing tag couples like `<stressed>...</desserts>`,
-`<repaid>...</diaper>`, `<evilStar>...</RatsLive>`. Amusing!
-
-Now: parser combinators are composable, so simply improving the
-`closingTag` parser should allow the entire XML node parser to benefit
-from the change. After all, that's exactly their selling point, right?
-Reversing a string is dead easy:
-
-```fsharp
-let reverse (s: string) = new string(s.ToCharArray() |> Array.rev)
-```
-
-Therefore, creating a parser for closing tags should be a matter of
-lifting this `reverse` function to the parser world. Maybe we could
-try mapping `reverse`, with `<!>`:
-
-```fsharp
-let PemaNgat = reverse <!> tagNameP
-        
-let openingTagP = tagNameP |> between (str "<") (str ">")
-let closingTag =  PemaNgat |> between (str "</") (str ">")
-```
-
-Does this work? I don't know, pal, how can I tell? Didn't we just
-forget to work with TDD? Where are tests? Let's put it right at once!
-
-```fsharp
-[<Fact>]
-let ``parses an XML tag node with semordnilap tags`` () =
-  let s = "<hello>ciao ciao</olleh>"
-
-  let expected =
-      { tag = "hello"
-        content = "ciao ciao"}
-
-  test <@ run nodeP s = Success ("", expected) @>
+    let trying = firstParser <|> fallback
 
 
-[<Theory>]
-[<InlineData("foo")>]
-[<InlineData("barBaz")>]
-[<InlineData("evil")>]
-[<InlineData("live")>]
-let ``possible tag names`` (s: string) =
-    test <@ run tagNameP s = Success("", s)@>
-
-[<Theory>]
-[<InlineData("oof")>]
-[<InlineData("zaBrab")>]
-[<InlineData("live")>]
-[<InlineData("evil")>]
-let ``possible closing tag names`` (s: string) =
-    test <@ run PemaNgat s = Success("", reverse s)@>
-
-```
-
-Yes, it seems to works.  
-Did you note that we have `evil` and `live` in the test input set for
-for both the opening and the closing tags? And in both cases the tests
-are green?  Well, that's not surprising: `evil` is a legit closing tag
-name, because it's the reverse of `live`. And `live` too is a legit
-closing tag name, because it's the reverse of `evil`. And
-both are also legit *opening* tag names.  
-The test for the closing tag requires that a string is the reverse of
-something. On second thought, it's a very loose constraint: any string
-is the reverse of, ehm, its reverse. Does it mean that this test would
-pass no matter the string? Let's find it out with a random string:
-
-```fsharp
-[<Fact>]
-let ``a random string can be both an opening and a closing tag name`` () =
-    let random = System.Random()
-
-    let randomString =
-        [| for _ in 1 .. 10 -> alphaChars.[random.Next(alphaChars.Length)] |]
-        |> System.String
-
-    test <@ run PemaNgat randomString = Success("", reverse randomString)@>
-```
-
-Wait a minute! Does it mean that our XML node parser would just accept
-any closing tag? Let's see:
-
-
-```fsharp
-[<Fact>]
-let ``accepts a wrong closing tag`` () =
-
-  let s = "<hello>ciao ciao</picture>"
-
-  let expected =
-      { tag = "hello"
-        content = "ciao ciao"}
-
-  test <@ run nodeP s = Success ("", expected) @>
-```
-
-Uh oh! Not a good news! (Note to self: next time, not only shall I
-write tests before the implementation, but I should also not forget
-the red phase of the red-green-refactor TDD mantra. Also, I should
-test both the happy and the failure cas). Is this a bug introduced by
-the semordnilap-based syntax? Let's revert back to the conventional
-tag name rule, using a completely unrelated closing tag:
-
-```fsharp
-let tagNameP = many1 (anyOf ['a'..'Z'])
-
-let openingTagP = tagNameP |> between (str "<") (str ">")
-let closingTagP = tagNameP |> between (str "</") (str ">")
+    test <@ run trying "some input" = Success ("the rest", One) @>
 
 [<Fact>]
-let ``XML node test`` () =
-  let s = "<pun>Broken pencils are pointless</picture>"
+let ``if the first parser fails, applies the fallback parser`` () =
+    let alwaysFails = Parser (fun _ -> Failure "failed!")
+    let fallback = Parser (fun _ -> Success ("the rest", Two))
 
-  let expected =
-      { tag = "pun"
-        content = "Broken pencils are pointless"}
+    let trying = alwaysFails <|> fallback
 
-  test <@ run nodeP s = Success ("", expected) @>
+    test <@ run trying "some input" = Success ("the rest", Two) @>
 ```
 
-Oh, no! It's still green! So, this bug is really inherent.
 
-## Lack of context
-If you think about it, in the definition of `openingTagP` and
-`closingTagP`:
+## Choice
+
+Naturally, you can apply `<|>` multiple times:
+
 
 ```fsharp
-let tagNameP = many1 (anyOf ['a'..'Z'])
+type WhateverResult = Whatever
 
-let openingTagP = tagNameP |> between (str "<") (str ">")
-let closingTagP = tagNameP |> between (str "</") (str ">")
+[<Fact>]
+let ``sequence of <|>`` () =
+    let p1 = Parser (fun _ -> Failure "failed!")
+    let p2 = Parser (fun _ -> Failure "failed!")
+    let p3 = Parser (fun _ -> Failure "failed!")
+    let p4 = Parser (fun _ -> Failure "failed!")
+    let p5 = Parser (fun _ -> Failure "failed!")
+    let fallback = Parser (fun _ -> Success ("the rest", Whatever))
+
+    let trying = p1 <|> p2 <|> p3 <|> p4 <|> p5 <|> fallback
+
+    test <@ run trying "some input" = Success ("the rest", Whatever) @>
 ```
 
-there is no indication at all that the tag name of the closing tag
-must match the string parsed by the opening tag.  
-"How so?" I can hear you cry: "They are using the very same
-`tagNameP`! They must match the same tag name! It's literally written there!"  
-Not quite. `openingTagP` and `closingTagP` share the same tag name
-*parser*, not the same tag name *value*. Remember? A parser is a
-function eventually returning a parsed value. It's not that
-value. It's like a promise of a value.
-
-`tagNameP`, as it is defined, would succeed with *any* sequence of
-letters. `PemaNgat` would also succeed with *any* sequence of
-letters. Possibly, and most likely, with unrelated ones. There is
-really no connection between the two.
-
-What we would rather do, instead, is to build `closingTagP` as the
-parser expecting *exactly* the *value* parsed by
-`openingTagP`. Something like:
+This invites us to conceive a combinator that tries all the parsers we
+feed it with:
 
 ```fsharp
-let tagNameP = many1 (anyOf ['a'..'Z'])
+let choice (parsers: 'a Parser list) : 'a Parser =
+    failwith "Not yet implemented"
 
-let openingTagP = tagNameP |> between (str "<") (str ">")
-let closingTag (openingTagName: string) =
-    (str openingTagName) |> between (str "</") (str ">")
+let failing = Parser (fun _ -> Failure "failed!")
+
+[<Fact>]
+let ``applies the first successful parser`` () =
+    let p1 = failing
+    let p2 = failing
+    let p3 = failing
+    let p4 = failing
+    let p5 = failing
+    let succeeding = Parser (fun _ -> Success ("the rest", Whatever))
+    let p6 = failing
+    let p7 = failing
+
+    let firstSucceeding = choice [p1; p2; p3; p4; succeeding; p5; p6; p7;]
+
+    test <@ run firstSucceeding "some input" = Success ("the rest", Whatever) @>
 ```
 
-You see the tragedy? The value of `openingTagName` is not known until
-we physicall run the `openingTagP` parser. Until this page, we have
-encountered several parsers depending on other parsers. But this is in
-fact the first time we have a parser depending on *the result* of
-another parser. Watching this from another perspective: it's the first
-time that the elements of our grammar requires parsers having a notion
-of their surrounding context.
+A possible recursive implementation could be:
 
-Do you remember when I stated "We assume that a node is whatever is
-surrounded by an opening tag &mdash; such as `<joke>` &mdash; and its
-*corresponding* closing tag"? The notion we just forgot to take into
-account is related to that *corresponding* word. It's only intuitive
-that *corresponding* has to do with some kind of relationship between
-the elements of a grammar and, consequently, some kind of *binding*
-between its parsers.
+```fsharp
+let rec choice<'a> (parsers: 'a Parser list) : 'a Parser =
+    match parsers with
+    | [] ->
+        Parser (fun _ -> Failure "No parsers succeeded")
+    | [p] ->
+        p
+    | p :: ps ->
+        p <|> choice ps
+```
 
-Indeed, grammars with elements depending on each other, like in the
-case of our matching opening and closing tags, are called
-[Context-sensitive Grammars][context-sensitive-grammar].
+Amazingly, a shorter working version is:
 
-A parser for this family of grammars requires a new tool that &mdash;
-it could be demonstrated &mdash; cannot be built as a composition of
-the applicative parsers we have distilled so far. We need a brand new
-mechanism.  
-This new tool is indeed pretty simple: we just need an operator
-similar to the Applicative Functor's `<*>`, only a bit smarter; a
-function able to pass the value successfully parsed by a parser to the
-next parser. So, something that could *bind* 2 parsers in a row.  
-Not surprisingly, we will call this operator `bind` &mdash; or `>>=`,
-because we functional programmers can't get enough of symbols &mdash;
-and the resulting notion *monad*.
+```fsharp
+let choice parsers = 
+    List.reduce (<|>) parsers
+```
 
-Implementing it will be super easy &mdash; just a matter of following
-the type signature &mdash; but the consequences will be revolutionary.
+It would be nice to write it even more concisely, in Point Free Style
+as:
 
-Curious? Grab a liquorice and jump to [Chapter
-13](/monadic-parser-combinators-13): we are going to write it.
+```fsharp
+let choice =
+    List.reduce (<|>)
+```
+
+but F# type inference would scream at us.
+
+Technically speaking, this super-short version is based on the fact
+that a `Parser`, together with the binary operation `<|>` *forms a
+semigroup*. In simple words, this means that we managed to have an
+operation to reduce 2 different items into 1, and this is a very well
+known pattern in functional programming. Indeed, `List.reduce` is
+based on that pattern. It documentation states:
+
+```
+val reduce: reduction: ('T -> 'T -> 'T) -> list: 'T list -> 'T
+
+'T is Parser<'a>
+
+[...]
+reduction - The function to reduce two list elements to a single element.
+```
+
+This is encouraging: whenever you happen to develop a custom operator
+and then you discover that the standard F# library natively supports
+it, that's the sign that you hit the nail on the head.
+
+### Month names
+
+Let's see how to apply `choice` in a concrete case. Say that you want
+to parse a date from the format `12 Oct 2025`. For the month part, you
+would like to parse:
+
+| Input   | Parse result |
+|---------|--------------|
+| `"Jan"` | `1`          |
+| `"Feb"` | `2`          |
+| `"Mar"` | `3`          |
+| `"Apr"` | `4`          |
+| `"May"` | `5`          |
+| `"Jun"` | `6`          |
+| `"Jul"` | `7`          |
+| `"Aug"` | `8`          |
+| `"Sep"` | `9`          |
+| `"Oct"` | `10`         |
+| `"Nov"` | `11`         |
+| `"Dec"` | `12`         |
 
 
-# References
+Here is how we could create `12` parsers in one shot:
 
-* [Garden Path Sentence][garden-path-sentence]
-* [semordnilaP][semordnilap]
-* [Context-sensitive Grammar][context-sensitive-grammar]
+```fsharp
+let months: int Parser list =
+    [ "Jan"
+      "Feb"
+      "Mar"
+      "Apr"
+      "May"
+      "Jun"
+      "Jul"
+      "Aug"
+      "Sep"
+      "Oct"
+      "Nov"
+      "Dec" ]
 
-[semordnilap]: https://en.wiktionary.org/wiki/semordnilap
-[garden-path-sentence]: https://en.wikipedia.org/wiki/Garden-path_sentence
-[context-sensitive-grammar]: https://en.wikipedia.org/wiki/Context-sensitive_grammar
+let monthParsers =
+    months
+    |> List.mapi (fun idx kw -> ((fun _ -> idx + 1) <!> (str kw)))
+```
 
+Then, we can use `choicea to coalesce them in a single parser:
+
+```fsharp
+let monthParser = choice monthParsers
+
+[<Fact>]
+let ``parses a month`` () =
+    test <@ run monthParser "Oct 2025" = Success (" 2025", 10) @>
+    test <@ run monthParser "Apr 2009" = Success (" 2009", 4) @>
+    test <@ run monthParser "not a month" = Failure "Expected Dec" @>
+```
+
+Notice that when this parser fails, it emits the error emitted by the
+last parser in the collection. This is less than ideal. There are
+techniques to improve that, but let's not get sidetracked. We have
+other interesting combinators to invent, first.
+
+Of course, if you want `monthParser` to return an `int` instead of a
+`char`, you can `map` an `char -> int` function to it.  
+
+Are you getting familiar with this way of mixing these little
+combinators?
+
+## anyOf
+A very convenient helper function you can build on top of `choose` is
+`anyOf`: it takes a list of characters and it builds a parser for any
+of them. Under the hoods, it uses `charP`, a parser for a single
+character:
+
+```fsharp
+let charP (c: char) = Parser (fun input ->
+    if input.StartsWith(c)
+    then Success (input[1..], c)
+    else Failure "Expected '{c}'" )
+
+let anyOf chars =
+    chars |> List.map charP |> choice
+
+
+let digit = anyOf ['0'..'9']
+
+[<Fact>]
+let ``parses any digit`` () =
+    test <@ run digit "42 the rest" = Success ("2 the rest", '4') @>
+    test <@ run digit "92 the rest" = Success ("2 the rest", '9') @>
+```
+
+`anyOf` is a classical low-level parser which can be used as a trivial
+building block of other more complex parsers, by the means of `<!>`
+and other combinators.
+
+## many
+Remember that we started investigating this very topic in the attempt
+of parsing an unsigned integer of an unknown number of digits. We are
+very close to this goal. Be ready to see a disappointing
+implementation, though: in fact, we are scratching the bottom of what
+is possible with Functors and Applicative Functors, and soon we will
+need Monads.
+
+So, back to our number with arbitrary digits problem. The idea is:
+
+* To build a combinator `many` that keeps trying a specific parser
+  over and over, until it fails. The parser generated by `many` would
+  return the list of all the successfully parsed values.
+* To parse many digits, we could apply `many` to the parser
+  `anyDigit`. This in turn must be able to detect a single digit (any
+  of `1`, `2`, `3`, etc).
+* How to build `anyDigit`? We can apply `choice` on 10 separate simple
+  parsers, each handling a single digit.
+* Instead of writing 10 different parsers, we could build a factory of
+  parsers, to be fed with `[0..9]`.
+* The result will be a Parser emitting a the list of digits. We know
+  how to convert a list of digits to a number. And we know how to use
+  `map` to convert a Parsr of list of digits to a Parser of numbers. 
+
+Let's go.
+
+```fsharp
+let many<'a> (parser: 'a Parser): 'a list Parser = 
+    failwith "Not yet implemented"
+    
+let toInteger (digits: char list) : int =
+    failwith "Not yet implemented"
+
+let intP: int Parser =
+    failwith "Not yet implemented"
+
+[<Fact>]
+let ``parse numbers of any number of digits`` () =
+    test <@ run intP "1 the rest" = Success (" the rest", 1) @>
+    test <@ run intP "42 the rest" = Success (" the rest", 42) @>
+    test <@ run intP "2025+7999" = Success ("+7999", 2025) @>
+```
+
+Assuming the other components will eventually be there, implementing
+`intP` it is a walk in the park:
+
+```fsharp
+let intP = many digit |>> toInteger
+```
+
+Read it as:
+
+* `intP` is that parsers that expectes an arbitrary number of digits.
+* Since the result of `many digit` is a `char list`, we need to
+  convert it to an `int` with `toInteger`.
+* But we don't have a `char list`: we have a `Parser` of `char list`.
+  So, we need to lift `toInteger` into the parser world, using the
+  parser-powered pipe operator `|>>`.
+
+Implementing `toInteger` is ordinary F#, nothing to do with parsers:
+
+```fsharp
+let toInteger (digits: char list) : int =
+    digits
+    |> List.map string
+    |> String.concat ""
+    |> int
+
+[<Fact>]
+let ``from list of chars to integer`` () =
+    test <@ ['4';'2'] |> toInteger = 42 @>
+    test <@ ['1';'9';'9'] |> toInteger = 199 @>
+    test <@ ['2';'0';'2';'5'] |> toInteger = 2025 @>
+```
+
+The last missing piece is, finally, `many`:
+
+```fsharp
+let many<'a> (parser: 'a Parser): 'a list Parser =
+        failwith "Not yet implemented"
+
+
+[<Fact>]
+let ``applies a parser many times`` () =
+
+    let manyWell = many (str "well!")
+
+    test <@ run manyWell "well!well!well! the rest" = Success(" the rest", ["well!";"well!";"well!"]) @>
+```
+
+`many` will often come in handy: for example, it can be used to handle
+the case of an unknown number of spaces between keywords, in your
+language. Here's the complete code for parsing a simple binary
+mathematical expression:
+
+```fsharp
+type Operation = Sum | Substraction
+
+type Expression = Expression of (int * int * Operation)
+
+[<Fact>]
+let ``parses elements ignoring the separating white spaces`` () =
+    let toInteger (digits: char list) : int =
+        digits
+        |> List.map string
+        |> String.concat ""
+        |> int
+
+    let digit = anyOf ['0'..'9']
+    let intP = many digit |>> toInteger
+
+    let sum = (str "+") |>> (fun _ -> Sum)
+    let subtraction = (str "-") |>> (fun _ -> Substraction)
+
+    let operation: Operation Parser = sum <|> subtraction
+
+    let spaces = many (charP ' ')
+
+    let makeExpression n1 _spaces1 op _space2 n2 =
+        Expression (n1, n2, op)
+
+    let expression =
+        makeExpression <!> intP <*> spaces <*> operation <*> spaces <*> intP
+
+    test <@ run expression "12  +   42" = Success ("", Expression (12, 42, Sum)) @>
+    test <@ run expression "1942-9" = Success ("", Expression (1942, 9, Substraction)) @>
+```
+
+
+As for any other parser combinator, the parser manipulated by `many`
+can be arbitrarily complex; it can be as simple as the parser of a
+single charactes as a whole JSON parser. `many` just won't care.
+
+
+Implementing `many` is actually quite challenging. We have to build a
+list of results, so recursion comes naturally to mind. The hard part
+is that we are not really building a list, but a parser emitting a
+list. What can help is to think that `many`, by itself, can never
+fail: it keeps applying a parser, and when this fails, it just stops
+cycling. Even if the input is empty, or if the parser immediately
+fails, `many` would happily succeed, returning an empty list.
+
+Here's a possible implementation:
+
+```fsharp
+let many<'a> (parser: 'a Parser): 'a list Parser = Parser (fun input ->
+    let rec zeroOrMore input =
+        match run parser input with
+        | Failure _ -> (input, [])
+        | Success (rest, result) ->
+            match (zeroOrMore rest) with
+            | rest, [] -> (rest, result :: [])
+            | rest, others -> (rest, result :: others)
+
+    Success(zeroOrMore input))
+```
+
+As you see, it makes use of a `zeroOrMore` inner function which does
+not operate in the parser world. It just executes the parser with
+`run`, recursing during the list building. As soon as `parser` fails,
+it stops.
+
+Now, this is what I call a disappointing implementation. We have gone
+through 11 chapters, developing building blocks after building blocks,
+only to be back to square one, building `many` by the means of pattern
+matching and passing `rest` around. That's depressing.
+
+Wait a minute! Can't we lift the function for recursively bulding a
+list to the Parser world using `<!>` and `<*>`? I mean, if:
+
+```fsharp
+let cons head tail = head :: tail
+```
+
+can't we just lift it with:
+
+```fsharp
+let rec many parser = 
+    cons <!> parser <*> (many parser)
+```
+
+To be precise: this version is not quite correct, as it requires at
+least 1 application of parser (in the parser jargon: this is `many1`).
+`many` should succeeds also in case 0 applications. Easy peasy, `<|>`
+to the resque:
+
+```fsharp
+let rec many parser = 
+    (cons <!> parser <*> (many parser)) <|> (pure' [])
+```
+
+Here we go! If the first part (the lifted `cons`) fails, we just a
+lifted empty list.
+
+It perfectly type checks. This is promising! If it compiles it works,
+right! Until it does not. Damn. Try yourself: if you run the test, it
+enters an infinite loop. It compiled only because `⊥`, or `bottom`,
+the ideal type representing never-returning functions, is a member of
+all the types. What a scam...
+
+In simpler words, the problem here is that function application is
+eager: F# evaluates all the arguments before passing them to a
+function. If we had a lazy language, like Haskell, this implementation
+could possibly work, but that's not the case with F#.
+
+What about this implementation?
+
+```fsharp
+let rec many parser =
+    parse {
+        let! x = parser
+        let! xs = many parser
+        return x :: xs
+    } <|> (pure' [])
+```
+
+OK, this is a syntax we never encountered before. I don't expect you
+to immediately understand it, if you never encountered do-notation.
+But maybe you can grasp some of it:
+
+* It's a parser, because of that initial `parse {`.
+* It returns the list `x :: xs`.
+* The head `x` is somehow related to running the parser (see that
+  `let! x = parser`).
+* The tail `xs` is related to a recursive call to `many parser`.
+* The last `<|> pure' []` accounts for what we saw before: `many`
+  shall not fail if the parser `parser` cannot be applied even once.
+  
+I bet that you agree: besides the funny new syntactic elements, this
+version is way more linear than the original:
+
+```fsharp
+let many<'a> (parser: 'a Parser): 'a list Parser = Parser (fun input ->
+    let rec zeroOrMore input =
+        match run parser input with
+        | Failure _ -> (input, [])
+        | Success (rest, result) ->
+            match (zeroOrMore rest) with
+            | rest, [] -> (rest, result :: [])
+            | rest, others -> (rest, result :: others)
+
+    Success(zeroOrMore input))
+```
+
+Ladies and gentlemen, enter monads and monadic computation
+expressions. We've delayed this out long enough. It's time to open
+that door. The next chapter should provide the rational why and in
+which cases we need monadic parsers. Then, we will invent them.
+
+Take a long break. Enjoy a Swiss cheese fondue. We will see in
+[Chapter 13](/monadic-parser-combinators-13)
 
 # Comments
-[GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/33)
+[GitHub
+Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/33)
 
 
 

@@ -1,195 +1,305 @@
 ---
 layout: post
-title: "Monadic Parser Combinators in F# - Mind the Context"
+title: "Monadic Parser Combinators in F# - Things You Want To Remember"
 author: <a href="https://arialdomartini.github.io">Arialdo Martini</a>
 tags:
 - fsharp
 - functional programming
 include_in_index: false
 ---
-Boiling the problem down, we can say that, in a Context-sensitive
-grammar, we need a parser to read a value &mdash; like a `Foo Parser`
-parsing a `Foo` instance &mdash; and then use another parser based on
-that value &mdash; such as a `Foo -> Bar Parser` consuming that `Foo`
-value to generate a `Bar Parser`. Keeping types generic, this means
-that first we find an `'a Parser`, then eventually an `'a -> 'b
-Parser` follows.
+Let's write the parser for an XML node. This is a task dressed up as a
+walk in the park, but in fact hiding an insidious maze inside. Let's
+see why.
 
-Our goal is to write a parser combinator (`bind` or `>>=`) that given
-those 2 elements generates us back a `'b Parser`:
+## Opening and closing tags
+We assume that a node is any text surrounded by an opening tag &mdash;
+such as `<pun>` &mdash; and its corresponding closing tag &mdash; in
+this case `</pun>`. The parser should work with arbitrary tag names,
+so any of the following strings should be successfully parsed:
+
+* `<pun>I started out with nothing, and I still have most of it</pun>`
+* `<gardenPathSentence>Time flies like an arrow; fruit flies like
+  bananas</gardenPathSentence>`<sup>1</sup>
+* `<well>well</well>`
+
+For the sake of simplicity, we won't support nested nodes nor
+attributes.
+
+(<sup>1</sup> By the way: parsing a [Garden Path Sentence][garden-path-sentence] is
+really a topic on its own).
+
+Let's say that parsing nodes should give us back instances of this
+record:
 
 ```fsharp
-bind : 'a Parser -> ('a -> 'b Parser) -> 'b Parser
+type Node = 
+    { tag: string
+      content: string }
 ```
 
-First things first: we need a unit test. To keep things simple, we
-strip the rules down to the minimum, and we work with empty XML nodes;
-in other words, we remove the XML node content so that the opening tag
-is directly followed by the closing tag:
+Fine! How hard can it be? The first recipe that comes into mind is:
 
-| Input string  | Expected parsing result  |
-|---------------|--------------------------|
-| `<pun></pun>` | `Success ("", "pun")`    |
-| `<pun></xyz>` | `Failure "Expected pun"` |
+- We parse the tag name between `<` and `>` using `between`.
+- Then we parse the content, combining `many` and `anyOf`.
+- Then, we parse again the tag name, this time betweeen `</` and
+  `>`. Of course, we will use `between` again.
+- Finally, we combine all that we parsed to build an instance of
+  `Node`, either using the applicative functor's `<*>` or lifting the
+  `Node` costructor with `lift3`.
 
+It really seems that we have all the ingredients we need. Let's write
+this down into code:
 
 ```fsharp
+type Node =
+    { tag: string
+      content: string }
+
 let alphaChars = [ 'a' .. 'z' ] @ [ 'A' .. 'Z' ]
 let punctuationMarks = [' '; ';'; ','; '.']
 
 let tagNameP = many1 (anyOf alphaChars) |>> String.Concat
 
 let openingTagP = tagNameP |> between (str "<")  (str ">")
-let closingTagP tagName = (str tagName) |> between (str "</") (str ">")
+let closingTagP = tagNameP |> between (str "</") (str ">")
 
-let bind m f = failwith "Not yet implemented"
+let contentP = many (anyOf (alphaChars @ punctuationMarks)) |>> String.Concat
 
-let (>>=) = bind
-let return' v = Parser (fun s -> Success (s, v))
+let buildNode openingTag content _closingTag =
+    { tag = openingTag
+      content = content }
 
-let nodeP = failwith "Not yet implemented"
+let nodeP = buildNode <!> openingTagP <*> contentP <*> closingTagP
 
 [<Fact>]
-let ``closingTag works in a context-sensitive grammar`` () =
-  let s = "<pun>Broken pencils are pointless</pun>rest"
+let ``parses an XML node`` () =
+  let s = "<pun>Broken pencils are pointless</pun>"
 
   let expected =
       { tag = "pun"
-        content = "Broken pencils are pointless" }
+        content = "Broken pencils are pointless"}
 
-  test <@ run nodeP s = Success ("rest", expected) @>
+  test <@ run nodeP s = Success ("", expected) @>
+```
+
+That was really simple, indeed. What was the big deal?  
+The big deal is: this implementation is wrong. Did you spot the bug?
+
+## semordnilap tags
+If you did not, let me make it more apparent. Indulge me while I
+introduce a little silly change in the XML grammar, in line with the
+craziness of your yet-to-be-invented programming language: let's ask
+the user to type the closing tag name by spelling it backward, as a
+[semordnilap][semordnilap]. This will have the delightful effect of
+producing tag couples like `<stressed>...</desserts>`,
+`<repaid>...</diaper>`, `<evilStar>...</RatsLive>`. Amusing!
+
+Now: parser combinators are composable, so simply improving the
+`closingTag` parser should allow the entire XML node parser to benefit
+from the change. After all, that's exactly their selling point, right?
+Reversing a string is dead easy:
+
+```fsharp
+let reverse (s: string) = new string(s.ToCharArray() |> Array.rev)
+```
+
+Therefore, creating a parser for closing tags should be a matter of
+lifting this `reverse` function to the parser world. Maybe we could
+try mapping `reverse`, with `<!>`:
+
+```fsharp
+let PemaNgat = reverse <!> tagNameP
+        
+let openingTagP = tagNameP |> between (str "<") (str ">")
+let closingTag =  PemaNgat |> between (str "</") (str ">")
+```
+
+Does this work? I don't know, pal, how can I tell? Didn't we just
+forget to work with TDD? Where are tests? Let's put it right at once!
+
+```fsharp
+[<Fact>]
+let ``parses an XML tag node with semordnilap tags`` () =
+  let s = "<hello>ciao ciao</olleh>"
+
+  let expected =
+      { tag = "hello"
+        content = "ciao ciao"}
+
+  test <@ run nodeP s = Success ("", expected) @>
+
+
+[<Theory>]
+[<InlineData("foo")>]
+[<InlineData("barBaz")>]
+[<InlineData("evil")>]
+[<InlineData("live")>]
+let ``possible tag names`` (s: string) =
+    test <@ run tagNameP s = Success("", s)@>
+
+[<Theory>]
+[<InlineData("oof")>]
+[<InlineData("zaBrab")>]
+[<InlineData("live")>]
+[<InlineData("evil")>]
+let ``possible closing tag names`` (s: string) =
+    test <@ run PemaNgat s = Success("", reverse s)@>
+
+```
+
+Yes, it seems to works.  
+Did you note that we have `evil` and `live` in the test input set for
+for both the opening and the closing tags? And in both cases the tests
+are green?  Well, that's not surprising: `evil` is a legit closing tag
+name, because it's the reverse of `live`. And `live` too is a legit
+closing tag name, because it's the reverse of `evil`. And
+both are also legit *opening* tag names.  
+The test for the closing tag requires that a string is the reverse of
+something. On second thought, it's a very loose constraint: any string
+is the reverse of, ehm, its reverse. Does it mean that this test would
+pass no matter the string? Let's find it out with a random string:
+
+```fsharp
+[<Fact>]
+let ``a random string can be both an opening and a closing tag name`` () =
+    let random = System.Random()
+
+    let randomString =
+        [| for _ in 1 .. 10 -> alphaChars.[random.Next(alphaChars.Length)] |]
+        |> System.String
+
+    test <@ run PemaNgat randomString = Success("", reverse randomString)@>
+```
+
+Wait a minute! Does it mean that our XML node parser would just accept
+any closing tag? Let's see:
+
+
+```fsharp
+[<Fact>]
+let ``accepts a wrong closing tag`` () =
+
+  let s = "<hello>ciao ciao</picture>"
+
+  let expected =
+      { tag = "hello"
+        content = "ciao ciao"}
+
+  test <@ run nodeP s = Success ("", expected) @>
+```
+
+Uh oh! Not a good news! (Note to self: next time, not only shall I
+write tests before the implementation, but I should also not forget
+the red phase of the red-green-refactor TDD mantra. Also, I should
+test both the happy and the failure cas). Is this a bug introduced by
+the semordnilap-based syntax? Let's revert back to the conventional
+tag name rule, using a completely unrelated closing tag:
+
+```fsharp
+let tagNameP = many1 (anyOf ['a'..'Z'])
+
+let openingTagP = tagNameP |> between (str "<") (str ">")
+let closingTagP = tagNameP |> between (str "</") (str ">")
 
 [<Fact>]
-let ``not matching closing tags raise a failure`` () =
-  let s = "<pun>Broken pencils are pointless</xml>rest"
+let ``XML node test`` () =
+  let s = "<pun>Broken pencils are pointless</picture>"
 
-  test <@ run nodeP s = Failure "Expected pun" @>
+  let expected =
+      { tag = "pun"
+        content = "Broken pencils are pointless"}
+
+  test <@ run nodeP s = Success ("", expected) @>
 ```
 
-The disrupting element is the closing tag parser, since it depends on
-the `tagName` value parsed by the previous parser. The combination of
-the 2 parsers is obtained by the application of `>>=`:
+Oh, no! It's still green! So, this bug is really inherent.
+
+## Lack of context
+If you think about it, in the definition of `openingTagP` and
+`closingTagP`:
 
 ```fsharp
-let nodeP = 
-    openingTagP >>= (fun tagName ->
-        contentP >>= (fun content ->
-            (closingTagP tagName) >>= (fun _ ->
-                return' { tag = tagName; content = content })))
+let tagNameP = many1 (anyOf ['a'..'Z'])
+
+let openingTagP = tagNameP |> between (str "<") (str ">")
+let closingTagP = tagNameP |> between (str "</") (str ">")
 ```
 
+there is no indication at all that the tag name of the closing tag
+must match the string parsed by the opening tag.  
+"How so?" I can hear you cry: "They are using the very same
+`tagNameP`! They must match the same tag name! It's literally written there!"  
+Not quite. `openingTagP` and `closingTagP` share the same tag name
+*parser*, not the same tag name *value*. Remember? A parser is a
+function eventually returning a parsed value. It's not that
+value. It's like a promise of a value.
 
-If you squint your eyes you could read the funny `>>=` syntax as:
+`tagNameP`, as it is defined, would succeed with *any* sequence of
+letters. `PemaNgat` would also succeed with *any* sequence of
+letters. Possibly, and most likely, with unrelated ones. There is
+really no connection between the two.
+
+What we would rather do, instead, is to build `closingTagP` as the
+parser expecting *exactly* the *value* parsed by
+`openingTagP`. Something like:
 
 ```fsharp
-let openCloseP = 
-         openingTagP    >>=    (fun tagName -> ...)
-// apply openingTagP   then    pass tagName to a lambda continuation
+let tagNameP = many1 (anyOf ['a'..'Z'])
+
+let openingTagP = tagNameP |> between (str "<") (str ">")
+let closingTag (openingTagName: string) =
+    (str openingTagName) |> between (str "</") (str ">")
 ```
 
-so you can read the whole sequence as:
+You see the tragedy? The value of `openingTagName` is not known until
+we physicall run the `openingTagP` parser. Until this page, we have
+encountered several parsers depending on other parsers. But this is in
+fact the first time we have a parser depending on *the result* of
+another parser. Watching this from another perspective: it's the first
+time that the elements of our grammar requires parsers having a notion
+of their surrounding context.
 
-* In order to parse an XML node
-* We first parse the opening tag (`openingTagP`).
-* Then, we pass forward the value it parses (`>>= (fun tagName -> ...`)
-* To a continuation. This, in turn will parse the content (`contentP`)
-* Passing forward the parsed value (`>>= (fun content -> ...`) 
-* to the next part. This will use `tagName` to build the
-  parser for the closing tag (`closingTagP tagName`)
-* Finally, handing over (`>>= fun _ ->`) to the last part
-* Whose purpose is to just return an instance of the tag record.
+Do you remember when I stated "We assume that a node is whatever is
+surrounded by an opening tag &mdash; such as `<joke>` &mdash; and its
+*corresponding* closing tag"? The notion we just forgot to take into
+account is related to that *corresponding* word. It's only intuitive
+that *corresponding* has to do with some kind of relationship between
+the elements of a grammar and, consequently, some kind of *binding*
+between its parsers.
 
+Indeed, grammars with elements depending on each other, like in the
+case of our matching opening and closing tags, are called
+[Context-sensitive Grammars][context-sensitive-grammar].
 
-Notice that `return'` is identical to the `pure'` function introduced
-with Applicative Functors.
+A parser for this family of grammars requires a new tool that &mdash;
+it could be demonstrated &mdash; cannot be built as a composition of
+the applicative parsers we have distilled so far. We need a brand new
+mechanism.  
+This new tool is indeed pretty simple: we just need an operator
+similar to the Applicative Functor's `<*>`, only a bit smarter; a
+function able to pass the value successfully parsed by a parser to the
+next parser. So, something that could *bind* 2 parsers in a row.  
+Not surprisingly, we will call this operator `bind` &mdash; or `>>=`,
+because we functional programmers can't get enough of symbols &mdash;
+and the resulting notion *monad*.
 
-If you find this code convoluted because of the value passing boiler
-plate, you are absolutely right: it sucks. Hang in there for a few
-more minutes: soon we will introduce a technique to dramatically
-streamline the code.
+Implementing it will be super easy &mdash; just a matter of following
+the type signature &mdash; but the consequences will be revolutionary.
 
-Fine. Let's finally implement this infamous `bind` combinator.
-
-## Follow the type signature
-```fsharp
-// 'a Parser -> ('a -> 'b Parser) -> 'b Parser
-let bind m f = ...
-```
-
-Going with the flow and following the type signature, we know we have
-to return a `'b Parser`:
-
-
-```fsharp
-let bind m f = Parser (fun s ->
-    ...)
-```
-
-We have the input string `s` and `m`, the `'a Parser`. If we run this
-parser with the input string, we will get back a parsing result,
-possibly containing a parsed value `a: 'a`:
-
-```fsharp
-let bind m f = Parser (fun s ->
-    let resultA = run m s
-    ...)
-```
-
-We are not sure that the parsing succeeded. We'd better pattern
-match. Of course, in case of failure, we can let `binda just fail.
-
-```fsharp
-let bind m f = Parser (fun s ->
-    let resultA = run m s
-    match resultA with
-    | Failure f -> Failure f
-    | Success(rest, a) ->
-        ...)
-```
-
-In case of success, we get the the unconsumed input and the `'a`
-value: exactly what we needed to get the `'b Parser`:
+Curious? Grab a liquorice and jump to [Chapter
+14](/monadic-parser-combinators-14): we are going to write it.
 
 
-```fsharp
-let bind m f = Parser (fun s ->
-    let resultA = run m s
-    match resultA with
-    | Failure f -> Failure f
-    | Success(rest, a) ->
-        let bParser = f a
-        ...)
-```
+# References
 
-We are done! We got the `'b Parser` we wanted. We cannot just return
-it, because our code is surrounded by `Parser (fun s -> ...)`  and we
-would end up with a parser inside a parser. Idea: we can `run` the `b
-Parser` with the `rest` input to get its parsed value:
+* [Garden Path Sentence][garden-path-sentence]
+* [semordnilaP][semordnilap]
+* [Context-sensitive Grammar][context-sensitive-grammar]
 
+[semordnilap]: https://en.wiktionary.org/wiki/semordnilap
+[garden-path-sentence]: https://en.wikipedia.org/wiki/Garden-path_sentence
+[context-sensitive-grammar]: https://en.wikipedia.org/wiki/Context-sensitive_grammar
 
-```fsharp
-let bind m f = Parser (fun s ->
-    let resultA = run m s
-    match resultA with
-    | Failure f -> Failure f
-    | Success(rest, a) ->
-        let bParser = f a
-        run bParser rest)
-```
-
-Test it. Green!
-
-## Is That All, Folks?
-
-You might not be impressed by this result. In fact, it's an explosive
-one. This little unsuspected `bind` function, together with `return'`,
-is so powerful that it could replace everything you did in the last 13
-chapters. It's such a game changer that F# provides native support for
-its style, which will bring a dramatic shift to both the syntax and
-style of your code, for the better.
-
-If you never enjoyed a Tamil Kootu, that's the perfect chance to give
-it a try. [Chapter 14](/monadic-parser-combinators-14), here we come!
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/33)
