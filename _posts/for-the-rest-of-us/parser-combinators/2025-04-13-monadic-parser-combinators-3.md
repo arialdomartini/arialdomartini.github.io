@@ -257,9 +257,6 @@ for [the next chapter](monadic-parser-combinators-4).
 Signature!!](/monadic-parser-combinators-4)
 
 
-# References
-
-
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/33)
 

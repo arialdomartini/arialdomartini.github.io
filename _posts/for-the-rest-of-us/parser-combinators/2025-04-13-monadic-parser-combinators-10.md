@@ -233,9 +233,7 @@ let d:  'd         = f     a      b      c
 let dP: 'd Parser  = f <!> aP <*> bP <*> cP
 ```
 
-
 Basically, we are writing an enhanced version of whitespace.
-
 
 <p align="center">
   <img src="static/img/parser-combinators-for-the-rest-of-us/map-ap-part-3.png"
@@ -243,7 +241,15 @@ Basically, we are writing an enhanced version of whitespace.
 </p>
 
 
-Implementing `<*>` is not hard at all. You just have to be driven by
+ If you don't like the fact that `<*>` is used for all the arguments
+but the first one, you might prefer this alternative syntax:
+
+```fsharp
+let dP: 'd Parser  = pure' f <*> aP <*> bP <*> cP
+```
+
+It's not hard to verify that it's completely equivalent. Anyway,
+implementing `<*>` is not hard at all. You just have to be driven by
 the type signature. Let's start with the simplest case of 1-parameter
 functions. `ap` / `<*>` is that operator that given a 1-parameter
 function wrapped in a Parser:
@@ -441,17 +447,47 @@ let ``ap with a 3-parameter function`` () =
     test <@ run dP "some input" = Success ("some input", "42, True, foobar") @>
 ```
 
-Amazing! It works! To this end, I did not introduce `pure'` as a
-coincidence: in fact, the combination of `pure'` and `<*>` is what
-conventionally defines Applicative Functors.
+Amazing! It works!
 
-Time to get our hands dirty building some real parsers with `<*>` and
-`pure'`! Treat yourself with a rösti and get prepared to [Chapter
+## Applicative Functors
+I did not introduce `pure'` as a coincidence: in fact, the combination
+of `pure'` and `<*>` is what conventionally defines Applicative
+Functors. There are 2 possible interpretation of Applicative
+Functors. The first is about what we have just experimented: seeing
+them as an extension of function application. It should not come as a
+surprise that we have made every effort to ensure that using
+Applicative Functors resembled just applying functions:
+
+```fsharp
+let d:  'd         = f     a      b      c
+let dP: 'd Parser  = f <!> aP <*> bP <*> cP
+```
+
+I have always been fascinated by the way the [Idris] programming
+language took this interpretation to the extreme, with Conor McBride's
+[Idiom Brackets][idris-idiom-brackets]:
+
+```idris
+d = [| f aP bP cP |]
+```
+
+Like this, it really seems an ordinary function application! But
+enough for now. Time to get our hands dirty building some real parsers
+with `<*>` and `pure'`, and to play with the second interpretation of
+Applicative Functors, that has to do with the notion of lifting
+functions. Treat yourself with a rösti and get prepared to [Chapter
 11](/monadic-parser-combinators-11).
 
 [Previous - Things You Don't Care About](/monadic-parser-combinators-9) ⁓
 [Next - Lifting Functions](/monadic-parser-combinators-11)
 
+# References
+
+- [Idris][idris]
+- [Idris - Idiom Brackets][idris-idiom-brackets]
+
+[idris]: https://idris-lang.org/
+[idris-idiom-brackets]: https://docs.idris-lang.org/en/latest/tutorial/interfaces.html?highlight=idiom%20bracket#idiom-brackets
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/33)
