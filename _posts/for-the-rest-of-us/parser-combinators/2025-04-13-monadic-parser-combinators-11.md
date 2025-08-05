@@ -217,7 +217,8 @@ unknown things. This require a new tool in our toolbelt, something
 giving our parsers the ability to *try* a parsing, and to eventually
 recover from a failure. We will cover exactly this in the next
 chapter. Instead, let's close this one with a last twist: let's invent
-the notion of *lifting functions*.
+the notion of *lifting functions*, a possible second interpretation of
+Applicative Functors.
 
 ## Lifting functions
 We learnt that a function taking values can be applied to parsers of
@@ -230,12 +231,11 @@ let fP: 'value Parser  = f <!> aP <*> bP <*> cP
 ```
 
 In a sense, the combination of `<!>` and `<*>` elevates a function
-from the world of ordinary values to the parser world.
-
-This lifting happens as we provide one argument after the other. It
-would be nice to have an operator to perform that lifting before hand,
-even before we have an argument to feed the function with. In other
-words, it would be amazing if we could convert:
+from the world of ordinary values to the parser world. This lifting
+happens as we provide one argument after the other. It would be nice
+to have an operator to perform that lifting beforehand, even before we
+have an argument to feed the function with. In other words, it would
+be amazing if we could convert:
 
 ```fsharp
 f:   a -> b -> c -> d
@@ -247,12 +247,14 @@ into:
 fP: 'a Parser -> 'b Parser -> 'c Parser -> 'd Parser
 ```
 
+in one shot. That's the work for `lift3`:
+
 <p align="center">
   <img src="static/img/parser-combinators-for-the-rest-of-us/lift3.png" alt="lift3 function" height="350px">
 </p>
 
-But this is a piece of cake! We don't even need a test for this, type
-checking will suffice:
+But implementing it is a piece of cake! We don't even need a test for
+this, type checking will suffice:
 
 ```fsharp
 let lift3 f =
@@ -270,20 +272,20 @@ instead of:
 
 ```fsharp
 let multiDateP =
-  makeMultiDate <!> intP <*> times <*> fancyDate
+    makeMultiDate <!> intP <*> times <*> fancyDate
 ```
 
 you can just write:
 
 ```fsharp
 
-let multiDateP = (lift3 makeMultiDate) intP times fancyDate
+let multiDateP = 
+    (lift3 makeMultiDate) intP times fancyDate
 ```
 
-It's like writing parser-powered code while removing all the parser
-boilerplate from sight, so to get back the original linear, pure code.
-Sweet!
-
+It's like writing parser-powered code while removing all the
+boilerplate code from sight, so to get back the original linear, pure
+code. Sweet!  
 As the name suggests, `lift3` works for 3-parameter functions. For
 2-parameter functions `lift2` is similarly defined as:
 
@@ -307,12 +309,12 @@ let lift f a = f <!> a
 </p>
 
 
-But look! *Eta-reducing* this expression &mdash; that is, removing `a`
-and `f` from both sides &mdsah; it's easy to see that `lift` is in
-fact our old friend `map`:
+But look! [η-reducing][eta-conversion] this expression &mdash; that
+is, removing `a` and `f` from both sides &mdash; it's easy to see that
+`lift` is in fact our old friend `map`:
 
 ```fsharp
-let lift = (<!>)
+let lift = map
 ```
 
 
@@ -322,9 +324,20 @@ let lift = (<!>)
 
 Given the diagram, it all makes sense.
 
-Enough for now. Let's take a break: you deserve a pistacchio kulfi to
+That'll do for now! Let's take a break: you deserve a pistacchio kulfi to
 refresh your mind.  
 See you later in [Chapter 12](/monadic-parser-combinators-12).
+
+
+[Previous - Applying Functions, Ad Nauseam](/monadic-parser-combinators-10) ⁓
+[Next - Things You Are Not Sure About](/monadic-parser-combinators-12)
+
+
+# References
+
+[Eta Reduction][eta-conversion]
+
+[eta-conversion]: https://wiki.haskell.org/Eta_conversion
 
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/33)
