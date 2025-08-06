@@ -250,6 +250,11 @@ This has been a tough chapter and you deserve some rest. If you never
 enjoyed a Tamil Kootu, that's the perfect chance to give it a
 try. [Chapter 15](/monadic-parser-combinators-15), here we come!
 
+
+[Previous - Things You Want To Remember](/monadic-parser-combinators-13) ⁓
+[Next - One Combinator to Rule Them All](/monadic-parser-combinators-15)
+
+
 # Comments
 [GitHub Discussions](https://github.com/arialdomartini/arialdomartini.github.io/discussions/33)
 
