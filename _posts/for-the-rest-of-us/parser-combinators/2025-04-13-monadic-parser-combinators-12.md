@@ -17,9 +17,8 @@ library you are building:
 result of other parsers. Basically, it's equivalent to equipping
 parsers with a form of memory. This capability will allow you to parse
 more complex languages and will dramatically change the way you write
-parsers.  
-As you have surely guessed already, this is about introducing monads.
-We will get there in the very next chapter.
+parsers. This requires introducing monads. We will get there in the
+very next chapter.
 
 
 *Backtracking* is the ability to recover from errors and to explore
@@ -34,7 +33,9 @@ The basic operator for implementing backtracking is `<|>`: its purpose
 is to try the parser on its left, first; if that parser fails, instead
 of propagating the error, it *backtracks* trying the parser on the
 right, using the original input. If both parsers fail, only then a
-parsing error is returned. The implementation is straightforward.
+parsing error is returned. We implemented it already in [Chapter
+3](/monadic-parser-combinators-3), but before introducing a `Parser`
+type wrapper. The implementation is straightforward:
 
 ```fsharp
 let orElse tryFirst fallback  =
@@ -50,22 +51,21 @@ type SomeResult = One | Two
 
 [<Fact>]
 let ``applies the first parser if successful`` () =
-    let firstParser = Parser (fun _ -> Success ("the rest", One))
-    let fallback = Parser (fun _ -> Success ("the rest", Two))
+    let firstParser = Parser (fun _ -> Success (One,  "the rest"))
+    let fallback = Parser (fun _ -> Success (Two, "the rest"))
 
     let trying = firstParser <|> fallback
 
-
-    test <@ run trying "some input" = Success ("the rest", One) @>
+    test <@ run trying "some input" = Success (One, "the rest") @>
 
 [<Fact>]
 let ``if the first parser fails, applies the fallback parser`` () =
     let alwaysFails = Parser (fun _ -> Failure "failed!")
-    let fallback = Parser (fun _ -> Success ("the rest", Two))
+    let fallback = Parser (fun _ -> Success (Two, "the rest"))
 
     let trying = alwaysFails <|> fallback
 
-    test <@ run trying "some input" = Success ("the rest", Two) @>
+    test <@ run trying "some input" = Success (Two, "the rest") @>
 ```
 
 
@@ -84,24 +84,25 @@ let ``sequence of <|>`` () =
     let p3 = Parser (fun _ -> Failure "failed!")
     let p4 = Parser (fun _ -> Failure "failed!")
     let p5 = Parser (fun _ -> Failure "failed!")
-    let fallback = Parser (fun _ -> Success ("the rest", Whatever))
+    let fallback = Parser (fun _ -> Success (Whatever, "the rest"))
 
     let trying = p1 <|> p2 <|> p3 <|> p4 <|> p5 <|> fallback
 
-    test <@ run trying "some input" = Success ("the rest", Whatever) @>
+    test <@ run trying "some input" = Success (Whatever, "the rest") @>
 ```
 
 This invites us to conceive a combinator that tries all the parsers we
 feed it with:
 
 ```fsharp
-let choice (parsers: 'a Parser list) : 'a Parser =
-    failwith "Not yet implemented"
+let choice (parsers: 'a Parser list) : 'a Parser = __
 
-let failing = Parser (fun _ -> Failure "failed!")
 
 [<Fact>]
 let ``applies the first successful parser`` () =
+
+    let failing = Parser (fun _ -> Failure "failed!")
+    
     let p1 = failing
     let p2 = failing
     let p3 = failing
@@ -148,10 +149,11 @@ but F# type inference would scream at us.
 
 Technically speaking, this super-short version is based on the fact
 that a `Parser`, together with the binary operation `<|>` *forms a
-semigroup*. In simple words, this means that we managed to have an
-operation to reduce 2 different items into 1, and this is a very well
-known pattern in functional programming. Indeed, `List.reduce` is
-based on that pattern. It documentation states:
+[semigroup][semigroup]*. In simple words, this means that we managed
+to have an operation to reduce 2 different items into 1, and this is a
+very well known pattern in functional programming. Indeed,
+`List.reduce` is based on that pattern. [Its documentation][reduce]
+states:
 
 ```
 val reduce: reduction: ('T -> 'T -> 'T) -> list: 'T list -> 'T
@@ -168,8 +170,8 @@ it, that's the sign that you hit the nail on the head.
 
 ### Month names
 
-Let's see how to apply `choice` in a concrete case. Say that you want
-to parse a date from the format `12 Oct 2025`. For the month part, you
+Let's see how to apply `choice` to a concrete case. Say that you want
+to parse a date in the format `12 Oct 2025`. For the month part, you
 would like to parse:
 
 | Input   | Parse result |
@@ -191,7 +193,7 @@ would like to parse:
 Here is how we could create `12` parsers in one shot:
 
 ```fsharp
-let months: int Parser list =
+let months: string list =
     [ "Jan"
       "Feb"
       "Mar"
@@ -205,44 +207,75 @@ let months: int Parser list =
       "Nov"
       "Dec" ]
 
-let monthParsers =
+let monthParsers: int Parser list =
     months
-    |> List.mapi (fun idx kw -> ((fun _ -> idx + 1) <!> (str kw)))
+    |> List.mapi (fun idx month -> ((fun _ -> idx + 1) <!> (str month)))
 ```
 
-Then, we can use `choicea to coalesce them in a single parser:
+Then, we can use `choice` to coalesce them in a single parser:
 
 ```fsharp
 let monthParser = choice monthParsers
 
 [<Fact>]
 let ``parses a month`` () =
-    test <@ run monthParser "Oct 2025" = Success (" 2025", 10) @>
-    test <@ run monthParser "Apr 2009" = Success (" 2009", 4) @>
+    test <@ run monthParser "Oct 2025" = Success (10, " 2025") @>
+    test <@ run monthParser "Apr 2009" = Success (4, " 2009") @>
     test <@ run monthParser "not a month" = Failure "Expected Dec" @>
 ```
 
-Notice that when this parser fails, it emits the error emitted by the
+Note that when this parser fails, it emits the error produced by the
 last parser in the collection. This is less than ideal. There are
 techniques to improve that, but let's not get sidetracked. We have
 other interesting combinators to invent, first.
 
-Of course, if you want `monthParser` to return an `int` instead of a
-`char`, you can `map` an `char -> int` function to it.  
+## Simplify Until It Can't Be Simpler
+Have you noticed how, the more combinators we add to our toolbelt, the
+smaller is the need of developing manually-written parsers? Basically,
+the only parser we wrote without combinators is `str`. We distilled
+almost all the other ones by the application of `<!>`, `<*>`, `<|>`
+and their friends. Even further: it's not hard to see how `str` itself
+can be decomposed into smaller parsers. What about, for example,
+combining:
 
-Are you getting familiar with this way of mixing these little
-combinators?
+- A collection of parsers, each for a specific char (like the parser
+  for `a`, the parser for `5` and the like).
+- `choice`, the combinator we just wrote, to generate a parser for any
+  of the provided parsers. Or even better, `anyOf`, to generate a
+  parser for any of the provided characters. So, a parser for a digit
+  would be simple `anyOf ['0'..'9']`.
+- `many`, to keep parsing, until the input string cannot be parsed
+  anymore. This way, `many (anyOf ['0'..'9'])` would parse any
+  sequence of digits (including the empty one).
+
+You see how these few tools are enough for parsing strings, digits,
+sequences of digits (i.e., numbers), etc. And if you take it to the
+extreme, you also see how, amazingly, we can decompose the parser for
+a specific character even more: the classic approach is to have the
+parser `any` for *any* character, combined with `satisfy`, a
+combinator that imposes some restrictions to parsers (in this case:
+making sure the character parsed by `any` is the desired one).  
+In a sense, we are scraping the bottom of the barrel, with parser
+combinators: the hand-made parsers we stricly need are reducing to the
+really trivial ones. In other words, we are seeing with our eyes how,
+at its core, parser design thrives on simplicity: it's an art of
+seeing patterns in the complexity, and of abstracting each pattern in
+a specific combinator. Applyuing this aproach over and over will lead
+us to end up with an interesting asymmetry: a very reach grammar of
+combinators, a next-to-empty collection of actual parsers.
+
+Following this path, let's build `anyOf` and `many`.
 
 ## anyOf
-A very convenient helper function you can build on top of `choose` is
-`anyOf`: it takes a list of characters and it builds a parser for any
-of them. Under the hoods, it uses `charP`, a parser for a single
-character:
+`anyOf` is just a helper function. It takes a list of characters and
+it builds a parser for any of them. Under the hoods, it uses `charP`,
+a parser for a single character:
 
 ```fsharp
+
 let charP (c: char) = Parser (fun input ->
     if input.StartsWith(c)
-    then Success (input[1..], c)
+    then Success (c, input[1..])
     else Failure "Expected '{c}'" )
 
 let anyOf chars =
@@ -253,59 +286,45 @@ let digit = anyOf ['0'..'9']
 
 [<Fact>]
 let ``parses any digit`` () =
-    test <@ run digit "42 the rest" = Success ("2 the rest", '4') @>
-    test <@ run digit "92 the rest" = Success ("2 the rest", '9') @>
+    test <@ run digit "42 the rest" = Success ('4', "2 the rest") @>
+    test <@ run digit "92 the rest" = Success ('9', "2 the rest") @>
 ```
-
-`anyOf` is a classical low-level parser which can be used as a trivial
-building block of other more complex parsers, by the means of `<!>`
-and other combinators.
 
 ## many
 Remember that we started investigating this very topic in the attempt
 of parsing an unsigned integer of an unknown number of digits. We are
 very close to this goal. Be ready to see a disappointing
-implementation, though: in fact, we are scratching the bottom of what
+implementation, though: in fact, we are approaching the limit of what
 is possible with Functors and Applicative Functors, and soon we will
 need Monads.
 
-So, back to our number with arbitrary digits problem. The idea is:
+The idea is:
 
 * To build a combinator `many` that keeps trying a specific parser
   over and over, until it fails. The parser generated by `many` would
   return the list of all the successfully parsed values.
-* To parse many digits, we could apply `many` to the parser
-  `anyDigit`. This in turn must be able to detect a single digit (any
-  of `1`, `2`, `3`, etc).
-* How to build `anyDigit`? We can apply `choice` on 10 separate simple
-  parsers, each handling a single digit.
-* Instead of writing 10 different parsers, we could build a factory of
-  parsers, to be fed with `[0..9]`.
-* The result will be a Parser emitting a the list of digits. We know
-  how to convert a list of digits to a number. And we know how to use
-  `map` to convert a Parsr of list of digits to a Parser of numbers. 
+* To feed `many` with the `digit` parser we just built.
+* The result will be a Parser for a list of digits. We know how to
+  convert a list of digits to a number, so it's a matter of applying
+  this logic by the means `map`.
 
 Let's go.
 
 ```fsharp
-let many<'a> (parser: 'a Parser): 'a list Parser = 
-    failwith "Not yet implemented"
+let many<'a> (parser: 'a Parser): 'a list Parser = __ 
     
-let toInteger (digits: char list) : int =
-    failwith "Not yet implemented"
+let toInteger (digits: char list) : int = __
 
-let intP: int Parser =
-    failwith "Not yet implemented"
+let intP: int Parser = __
 
 [<Fact>]
 let ``parse numbers of any number of digits`` () =
-    test <@ run intP "1 the rest" = Success (" the rest", 1) @>
-    test <@ run intP "42 the rest" = Success (" the rest", 42) @>
-    test <@ run intP "2025+7999" = Success ("+7999", 2025) @>
+    test <@ run intP "1 the rest" = Success (1, " the rest") @>
+    test <@ run intP "42 the rest" = Success (42, " the rest") @>
+    test <@ run intP "2025+7999" = Success (2025, "+7999") @>
 ```
 
-Assuming the other components will eventually be there, implementing
-`intP` it is a walk in the park:
+Implementing `intP` it is a walk in the park:
 
 ```fsharp
 let intP = many digit |>> toInteger
@@ -339,8 +358,7 @@ let ``from list of chars to integer`` () =
 The last missing piece is, finally, `many`:
 
 ```fsharp
-let many<'a> (parser: 'a Parser): 'a list Parser =
-        failwith "Not yet implemented"
+let many<'a> (parser: 'a Parser): 'a list Parser = __
 
 
 [<Fact>]
@@ -348,51 +366,9 @@ let ``applies a parser many times`` () =
 
     let manyWell = many (str "well!")
 
-    test <@ run manyWell "well!well!well! the rest" = Success(" the rest", ["well!";"well!";"well!"]) @>
+    test <@ run manyWell "well!well!well! the rest" =
+    Success(["well!";"well!";"well!"], " the rest") @>
 ```
-
-`many` will often come in handy: for example, it can be used to handle
-the case of an unknown number of spaces between keywords, in your
-language. Here's the complete code for parsing a simple binary
-mathematical expression:
-
-```fsharp
-type Operation = Sum | Substraction
-
-type Expression = Expression of (int * int * Operation)
-
-[<Fact>]
-let ``parses elements ignoring the separating white spaces`` () =
-    let toInteger (digits: char list) : int =
-        digits
-        |> List.map string
-        |> String.concat ""
-        |> int
-
-    let digit = anyOf ['0'..'9']
-    let intP = many digit |>> toInteger
-
-    let sum = (str "+") |>> (fun _ -> Sum)
-    let subtraction = (str "-") |>> (fun _ -> Substraction)
-
-    let operation: Operation Parser = sum <|> subtraction
-
-    let spaces = many (charP ' ')
-
-    let makeExpression n1 _spaces1 op _space2 n2 =
-        Expression (n1, n2, op)
-
-    let expression =
-        makeExpression <!> intP <*> spaces <*> operation <*> spaces <*> intP
-
-    test <@ run expression "12  +   42" = Success ("", Expression (12, 42, Sum)) @>
-    test <@ run expression "1942-9" = Success ("", Expression (1942, 9, Substraction)) @>
-```
-
-
-As for any other parser combinator, the parser manipulated by `many`
-can be arbitrarily complex; it can be as simple as the parser of a
-single charactes as a whole JSON parser. `many` just won't care.
 
 
 Implementing `many` is actually quite challenging. We have to build a
@@ -409,19 +385,19 @@ Here's a possible implementation:
 let many<'a> (parser: 'a Parser): 'a list Parser = Parser (fun input ->
     let rec zeroOrMore input =
         match run parser input with
-        | Failure _ -> (input, [])
-        | Success (rest, result) ->
+        | Failure _ -> ([], input)
+        | Success (result, rest) ->
             match (zeroOrMore rest) with
-            | rest, [] -> (rest, result :: [])
-            | rest, others -> (rest, result :: others)
+            | [], rest -> (result :: [], rest)
+            | others, rest -> (result :: others, rest)
 
     Success(zeroOrMore input))
 ```
 
-As you see, it makes use of a `zeroOrMore` inner function which does
-not operate in the parser world. It just executes the parser with
-`run`, recursing during the list building. As soon as `parser` fails,
-it stops.
+Not so easy, right? As you see, it makes use of a `zeroOrMore` inner
+function which does not operate in the parser world. It just executes
+the parser with `run`, recursing during the list building. As soon as
+`parser` fails, it stops.
 
 Now, this is what I call a disappointing implementation. We have gone
 through 11 chapters, developing building blocks after building blocks,
@@ -429,7 +405,8 @@ only to be back to square one, building `many` by the means of pattern
 matching and passing `rest` around. That's depressing.
 
 Wait a minute! Can't we lift the function for recursively bulding a
-list to the Parser world using `<!>` and `<*>`? I mean, if:
+list to the Parser world using `<!>` and `<*>`? I mean, if building a
+list can be done [cons-ing][cons] values with:
 
 ```fsharp
 let cons head tail = head :: tail
@@ -455,17 +432,19 @@ let rec many parser =
 Here we go! If the first part (the lifted `cons`) fails, we just a
 lifted empty list.
 
-It perfectly type checks. This is promising! If it compiles it works,
-right! Until it does not. Damn. Try yourself: if you run the test, it
-enters an infinite loop. It compiled only because `⊥`, or `bottom`,
-the ideal type representing never-returning functions, is a member of
-all the types. What a scam...
+It perfectly type checks. This is promising! "If it compiles it
+works", they told you. Until it does not. Try yourself: if you run the
+test, it enters an infinite loop. It compiled only because `⊥`, or
+[bottom][bottom], the ideal type representing never-returning
+functions, is a member of all the types. What a scam...
 
 In simpler words, the problem here is that function application is
 eager: F# evaluates all the arguments before passing them to a
 function. If we had a lazy language, like Haskell, this implementation
 could possibly work, but that's not the case with F#.
 
+
+## Many, For The Rest Of Us
 What about this implementation?
 
 ```fsharp
@@ -477,7 +456,7 @@ let rec many parser =
     } <|> (pure' [])
 ```
 
-OK, this is a syntax we never encountered before. I don't expect you
+This is a syntax we never encountered before. I don't expect you
 to immediately understand it, if you never encountered do-notation.
 But maybe you can grasp some of it:
 
@@ -493,16 +472,16 @@ I bet that you agree: besides the funny new syntactic elements, this
 version is way more linear than the original:
 
 ```fsharp
-let many<'a> (parser: 'a Parser): 'a list Parser = Parser (fun input ->
-    let rec zeroOrMore input =
-        match run parser input with
-        | Failure _ -> (input, [])
-        | Success (rest, result) ->
-            match (zeroOrMore rest) with
-            | rest, [] -> (rest, result :: [])
-            | rest, others -> (rest, result :: others)
-
-    Success(zeroOrMore input))
+let many<'a> (parser: 'a Parser) : 'a list Parser =
+    Parser(fun input ->
+        let rec zeroOrMore input =
+            match run parser input with
+            | Failure _ -> ([], input)
+            | Success(result, rest) ->
+                match (zeroOrMore rest) with
+                | [], rest -> (result :: [], rest)
+                | others, rest -> (result :: others, rest)
+         Success(zeroOrMore input))
 ```
 
 Ladies and gentlemen, enter monads and monadic computation
@@ -510,8 +489,26 @@ expressions. We've delayed this out long enough. It's time to open
 that door. The next chapter should provide the rational why and in
 which cases we need monadic parsers. Then, we will invent them.
 
-Take a long break. Enjoy a Swiss cheese fondue. We will see in
-[Chapter 13](/monadic-parser-combinators-13)
+Take a long break. Enjoy a Swiss cheese fondue (and take your time to
+digest it). We will see in [Chapter
+13](/monadic-parser-combinators-13)
+
+
+[Previous - Lifting Functions](/monadic-parser-combinators-11) ⁓
+[Next - Things You Want To Remember](/monadic-parser-combinators-13)
+
+
+# References
+
+- [nCatLab - Semigroup][semigroup]
+- [reduce - FSharp.Core/list.fsi#L1717][reduce]
+- [Wikipedia - cons][cons]
+- [Bottom][bottom]
+
+[semigroup]: https://ncatlab.org/nlab/show/semigroup
+[reduce]: https://fsharp.github.io/fsharp-core-docs/reference/fsharp-collections-listmodule.html#reduce
+[cons]: https://en.wikipedia.org/wiki/Cons
+[bottom]: https://wiki.haskell.org/Bottom
 
 # Comments
 [GitHub
