@@ -10,9 +10,9 @@ include_in_index: false
 Monads are beautiful, and so is F#. No wonders that the latter
 natively supports the former. There a little trick to extend the F#
 syntax to support monadic parser combinators. Indeed, since F#
-natively knows how to deal with monads, via [Computation
+natively knows how to deal with Monads, via [Computation
 Expressions][computation-expression], it's a matter telling it
-which monad implementation to use.  
+which Monad implementation to use.  
 The implementations of `bind` and `return'` will suffice:
 
 ```fsharp

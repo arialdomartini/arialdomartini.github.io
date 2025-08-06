@@ -258,7 +258,7 @@ terms of the parsers that emit those values: it's just one level of indirection 
 If I may borrow a metaphor, it's like there are 2 separate realms: the
 poor's man world of ordinary functions, manipulating simple values;
 and the elevated World Of Parsers, up there beyond the clouds, a realm
-full of funny operators, functors and monads. It would be awesome to
+full of funny operators, Functors and Monads. It would be awesome to
 work down here on the ground, as we are already used to do, then to
 pop the result into a magic elevator, hit the button for the Parser
 World floor, and take it all in up there, for free. This is what the

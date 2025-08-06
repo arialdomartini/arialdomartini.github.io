@@ -12,8 +12,8 @@ on the back to celebrate this little `bind` function, and how it is
 our most outstanding invention since chapter 1.  
 Here's the plan:
 
-- We will see how monads entail and incorporate functors and
-  applicative functors, and how `bind` can be used to reimplement
+- We will see how Monads entail and incorporate Functors and
+  Applicative Functors, and how `bind` can be used to reimplement
   `map` and `<*>`. Basically, we will find out that `bind` was the
   missing Swiss Army Knife to implement everything and the kitchen
   sink.
@@ -48,7 +48,7 @@ exercise more.
 sections ahead, I will be able to show you what a tremendous power you
 uncovered with `>>=`.
 
-## Look ma, functors!
+## Look Ma, Functors!
 Do you remember when in [Chapter
 7](/monadic-parser-combinators-7) we defined `map`?
 
@@ -188,7 +188,7 @@ after playing enough with FP, you will find it understandable. And I
 promise that when we will eventually distill the *do notation*, you
 will even find it familiar.
 
-## Look ma, applicative functors either!
+## Look Ma, Applicative Functors Too!
 Writing `map` in terms of `>>=` was cool. But we already wrote it
 in terms of `<*>`, so shall we be so impressed?
 
@@ -338,7 +338,7 @@ let ap fP (aP: 'a Parser) =
 The compiler is happy, tests are green, so this expression must be
 correct.
 
-## Not really my vibe
+## Not Really My Vibe
 
 If you are one of those horrible developers who are proud when the
 code is super-concise, magic and almost impenetrable to your
@@ -357,7 +357,7 @@ will quickly proceed with [Chapter
 16](/monadic-parser-combinators-16), in which I intend to transform
 this horrible syntax into something more digestible for the rest of
 us. Then, I promise, there will be a very convincing reason to rewrite
-*some* of the past combinators with monads. In the meanwhile, buon
+*some* of the past combinators with Monads. In the meanwhile, buon
 appetito.
 
 

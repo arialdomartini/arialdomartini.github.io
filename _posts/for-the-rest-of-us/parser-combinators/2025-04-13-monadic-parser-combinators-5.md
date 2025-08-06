@@ -140,7 +140,7 @@ leveraged.
 
 So, let's see how to fix the pyramid of doom we wrote in `parsePerson`
 by distilling a new function application. And let's see how this leads
-us to re-invent &mdash; yet another time &mdash; monads.
+us to re-invent &mdash; yet another time &mdash; Monads.
 
 Take a break, bite an apple, then jump to [the next installment](/monadic-parser-combinators-6).
 

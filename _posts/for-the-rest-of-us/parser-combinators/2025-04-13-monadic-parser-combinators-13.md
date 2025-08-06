@@ -42,7 +42,7 @@ How hard can it be? The first recipe that comes into mind is:
 - Then, we parse again the tag name, this time betweeen `</` and
   `>`. Of course, we will use `between` again.
 - Finally, we combine all that we parsed to build an instance of
-  `Node`, either using the applicative functor's `<*>` or lifting the
+  `Node`, either using the Applicative Functor's `<*>` or lifting the
   `Node` costructor with `lift3`.
 
 Instead of `many`, which succeeds also in case of empty collections,

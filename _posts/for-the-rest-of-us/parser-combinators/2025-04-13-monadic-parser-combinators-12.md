@@ -17,7 +17,7 @@ library you are building:
 result of other parsers. Basically, it's equivalent to equipping
 parsers with a form of memory. This capability will allow you to parse
 more complex languages and will dramatically change the way you write
-parsers. This requires introducing monads. We will get there in the
+parsers. This requires introducing Monads. We will get there in the
 very next chapter.
 
 

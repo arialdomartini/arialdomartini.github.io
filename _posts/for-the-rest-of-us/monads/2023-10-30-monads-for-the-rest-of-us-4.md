@@ -396,7 +396,7 @@ Func<A, IO<C>> ComposedWith<A, B, C>(this Func<B, IO<C>> f, Func<A, IO<B>> g) =>
 That's a typical outcome in the Functional Programming world: pages and pages of deep contemplation and deconstruction of a topic, only to end up with a single-line code formula.
 
 # You made it!
-That was an IO monad. There are of course a bunch of details we passed over &mdash; the monad laws, the `return` operation, the relation between monads, functors and applicatives, and the like &mdash; but I hope you found the topic less intimidating than you expected.
+That was an IO monad. There are of course a bunch of details we passed over &mdash; the monad laws, the `return` operation, the relation between monads, Functors and Applicatives, and the like &mdash; but I hope you found the topic less intimidating than you expected.
 
 Good job! Ready for the next round?  
 The next topics are:

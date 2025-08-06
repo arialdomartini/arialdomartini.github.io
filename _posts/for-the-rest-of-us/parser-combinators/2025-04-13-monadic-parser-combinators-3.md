@@ -246,8 +246,8 @@ is often too late to fix them. So, better investigate.
 The good news is, this problem isn't per se a barrier but an
 invitation: in the next chapter we will intentionally increase the
 complexity of our parsers, so to see the problem arise. Then we will
-code-bend it into an improvement, finally getting to applicative
-functors and monads. Bear with me.
+code-bend it into an improvement, finally getting to Applicative
+Functors and Monads. Bear with me.
 
 Have a slice of Black Forest Cake, you deserve it and you need energy
 for [the next chapter](monadic-parser-combinators-4).

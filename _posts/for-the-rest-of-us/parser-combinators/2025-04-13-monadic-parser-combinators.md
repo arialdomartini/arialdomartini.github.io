@@ -162,7 +162,7 @@ This post tries to stand out in a few different ways:
   theme of this book. Nevertheless, we'll often stray from the main
   path and let our imagination roam, exploring a variety of other
   subjects along the way. You can consider these pages an invitation
-  to discover functors, applicatives, and monads.
+  to discover Functors, Applicatives, and Monads.
 
 - We will write code with Test-Driven Development.  
   Isn't it ironic that we developers often lament the absence of tests

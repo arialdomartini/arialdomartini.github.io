@@ -65,7 +65,7 @@ In [Category Theory for Computing Science][barr-wells], Michael Barr and Charles
 * and the functions of `C` to the functions of `D`
 
 while preserving some rules, that I'm omitting for simplicity.  
-Let me stress again: a functor is *a pair of functions*. A functor is not a thing: it's two. It's the mapping that teletransports your types *and* your functions to the monadic world.
+Let me stress again: a Functor is *a pair of functions*. A Functor is not a thing: it's two. It's the mapping that teletransports your types *and* your functions to the monadic world.
 
 Of course, this is the mathematical definition. Projected to the programming language world, you need some way to implement this idea. No surprises that you can find a wide variety of implementations, from  classes implementing a `Functor` interface, like in [language-ext][language-ext]:
 
@@ -112,14 +112,14 @@ The implementation is not essential, but it is interesting to notice how it ofte
 * "a functor is a type that can map itself to another version of itself using a mapping function"
 * "A functor is a container of values"
 
-The most popular way to visualize functors is using boxes, as in [Functors, Applicatives, And Monads In Pictures][functors-as-boxes]:
+The most popular way to visualize Functors is using boxes, as in [Functors, Applicatives, And Monads In Pictures][functors-as-boxes]:
 
 ![Functors as boxes](static/img/monads-for-the-rest-of-us/functors-as-boxes.png){: height="300px" }
 
 This is all good. But I recommend: don't forget that these are only approximations and visualization stratagems.  
 The box metaphor holds true in many scenarios, but easily falls short in others, leading to situations that can be quite perplexing.
 
-Before implementing functors for our `IO`, `Undetemined` and `Maybe` cases, let's see with some code those 2 different perspectives on Functors.
+Before implementing Functors for our `IO`, `Undetemined` and `Maybe` cases, let's see with some code those 2 different perspectives on Functors.
 
 ## Functor as a mapper
 Take a simple function `string -> int`:

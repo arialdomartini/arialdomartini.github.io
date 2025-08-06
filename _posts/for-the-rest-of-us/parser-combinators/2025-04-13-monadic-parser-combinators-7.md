@@ -73,7 +73,7 @@ function that *opens* it and reveals its content. This is a common
 theme when working with monads: even if monads are not boxes &mdash;
 nor burritos &mdash; sometimes the idea of *opening a monad*,
 operating with its content, and then *wrapping* the result back in
-another monad comes in handy.  
+another Monad comes in handy.  
 Fine. The `Parser` type and the `run` function are an excellent
 starting point.
 
@@ -667,7 +667,7 @@ let ``parsing the string 'falsch as an instance of Boolish`` () =
 
 ## F-word
 Do you realize know what you have just accomplished? You have invented
-functors! In order to understand this better, we need to examine the
+Functors! In order to understand this better, we need to examine the
 `<<|` signature and to reinterpret it through a new lens. Here's the implementation:
 
 ```fsharp
@@ -808,7 +808,7 @@ let ``applying a lift toEpicTime`` () =
 ```
 
 
-Wow... That was a mouthful, wasn't it? Not only are functors
+Wow... That was a mouthful, wasn't it? Not only are Functors
 incredibly powerful, but they are also pervasive in Functional
 Programming, forming a fundamental building block. During your journey, you will surely encounter them in many other contexts.
 

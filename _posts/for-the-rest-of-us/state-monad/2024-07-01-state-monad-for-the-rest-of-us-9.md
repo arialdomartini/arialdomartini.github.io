@@ -155,7 +155,7 @@ get = state $ \ s -> (s, s)
 
 Observe it again: it's a function (inside a `WithCount`), but, in
 applicative and monadic contexts, you pratically use it as a value.
-Playing with functors, applicative and monads is often akin to playing
+Playing with Functors, Applicative and Monads is often akin to playing
 with Quantum Mechanics: things have a dual nature of values and
 functions. In an Applicative context, you can treat `getCount` as *the
 value of `count`*:
