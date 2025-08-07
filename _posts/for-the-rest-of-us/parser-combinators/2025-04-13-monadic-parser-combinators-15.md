@@ -343,9 +343,9 @@ colleagues, you can stop here and praise yourself. In theory you could
 even keep rewriting `many`, `many1`, `>>.`, `.>>`, `between`, `sepBy`
 and all the other parser combinators we have invented in the past
 chapters using `>>=` only. It is technically possible. Just know that
-every time you do that, a fairy loses its wings.
-
-To me, in most of the cases, it would make little sense. I personally find this result too cryptic and not particularly expressive.
+every time you do that, a fairy loses its wings.  
+To me, in most of the cases, it makes little sense. I personally find
+this result too cryptic and not particularly expressive.
 
 So, here's my alternative plan: I would rather get an energizing
 Tiramisù; then I will quickly proceed with [Chapter

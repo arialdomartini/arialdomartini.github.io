@@ -24,8 +24,8 @@ let parse = ParseBuilder()
 ```
 
 Here we go! From now on, whenever F# finds a piece of code inside a
-`parser { }` code block, it knows it can rely on our `bind` and
-`return'` implementation. Even better, we won't even need to
+`parser { }` code block, it knows it can rely on the `Parser`'s `bind`
+and `return'` implementation. Even better, we won't even need to
 explicitly mention `bind` and `return'` in that block: F# will let us
 use some very sweet syntactic sugar. For whatever expression like:
 
@@ -51,10 +51,10 @@ first, you move `value` to the left:
 ![from a bind invocation to do-notation-1](static/img/parser-combinators-for-the-rest-of-us/do-notation-2.png){:width="75%"}
 
   
-Basically, instead of using it the parameter of a lambda, you let it be a
-simple variable. Just use `let!` instead of `let`.
-  
-Then, you move the body of the lambda `doSomethingWith value` to the next line:
+That is, instead of using `value` as a lambda parameter, you promote
+it to be a simple variable. Just use `let!` instead of `let`. Then,
+you move the body of the lambda `doSomethingWith value` to the next
+line:
 
 ![from a bind invocation to do notation-1](static/img/parser-combinators-for-the-rest-of-us/do-notation-3.png){:width="75%"}
 
@@ -62,7 +62,18 @@ And that's it. You can just remove all the boilerplate syntax
 elements, such as the `>>=` operator, `fun`, etc.
     
 ![from a bind invocation to do notation-1](static/img/parser-combinators-for-the-rest-of-us/do-notation-result.png){:width="75%"}
-  
+
+
+So, keep in mind this transformation:
+
+```fsharp
+parser >>= (fun value -> doSomethingWith value)
+
+let! value = parser
+doSomethingWith value
+```
+
+Only, remember to wrap the latter in a `parse { }` block.  
 I find the first step amusing, because it reminds me that [variables
 are syntactic sugar for lambda expressions][variables-sugar].
 
@@ -72,18 +83,18 @@ notation* (see [Changes from Haskell 1.2 to Haskell 1.3 - Monad
 Syntax][haskell-1.3]). That's often what I call it too, although the
 correct name for F# is Computation Expression.
 
-## `map` in do notation
+## `map` In Do Notation
 
 Here's `map`, in its initil implementation, from [Chapter
 7](/monadic-parser-combinators-7):
 
 
 ```fsharp
-let map (f: 'a -> 'b) (ap: 'a Parser) : 'b Parser =
+let map (f: 'a -> 'b) (aP: 'a Parser) : 'b Parser =
     Parser (fun input ->
-        let ar : 'a ParseResult = run ap input
+        let ar : 'a ParseResult = run aP input
         match ar with
-        | Success (rest, a) -> Success (rest, f a)
+        | Success (rest, a) -> Success (f a, rest)
         | Failure s -> Failure s )
 ```
 
@@ -92,16 +103,16 @@ Here is it how we defined it, in [Chapter
 
 ```fsharp
 let map = (<<|)
-let map (f: 'a -> 'b) (a: 'a Parser) : 'b Parser =
-    pure' f <*> a
+let map (f: 'a -> 'b) (aP: 'a Parser) : 'b Parser =
+    pure' f <*> aP
 ```
 
 And, finally, the version of [Chapter
-14](/monadic-parser-combinators-14), implemented with `bind` and `return'`:
+15](/monadic-parser-combinators-15), implemented with `bind` and `return'`:
 
 ```fsharp
-let map (f: 'a -> 'b) (ap: `a Parser) = 
-    bind ap (f >> return')
+let map (f: 'a -> 'b) (aP: `a Parser) = 
+    bind aP (f >> return')
 ```
 
 If we wanted to use the `parser` computation expression, we could
@@ -112,23 +123,46 @@ lead us to:
 
 
 ```fsharp
-let map f aP = parser {
+let map f aP = parse {
     let! a = aP
     let b = f a
-    return' b
+    return b
 }
 ```
 
 Read it as:
 
 * mapping `f` over the parser `aP`
-* generates another parser (`parser { ... }`)
+* generates another parser (`parse { ... }`)
 * working like this:
 * it takes the value `a` parsed by `aP` (`let! a = aP`)
 * and it applies `f` to it (`let b = f a`)
-* and this is the value the new parser would return (`return' b`)
+* and this is the value the new parser would return (`return
+  b`). Notice that we are directly using the native `return`, not our
+  custom `return'`.
 
-Notice the difference between `let!` and `let` in:
+
+Does it work? Let us update the original test we had for `map`:
+
+```fsharp
+[<Fact>]
+let ``parser-powered function application`` () =
+    let twice x = x * 2
+    
+    let p42: int Parser =
+        Parser (fun _ -> Success(42, "rest"))
+
+    let expr = parse {
+        let! v = p42
+        let twiceTheValue = twice v
+        return twiceTheValue
+    }
+
+    test <@ run expr "some input" = Success(84, "rest") @>
+```
+
+Green.  
+It is worth to reflect on the difference between `let!` and `let` in:
 
 * `let! a = aP`
 * `let b = f a`
@@ -142,7 +176,7 @@ always used.
 Of course, you can make the whole implemenetation a bit shorter:
 
 ```fsharp
-let map f aP = parser {
+let map f aP = parse {
     let! a = aP
     return' f a
 }
@@ -152,7 +186,7 @@ As far as I know, when using this style there is no way to obtain a
 Point Free style.
 
 
-## `ap` in do notation
+## `ap` In Do Notation
 Do you remember how we defined the Applicative Functor's `ap` in [Chapter
 10](/monadic-parser-combinators-10)?
 
@@ -161,10 +195,10 @@ Do you remember how we defined the Applicative Functor's `ap` in [Chapter
 let ap fP aP = Parser (fun input ->
     match run fP input with
     | Failure e ->  Failure e
-    | Success (rf, f) ->
+    | Success (r, rf) ->
         match run aP rf with
         | Failure s -> Failure s
-        | Success (ra, a) -> Success (ra, f a))
+        | Success (a, ra) -> Success (f a, ra))
 ```
 
 The 2 parameters of `ap` are both wrapped in a Parser. Indeed, the
@@ -181,19 +215,16 @@ let ap fP aP =
         let! a = aP
 
         return f a
-}
+    }
 ```
 
-Isn't it lovely?
+Isn't it sweet?
 
-## Do notation everywhere
-Computation Expressions are often particularly effective in the way
-they capture the meaning of a parser and they make the intent clear
-and readable.
-
-
-In [Chapter 9](/monadic-parser-combinators-9) we defined `between`
-using `>>.` and `.>>`:
+## Do Notation Everywhere
+Computation Expressions are particularly effective at capturing the
+meaning of a parser and at making the intent clear. In [Chapter
+9](/monadic-parser-combinators-9) we defined `between` using `>>.` and
+`.>>`:
 
 ```fsharp
 let between opening closing content =
@@ -218,15 +249,15 @@ let between openingP closingP contentP =
         let! _ = closingP
 
         return content
-}
+    }
 ```
 
-Straighforward, right?
+Straighforward and readable, isn't it?
 
 Here's a rewarding exercise to do: to go through all the parser
 combinators we have written until this point and to reimplement them
 in do notation style. Not only will you find this very easy &mdash;
-almost a matter of translating the requirement word by word &mdash;
+almost a matter of translating the requirements word by word &mdash;
 but likely you will find the resulting expression more eloquent and
 expressive.
 
@@ -245,7 +276,7 @@ let (.>>.) aP bP =
         let! b = bP
 
         return (a, b)
-}
+    }
 ```
 
 ### `.>>`
@@ -259,7 +290,7 @@ let (.>>) firstP secondP =
         let! _ = secondP
 
         return first
-}
+    }
 ```
       
 ### `>>.`
@@ -292,7 +323,9 @@ let rec many1 p =
     }
 ```
 
-Notice that this is the implementation of `many1`, which fails with sequences with no elements. `many1` is easily obtained combining `many1` with the empty sequence case, by the use of `<|>`:
+Notice that this is the implementation of `many1`, requiring at least
+1 element. `many` is easily obtained combining `many1` with the empty
+sequence case, by the use of `<|>`:
 
 
 ```fsharp
@@ -301,31 +334,34 @@ let rec many p =
     <|> (pure' [])
 ```
 
-We saw this in [Chapter 11](/monadic-parser-combinators-11), remember? We got to the implementation:
+Compare this with what we obtained in [Chapter 11](/monadic-parser-combinators-11):
 
 ```fsharp
 let many<'a> (parser: 'a Parser): 'a list Parser = Parser (fun input ->
     let rec zeroOrMore input =
         match run parser input with
         | Failure _ -> (input, [])
-        | Success (rest, result) ->
+        | Success (result, rest) ->
             match (zeroOrMore rest) with
-            | rest, [] -> (rest, result :: [])
-            | rest, others -> (rest, result :: others)
+            | [], rest -> (result :: [], rest)
+            | others, rest -> (result :: others, rest)
 
     Success(zeroOrMore input))
 ```
 
-and to the more concise:
+and:
 
 ```fsharp
 let rec many parser = 
     (cons <!> parser <*> (many parser)) <|> (pure' [])
 ```
 
+With Computation Expression we obtained an astoundingly easier
+formulation, don't you think?
+
 ### `skipMany`
 Parse zero or more occurrences of something, discarding the result.
-That's easy! Why don't we parse many elements, only to ignore them?
+That's easy! We just need to parse many elements, only to ignore them:
 
 ```fsharp
 let skipMany p =

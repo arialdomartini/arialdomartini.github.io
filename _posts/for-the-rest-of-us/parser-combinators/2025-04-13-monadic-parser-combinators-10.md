@@ -181,13 +181,13 @@ Let's recover from where we left:
 [<Fact>]
 let ``Parser-powered function application with 3 parameters`` () =
 
-    let a: 'a Parser = __
-    let b: 'b Parser = __
-    let c: 'c Parser = __
+    let aP: 'a Parser = __
+    let bP: 'b Parser = __
+    let cP: 'c Parser = __
 
     let f (a: int) (b: 'b) (c: 'c) = __
     
-    let fa: ('b -> 'c -> 'd) Parser = f <!> a
+    let fa: ('b -> 'c -> 'd) Parser = f <!> aP
     ...
 ```
 
@@ -386,7 +386,7 @@ show that, since Applicative Functors are more powerful than Functors,
 we can rewrite `map` in terms of `pure'` and `ap`:
 
 ```fsharp
-let map f a = pure' f <*> a
+let map f aP = pure' f <*> aP
 ```
 
 This `map` implementation may look obscure, but it is in fact very

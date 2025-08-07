@@ -306,9 +306,9 @@ and:
 
 
 ```fsharp
-let (<<|) (f: 'a -> 'b) (a: 'a Parser) : 'b = __
+let (<<|) (f: 'a -> 'b) (aP: 'a Parser) : 'b = __
 
-let (|>>) (a: 'a Parser) (f: 'a -> 'b) : 'b = __
+let (|>>) (aP: 'a Parser) (f: 'a -> 'b) : 'b = __
 
 // A never-failing mock parser always returning 42
 let p42: int Parser =
@@ -351,9 +351,9 @@ This means that the signature of our enhanced operators should rather
 be:
 
 
-| Version        | Operator | Signature                       |
-|----------------|----------|---------------------------------|
-| F# native      | `<|`     | `('a -> 'b) -> 'a -> 'b` |
+| Version        | Operator | Signature                              |
+|----------------|----------|----------------------------------------|
+| F# native      | `<|`     | `('a -> 'b) -> 'a -> 'b`               |
 | Parser-powered | `<<|`    | `('a -> 'b) -> 'a Parser -> 'b Parser` |
 
 and:
@@ -383,9 +383,9 @@ test <@ run (p42 |>> twice) "some input" = Success ("rest", 84) @>
 Putting all together:
 
 ```fsharp
-let (<<|) (f: 'a -> 'b) (a: 'a Parser) : 'b Parser = __
+let (<<|) (f: 'a -> 'b) (aP: 'a Parser) : 'b Parser = __
 
-let (|>>) (a: 'a Parser) (f: 'a -> 'b) : 'b Parser = __
+let (|>>) (aP: 'a Parser) (f: 'a -> 'b) : 'b Parser = __
 
 let p42: int Parser =
     Parser (fun _ -> Success(42, "rest"))
@@ -404,14 +404,14 @@ Now that we are armed with a failing test, we are ready to implement
 you too. Listen to the signature:
 
 ```fsharp
-let (<<|) (f: 'a -> 'b) (ap: 'a Parser) : 'b Parser = ...
+let (<<|) (f: 'a -> 'b) (aP: 'a Parser) : 'b Parser = ...
 ```
 
 It tells us to return an instance of `Parser`. Fine, let's obey. We
 need to invoke the `Parser` case constructor:
 
 ```fsharp
-let (<<|) (f: 'a -> 'b) (ap: 'a Parser) : 'b Parser =
+let (<<|) (f: 'a -> 'b) (aP: 'a Parser) : 'b Parser =
     Parser ...
 ```
 
@@ -419,7 +419,7 @@ What does the case constructor want as an argument? A function from an
 input `string` to something. Fine, type system, I trust you:
 
 ```fsharp
-let (<<|) (f: 'a -> 'b) (ap: 'a Parser) : 'b Parser =
+let (<<|) (f: 'a -> 'b) (aP: 'a Parser) : 'b Parser =
     Parser (fun input ->
         ...)
 ```
@@ -434,7 +434,7 @@ Now:
   `string` input.
 - But look! You do have a `string` input, because you live inside a
   lambda!
-- So, just *run* `ap` with `input` and you will get an `a
+- So, just *run* `aP` with `input` and you will get an `a
   ParseResult`. If it is successful, you will find the `'a` value
   there, together with the unconsumed input.
 - (If it fails, you are safe to let `<<|` fail too).
@@ -446,9 +446,9 @@ Now:
 Let's translate all of this to code:
 
 ```fsharp
-let (<<|) (f: 'a -> 'b) (ap: 'a Parser) : 'b Parser =
+let (<<|) (f: 'a -> 'b) (aP: 'a Parser) : 'b Parser =
     Parser (fun input ->
-        let ar : 'a ParseResult = run ap input
+        let ar : 'a ParseResult = run aP input
         match ar with
         | Success (a, rest) -> Success (f a, rest)
         | Failure s -> Failure s )
@@ -457,15 +457,15 @@ let (<<|) (f: 'a -> 'b) (ap: 'a Parser) : 'b Parser =
 Relying on type inference, you can simplify this to:
 
 ```fsharp
-let (<<|) f ap =
+let (<<|) f aP =
     Parser (fun input ->
-        match run ap input with
+        match run aP input with
         | Success (rest, a) -> Success (rest, f a)
         | Failure s -> Failure s )
         
-let (<<|) f ap =
+let (<<|) f aP =
     Parser (fun input ->
-        match run ap input with
+        match run aP input with
         | Success (a, rest) -> Success (f a, rest)
         | Failure s -> Failure s )
 ```
@@ -490,7 +490,7 @@ dependency injection.
 Defining `|>>` is trivial: just swap the parameters:
 
 ```fsharp
-let (|>>) a f = f <<| a
+let (|>>) aP f = f <<| aP
 ```
 
 Green tests. Hurray!  
