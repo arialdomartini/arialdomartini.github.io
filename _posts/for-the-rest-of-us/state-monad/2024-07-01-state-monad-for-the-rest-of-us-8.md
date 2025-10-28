@@ -194,7 +194,7 @@ let rec index =
     | Leaf v ->
         WithCount (fun count -> (Leaf (v, count), count + 1))
     | Node (l, r) ->
-        let buildNode' = putInWithCount buildNote
+        let buildNode' = putInWithCount buildNode
         ...
 ```
 
