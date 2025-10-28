@@ -87,7 +87,7 @@ and over. What I would like you to notice, instead, is:
 
 * F# is not a pure functional language and if you opt for mutability,
   it is tollerant.
-* But its powerful Type Sytem will abandon you to your fate, and will
+* But its powerful Type System will abandon you to your fate, and will
   not do much more to help you.
   
 Throughout this series, every time we managed to have a compiling
@@ -97,13 +97,13 @@ here anymore. The very moment you resolve the dependency to
 `count` with an shared mutable variable, as far as the compiler is
 concerned, the code is alredy complete and correct.
 
-I like to interpret the apathy we are getting from the Type Sytem as
+I like to interpret the apathy we are getting from the Type System as
 if it is telling us:
 
 "So you are not giving me any hints about the types at play. Fine,
 your loss, go ahead and do it your way".
 
-Is there a way to give the Type Sytem a hint about the types at play?
+Is there a way to give the Type System a hint about the types at play?
 Yes, there is! And it is exactly the second option you found: passing
 `count` as a function parameter. 
 
@@ -118,19 +118,19 @@ let rec index count =
 ```
 
 You might have missed it, but you just changed the `index` signature,
-that is, its type. Exactly what the Type Sytem was moaning about.
+that is, its type. Exactly what the Type System was moaning about.
 
 | Original signature        | New signature                    |
 |---------------------------|----------------------------------|
 | `Tree a -> Tree (a, Int)` | `Tree a -> Int -> Tree (a, Int)` |
 
 Although the change is as simple as before (you just added a humble
-`count`), the Type Sytem will not let you down. On the contrary, it
+`count`), the Type System will not let you down. On the contrary, it
 immediately highlights all the lines where your code fails to compile.
 
 Notice: a compilation error is not a harm. On the contrary: it's a
 gift from Heaven, it's a lighthouse to follow. Instead of being
-left to sink or swim, the Type Sytem is there to suggest you how to
+left to sink or swim, the Type System is there to suggest you how to
 complete your implementation. Beautiful.
 
 Before going ahead, notice that there were 3 positions where you could
@@ -239,7 +239,7 @@ This is a very common trick in Functional Programming: if you need a
 value and it's not there, you just create it from thin air, returning
 a function that requires it. It will be your caller's duty to provide
 it. Doing so, you are propagating up to the call site, and through the
-Type Sytem, your need. The Type Sytem will make sure that this need
+Type System, your need. The Type System will make sure that this need
 is not ignored.
 
 Cool. You have `count` out of thin air. You can index the left branch,
@@ -404,7 +404,7 @@ As for 1, this is very simple. After indexing the left branch, do we
 have the updated value of `count`? Yes we have, it's `lc`, the left
 count:
 
-As for 2, the Type Sytem complains that we should return a tuple, not
+As for 2, the Type System complains that we should return a tuple, not
 an indexed tree only. Sure, let's return the count too. Which is the
 most updated value? `rc`, of course, the value the indexing of the
 right branch conveniently sent to its future clients:
