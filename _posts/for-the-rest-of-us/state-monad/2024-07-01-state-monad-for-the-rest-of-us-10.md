@@ -12,7 +12,7 @@ Source code:
 [github.com/arialdomartini/state-monad-for-the-rest-of-us][source-code]
 
 In [chapter 7](state-monad-for-the-rest-of-us-7), when we wanted to
-introduce a new type for the result value of `index`:
+introduce a new type for the result value of `index` we got to this:
 
 ```fsharp
 // Tree a -> (Int -> (Tree (a, Int), Int))
