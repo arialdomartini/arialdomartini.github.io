@@ -44,7 +44,7 @@ observations that lead us untangle the yarn:
 
 1. We made more apparent that the branch was invoking a function,
    creating a function `buildNode`.
-2. We immediately put `buildNode` a `WithCount`.
+2. We immediately put `buildNode` in a `WithCount`.
 
 Let's do the same. Make explicit that you are invoking a function:
 
