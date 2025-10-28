@@ -324,7 +324,7 @@ After all, it must be immutable...
 
 ## Inherit from the past, pass it on to the future
 Another useful perspective on returning a `fun count ->` is to view it
-as a communication channel. it's a way for the code to send
+as a communication channel. It's a way for the code to send
 information back to its caller, back to the past. It says:
 
 > I don't know who used to run before me,
