@@ -7,7 +7,7 @@ tags:
 - jujutsu
 ---
 1. Write commit messages before coding.
-2. Describe what the software does, not what you have done.
+2. Describe how the software behaves, not what you have done.
 
 <!--more-->
 
