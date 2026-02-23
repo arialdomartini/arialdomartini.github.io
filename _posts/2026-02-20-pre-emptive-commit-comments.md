@@ -38,7 +38,7 @@ without knowing where to go and then, when we are done, to figure out
 what the requirements were?
 
 If only TDD was called Requirement-Driven Development, no one would
-find it counterintuitive. "*Test*" suggests the idea of verifying,
+find it counterintuitive. "*Test*" suggests the idea of verifying
 something that is already done. Not the most fortunate pick, Kent...
 
 As Dan North wrote:
@@ -56,7 +56,7 @@ I started thinking to commit messages the same way, and
 something clicked. Maybe the word "*commit*" in the Git lingo is not casual.
 Maybe making a commit means making a promise too.
 
-It's funny how Git lets you commit to something when the code is
+It's funny how Git lets you *commit* to something when the code is
 already complete. A bit late, indeed.  Even funnier how in
 [Jujutsu][jujutsu] it's the exact opposite to be idiomatic: you first
 `jj commit`, then you write the code.  
@@ -64,14 +64,15 @@ We'll get this in few seconds. Back to the message.
 
 ## How To Describe A Promise?
 
-A message such as:
+A commit message such as:
 
 ```
 Use Set instead of List
 ```
 
 is neither a commitment nor a behaviour description: it's an activity
-report. It could be written in the style of a BDD method:
+report.  
+It makes more sense when written in the style of a BDD method:
 
 ```
 When the cart contains more than 10k items doesn't crash
@@ -85,10 +86,10 @@ the feature, the present, the *what*.
 
 The second form is what I would like to read in the Git history, and
 is in line with the idea of [Conventional
-Commits][conventional-commits], which promises to "[Automatically
+Commits][conventional-commits], which promise to "[Automatically
 generate CHANGELOGs](https://www.conventionalcommits.org/en/v1.0.0/#why-use-conventional-commits)".
 
-When I checkout a commit, I know that someone worked hard on their
+When I check out a commit, I know that someone worked hard on their
 keyboard to make the software behave like it should. I'm grateful, but
 when it's my turn to work on top of that commit there's no point
 answering the question:
@@ -107,17 +108,16 @@ Then I stumbled upon this tweet by [Eric Willeke](https://twitter.com/erwilleke)
 A point of view of disarming simplicity. It's **test-first applied to
 version control**. It instantly resonated with me.
 
-As I was accustomed to write tests before the implementation, it was
-easy to start writing commit messages before coding. Messages became
-statement of intents, commits became commitments.
+If you are accustomed to write tests before the implementation,
+writing commit messages before coding will be natural. Messages become
+statement of intents, commits become commitments.
 
 
 This is how the [Squash
 Workflow](https://steveklabnik.github.io/jujutsu-tutorial/real-world-workflows/the-squash-workflow.html)
 works in Jujutsu. It revolves around the idea of creating a new empty
 revision, together with its description, even before touching any
-file. Not a coincidence that the command to do this is `jj
-commit`. The commit message as the intent and the unit of work.
+file. Not a coincidence tha the command to do this is `jj commit`. The commit message as the intent and the unit of work.
 
 First you write it, then you make it true.
 
@@ -136,8 +136,7 @@ followed by
 git commit --amend
 ```
 
-when we were done. Some Git GUIs makes this easy. Today I still do
-this, with jj.
+when we were done. Some Git GUIs makes this easy.
 
 Over the years, this is what I experienced:
 
