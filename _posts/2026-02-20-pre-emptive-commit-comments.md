@@ -64,23 +64,21 @@ We'll get this in few seconds. Back to the message.
 
 ## How To Describe A Promise?
 
-Messages such as:
+A message such as:
 
 ```
-- Add Foo
-- Remove method Baz
 - Use Set instead of List
 ```
 
-are neither commitments nor behaviour descriptions: they are activity
-reports. And yet a commit message could be written in the style of a BDD method:
+is neither a commitment nor a behaviour description: it's an activity
+report. It could be written in the style of a BDD method:
 
 ```
 When the user saves the file, a preview is shown
 ```
 
-That's not a cosmetic difference. The formers are about the actions
-performed by the programmer, the past, the *how*. The latter describes
+That's not a cosmetic difference. The former is about the actions
+performed by the programmer, the past, the *how*. The latter about
 the feature, the present, the *what*.
 
 ## Tell Me What The Software Does, Not What You Have Done
