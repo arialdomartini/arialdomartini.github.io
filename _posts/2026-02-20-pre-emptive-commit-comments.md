@@ -37,11 +37,9 @@ should sound crazy. What are we supposed to do? To write the code
 without knowing where to go and then, when we are done, to figure out
 what the requirements were?
 
-It's only fair that we start from the *what*, the requirement, and
-that only later we think about the *how*, the implementation. If only
-TDD was called Requirement-Driven Development, no one would find it
-counterintuitive. "*Test*" suggests the idea of verifying, once the work
-is done. What an unfortunate pick, Kent...
+If only TDD was called Requirement-Driven Development, no one would
+find it counterintuitive. "*Test*" suggests the idea of verifying,
+something that is already done. Not the most fortunate pick, Kent...
 
 As Dan North wrote:
 
