@@ -67,14 +67,14 @@ We'll get this in few seconds. Back to the message.
 A message such as:
 
 ```
-- Use Set instead of List
+Use Set instead of List
 ```
 
 is neither a commitment nor a behaviour description: it's an activity
 report. It could be written in the style of a BDD method:
 
 ```
-When the user saves the file, a preview is shown
+When the cart contains more than 10k items doesn't crash
 ```
 
 That's not a cosmetic difference. The former is about the actions
@@ -98,22 +98,6 @@ answering the question:
 It's more usesul to have an answer to:
 
     What's the project behaviour NOW?
-
-A comment like:
-
-    "Fix Gitk, cache commit info array"
-    
-is worth less than:
-
-    When the history exceeds 10k commits, Gitk doesn't crash
-
-The principles one might derive from this are simple:
-
-- Talk about the program behaviour, not about yourself.
-- Don't tell me what the software's was, describe what it is now, in
-  present tense.
-- There's no need to add time references: the commit already has a
-  timestamp, it's by definition about "now".
 
 ## Write It First
 Then I stumbled upon this tweet by [Eric Willeke](https://twitter.com/erwilleke):
