@@ -15,24 +15,19 @@ tags:
 
 Dan North changed my life.
 
-I always recommend reading [Introducing
+I always recommend his [Introducing
 BDD](https://dannorth.net/blog/introducing-bdd/). It explains how
-Behaviour-Driven Development started from the intuition that TDD is not
-merely about testing. For Dan North, the word "*test*" itself points
-developers in the wrong direction, toward verification, toward the
+Behaviour-Driven Development started from the intuition that TDD is
+not merely about testing. The word "*test*" itself points developers
+in the wrong direction, he says, toward verification, toward the
 past. He prefers using "*behaviour*".
 
 It's a dramatic change of perspective. For Dan North tests document
 the system's behaviour from the outside, from the point of view of
-Business Users; therefore, they should describe what the system
-*should do*, using narrative sentences. They are in fact business
-requirements.
-
-From this perspective, it's only natural that they are written in the
-business language. And that, of course, they are conceived before the
+Business Users; therefore, they describe what the system *should do*,
+using narrative sentences. They are in fact business requirements,
+written in the business language and, of course, conceived before the
 implementation even exists.
-
-That's exactly the key of Pre-Emptive Commit Messages.
 
 ## Why Test-First?
 
