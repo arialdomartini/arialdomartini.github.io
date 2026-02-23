@@ -103,7 +103,7 @@ It's more usesul to have an answer to:
 ## Write It First
 Then I stumbled upon this tweet by [Eric Willeke](https://twitter.com/erwilleke):
 
-![Eric Willeke Tweet](static/img/pre-emptive-commit-messages/erik-git-comments1.png)
+![Eric Willeke Tweet](https://github.com/arialdomartini/arialdomartini.github.io/blob/pre-empt/static/img/pre-emptive-commit-messages/erik-git-comments1.png?raw=true)
 
 A point of view of disarming simplicity. It's **test-first applied to
 version control**. It instantly resonated with me.
