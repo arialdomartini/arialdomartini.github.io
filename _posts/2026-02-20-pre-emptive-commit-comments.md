@@ -168,11 +168,14 @@ Over the years, this is what I experienced:
   When I code alone, I have to find an agreement with my own
   understading. It's equally challenging and it equally pays off.
 
-- **It's easier to focus**: together with the tests, the pre-emptive
-  commit message is the coding session's center of gravity. When the
-  conversation or my thougths digress, the promise in the commit
-  message is there to bring me back to the point.  
+- **It's easier to focus**: tests and commit message are the coding
+  session's center of gravity. When the conversation or my thougths
+  digress, the promise in the commit message is there to bring me back to the point.  
   I'm less prone to lose focus.
+
+- **It sets a micro scope**: Before I used to ask myself: "*Should I
+  stop coding now? How much is enough? Am I done yet?*".  
+   Checking if I reached the planned goal is just easier.
 
 - **Simpler commit reviews**: I always review my changes before making
   them final. Instead of asking "*Well well well, let's find out, what
@@ -198,25 +201,14 @@ Over the years, this is what I experienced:
   Starting a pairing session, there's nothing nicer than discussing
   about design.
 
-- **It sets a micro scope**. Once the goal is written down to words,
-  it's so easy to know when I'm done coding. Without pre-emptive
-  message, I often found myself in a flow state, wondering: "*Should I
-  stop coding and finally commit? When is it enough changes?
-  Am I done yet?*".  
-  Checking if I reached the planned goal is just easier.
-
 - **It creates a natural timebox**: I make my best to commit to
   baby-step progresses, from a stable state to the next little
-  goal. When I have the tendency to digress, it's easy to verify if a
-  chance belongs or not to the goal.  
-  This naturally leads to small timeboxed, scoped sessions.
+  goal. It's easy to verify if a chance belongs or not to the goal.
 
-- **It goes well with short-lived feature branches**: pre-emptive
-  messages define micro-goals, and they live in the context of a
-  wider goal, defined by the branch name. Which is also pre-emptive,
-  by design.  
-  These 2 levels of goals help me steering the direction I'm moving
-  toward.
+- **It goes well with short-lived feature branches**: messages define
+  micro-goals, and they live in the context of the wider goal defined
+  by the branch name. Which is also pre-emptive, by design.  
+  These 2 levels of goals help me steering the direction.
 
 - **The commit history gains natural granularity**. Each commit has a
   single goal (one could say it respects the Single Responsibility
