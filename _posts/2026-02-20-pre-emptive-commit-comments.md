@@ -97,7 +97,7 @@ answering the question:
 
     What did the programmers do during that work session?
     
-It's more usesul to have an answer to:
+It's more useful to have an answer to:
 
     What's the project behaviour NOW?
 
@@ -118,7 +118,7 @@ This is how the [Squash
 Workflow](https://steveklabnik.github.io/jujutsu-tutorial/real-world-workflows/the-squash-workflow.html)
 works in Jujutsu. It revolves around the idea of creating a new empty
 revision, together with its description, even before touching any
-file. Not a coincidence tha the command to do this is `jj commit`. The commit message as the intent and the unit of work.
+file. Not a coincidence that the command to do this is `jj commit`. The commit message as the intent and the unit of work.
 
 First you write it, then you make it true.
 
@@ -165,7 +165,7 @@ Over the years, this is what I experienced:
   
 
 - **More accurate and faithful statements**: if I have to write the
-  message before coding, I cannot help but beying very specific. It's
+  message before coding, I cannot help but being very specific. It's
   easy to refrain from being vague and writing `Fix` or `Update
   Repository.cs`. The message and the resulting commit content
   naturally match, because the message was the goal since the very
