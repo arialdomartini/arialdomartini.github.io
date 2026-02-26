@@ -13,7 +13,7 @@ tags:
 
 ## Behaviours, Not Tests
 
-Dan North changed my life.
+Daniel Terhorst-North changed my life.
 
 I always recommend his [Introducing
 BDD](https://dannorth.net/blog/introducing-bdd/). It explains how
@@ -22,8 +22,8 @@ not merely about testing. The word "*test*" itself points developers
 in the wrong direction, he says, toward verification, toward the
 past. He prefers using "*behaviour*".
 
-It's a dramatic change of perspective. For Dan North tests document
-the system's behaviour from the outside, from the point of view of
+It's a dramatic change of perspective. For Daniel tests document the
+system's behaviour from the outside, from the point of view of
 Business Users; therefore, they describe what the system *should do*,
 using narrative sentences. They are in fact business requirements,
 written in the business language and, of course, conceived before the
@@ -41,7 +41,7 @@ If only TDD was called Requirement-Driven Development, no one would
 find it counterintuitive. "*Test*" suggests the idea of verifying
 something that is already done. Not the most fortunate pick, Kent...
 
-As Dan North wrote:
+As Daniel wrote:
 
 > A really useful way to stay focused was to ask:  
 > "What's the next most important thing the system doesn’t do?"
