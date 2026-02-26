@@ -102,6 +102,11 @@ It's more useful to have an answer to:
 
     What's the project behaviour NOW?
 
+As [Ferdinando Santacroce][nando] loves to say: the commit message
+should capture what cannot be deduced from the code only: the context,
+the motivation and the thought process behind the solution. To me,
+that alone is a good reason not to let LLMs write my commit messages.
+
 ## Write It First
 Then I stumbled upon this tweet by [Eric Willeke](https://twitter.com/erwilleke):
 
