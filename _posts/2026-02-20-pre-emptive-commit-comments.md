@@ -33,10 +33,11 @@ even exists.
 ## Why Test-First?
 
 Some find it counterintuitive, if not crazy, writing tests before the
-system under test even exists. Yet it's the opposite approach that
-should sound crazy. What are we supposed to do? To write the code
-without knowing where to go and then, when we are done, to figure out
-what the requirements were?
+system under test even exists. Yet, if you replace the word "test"
+with "requirement" all makes sense, and it's the opposite approach to
+sound crazy. What are we supposed to do? To write the code without
+knowing where to go and then, when we are done, to figure out what the
+requirements were?
 
 If only TDD was called Requirement-Driven Development, no one would
 find it counterintuitive. "*Test*" suggests the idea of verifying
