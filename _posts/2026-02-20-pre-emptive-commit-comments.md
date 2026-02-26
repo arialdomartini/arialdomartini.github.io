@@ -22,12 +22,12 @@ not merely about testing. The word "*test*" itself points developers
 in the wrong direction, he says, toward verification, toward the
 past. He prefers using "*behaviour*".
 
-It's a dramatic change of perspective. For Daniel tests document the
-system's behaviour from the outside, from the point of view of
-Business Users; therefore, they describe what the system *should do*,
-using narrative sentences. They are in fact business requirements,
-written in the business language and, of course, conceived before the
-implementation even exists.
+It's a dramatic change of perspective. For Daniel tests (or code
+examples, how he call them) document the system's behaviour from the
+outside, from the point of view of Business Users; therefore, they
+describe what the system *should do*, using narrative sentences. They
+are in fact business requirements, written in the business language
+and, of course, conceived before the implementation even exists.
 
 ## Why Test-First?
 
