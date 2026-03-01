@@ -25,15 +25,17 @@ past. He prefers using "*behaviour*".
 It's a dramatic change of perspective. For Daniel tests document the
 system's behaviour from the outside, from the point of view of its
 clients or users; therefore, they describe what the system *should
-do*, using narrative sentences. They are in fact business
-requirements, written in the business language and, of course,
-conceived before the implementation even exists.
+do*, using narrative sentences.
+
+They are in fact business requirements, written in the business
+language and, of course, conceived before the implementation even
+exists.
 
 ## Why Test-First?
 
 Some find it counterintuitive, if not crazy, writing tests before the
 system under test even exists. Yet, if you replace the word "test"
-with "requirement" all makes sense, and it's the opposite approach to
+with "requirement", all makes sense, and it's the opposite approach to
 sound crazy. What are we supposed to do? To write the code without
 knowing where to go and then, when we are done, to figure out what the
 requirements were?
@@ -57,8 +59,8 @@ I started thinking to commit messages the same way, and
 something clicked. Maybe the word "*commit*" in the Git lingo is not casual.
 Maybe making a commit means making a promise too.
 
-It's funny how Git lets you *commit* to something when the code is
-already complete. A bit late, indeed.  Even funnier how in
+It's ironic how Git lets you *commit* to something when the code is
+already complete. A bit late, indeed. The real twist is how in
 [Jujutsu][jujutsu] it's the exact opposite to be idiomatic: you first
 `jj commit`, then you write the code.  
 We'll get this in few seconds. Back to the message.
@@ -76,7 +78,7 @@ report.
 It makes more sense when written in the style of a BDD method:
 
 ```
-When the cart contains more than 10k items doesn't crash
+The cart does not crash when it contains more than 10k items
 ```
 
 That's not a cosmetic difference. The former is about the actions
@@ -91,9 +93,9 @@ Commits][conventional-commits], which promise to "[Automatically
 generate CHANGELOGs](https://www.conventionalcommits.org/en/v1.0.0/#why-use-conventional-commits)".
 
 When I check out a commit, I know that someone worked hard on their
-keyboard to make the software behave like it should. I'm grateful, but
-when it's my turn to work on top of that commit there's no point
-answering the question:
+keyboard to make the software behave like it should. Kudos, I'm
+grateful. But when it's my turn to work on top of that commit there's
+no point answering the question:
 
     What did the programmers do during that work session?
     
@@ -115,8 +117,9 @@ A point of view of disarming simplicity. It's **test-first applied to
 version control**. It instantly resonated with me.
 
 If you are accustomed to write tests before the implementation,
-writing commit messages before coding will be natural. Messages become
-statement of intents, commits become commitments.
+writing commit messages before coding will be just as
+natural. Messages become statement of intents, commits become
+commitments.
 
 
 This is how the [Squash
@@ -154,24 +157,23 @@ Over the years, this is what I experienced:
   understading. It's equally challenging and it equally pays off.
 
 - **It's easier to focus**: tests and commit message are the coding
-  session's center of gravity. When the conversation or my thougths
-  digress, the promise in the commit message is there to bring me back to the point.  
+  session's center of gravity. When I digress, the promise in the commit message is there to bring me back to the point.  
   I'm less prone to lose focus.
 
-- **It sets a micro scope**: Before I used to ask myself: "*Should I
+- **It sets a micro scope**: Before, I used to ask myself: "*Should I
   stop coding now? How much is enough? Am I done yet?*".  
    Checking if I reached the planned goal is just easier.
 
 - **Simpler commit reviews**: I always review my changes before making
   them final. Instead of asking "*Well well well, let's find out, what
   have I done here? I don't even remember...*" I can ask myself "*Have
-  I done all and only[^1] what I committed to?*".  
+  I done all and only what I committed to?*".  
   It's a much easier and targeted question to answer. 
   
 
-- **More accurate and faithful statements**: if I have to write the
-  message before coding, I cannot help but being very specific. It's
-  easy to refrain from being vague and writing `Fix` or `Update
+- **More accurate and faithful statements**: when writing the message
+  before coding, being very specific comes naturally. It's easy to
+  refrain from being vague and writing `Fix` or `Update
   Repository.cs`. The message and the resulting commit content
   naturally match, because the message was the goal since the very
   beginning.
@@ -216,15 +218,11 @@ Essentials][git-essentials] by [Ferdinando Santacroce][nando].
 [pre-emptive-commit-comments]: https://arialdomartini.wordpress.com/2012/09/03/pre-emptive-commit-comments/
 [git-essentials]: https://www.goodreads.com/book/show/25533645-git-essentials
 [nando]: https://jesuswasrasta.com/
-[3-rules]: http://www.butunclebob.com/ArticleS.UncleBob.TheThreeRulesOfTdd
 
 # References
 
 * [Jujustu][jujutsu]
-* [Robert Martin - The Three Rules of TDD][3-rules]
 * [Conventional Commits][conventional-commits]
 * [Pre-Emptive Commit Comments][pre-emptive-commit-comments]
 * [Ferdinando Santacroce][nando]
   * [Git Essentials - Ferdinando Santacroce][git-essentials]
-
-[^1]: This "all and only" reminds me of the [3rd rule of TDD][3-rules]: I am not allowed to write any more production code than is sufficient to pass the one failing unit test.
