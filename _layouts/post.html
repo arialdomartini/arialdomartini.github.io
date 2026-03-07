@@ -9,6 +9,7 @@ layout: layout
 	<div class="blog-title">
           <h1>
             {{page.title}}
+
           </h1>
           <div>
 	    {{ page.author}}
@@ -18,9 +19,9 @@ layout: layout
 	    {% for tag in page.tags %}
 	    <span class="label label-success">{{ tag }}</span>
 	    {% endfor %}
+     	    <span class="label label-human-made">written by humans, not LLMs</span>
           </div>
 	</div>
-        
         <br/>
         {{ content }}
       </div>

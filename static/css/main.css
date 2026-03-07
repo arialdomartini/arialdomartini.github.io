@@ -313,3 +313,9 @@ blockquote {
       width: 100%;
   }
 }
+
+
+.label-human-made {
+    background-color: #007cff;
+    /* background-color: #b83f3f; */
+}
